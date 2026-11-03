@@ -69,6 +69,7 @@
 #include <QMenu>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QCloseEvent>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -286,8 +287,9 @@ int tclCmdPlotObjects(ClientData cd, Tcl_Interp* ip, int objc, Tcl_Obj* const ob
     return TCL_OK;
 }
 
-int tclCmdQuit(ClientData, Tcl_Interp*, int, Tcl_Obj* const[]) {
-    QCoreApplication::quit();
+int tclCmdQuit(ClientData cd, Tcl_Interp*, int, Tcl_Obj* const[]) {
+    if (auto* w = static_cast<MainWindow*>(cd)) w->close();
+    else QCoreApplication::quit();
     return TCL_OK;
 }
 
@@ -1122,6 +1124,7 @@ QString formatDouble(double v) {
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     undoStack_ = new QUndoStack(this);
+    connect(undoStack_, &QUndoStack::indexChanged, this, [this](int) { markProjectDirty(); });
     setWindowTitle(tr("FlatCAM C++"));
     resize(1200, 800);
     setAcceptDrops(true);
@@ -1162,10 +1165,21 @@ void MainWindow::buildLayout() {
     gcodeView_->setStyleSheet("QPlainTextEdit { font-family: Menlo; font-size: 12px; }");
     bottomTabs_->addTab(gcodeView_, tr("G-code"));
     bottomTabs_->addTab(info_, tr("Informe"));
-    auto* shellDock = new QDockWidget(tr("Shell"), this);
-    shellDock->setTitleBarWidget(new QWidget(shellDock));
-    shellDock->setWidget(bottomTabs_);
-    addDockWidget(Qt::BottomDockWidgetArea, shellDock);
+    shellDock_ = new QDockWidget(tr("Shell"), this);
+    shellDock_->setObjectName("shellDock");
+    shellDock_->setTitleBarWidget(new QWidget(shellDock_));
+    shellDock_->setWidget(bottomTabs_);
+    addDockWidget(Qt::BottomDockWidgetArea, shellDock_);
+
+    auto* closeConsole = new QToolButton(bottomTabs_);
+    closeConsole->setText("×");
+    closeConsole->setAutoRaise(true);
+    closeConsole->setToolTip(tr("Ocultar la consola (Ver → Consola para mostrarla)."));
+    closeConsole->setFixedSize(24, 24);
+    bottomTabs_->setCornerWidget(closeConsole, Qt::TopRightCorner);
+    connect(closeConsole, &QToolButton::clicked, this, [this] {
+        if (shellDock_) shellDock_->hide();
+    });
 
     objects_ = new QTreeWidget(this);
     objects_->setToolTip(tr("Objetos cargados. Checkbox: visibilidad. Clic: seleccionar/zoom. "
@@ -1462,7 +1476,7 @@ void MainWindow::buildMenus() {
     file->addSeparator();
     QAction* quit = file->addAction(tr("&Salir"));
     quit->setShortcut(QKeySequence::Quit);
-    connect(quit, &QAction::triggered, qApp, &QApplication::quit);
+    connect(quit, &QAction::triggered, this, &QWidget::close);
 
     QMenu* edit = menuBar()->addMenu(tr("&Editar"));
     QAction* undo = edit->addAction(tr("&Deshacer"));
@@ -1865,7 +1879,7 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.2.0</b> · build 2026-11-03<br>"
+                           tr("<b>FlatCAM C++ 0.2.1</b> · build 2026-11-03<br>"
                               "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
                               "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
@@ -1977,7 +1991,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.2.0\nBuild: 2026-11-03\n"
+            tr("FlatCAM C++ 0.2.1\nBuild: 2026-11-03\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -2113,6 +2127,7 @@ bool MainWindow::openFiles(const QStringList& paths) {
     gerberLayers_.clear();
     excellonLayers_.clear();
     projectPath_.clear();
+    projectDirty_ = false;
     resetObjectGroups();
     canvas_->beginGeometry();
 
@@ -2241,6 +2256,7 @@ bool MainWindow::openProject(const QString& path) {
         statusLabel_->setText(tr("%1 · %2 objetos").arg(QFileInfo(path).fileName()).arg(summaries.size()));
         statusBar()->showMessage(tr("Proyecto cargado (objetos en streaming)"), 5000);
         recordRecent(path);
+        projectDirty_ = false;
         return true;
     } catch (const std::exception& e) {
         showError(QString::fromUtf8(e.what()));
@@ -3532,7 +3548,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.2.0");
+    return QStringLiteral("FlatCAM C++ 0.2.1");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
@@ -3936,6 +3952,17 @@ double MainWindow::lengthToMm(double value) const {
 }
 
 /// @brief Formatea una longitud con la unidad y decimales activos.
+QString MainWindow::activeObjectBase() const {
+    QTreeWidgetItem* item = objects_ ? objects_->currentItem() : nullptr;
+    if (!item) return {};
+    return QFileInfo(item->text(1)).completeBaseName();
+}
+
+QString MainWindow::toolLayerName(const QString& operation) const {
+    const QString base = activeObjectBase();
+    return base.isEmpty() ? operation : tr("%1 · %2").arg(operation, base);
+}
+
 QString MainWindow::lengthText(double mm, int decimals) const {
     return QString::number(displayLength(mm), 'f', displayInch_ ? decimals + 4 : decimals);
 }
@@ -4506,7 +4533,9 @@ QTreeWidgetItem* MainWindow::addObjectRow(const QString& name, const QString& ki
                                           const QString& area, int layerId, bool visible,
                                           QTreeWidgetItem* parent) {
     if (!parent) {
-        parent = (kind == "gerber" || kind == "excellon") ? filesGroup_ : toolsGroup_;
+        if (kind == "gerber" || kind == "excellon") parent = filesGroup_;
+        else if (kind == "gcode" || kind == "cncjob") parent = gcodeGroup_;
+        else parent = toolsGroup_;
     }
     auto* item = new QTreeWidgetItem(parent);
     item->setFlags((item->flags() | Qt::ItemIsDragEnabled | Qt::ItemIsSelectable |
@@ -4517,6 +4546,7 @@ QTreeWidgetItem* MainWindow::addObjectRow(const QString& name, const QString& ki
     item->setData(0, Qt::UserRole, layerId);
     setObjectVisible(item, visible);
     refreshSourceCombos();
+    markProjectDirty();
     return item;
 }
 
@@ -7674,6 +7704,7 @@ void MainWindow::newProject() {
     sourcePaths_.clear();
     generatedFrom_.clear();
     projectPath_.clear();
+    projectDirty_ = false;
     resetObjectGroups();
     canvas_->clearData();
     info_->clear();
@@ -7756,7 +7787,52 @@ void MainWindow::loadConfiguration() {
     statusBar()->showMessage(tr("Configuración cargada"), 5000);
 }
 
-/// @brief Pide una ruta y guarda el proyecto.
+/// @brief Marca el proyecto como modificado desde el último guardado.
+void MainWindow::markProjectDirty() {
+    projectDirty_ = true;
+}
+
+/// @brief Permite cerrar sin preguntar (capturas y automatización).
+void MainWindow::allowCloseWithoutPrompt() {
+    projectDirty_ = false;
+}
+
+/**
+ * @brief Pregunta si se deben guardar los cambios antes de cerrar.
+ *
+ * @param event Evento de cierre; se ignora si el usuario cancela o si falla
+ *        el guardado.
+ */
+void MainWindow::closeEvent(QCloseEvent* event) {
+    if (!projectDirty_ || objectItems().empty()) {
+        QMainWindow::closeEvent(event);
+        return;
+    }
+    const auto answer = QMessageBox::question(
+        this, tr("Salir de FlatCAM C++"),
+        tr("Hay archivos o cambios sin guardar.\n¿Querés guardar el proyecto antes de salir?"),
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+        QMessageBox::Save);
+    if (answer == QMessageBox::Cancel) {
+        event->ignore();
+        return;
+    }
+    if (answer == QMessageBox::Save) {
+        QString path = projectPath_;
+        if (path.isEmpty()) {
+            path = QFileDialog::getSaveFileName(
+                this, tr("Guardar proyecto"),
+                QFileInfo(lastDir_).absolutePath() + "/proyecto.FlatPrj",
+                tr("Proyecto FlatCAM (*.FlatPrj);;Todos (*)"));
+        }
+        if (path.isEmpty() || !saveProjectToPath(path)) {
+            event->ignore();
+            return;
+        }
+    }
+    QMainWindow::closeEvent(event);
+}
+
 void MainWindow::saveProjectAs() {
     const QString path = QFileDialog::getSaveFileName(
         this, tr("Guardar proyecto"), QFileInfo(lastDir_).absolutePath() + "/proyecto.FlatPrj",
@@ -7796,6 +7872,8 @@ bool MainWindow::saveProjectToPath(const QString& path) {
     project.options = toolTablesJson().toStdString();
     try {
         saveProject(path.toStdString(), project);
+        projectPath_ = path;
+        projectDirty_ = false;
         return true;
     } catch (const std::exception& e) {
         showError(QString::fromUtf8(e.what()));
@@ -7992,12 +8070,13 @@ void MainWindow::addCncJobObject(const QString& name, const QString& code,
                                  const std::map<QString, QString>& props) {
     const int id = canvas_->appendGeometry({}, {}, true);
     canvas_->endGeometry();
-    addObjectRow(tr("CNCJob: %1").arg(name), "cncjob", "-", id);
+    addObjectRow(tr("CNCJob: %1").arg(name), "cncjob", "-", id, true, gcodeGroup_);
     objectText_[id] = code;
     objectProps_[id][tr("Tipo")] = tr("CNCJob");
     objectProps_[id][tr("Líneas")] = QString::number(code.count('\n') + 1);
     objectProps_[id][tr("Caracteres")] = QString::number(code.size());
     for (const auto& [key, value] : props) objectProps_[id][key] = value;
+    if (gcodeView_) gcodeView_->setPlainText(code);
 }
 
 /// @brief Define el origen de visualización.
@@ -9152,6 +9231,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
         const int inchWidths[8] = {22, 78, 46, 44, 46, 42, 84, 84};
         const int* chosen = displayInch_ ? inchWidths : widths;
         for (int c = 0; c < 8; ++c) table->setColumnWidth(c, chosen[c]);
+        connect(table, &QTableWidget::cellChanged, this,
+                [this](int, int) { markProjectDirty(); });
         return table;
     };
 
@@ -9246,8 +9327,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     auto addCommon = [&](QFormLayout* form, QTableWidget* table) {
         Common c;
         c.zMove = makeSpin(0.0, 50.0, 2.0, 3, " mm",
-            tr("<b>Z de viaje</b><br>Altura de traslado entre recorridos. Típico 2–5 mm.<br>"
-               "No aplica en modo láser (se ignora y se oculta)."));
+            tr("<b>Altura Z para recorridos</b><br>Altura de traslado entre recorridos. "
+               "Típico 2–5 mm.<br>No aplica en modo láser (se ignora y se oculta)."));
         c.zTool = makeSpin(0.0, 100.0, 19.0, 3, " mm",
             tr("<b>Z de cambio de herramienta</b><br>Altura segura para cambiar la fresa.<br>"
                "No aplica en modo láser."));
@@ -9269,8 +9350,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
 
         c.noZ = new QCheckBox(tr("Ignorar Z (modo láser)"), this);
         applyTip(c.noZ, tr("<b>Ignorar Z</b><br>"
-                           "Desactiva Z de viaje, cambio de herramienta, fin de Z y las "
-                           "columnas Av. Z / Z corte / Prof. de la tabla.<br>"
+                           "Desactiva la altura Z para recorridos, el cambio de herramienta, "
+                           "el fin de Z y las columnas Av. Z / RPM / Z corte / Prof.<br>"
                            "Se activa automáticamente con GRBL láser y también podés "
                            "usarlo para máquinas sin eje Z."));
 
@@ -9299,19 +9380,26 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     c.customTc->setVisible(custom);
                 });
 
-        auto updateZ = [c, table] {
+        auto updateZ = [c, table, form] {
             const bool laser = isLaserFlavorIndex(c.pre->currentIndex());
             const bool ignore = c.noZ->isChecked();
             c.zMove->setEnabled(!ignore);
             c.zTool->setEnabled(!ignore);
             c.zEnd->setEnabled(!ignore);
+            auto grayLabel = [form](QWidget* field, bool enabled) {
+                if (QWidget* label = form->labelForField(field)) label->setEnabled(enabled);
+            };
+            grayLabel(c.zMove, !ignore);
+            grayLabel(c.zTool, !ignore);
+            grayLabel(c.zEnd, !ignore);
             if (table) {
-                table->setColumnHidden(3, ignore);  // Av. Z
-                table->setColumnHidden(6, ignore);  // Z corte
-                table->setColumnHidden(7, ignore);  // Prof.
-                table->setColumnHidden(4, false);   // RPM
+                table->setColumnHidden(3, ignore);          // Av. Z
+                table->setColumnHidden(4, ignore || laser); // RPM no aplica sin Z ni en láser
+                table->setColumnHidden(5, !laser);          // S sólo en modo láser
+                table->setColumnHidden(6, ignore);          // Z corte
+                table->setColumnHidden(7, ignore);          // Prof.
                 if (auto* header = table->horizontalHeaderItem(5))
-                    header->setText(laser ? tr("Pot. láser") : tr("S"));
+                    header->setText(tr("Pot. láser"));
             }
         };
         connect(c.pre, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
@@ -9324,7 +9412,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 });
         connect(c.noZ, &QCheckBox::toggled, this, [updateZ](bool) { updateZ(); });
 
-        addRow(form, tr("Z de viaje:"), c.zMove);
+        addRow(form, tr("Altura Z p/recorr.:"), c.zMove);
         addRow(form, tr("Cambio herram. Z:"), c.zTool);
         addRow(form, tr("Fin del mov. Z:"), c.zEnd);
         addRow(form, tr("Dwell:"), c.dwell);
@@ -9355,6 +9443,15 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
         opt.flavor = gcodeFlavorFromIndex(c.pre->currentIndex());
         opt.customToolchange = c.customTc ? c.customTc->toPlainText().toStdString() : std::string();
         return opt;
+    };
+
+    auto sourceBase = [](QComboBox* combo) {
+        if (!combo) return QString();
+        return QFileInfo(combo->currentText()).completeBaseName();
+    };
+    auto camName = [this, sourceBase](const QString& op, QComboBox* combo) {
+        const QString base = sourceBase(combo);
+        return base.isEmpty() ? op : tr("%1 · %2").arg(op, base);
     };
 
     // --- Isolation
@@ -9412,11 +9509,13 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     section(isoForm, tr("Parámetros comunes"));
     Common isoCommon = addCommon(isoForm, isoTable);
     auto* isoPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
+    auto* isoCnc = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
     auto* isoExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     isoForm->addRow(isoPreview);
+    isoForm->addRow(isoCnc);
     isoForm->addRow(isoExport);
     connect(isoPreview, &QPushButton::clicked, this,
-            [this, isoTable, isoPasses, isoOverlap, isoInvert, isoOrder, isoType, isoAngle,
+            [this, camName, isoTable, isoPasses, isoOverlap, isoInvert, isoOrder, isoType, isoAngle,
              isoDepth, isoFollow, isoCombine, isoRest, isoCommon, optionsFor, readTable] {
                 fc::GerberResult* src = sourceGerber(isoSource_);
                 if (!src) return;
@@ -9484,9 +9583,20 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 }
                 lastIsoHeader_ = optionsFor(rows.front(), isoCommon);
                 const int sourceId = isoSource_ ? isoSource_->currentData().toInt() : 0;
-                addGeneratedLayer(tr("Aislamiento"), preview, sourceId);
+                addGeneratedLayer(camName(tr("Aislamiento"), isoSource_), preview, sourceId);
                 statusBar()->showMessage(tr("Aislamiento: %1 herramientas").arg(lastIsoMulti_.size()), 4000);
             });
+    connect(isoCnc, &QPushButton::clicked, this, [this, camName] {
+        if (lastIsoMulti_.empty()) {
+            QMessageBox::information(this, tr("Aislamiento"),
+                                     tr("Genere primero la geometría de aislamiento."));
+            return;
+        }
+        const std::string code = pathsGCodeMulti(lastIsoMulti_, lastIsoHeader_);
+        addCncJobObject(camName(tr("Aislamiento"), isoSource_), QString::fromStdString(code),
+                        cncProps(lastIsoHeader_, tr("Aislamiento")));
+        statusBar()->showMessage(tr("CNCJob de aislamiento generado"), 4000);
+    });
     connect(isoExport, &QPushButton::clicked, this, &MainWindow::exportIsolationGCode);
     toolTabs_[tr("Herramienta de aislamiento")] = wrapScroll(isoPage);
 
@@ -9507,7 +9617,13 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     auto* nccMargin = makeSpin(0.0, 50.0, 1.0, 2, " mm",
         tr("<b>Margen del área</b><br>Expande el área a despejar."));
     auto* nccStrategy = new QComboBox(this);
-    nccStrategy->addItems({tr("Hatch"), tr("Paint")});
+    nccStrategy->addItems({tr("Hatch (líneas)"), tr("Paint (contornos)")});
+    nccStrategy->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    nccStrategy->setToolTip(tr("Hatch: líneas paralelas. Paint: contornos concéntricos."));
+    nccStrategy->setItemData(0, tr("Líneas paralelas para despejar áreas grandes."),
+                             Qt::ToolTipRole);
+    nccStrategy->setItemData(1, tr("Contornos paralelos para un acabado más uniforme."),
+                             Qt::ToolTipRole);
     addRow(nccForm, tr("Superposición:"), nccStep);
     addRow(nccForm, tr("Distancia al cobre:"), nccClear);
     addRow(nccForm, tr("Ángulo:"), nccAngle);
@@ -9529,11 +9645,13 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     section(nccForm, tr("Parámetros comunes"));
     Common nccCommon = addCommon(nccForm, nccTable);
     auto* nccPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
+    auto* nccCnc = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
     auto* nccExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     nccForm->addRow(nccPreview);
+    nccForm->addRow(nccCnc);
     nccForm->addRow(nccExport);
     connect(nccPreview, &QPushButton::clicked, this,
-            [this, nccTable, nccStep, nccClear, nccAngle, nccMargin, nccStrategy, nccConnect,
+            [this, camName, nccTable, nccStep, nccClear, nccAngle, nccMargin, nccStrategy, nccConnect,
              nccRest, nccCommon, optionsFor, readTable] {
                 fc::GerberResult* src = sourceGerber(nccSource_);
                 if (!src) return;
@@ -9579,9 +9697,20 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 }
                 lastNccHeader_ = optionsFor(rows.front(), nccCommon);
                 const int sourceId = nccSource_ ? nccSource_->currentData().toInt() : 0;
-                addGeneratedLayer(tr("NCC"), preview, sourceId);
+                addGeneratedLayer(camName(tr("NCC"), nccSource_), preview, sourceId);
                 statusBar()->showMessage(tr("NCC: %1 herramientas").arg(lastNccMulti_.size()), 4000);
             });
+    connect(nccCnc, &QPushButton::clicked, this, [this, camName] {
+        if (lastNccMulti_.empty()) {
+            QMessageBox::information(this, tr("NCC"),
+                                     tr("Genere primero la geometría NCC."));
+            return;
+        }
+        const std::string code = pathsGCodeMulti(lastNccMulti_, lastNccHeader_);
+        addCncJobObject(camName(tr("NCC"), nccSource_), QString::fromStdString(code),
+                        cncProps(lastNccHeader_, tr("NCC")));
+        statusBar()->showMessage(tr("CNCJob NCC generado"), 4000);
+    });
     connect(nccExport, &QPushButton::clicked, this, &MainWindow::exportNccGCode);
     toolTabs_[tr("Herramienta NCC")] = wrapScroll(nccPage);
 
@@ -9603,12 +9732,32 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     auto* cutInternal = new QCheckBox(tr("Corte interno"), this);
     auto* cutGapType = new QComboBox(this);
     cutGapType->addItems({tr("Con puentes"), tr("Corte completo")});
+    auto* cutSides = new QComboBox(this);
+    cutSides->addItems({tr("Todos los lados"), tr("Arriba y abajo"),
+                        tr("Izquierda y derecha")});
+    cutSides->setToolTip(tr("Zona del contorno donde se permiten puentes."));
+    auto* cutManual = new QLineEdit(this);
+    cutManual->setPlaceholderText(tr("ej. 10, 30, 70 % (vacío = automático)"));
+    cutManual->setToolTip(tr("Posiciones manuales de los puentes como porcentaje del "
+                             "perímetro. Si se completa, reemplaza la cantidad y los lados."));
     auto* cutHoles = new QCheckBox(tr("Incluir agujeros internos"), this);
     addRow(cutForm, tr("Margen:"), cutMargin);
     cutForm->addRow(tr("Puentes:"), cutTabs);
     addRow(cutForm, tr("Ancho de puente:"), cutTabW);
+    addRow(cutForm, tr("Lados de puente:"), cutSides);
+    addRow(cutForm, tr("Puentes manuales:"), cutManual);
     addRow(cutForm, tr("Separación:"), cutGapType);
     markAdvanced(cutForm, cutGapType);
+    auto updateCutTabs = [cutGapType, cutTabs, cutTabW, cutSides, cutManual] {
+        const bool enabled = cutGapType->currentIndex() == 0;
+        cutTabs->setEnabled(enabled);
+        cutTabW->setEnabled(enabled);
+        cutSides->setEnabled(enabled);
+        cutManual->setEnabled(enabled);
+    };
+    connect(cutGapType, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            [updateCutTabs](int) { updateCutTabs(); });
+    updateCutTabs();
     cutForm->addRow(QString(), cutInternal);
     cutForm->addRow(QString(), cutHoles);
     markAdvanced(cutForm, cutHoles);
@@ -9620,12 +9769,14 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     section(cutForm, tr("Parámetros comunes"));
     Common cutCommon = addCommon(cutForm, cutTable);
     auto* cutPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
+    auto* cutCnc = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
     auto* cutExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     cutForm->addRow(cutPreview);
+    cutForm->addRow(cutCnc);
     cutForm->addRow(cutExport);
     connect(cutPreview, &QPushButton::clicked, this,
-            [this, cutTable, cutMargin, cutTabs, cutTabW, cutInternal, cutGapType, cutHoles,
-             cutCommon, optionsFor, readTable] {
+            [this, camName, cutTable, cutMargin, cutTabs, cutTabW, cutInternal, cutGapType,
+             cutSides, cutManual, cutHoles, cutCommon, optionsFor, readTable] {
                 fc::GerberResult* src = sourceGerber(cutSource_);
                 if (!src) return;
                 const auto rows = readTable(cutTable);
@@ -9638,6 +9789,21 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     o.margin = cutMargin->value();
                     o.tabCount = cutGapType->currentIndex() == 1 ? 0 : cutTabs->value();
                     o.tabWidth = cutTabW->value();
+                    o.tabSides = cutSides->currentIndex() == 1
+                                     ? fc::TabSides::TopBottom
+                                     : (cutSides->currentIndex() == 2
+                                            ? fc::TabSides::LeftRight
+                                            : fc::TabSides::All);
+                    o.tabPositions.clear();
+                    if (cutGapType->currentIndex() == 0) {
+                        const QString manual = cutManual->text().trimmed();
+                        for (const QString& part : manual.split(QRegularExpression("[,;\\s]+"),
+                                                                Qt::SkipEmptyParts)) {
+                            bool ok = false;
+                            const double percent = part.toDouble(&ok);
+                            if (ok) o.tabPositions.push_back(percent / 100.0);
+                        }
+                    }
                     o.external = !cutInternal->isChecked();
                     o.includeHoles = cutHoles->isChecked();
                     const CutoutResult res = cutoutGeometry(src->solid, o);
@@ -9655,9 +9821,20 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 }
                 lastCutHeader_ = optionsFor(rows.front(), cutCommon);
                 const int sourceId = cutSource_ ? cutSource_->currentData().toInt() : 0;
-                addGeneratedLayer(tr("Corte"), preview, sourceId);
+                addGeneratedLayer(camName(tr("Corte"), cutSource_), preview, sourceId);
                 statusBar()->showMessage(tr("Corte: %1 herramientas").arg(lastCutMulti_.size()), 4000);
             });
+    connect(cutCnc, &QPushButton::clicked, this, [this, camName] {
+        if (lastCutMulti_.empty()) {
+            QMessageBox::information(this, tr("Corte"),
+                                     tr("Genere primero la geometría de corte."));
+            return;
+        }
+        const std::string code = pathsGCodeMulti(lastCutMulti_, lastCutHeader_);
+        addCncJobObject(camName(tr("Corte"), cutSource_), QString::fromStdString(code),
+                        cncProps(lastCutHeader_, tr("Corte")));
+        statusBar()->showMessage(tr("CNCJob de corte generado"), 4000);
+    });
     connect(cutExport, &QPushButton::clicked, this, &MainWindow::exportCutoutGCode);
     toolTabs_[tr("Herramienta de corte")] = wrapScroll(cutPage);
 
@@ -9683,11 +9860,13 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     section(paintForm, tr("Parámetros comunes"));
     Common paintCommon = addCommon(paintForm, paintTable);
     auto* paintPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
+    auto* paintCnc = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
     auto* paintExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     paintForm->addRow(paintPreview);
+    paintForm->addRow(paintCnc);
     paintForm->addRow(paintExport);
     connect(paintPreview, &QPushButton::clicked, this,
-            [this, paintTable, paintStep, paintMargin, paintCommon, optionsFor, readTable] {
+            [this, camName, paintTable, paintStep, paintMargin, paintCommon, optionsFor, readTable] {
                 fc::GerberResult* src = sourceGerber(paintSource_);
                 if (!src) return;
                 const auto rows = readTable(paintTable);
@@ -9714,9 +9893,20 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 }
                 lastPaintHeader_ = optionsFor(rows.front(), paintCommon);
                 const int sourceId = paintSource_ ? paintSource_->currentData().toInt() : 0;
-                addGeneratedLayer(tr("Pintura"), preview, sourceId);
+                addGeneratedLayer(camName(tr("Pintura"), paintSource_), preview, sourceId);
                 statusBar()->showMessage(tr("Pintura: %1 herramientas").arg(lastPaintMulti_.size()), 4000);
             });
+    connect(paintCnc, &QPushButton::clicked, this, [this, camName] {
+        if (lastPaintMulti_.empty()) {
+            QMessageBox::information(this, tr("Pintura"),
+                                     tr("Genere primero la geometría de pintura."));
+            return;
+        }
+        const std::string code = pathsGCodeMulti(lastPaintMulti_, lastPaintHeader_);
+        addCncJobObject(camName(tr("Pintura"), paintSource_), QString::fromStdString(code),
+                        cncProps(lastPaintHeader_, tr("Pintura")));
+        statusBar()->showMessage(tr("CNCJob de pintura generado"), 4000);
+    });
     connect(paintExport, &QPushButton::clicked, this, &MainWindow::exportPaintGCode);
     toolTabs_[tr("Herramienta de pintura")] = wrapScroll(paintPage);
 
@@ -9755,7 +9945,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     drillForm->addRow(drillPreview);
     drillForm->addRow(drillExport);
     connect(drillPreview, &QPushButton::clicked, this,
-            [this, drillCommon, drillOffsetX, drillOffsetY, drillOrder, optionsFor, readTable] {
+            [this, camName, drillCommon, drillOffsetX, drillOffsetY, drillOrder, optionsFor,
+             readTable] {
                 fc::ExcellonResult* src = sourceExcellon(drillSource_);
                 if (!src) {
                     QMessageBox::information(this, tr("Taladrado"), tr("Cargá un Excellon primero."));
@@ -9788,8 +9979,14 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 if (job.tools.empty()) return;
                 lastDrillJob_ = job;
                 lastDrillHeader_ = optionsFor(rows.front(), drillCommon);
+                lastDrillGCode_ = lastDrillHeader_;
                 if (drillOrder->isChecked()) optimizeDrillOrder(*lastDrillJob_);
-                statusBar()->showMessage(tr("Taladrado: %1 herramientas").arg(job.tools.size()), 4000);
+                const std::string code = drillingGCode(*lastDrillJob_, lastDrillHeader_);
+                addCncJobObject(camName(tr("Taladrado"), drillSource_),
+                                QString::fromStdString(code),
+                                cncProps(lastDrillHeader_, tr("Taladrado")));
+                statusBar()->showMessage(
+                    tr("Taladrado: %1 herramientas · CNCJob generado").arg(job.tools.size()), 4000);
             });
     connect(drillExport, &QPushButton::clicked, this, &MainWindow::exportDrillGCode);
     toolTabs_[tr("Herramienta de perforación")] = wrapScroll(drillPage);
@@ -9811,7 +10008,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     auto* millZ = makeSpin(-50.0, 0.0, -1.5, 3, " mm",
         tr("<b>Corte Z</b><br>Profundidad de fresado."));
     auto* millZMove = makeSpin(0.0, 50.0, 2.0, 3, " mm",
-        tr("<b>Z de viaje</b><br>Altura entre recorridos."));
+        tr("<b>Altura Z p/recorr.</b><br>Altura entre recorridos."));
     auto* millDepth = makeSpin(0.0, 20.0, 0.0, 3, " mm",
         tr("<b>Profundidad por pasada</b><br>0 = una pasada."));
     auto* millSpindle = makeSpin(0.0, 60000.0, 10000.0, 0, " RPM",
@@ -9820,12 +10017,14 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     addRow(millForm, tr("Avance XY:"), millFeed);
     addRow(millForm, tr("Avance Z:"), millFeedZ);
     addRow(millForm, tr("Corte Z:"), millZ);
-    addRow(millForm, tr("Z de viaje:"), millZMove);
+    addRow(millForm, tr("Altura Z p/recorr.:"), millZMove);
     addRow(millForm, tr("Prof. por pasada:"), millDepth);
     addRow(millForm, tr("Husillo:"), millSpindle);
     auto* millPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
+    auto* millCnc = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
     auto* millExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     millForm->addRow(millPreview);
+    millForm->addRow(millCnc);
     millForm->addRow(millExport);
     connect(millPreview, &QPushButton::clicked, this,
             [this, millDia, millFeed, millFeedZ, millZ, millZMove, millDepth, millSpindle] {
@@ -9865,6 +10064,17 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 addGeneratedLayer(tr("Fresado"), preview, sourceId);
                 statusBar()->showMessage(tr("Fresado: %1 recorridos").arg(lines.size()), 4000);
             });
+    connect(millCnc, &QPushButton::clicked, this, [this, camName] {
+        if (!lastMillJob_ || lastMillJob_->paths.empty()) {
+            QMessageBox::information(this, tr("Fresado"),
+                                     tr("Genere primero la geometría de fresado."));
+            return;
+        }
+        const std::string code = pathsGCode(*lastMillJob_, lastMillOptions_);
+        addCncJobObject(camName(tr("Fresado"), millSource_), QString::fromStdString(code),
+                        cncProps(lastMillOptions_, tr("Fresado")));
+        statusBar()->showMessage(tr("CNCJob de fresado generado"), 4000);
+    });
     connect(millExport, &QPushButton::clicked, this, &MainWindow::exportMillGCode);
     toolTabs_[tr("Herramienta de fresado")] = wrapScroll(millPage);
 
@@ -9967,7 +10177,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     auto* pasteNozzle = makeSpin(0.05, 5.0, 0.5, 3, " mm",
         tr("<b>Boquilla</b><br>Diámetro de la aguja dosificadora."));
     auto* pasteTravel = makeSpin(0.0, 50.0, 5.0, 3, " mm",
-        tr("<b>Z de viaje</b><br>Altura entre pads."));
+        tr("<b>Altura Z p/recorr.</b><br>Altura entre pads."));
     auto* pasteDispense = makeSpin(-10.0, 10.0, -0.2, 3, " mm",
         tr("<b>Z de dosificación</b><br>Altura donde se deposita la pasta."));
     auto* pasteRetract = makeSpin(-10.0, 20.0, 0.5, 3, " mm",
@@ -10081,7 +10291,6 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
         std::ofstream out(path.toStdString());
         const std::string pasteCode = pasteGCode(*lastPasteJob_, lastPasteOptions_);
         out << pasteCode;
-        addGCodeRow(path);
         addCncJobObject(QFileInfo(path).fileName(), QString::fromStdString(pasteCode),
                     cncProps(lastPasteOptions_, tr("Solder Paste")));
         statusBar()->showMessage(tr("G-code de pasta guardado"), 5000);
@@ -10197,7 +10406,7 @@ bool MainWindow::applyNcc(double toolDiameter, double stepOverPercent, double cl
     }
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(tr("NCC"), lastNcc_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("NCC")), lastNcc_->paths, sourceId);
     statusBar()->showMessage(tr("NCC: %1 recorridos").arg(lastNcc_->paths.size()), 4000);
     return true;
 }
@@ -10229,7 +10438,7 @@ bool MainWindow::applyPaint(double toolDiameter, double stepOverPercent, double 
     }
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(tr("Pintura"), lastPaint_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("Pintura")), lastPaint_->paths, sourceId);
     statusBar()->showMessage(tr("Pintado: %1 recorridos").arg(lastPaint_->paths.size()), 4000);
     return true;
 }
@@ -10263,7 +10472,6 @@ void MainWindow::exportMillGCode() {
         return;
     }
     out << code;
-    addGCodeRow(path);
     addCncJobObject(QFileInfo(path).fileName(), QString::fromStdString(code),
                     cncProps(lastMillOptions_, tr("Fresado")));
     statusBar()->showMessage(tr("G-code de fresado guardado"), 4000);
@@ -10287,7 +10495,6 @@ void MainWindow::exportDrillGCode() {
         return;
     }
     out << code;
-    addGCodeRow(path);
     addCncJobObject(QFileInfo(path).fileName(), QString::fromStdString(code),
                     cncProps(lastDrillGCode_, tr("Taladrado")));
     statusBar()->showMessage(tr("G-code de taladrado guardado"), 4000);
@@ -10432,7 +10639,6 @@ void MainWindow::showGerber(const QString& path) {
     lastCutout_.reset();
     lastNcc_.reset();
     lastPaint_.reset();
-    projectPath_.clear();
     resetObjectGroups();
     canvas_->setGeometryData(r.solids, r.follows);
     auto* item = addObjectRow(QFileInfo(path).fileName(), "gerber",
@@ -10502,7 +10708,6 @@ void MainWindow::showExcellon(const QString& path) {
     lastCutout_.reset();
     lastNcc_.reset();
     lastPaint_.reset();
-    projectPath_.clear();
     resetObjectGroups();
     canvas_->setGeometryData(r.geometry, {});
     auto* item = addObjectRow(QFileInfo(path).fileName(), "excellon",
@@ -10639,7 +10844,7 @@ bool MainWindow::applyIsolation(double toolDiameter, int passes, double overlapP
     }
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(tr("Aislamiento"), lastIsolation_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("Aislamiento")), lastIsolation_->paths, sourceId);
 
     std::ostringstream os;
     os << "\n--- AISLAMIENTO ---\n";
@@ -10748,7 +10953,7 @@ bool MainWindow::applyCutout(double toolDiameter, double margin, bool external,
     }
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(tr("Corte"), lastCutout_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("Corte")), lastCutout_->paths, sourceId);
 
     std::ostringstream os;
     os << "\n--- CORTE DE CONTORNO ---\n";
@@ -10796,7 +11001,6 @@ void MainWindow::exportCutoutGCode() {
         return;
     }
     out << code;
-    addGCodeRow(path);
     addCncJobObject(QFileInfo(path).fileName(), QString::fromStdString(code),
                     cncProps(opt, tr("Corte")));
     statusBar()->showMessage(tr("G-code de corte guardado: %1").arg(QFileInfo(path).fileName()),
@@ -10892,7 +11096,7 @@ void MainWindow::nccDialog() {
     lastNccGCode_.toolDiameter = opt.toolDiameter;
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(tr("NCC"), lastNcc_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("NCC")), lastNcc_->paths, sourceId);
 
     std::ostringstream os;
     os << "\n--- NCC ---\n";
@@ -10924,7 +11128,6 @@ void MainWindow::exportNccGCode() {
         return;
     }
     out << code;
-    addGCodeRow(path);
     addCncJobObject(QFileInfo(path).fileName(), QString::fromStdString(code),
                     cncProps(lastNccHeader_, tr("NCC")));
     statusBar()->showMessage(tr("G-code NCC guardado: %1").arg(QFileInfo(path).fileName()), 5000);
@@ -10984,7 +11187,7 @@ void MainWindow::paintDialog() {
     lastPaintGCode_.toolDiameter = opt.toolDiameter;
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(tr("Pintura"), lastPaint_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("Pintura")), lastPaint_->paths, sourceId);
 
     std::ostringstream os;
     os << "\n--- PAINT ---\n";
@@ -11015,7 +11218,6 @@ void MainWindow::exportPaintGCode() {
         return;
     }
     out << code;
-    addGCodeRow(path);
     addCncJobObject(QFileInfo(path).fileName(), QString::fromStdString(code),
                     cncProps(lastPaintHeader_, tr("Pintura")));
     statusBar()->showMessage(tr("G-code de pintado guardado: %1").arg(QFileInfo(path).fileName()), 5000);
@@ -11052,7 +11254,6 @@ void MainWindow::exportIsolationGCode() {
         return;
     }
     out << code;
-    addGCodeRow(path);
     addCncJobObject(QFileInfo(path).fileName(), QString::fromStdString(code),
                     cncProps(lastIsoHeader_, tr("Aislamiento")));
     statusBar()->showMessage(tr("G-code de aislamiento guardado: %1")

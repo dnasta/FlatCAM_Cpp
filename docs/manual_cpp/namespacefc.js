@@ -69,6 +69,11 @@ var namespacefc =
       [ "Hatch", "namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63a1ca570bb907094b2921ea489c73f1c3d", null ],
       [ "Paint", "namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63a4802a5ac6005a6ab9c68a2fb29e30a3e", null ]
     ] ],
+    [ "TabSides", "namespacefc.html#a3e29dc44d321f9f123160292dd769e18", [
+      [ "All", "namespacefc.html#a3e29dc44d321f9f123160292dd769e18ab1c94ca2fbc3e78fc30069c8d0f01680", null ],
+      [ "TopBottom", "namespacefc.html#a3e29dc44d321f9f123160292dd769e18ae877fb9a176ab7b69019a542d4844262", null ],
+      [ "LeftRight", "namespacefc.html#a3e29dc44d321f9f123160292dd769e18a955322c98b1fc571e8b6b688ae7d9ee4", null ]
+    ] ],
     [ "Units", "namespacefc.html#acb79184d1e00b1635d60b5596d70db00", [
       [ "Mm", "namespacefc.html#acb79184d1e00b1635d60b5596d70db00a07f07b623b4a00b57dc150ff2e59cb92", null ],
       [ "Inch", "namespacefc.html#acb79184d1e00b1635d60b5596d70db00abee12d309ba5730e1e121733b7b67956", null ]

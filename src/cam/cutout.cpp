@@ -74,13 +74,14 @@ double ringLength(const Ring& ring) {
  *          el tramo puede quedar degenerado; el límite del 90 % amortigua pero
  *          no elimina el caso cuando `count` es grande y el ancho moderado.
  */
-std::vector<Ring> splitWithTabs(const Ring& closed, double width, int count, double totalLength) {
+std::vector<Ring> splitWithTabs(const Ring& closed, double width, int count, double totalLength,
+                                TabSides sides, const std::vector<double>& manualPositions) {
     std::vector<Ring> out;
-    if (count <= 0 || width <= 0.0 || closed.size() < 4) {
+    if ((count <= 0 && manualPositions.empty()) || width <= 0.0 || closed.size() < 4) {
         out.push_back(closed);
         return out;
     }
-    if (totalLength <= 0.0 || width * count >= totalLength * 0.9) {
+    if (totalLength <= 0.0) {
         out.push_back(closed);
         return out;
     }
@@ -114,14 +115,52 @@ std::vector<Ring> splitWithTabs(const Ring& closed, double width, int count, dou
         return Pt{a.x + (b.x - a.x) * f, a.y + (b.y - a.y) * f};
     };
 
+    std::vector<double> centers;
+    if (!manualPositions.empty()) {
+        centers.reserve(manualPositions.size());
+        for (double fraction : manualPositions)
+            centers.push_back(std::clamp(fraction, 0.0, 1.0) * length);
+    } else {
+        for (int k = 0; k < count; ++k)
+            centers.push_back((k + 0.5) * length / count);
+        if (sides != TabSides::All) {
+            BBox box;
+            for (const Pt& p : pts) {
+                if (!box.valid) box = BBox{p.x, p.y, p.x, p.y};
+                else {
+                    box.xmin = std::min(box.xmin, p.x);
+                    box.ymin = std::min(box.ymin, p.y);
+                    box.xmax = std::max(box.xmax, p.x);
+                    box.ymax = std::max(box.ymax, p.y);
+                }
+            }
+            const double tolerance = std::max(0.01, length * 0.001);
+            std::vector<double> filtered;
+            for (double center : centers) {
+                const Pt p = pointAt(center);
+                const bool topBottom = std::fabs(p.y - box.ymax) <= tolerance ||
+                                       std::fabs(p.y - box.ymin) <= tolerance;
+                const bool leftRight = std::fabs(p.x - box.xmin) <= tolerance ||
+                                       std::fabs(p.x - box.xmax) <= tolerance;
+                if ((sides == TabSides::TopBottom && topBottom) ||
+                    (sides == TabSides::LeftRight && leftRight))
+                    filtered.push_back(center);
+            }
+            if (!filtered.empty()) centers = std::move(filtered);
+        }
+    }
+    if (width * static_cast<double>(centers.size()) >= length * 0.9) {
+        out.push_back(closed);
+        return out;
+    }
+
     struct Span {
         double start;
         double end;
     };
     std::vector<Span> tabs;
-    tabs.reserve(static_cast<std::size_t>(count));
-    for (int k = 0; k < count; ++k) {
-        const double center = (k + 0.5) * length / count;
+    tabs.reserve(centers.size());
+    for (double center : centers) {
         double start = center - width / 2.0;
         double end = center + width / 2.0;
         while (start < 0.0) {
@@ -228,14 +267,18 @@ CutoutResult cutoutGeometry(const Geom& outline, const CutoutOptions& options) {
 
     for (const PolygonContours& pc : envelope.polygons()) {
         const double outerLength = ringLength(pc.outer);
-        for (const Ring& segment : splitWithTabs(pc.outer, options.tabWidth, options.tabCount, outerLength)) {
+        for (const Ring& segment : splitWithTabs(pc.outer, options.tabWidth, options.tabCount,
+                                                outerLength, options.tabSides,
+                                                options.tabPositions)) {
             appendPath(result, segment, options.invert);
         }
         if (options.includeHoles) {
             for (const Ring& holeRing : pc.holes) {
                 const double holeLength = ringLength(holeRing);
-                for (const Ring& segment :
-                     splitWithTabs(holeRing, options.tabWidth, options.tabCount, holeLength)) {
+                for (const Ring& segment : splitWithTabs(holeRing, options.tabWidth,
+                                                         options.tabCount, holeLength,
+                                                         options.tabSides,
+                                                         options.tabPositions)) {
                     appendPath(result, segment, options.invert);
                 }
             }

@@ -7,6 +7,8 @@ var structfc_1_1_cutout_options =
     [ "margin", "structfc_1_1_cutout_options.html#aea98b5fda3bf2b4871fa2ece1940f63d", null ],
     [ "quadrantSegments", "structfc_1_1_cutout_options.html#a64986f146c302eeca1f0cf2080e1c972", null ],
     [ "tabCount", "structfc_1_1_cutout_options.html#a412b3d1e8d1e29bd4a6bdf13284024aa", null ],
+    [ "tabPositions", "structfc_1_1_cutout_options.html#ad572b037b5229e15d089daa06057bc20", null ],
+    [ "tabSides", "structfc_1_1_cutout_options.html#ab191131ee4d20288e497d1e6aff44e02", null ],
     [ "tabWidth", "structfc_1_1_cutout_options.html#a0eb6a723527d3ed4ae96c78a153c6d66", null ],
     [ "toolDiameter", "structfc_1_1_cutout_options.html#af3f8ed814ddf115e91a6e40fa6f2f278", null ]
 ];

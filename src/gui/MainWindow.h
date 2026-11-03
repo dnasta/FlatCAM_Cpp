@@ -45,6 +45,7 @@ class QTabWidget;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QUndoStack;
+class QDockWidget;
 
 /**
  * @brief Ventana principal y controlador de la aplicación.
@@ -60,6 +61,7 @@ public:
     bool openPath(const QString& path);
     /// @brief Abre la vista 3D del cobre visible.
     void show3D();
+    void allowCloseWithoutPrompt();
     /// @brief Abre el editor gráfico de Excellon.
     void excellonEditor();
     /// @brief Convierte mm a la unidad de visualización.
@@ -70,6 +72,8 @@ public:
     QString lengthText(double mm, int decimals = 3) const;
     /// @brief Convierte las tablas de herramientas a mm/in.
     void convertToolTableUnits(bool toInch);
+    QString activeObjectBase() const;
+    QString toolLayerName(const QString& operation) const;
     /// @brief Abre varios archivos como capas independientes.
     bool openFiles(const QStringList& paths);
     /// @brief Abre un proyecto `.FlatPrj`.
@@ -208,6 +212,7 @@ public:
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dropEvent(QDropEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
 
 private slots:
     void chooseFile();
@@ -345,6 +350,7 @@ private:
     class QJsonArray toolDbEntries() const;
     void setToolDbEntries(const class QJsonArray& entries) const;
     void savePreferences();
+    void markProjectDirty();
     std::function<fc::GCodeOptions()> isoOptions_;
     std::function<fc::GCodeOptions()> nccOptions_;
     std::function<fc::GCodeOptions()> cutOptions_;
@@ -417,6 +423,7 @@ private:
     QTreeWidget* properties_ = nullptr;
     QString projectPath_;
     bool updatingTree_ = false;
+    bool projectDirty_ = false;
     bool displayInch_ = false;
     bool snapGrid_ = false;
     bool advancedLevel_ = true;
@@ -447,6 +454,7 @@ private:
     QColor copperColor_{217, 164, 65};
     QColor followColor_{111, 168, 220};
     QColor toolpathColor_{102, 214, 132};
+    QDockWidget* shellDock_ = nullptr;
     QTabWidget* bottomTabs_ = nullptr;
     QPlainTextEdit* consoleOutput_ = nullptr;
     QLineEdit* consoleInput_ = nullptr;

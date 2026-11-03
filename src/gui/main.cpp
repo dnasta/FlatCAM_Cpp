@@ -212,6 +212,7 @@ int main(int argc, char** argv) {
             if (!target) target = &window;
             if (!target->grab().save(screenshot))
                 qWarning() << "No se pudo guardar la captura en" << screenshot;
+            window.allowCloseWithoutPrompt();
             QApplication::quit();
         });
     }

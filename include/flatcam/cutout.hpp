@@ -15,6 +15,13 @@
 
 namespace fc {
 
+/// Distribución de los puentes alrededor del contorno.
+enum class TabSides {
+    All,       ///< Repartidos uniformemente por todo el perímetro.
+    TopBottom, ///< Sólo en los bordes superior e inferior.
+    LeftRight  ///< Sólo en los bordes izquierdo y derecho.
+};
+
 /**
  * @brief Parámetros del corte de contorno.
  */
@@ -26,6 +33,10 @@ struct CutoutOptions {
     bool invert = false;         ///< Invierte el sentido del recorrido.
     int tabCount = 0;            ///< Puentes que sostienen la pieza; 0 = ninguno.
     double tabWidth = 0.0;       ///< Ancho de cada puente (mm).
+    TabSides tabSides = TabSides::All; ///< Lados donde se permiten puentes.
+    /// Posiciones manuales como fracción del perímetro (0..1). Si no está
+    /// vacío, reemplaza a `tabCount` y `tabSides`.
+    std::vector<double> tabPositions;
     bool includeHoles = false;   ///< Corta también contornos internos.
     std::optional<BBox> area;    ///< Área rectangular opcional de trabajo.
 };

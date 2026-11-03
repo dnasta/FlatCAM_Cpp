@@ -56,12 +56,13 @@ var searchData=
   ['tclversion_53',['tclVersion',['../class_main_window.html#a20e6926d67a2896885a5f7e190fb7b48',1,'MainWindow']]],
   ['thievingpoints_54',['thievingPoints',['../namespacefc.html#a01f76cea7ae4ad96c57e12e9cd03ee0e',1,'fc']]],
   ['tooldbentries_55',['toolDbEntries',['../class_main_window.html#a1e3ab693e02e9214b03ea8ede8c43a7e',1,'MainWindow']]],
-  ['tooltablesjson_56',['toolTablesJson',['../class_main_window.html#aa7c8530a5a4389f488c0ceac3f7728e4',1,'MainWindow']]],
-  ['tostring_57',['toString',['../namespacefc.html#af31110ab7b4d341f77e5321c501c4fc8',1,'fc']]],
-  ['towkt_58',['toWkt',['../classfc_1_1_geom.html#a0a968b0898b501f37d9502080fa4f5bc',1,'fc::Geom::toWkt()'],['../class_geom.html#a0a968b0898b501f37d9502080fa4f5bc',1,'Geom::toWkt()']]],
-  ['transformlayer_59',['transformLayer',['../class_canvas.html#aefbf279cd0b3c1ce2fba87e1a6db9ced',1,'Canvas']]],
-  ['transformselectedobject_60',['transformSelectedObject',['../class_main_window.html#afa5e4acb0de2f47478bc99f6b4e0c520',1,'MainWindow']]],
-  ['transformxy_61',['transformXY',['../classfc_1_1_geom.html#ac6cccc79d631cf73ca2780288adb9b94',1,'fc::Geom::transformXY()'],['../class_geom.html#ac6cccc79d631cf73ca2780288adb9b94',1,'Geom::transformXY()']]],
-  ['translate_62',['translate',['../classfc_1_1_geom.html#aef0d4a35b9d60e8ec1899008325c9e3c',1,'fc::Geom::translate()'],['../class_geom.html#aef0d4a35b9d60e8ec1899008325c9e3c',1,'Geom::translate()']]],
-  ['typeid_63',['typeId',['../classfc_1_1_geom.html#a6f94f675d0d22c03f0e89ae9dd724bfb',1,'fc::Geom::typeId()'],['../class_geom.html#a6f94f675d0d22c03f0e89ae9dd724bfb',1,'Geom::typeId()']]]
+  ['toollayername_56',['toolLayerName',['../class_main_window.html#afa7595d7d3ceae271f87e11144637cfe',1,'MainWindow']]],
+  ['tooltablesjson_57',['toolTablesJson',['../class_main_window.html#aa7c8530a5a4389f488c0ceac3f7728e4',1,'MainWindow']]],
+  ['tostring_58',['toString',['../namespacefc.html#af31110ab7b4d341f77e5321c501c4fc8',1,'fc']]],
+  ['towkt_59',['toWkt',['../classfc_1_1_geom.html#a0a968b0898b501f37d9502080fa4f5bc',1,'fc::Geom::toWkt()'],['../class_geom.html#a0a968b0898b501f37d9502080fa4f5bc',1,'Geom::toWkt()']]],
+  ['transformlayer_60',['transformLayer',['../class_canvas.html#aefbf279cd0b3c1ce2fba87e1a6db9ced',1,'Canvas']]],
+  ['transformselectedobject_61',['transformSelectedObject',['../class_main_window.html#afa5e4acb0de2f47478bc99f6b4e0c520',1,'MainWindow']]],
+  ['transformxy_62',['transformXY',['../classfc_1_1_geom.html#ac6cccc79d631cf73ca2780288adb9b94',1,'fc::Geom::transformXY()'],['../class_geom.html#ac6cccc79d631cf73ca2780288adb9b94',1,'Geom::transformXY()']]],
+  ['translate_63',['translate',['../classfc_1_1_geom.html#aef0d4a35b9d60e8ec1899008325c9e3c',1,'fc::Geom::translate()'],['../class_geom.html#aef0d4a35b9d60e8ec1899008325c9e3c',1,'Geom::translate()']]],
+  ['typeid_64',['typeId',['../classfc_1_1_geom.html#a6f94f675d0d22c03f0e89ae9dd724bfb',1,'fc::Geom::typeId()'],['../class_geom.html#a6f94f675d0d22c03f0e89ae9dd724bfb',1,'Geom::typeId()']]]
 ];

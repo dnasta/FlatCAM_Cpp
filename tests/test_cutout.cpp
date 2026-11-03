@@ -89,3 +89,24 @@ TEST(Cutout, AreaClipsTheEnvelope) {
     EXPECT_NEAR(r.bounds.ymax, 10.0, 1e-6);
     EXPECT_GT(r.paths.size(), std::size_t{0});
 }
+
+TEST(Cutout, TabsCanBeLimitedToSidesOrManualPositions) {
+    CutoutOptions opt;
+    opt.toolDiameter = 0.0;
+    opt.margin = 0.0;
+    opt.tabCount = 4;
+    opt.tabWidth = 2.0;
+
+    CutoutResult all = cutoutGeometry(Geom::box(0, 0, 50, 50), opt);
+    ASSERT_EQ(all.paths.size(), std::size_t{4});
+
+    opt.tabSides = TabSides::TopBottom;
+    CutoutResult topBottom = cutoutGeometry(Geom::box(0, 0, 50, 50), opt);
+    EXPECT_EQ(topBottom.paths.size(), std::size_t{2});
+
+    opt.tabSides = TabSides::All;
+    opt.tabCount = 0;
+    opt.tabPositions = {0.25, 0.75};
+    CutoutResult manual = cutoutGeometry(Geom::box(0, 0, 50, 50), opt);
+    EXPECT_EQ(manual.paths.size(), std::size_t{2});
+}
