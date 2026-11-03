@@ -9,7 +9,7 @@ Este producto incluye o enlaza los siguientes componentes de terceros:
 | Componente | Licencia | Uso |
 |---|---|---|
 | FlatCAM 2024.4 | GPL-3.0 | Proyecto original del que deriva este port |
-| Qt 6 (Core, Gui, Widgets, Svg, PrintSupport, Sql, Qml) | LGPL-3.0 / GPL-3.0 / comercial | GUI, gráficos, scripting JS, impresión |
+| Qt 6 (Core, Gui, Widgets, Svg, PrintSupport, Sql, Qml) | LGPL-3.0 / GPL-3.0 / comercial (se usa bajo GPL-3.0) | GUI, gráficos, scripting JS, impresión |
 | GEOS | LGPL-2.1 | Operaciones geométricas |
 | zlib | zlib License | Descompresión de PDF |
 | Tcl/Tk | BSD-style | Consola Tcl embebida (opcional) |
@@ -21,9 +21,10 @@ Este producto incluye o enlaza los siguientes componentes de terceros:
 | GoogleTest | BSD-3-Clause | Sólo tests; no se distribuye en el binario |
 | shapely / rtree / ezdxf | BSD / MIT | Sólo herramientas de verificación; no se distribuyen |
 
-Los textos completos de las licencias de Qt, GEOS, zlib y el resto de las
-dependencias están disponibles en sus sitios oficiales y en las copias que
-acompañan a las bibliotecas dentro del bundle de macOS.
+Los textos completos de las licencias están disponibles en los sitios
+oficiales de cada componente. La licencia LGPL-2.1 de GEOS se incluye en
+`licenses/GEOS-COPYING` y en el bundle de macOS. Este programa se distribuye
+bajo GPL-3.0, que cubre también el uso de Qt bajo esa opción de licencia.
 
 FlatCAM original: <http://flatcam.org> — autor original Juan Pablo Caram y
 colaboradores.

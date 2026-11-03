@@ -42,6 +42,8 @@ mkdir -p "$DEST/flatcam-gui.app/Contents/Resources"
 cp assets/appicon.icns "$DEST/flatcam-gui.app/Contents/Resources/appicon.icns"
 cp LICENSE "$DEST/flatcam-gui.app/Contents/Resources/LICENSE"
 cp THIRD_PARTY_NOTICES.md "$DEST/flatcam-gui.app/Contents/Resources/THIRD_PARTY_NOTICES.md"
+mkdir -p "$DEST/flatcam-gui.app/Contents/Resources/licenses"
+cp licenses/* "$DEST/flatcam-gui.app/Contents/Resources/licenses/"
 /usr/libexec/PlistBuddy -c "Set :CFBundleIconFile appicon" \
     "$DEST/flatcam-gui.app/Contents/Info.plist" 2>/dev/null || \
     /usr/libexec/PlistBuddy -c "Add :CFBundleIconFile string appicon" \
