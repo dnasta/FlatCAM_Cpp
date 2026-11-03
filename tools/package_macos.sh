@@ -31,6 +31,19 @@ for plugin in libqoffscreen.dylib libqminimal.dylib libqminimalegl.dylib; do
 done
 "$MACDEPLOYQT" "$DEST/flatcam-gui.app" -always-overwrite
 
+APP="$DEST/flatcam-gui.app"
+# Bundle GEOS (Homebrew instalado con deployment target alto no es portable).
+GEOS_DIR_CACHE="$(sed -n 's/^GEOS_DIR:[^=]*=//p' "$BUILD/CMakeCache.txt" | head -1)"
+if [ -n "$GEOS_DIR_CACHE" ]; then
+    GEOS_LIB_DIR="$(cd "$(dirname "$GEOS_DIR_CACHE")/.." && pwd)"
+else
+    GEOS_LIB_DIR="$(brew --prefix geos 2>/dev/null)/lib"
+fi
+if [ -d "$GEOS_LIB_DIR" ]; then
+    mkdir -p "$APP/Contents/Frameworks"
+    cp -L "$GEOS_LIB_DIR"/libgeos*.dylib "$APP/Contents/Frameworks/" 2>/dev/null || true
+fi
+
 # Keep only the SQLite driver: the PostgreSQL/ODBC/Mimer plugins may link
 # against libraries that are not present on the user machine.
 rm -f "$DEST/flatcam-gui.app/Contents/PlugIns/sqldrivers/libqsqlpsql.dylib" \
@@ -48,6 +61,18 @@ cp licenses/* "$DEST/flatcam-gui.app/Contents/Resources/licenses/"
     "$DEST/flatcam-gui.app/Contents/Info.plist" 2>/dev/null || \
     /usr/libexec/PlistBuddy -c "Add :CFBundleIconFile string appicon" \
     "$DEST/flatcam-gui.app/Contents/Info.plist"
+# CLI y JS dentro del bundle, con rpath a los Frameworks.
+for tool in flatcam-cli flatcam-js; do
+    if [ -f "$DEST/bin/$tool" ]; then
+        cp "$DEST/bin/$tool" "$APP/Contents/MacOS/$tool"
+        if ! otool -l "$APP/Contents/MacOS/$tool" | grep -q "@executable_path/../Frameworks"; then
+            install_name_tool -add_rpath "@executable_path/../Frameworks" "$APP/Contents/MacOS/$tool"
+        fi
+        printf '#!/bin/sh\nexec "$(dirname "$0")/../flatcam-gui.app/Contents/MacOS/%s" "$@"\n' "$tool" > "$DEST/bin/$tool"
+        chmod +x "$DEST/bin/$tool"
+    fi
+done
+
 codesign --force --deep --sign - --timestamp=none "$DEST/flatcam-gui.app" || \
     echo "ad-hoc codesign failed"
 codesign --verify --deep --strict "$DEST/flatcam-gui.app" && echo "signature OK"
