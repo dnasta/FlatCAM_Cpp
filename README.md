@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01"><img alt="Release" src="https://img.shields.io/badge/release-v0.01-b4771b"></a>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.02"><img alt="Release" src="https://img.shields.io/badge/release-v0.02-b4771b"></a>
   <a href="LICENSE"><img alt="Licencia" src="https://img.shields.io/badge/licencia-GPLv3-2f6f4f"></a>
   <img alt="macOS" src="https://img.shields.io/badge/macOS-14.4%2B%20arm64-16202b">
   <img alt="C++" src="https://img.shields.io/badge/C%2B%2B-20-00599C">
@@ -22,7 +22,7 @@
   <a href="README_US.md">🇬🇧 English</a> ·
   <a href="https://dnasta.github.io/FlatCAM_Cpp/manual_html/index.html"><strong>📖 Manual de usuario</strong></a> ·
   <a href="https://dnasta.github.io/FlatCAM_Cpp/manual_cpp/index.html"><strong>🛠 Manual del código</strong></a> ·
-  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01"><strong>⬇ Descargar v0.01</strong></a>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.02"><strong>⬇ Descargar v0.02</strong></a>
 </p>
 
 ---
@@ -198,7 +198,7 @@ Es un port del FlatCAM original (Python + PyQt5) a **C++20**, con **Qt 6** para 
 
 ### Desde el DMG
 
-1. Descargá [`FlatCAM-CPP-0.1.0-arm64.dmg`](https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01).
+1. Descargá [`FlatCAM-CPP-0.2.0-arm64.dmg`](https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.02).
 2. Abrí el DMG.
 3. Arrastrá **FlatCAM C++** a *Aplicaciones*.
 4. La primera vez: clic derecho → **Abrir** (firma ad-hoc).
@@ -328,8 +328,8 @@ cmake --build build -j8
 ### Empaquetar el DMG
 
 ```bash
-./tools/create_dmg.sh 0.1.0
-# dist/FlatCAM-CPP-0.1.0-arm64.dmg
+./tools/create_dmg.sh 0.2.0
+# dist/FlatCAM-CPP-0.2.0-arm64.dmg
 ```
 
 El script compila, ejecuta `macdeployqt`, copia GEOS, incrusta licencias, firma ad-hoc y crea el DMG con la app renombrada a `FlatCAM C++.app`.
@@ -460,4 +460,4 @@ cadena original.
 - **QR Code generator:** Project Nayuki.
 - **Comunidad FlatCAM** por la documentación y los ejemplos.
 
-<p align="center"><sub>Hecho con C++20, Qt 6 y GEOS · macOS Apple Silicon · v0.01</sub></p>
+<p align="center"><sub>Hecho con C++20, Qt 6 y GEOS · macOS Apple Silicon · v0.02</sub></p>

@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.02</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -1988,9 +1988,9 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('_main_window_8
 <div class="line"><a id="l01865" name="l01865"></a><span class="lineno"> 1865</span>    about-&gt;setStatusTip(tr(<span class="stringliteral">&quot;Información de la aplicación y licencia.&quot;</span>));</div>
 <div class="line"><a id="l01866" name="l01866"></a><span class="lineno"> 1866</span>    connect(about, &amp;QAction::triggered, <span class="keyword">this</span>, [<span class="keyword">this</span>] {</div>
 <div class="line"><a id="l01867" name="l01867"></a><span class="lineno"> 1867</span>        QMessageBox::about(<span class="keyword">this</span>, tr(<span class="stringliteral">&quot;FlatCAM C++&quot;</span>),</div>
-<div class="line"><a id="l01868" name="l01868"></a><span class="lineno"> 1868</span>                           tr(<span class="stringliteral">&quot;&lt;b&gt;FlatCAM C++ 0.1.0&lt;/b&gt; · build 2026-11-01&lt;br&gt;&quot;</span></div>
-<div class="line"><a id="l01869" name="l01869"></a><span class="lineno"> 1869</span>                              <span class="stringliteral">&quot;Port a C++20 + Qt6 + GEOS de FlatCAM 2024.4.&lt;br&gt;&quot;</span></div>
-<div class="line"><a id="l01870" name="l01870"></a><span class="lineno"> 1870</span>                              <span class="stringliteral">&quot;Hito M0-M2: núcleo geométrico, Gerber RS-274X y Excellon.&lt;br&gt;&lt;br&gt;&quot;</span></div>
+<div class="line"><a id="l01868" name="l01868"></a><span class="lineno"> 1868</span>                           tr(<span class="stringliteral">&quot;&lt;b&gt;FlatCAM C++ 0.2.0&lt;/b&gt; · build 2026-11-03&lt;br&gt;&quot;</span></div>
+<div class="line"><a id="l01869" name="l01869"></a><span class="lineno"> 1869</span>                              <span class="stringliteral">&quot;Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.&lt;br&gt;&quot;</span></div>
+<div class="line"><a id="l01870" name="l01870"></a><span class="lineno"> 1870</span>                              <span class="stringliteral">&quot;Gerber, Excellon, G-code, importadores y herramientas CAM.&lt;br&gt;&lt;br&gt;&quot;</span></div>
 <div class="line"><a id="l01871" name="l01871"></a><span class="lineno"> 1871</span>                              <span class="stringliteral">&quot;Licencia GPLv3, igual que el proyecto original.&quot;</span>));</div>
 <div class="line"><a id="l01872" name="l01872"></a><span class="lineno"> 1872</span>    });</div>
 <div class="line"><a id="l01873" name="l01873"></a><span class="lineno"> 1873</span> </div>
@@ -2100,7 +2100,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('_main_window_8
 <div class="line"><a id="l01977" name="l01977"></a><span class="lineno"> 1977</span>        <span class="keyword">auto</span>* details = <span class="keyword">new</span> QPlainTextEdit(&amp;dialog);</div>
 <div class="line"><a id="l01978" name="l01978"></a><span class="lineno"> 1978</span>        details-&gt;setReadOnly(<span class="keyword">true</span>);</div>
 <div class="line"><a id="l01979" name="l01979"></a><span class="lineno"> 1979</span>        details-&gt;setPlainText(</div>
-<div class="line"><a id="l01980" name="l01980"></a><span class="lineno"> 1980</span>            tr(<span class="stringliteral">&quot;FlatCAM C++ 0.1.0\nBuild: 2026-11-02 16:09:38\n&quot;</span></div>
+<div class="line"><a id="l01980" name="l01980"></a><span class="lineno"> 1980</span>            tr(<span class="stringliteral">&quot;FlatCAM C++ 0.2.0\nBuild: 2026-11-03\n&quot;</span></div>
 <div class="line"><a id="l01981" name="l01981"></a><span class="lineno"> 1981</span>               <span class="stringliteral">&quot;Qt: %1\nSistema: %2\nConfig: %3&quot;</span>)</div>
 <div class="line"><a id="l01982" name="l01982"></a><span class="lineno"> 1982</span>                .arg(QString::fromLatin1(qVersion()))</div>
 <div class="line"><a id="l01983" name="l01983"></a><span class="lineno"> 1983</span>                .arg(QSysInfo::prettyProductName())</div>
@@ -3729,7 +3729,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('_main_window_8
 <div class="line"><a id="l03533" name="l03533"></a><span class="lineno"> 3533</span><span class="comment">/// @brief Adaptador Tcl del comando `version`.</span></div>
 <div class="foldopen" id="foldopen03534" data-start="{" data-end="}">
 <div class="line"><a id="l03534" name="l03534"></a><span class="lineno"><a class="line" href="class_main_window.html#a20e6926d67a2896885a5f7e190fb7b48"> 3534</a></span>QString <a class="code hl_function" href="class_main_window.html#a20e6926d67a2896885a5f7e190fb7b48">MainWindow::tclVersion</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l03535" name="l03535"></a><span class="lineno"> 3535</span>    <span class="keywordflow">return</span> QStringLiteral(<span class="stringliteral">&quot;FlatCAM C++ 0.1.0&quot;</span>);</div>
+<div class="line"><a id="l03535" name="l03535"></a><span class="lineno"> 3535</span>    <span class="keywordflow">return</span> QStringLiteral(<span class="stringliteral">&quot;FlatCAM C++ 0.2.0&quot;</span>);</div>
 <div class="line"><a id="l03536" name="l03536"></a><span class="lineno"> 3536</span>}</div>
 </div>
 <div class="line"><a id="l03537" name="l03537"></a><span class="lineno"> 3537</span><span class="comment"></span> </div>

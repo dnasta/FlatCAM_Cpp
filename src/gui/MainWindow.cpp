@@ -1865,9 +1865,9 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.1.0</b> · build 2026-11-01<br>"
-                              "Port a C++20 + Qt6 + GEOS de FlatCAM 2024.4.<br>"
-                              "Hito M0-M2: núcleo geométrico, Gerber RS-274X y Excellon.<br><br>"
+                           tr("<b>FlatCAM C++ 0.2.0</b> · build 2026-11-03<br>"
+                              "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
+                              "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
     });
 
@@ -1977,7 +1977,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.1.0\nBuild: 2026-11-02 16:09:38\n"
+            tr("FlatCAM C++ 0.2.0\nBuild: 2026-11-03\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -3532,7 +3532,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.1.0");
+    return QStringLiteral("FlatCAM C++ 0.2.0");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
