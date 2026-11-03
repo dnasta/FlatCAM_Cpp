@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Importar y exportar · FlatCAM C++</title>
+<meta name="description" content="Gerber, Excellon, SVG, DXF, PDF, HPGL e imágenes">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html" class="active">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Importar y exportar</span></div>
+<h1>Importar y exportar</h1>
+<p class="subtitle">Gerber, Excellon, SVG, DXF, PDF, HPGL e imágenes</p>
+
+<p class="lead">FlatCAM C++ importa los formatos habituales de fabricación de PCB y también dibujos vectoriales, PDF e imágenes. La exportación cubre los mismos formatos y G-code.</p>
+
+<h2>Abrir archivos</h2>
+<ol class="steps">
+<li>Usá <em>Archivo → Abrir</em>, la barra de herramientas o arrastrá archivos a la ventana.</li>
+<li>Se pueden seleccionar varios archivos; cada uno se agrega como objeto independiente.</li>
+<li>El tipo se detecta por extensión y contenido. Para Gerber/Excellon se elige el parser correcto automáticamente.</li>
+<li>Revisá el <strong>Informe</strong> inferior por avisos de formato.</li>
+</ol>
+<p>Extensiones reconocidas: <code>.gbr .ger .gtl .gbl .gts .gbs .gko .drl .xln .exc .ncd .nc .gcode .tap .ngc .svg .dxf .pdf .hpgl .hpg .plt .FlatPrj</code>.</p>
+
+<h2>Gerber RS-274X</h2>
+<p>Soporta el estándar completo que usan KiCad, Eagle, Altium y otros:</p>
+<table>
+<thead><tr><th>Elemento</th><th>Detalle</th></tr></thead>
+<tbody>
+<tr><td>Formato</td><td><code>FS</code> con supresión de ceros L/T/D, absoluto/incremental.</td></tr>
+<tr><td>Unidades</td><td><code>MO</code>, <code>G70/G71</code>.</td></tr>
+<tr><td>Aperturas</td><td>Círculo, rectángulo, obround, polígono; macros <code>AM</code> con variables y primitivas 1, 2, 20, 21, 22, 4, 5, 6, 7.</td></tr>
+<tr><td>Trazos</td><td><code>D01/D02/D03</code>, interpolación lineal y circular <code>G01/G02/G03</code>, multiquadrante <code>G75</code> y <code>G74</code>.</td></tr>
+<tr><td>Regiones</td><td><code>G36/G37</code>.</td></tr>
+<tr><td>Polaridad</td><td><code>LP</code> dark/clear por lotes.</td></tr>
+<tr><td>Repetición</td><td><code>SR</code> step &amp; repeat.</td></tr>
+<tr><td>Atributos</td><td><code>TF/TA/TO</code> ignorados, <code>TD</code> elimina aperturas, <code>AB</code> avisado.</td></tr>
+</tbody>
+</table>
+<div class="note"><p>Si una capa aparece vacía, revisá que el archivo tenga <code>%MOMM*%</code> o <code>%MOIN*%</code> y que las coordenadas no estén fuera de rango. El informe indica aperturas y segmentos leídos.</p></div>
+
+<h2>Excellon</h2>
+<p>Se importan taladros, ranuras y ruteo:</p>
+<ul>
+<li>Cabecera <code>M48</code>, <code>METRIC/INCH</code>, <code>TZ/LZ</code> y formato decimal explícito.</li>
+<li>Definición y selección de herramientas <code>T#C...</code>.</li>
+<li>Taladros, ranuras <code>G85</code>, ruteo <code>M15/M16</code> + <code>G01</code>.</li>
+<li>Repeticiones <code>R</code>, <code>G90/G91</code> y archivos sin cabecera.</li>
+</ul>
+<p>El resultado incluye la tabla de herramientas y la geometría de cada taladro/ranura, que se usa en <a href="perforacion.html">Perforación</a>.</p>
+
+<h2>G-code</h2>
+<p>Se puede abrir un programa <code>.nc/.gcode/.tap/.ngc</code> para verlo como capa de recorridos. Reconoce <code>G00/G01</code>, coordenadas, <code>F</code>, <code>S</code>, cambios de herramienta y comentarios. Es útil para revisar un trabajo ya generado.</p>
+
+<h2>SVG</h2>
+<ul>
+<li>Formas: <code>path</code>, <code>polygon</code>, <code>polyline</code>, <code>rect</code>, <code>circle</code>, <code>ellipse</code>, <code>line</code>.</li>
+<li>Curvas C/Q/S/T/A aplanadas con tolerancia configurable.</li>
+<li>Transformaciones propias y heredadas de grupos: translate, scale, rotate, matrix, skew.</li>
+<li>Texto <code>&lt;text&gt;</code> convertido a contornos con la fuente del sistema, con ancho, anclaje y contadores.</li>
+</ul>
+<div class="warning"><p>SVG usa Y hacia abajo. FlatCAM no invierte el dibujo; si el diseño queda espejado, corregilo en el CAD o con <em>Transformar → Escalar Y = −1</em>.</p></div>
+
+<h2>DXF</h2>
+<ul>
+<li>LINE, LWPOLYLINE, CIRCLE, ARC, ELLIPSE y SPLINE aproximada.</li>
+<li><strong>INSERT</strong> de bloques con punto base, escala X/Y, rotación y arrays de columnas/filas.</li>
+<li><strong>TEXT/MTEXT</strong> convertidos a contornos, con alineación y varias líneas.</li>
+</ul>
+
+<h2>HPGL2</h2>
+<p>Comandos soportados: <code>IN</code>, <code>SC</code>, <code>PA/PR</code>, <code>PU/PD</code>, <code>CI</code>, <code>AA/AR</code>, <code>EA/ER</code> y <code>RA/RR</code>. El rango de <code>SC</code> se mapea al área A4 por defecto.</p>
+
+<h2>PDF</h2>
+<ol>
+<li>Se intenta primero la <strong>geometría vectorial</strong>: trazos, rellenos, Bézier y transformaciones.</li>
+<li>Si no hay vectores, se rasteriza con PDFKit (macOS) a 200 DPI y se vectoriza por umbral.</li>
+<li>En PDF multipágina se importa cada página como una capa con su tamaño real en mm.</li>
+</ol>
+<p>El texto PDF no se convierte (igual que en FlatCAM original); para texto, importá SVG o DXF.</p>
+
+<h2>Imágenes</h2>
+<p>PNG/JPG se convierten a cobre por umbral o por color:</p>
+<table>
+<thead><tr><th>Opción</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td>Ancho</td><td>Ancho físico de la imagen en la unidad activa.</td></tr>
+<tr><td>DPI</td><td>Calcula el ancho a partir de la resolución.</td></tr>
+<tr><td>Modo</td><td>Escala de grises o color.</td></tr>
+<tr><td>Umbral</td><td>Nivel de corte para blanco/negro.</td></tr>
+<tr><td>Invertir</td><td>Invierte qué zonas se consideran cobre.</td></tr>
+<tr><td>Color objetivo / tolerancia</td><td>Selecciona un color y su tolerancia.</td></tr>
+<tr><td>Máscara</td><td>Excluye zonas por color.</td></tr>
+</tbody>
+</table>
+
+<h2>Exportar</h2>
+<table>
+<thead><tr><th>Formato</th><th>Qué exporta</th></tr></thead>
+<tbody>
+<tr><td>Gerber</td><td>Sólidos como regiones y recorridos como trazos.</td></tr>
+<tr><td>Excellon</td><td>Herramientas, taladros y ranuras.</td></tr>
+<tr><td>G-code</td><td>CNCJob con el postprocesador elegido.</td></tr>
+<tr><td>SVG</td><td>Vista vectorial con huecos y trazos.</td></tr>
+<tr><td>DXF</td><td>Polilíneas, agujeros y recorridos.</td></tr>
+<tr><td>HPGL</td><td>Trazos para plotter.</td></tr>
+<tr><td>PDF</td><td>Vista vectorial de la escena.</td></tr>
+<tr><td>PNG</td><td>Captura del canvas o de la vista 3D.</td></tr>
+</tbody>
+</table>
+
+<div class="tip"><p>Después de importar, revisá <em>Propiedades</em>: el área y los límites deben coincidir con el diseño. Si el área es 0, el archivo no tiene geometría cerrada o las unidades están mal.</p></div>
+
+<nav class="page-nav"><a class="prev" href="proyecto.html"><span class="label">Anterior</span><span class="title">← Proyecto</span></a><a class="next" href="visualizacion.html"><span class="label">Siguiente</span><span class="title">Visualización →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

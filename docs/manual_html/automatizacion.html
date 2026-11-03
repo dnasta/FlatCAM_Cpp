@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automatización · FlatCAM C++</title>
+<meta name="description" content="Consola Tcl, JavaScript y CLI">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html" class="active">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Automatización</span></div>
+<h1>Automatización</h1>
+<p class="subtitle">Consola Tcl, JavaScript y CLI</p>
+
+<p class="lead">FlatCAM C++ se puede manejar sin la GUI: consola Tcl integrada, API JavaScript y CLI. Ideal para repetir trabajos, generar lotes o integrar con scripts.</p>
+
+<h2>Consola Tcl</h2>
+<p>La pestaña <strong>Shell Tcl</strong> del panel inferior es un intérprete Tcl real. Escribí un comando y <kbd>Enter</kbd>. También se puede ejecutar un script con <code>source archivo.tcl</code> o desde la CLI.</p>
+<pre><code>open_gerber examples/board_copper.gbr
+isolate 0.2 1 0.1
+export_gcode /tmp/aislamiento.nc</code></pre>
+
+<h2>Comandos disponibles (71)</h2>
+<table>
+<thead><tr><th>Grupo</th><th>Comandos</th></tr></thead>
+<tbody>
+<tr><td>Abrir/crear</td><td><code>open_gerber</code>, <code>open_excellon</code>, <code>open_dxf</code>, <code>open_svg</code>, <code>open_gcode</code>, <code>open_project</code>, <code>open_path</code>, <code>new</code>, <code>new_gerber</code>, <code>new_excellon</code>, <code>new_geometry</code>.</td></tr>
+<tr><td>Herramientas</td><td><code>isolate</code>, <code>cutout</code>, <code>ncc</code>, <code>paint</code>, <code>extract_drills</code>, <code>punch</code>, <code>panelize</code>, <code>qr</code>, <code>corners</code>, <code>optimal</code>, <code>follow</code>, <code>copperclear</code>, <code>geo_cutout</code>, <code>mill_drills</code>, <code>mill_slots</code>, <code>cncjob</code>, <code>drillcncjob</code>.</td></tr>
+<tr><td>Objetos</td><td><code>get_names</code>, <code>bbox</code>, <code>bounds</code>, <code>exteriors</code>, <code>interiors</code>, <code>nregions</code>, <code>set_active</code>, <code>delete</code>, <code>offset</code>, <code>scale</code>, <code>mirror</code>, <code>join_geometry</code>, <code>join_excellon</code>, <code>geo_union</code>, <code>subtract_poly</code>, <code>subtract_rectangle</code>.</td></tr>
+<tr><td>Geometría</td><td><code>add_circle</code>, <code>add_rectangle</code>, <code>add_polygon</code>, <code>add_polyline</code>.</td></tr>
+<tr><td>Exportar</td><td><code>export_gcode</code>, <code>export_gerber</code>, <code>export_excellon</code>, <code>export_dxf</code>, <code>export_svg</code>, <code>write_gcode</code>, <code>save_project</code>.</td></tr>
+<tr><td>Vista/sistema</td><td><code>plot_all</code>, <code>plot_objects</code>, <code>set_origin</code>, <code>get_path</code>, <code>set_path</code>, <code>get_sys</code>, <code>set_sys</code>, <code>list_sys</code>, <code>save_sys</code>, <code>options</code>, <code>align_drill</code>, <code>align_drill_grid</code>, <code>version</code>, <code>help</code>, <code>info</code>, <code>quit</code>.</td></tr>
+</tbody>
+</table>
+
+<h3>Sintaxis de las principales</h3>
+<pre><code>isolate dia ?passes? ?overlap?
+cutout dia ?margin? ?tabs? ?width?
+ncc dia ?overlap?
+paint dia ?overlap?
+extract_drills maxDia
+punch ?margin?
+panelize rows cols ?gapX? ?gapY?
+qr text ?module? ?border?
+corners length ?margin?
+optimal maxDia
+export_gcode path
+export_gerber path
+export_dxf path
+export_svg path
+save_project path
+get_names ?kind?
+bbox name
+set_active name
+delete name
+offset name dx dy
+scale name factor
+mirror name x|y</code></pre>
+
+<h2>API JavaScript</h2>
+<p>La pestaña <strong>Consola JS</strong> y el ejecutable <code>flatcam-js</code> usan <code>QJSEngine</code>. La API vive en el objeto <code>flatcam</code>:</p>
+<pre><code>flatcam.openGerber("examples/board_copper.gbr");
+flatcam.isolate(0.2, 1, 0.1);
+flatcam.exportGcode("/tmp/iso.nc");
+flatcam.log(flatcam.info());</code></pre>
+<table>
+<thead><tr><th>Función</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td><code>openGerber(path)</code></td><td>Abre un Gerber.</td></tr>
+<tr><td><code>openExcellon(path)</code></td><td>Abre un Excellon.</td></tr>
+<tr><td><code>isolate(dia, passes, overlap)</code></td><td>Aislamiento.</td></tr>
+<tr><td><code>cutout(dia, margin, tabs, width)</code></td><td>Corte.</td></tr>
+<tr><td><code>ncc(dia, overlap)</code></td><td>NCC.</td></tr>
+<tr><td><code>paint(dia, overlap)</code></td><td>Pintura.</td></tr>
+<tr><td><code>mill(...)</code></td><td>Fresado de recorridos.</td></tr>
+<tr><td><code>exportGcode(path)</code></td><td>Exporta el CNCJob activo.</td></tr>
+<tr><td><code>info()</code>, <code>lastError()</code>, <code>log(x)</code></td><td>Diagnóstico.</td></tr>
+</tbody>
+</table>
+
+<h2>CLI</h2>
+<pre><code>flatcam-cli gerber archivo.gbr --json
+flatcam-cli isolate archivo.gbr --tool-dia 0.2 --passes 2 --overlap 10 -o iso.nc
+flatcam-cli cutout contorno.gbr --tool-dia 1.5 --margin 0.5 --tabs 4 -o cut.nc
+flatcam-cli ncc cobre.gbr --tool-dia 0.5 --superposition 80 -o ncc.nc
+flatcam-cli gcode taladros.drl --preprocessor grbl --optimize -o drill.nc
+flatcam-cli project proyecto.FlatPrj --info
+flatcam-cli tcl</code></pre>
+<p>La CLI incluida en el bundle está en <code>FlatCAM C++.app/Contents/MacOS/flatcam-cli</code>.</p>
+
+<h2>Scripts de proyecto</h2>
+<p>Un objeto <strong>Script</strong> guarda código JavaScript y se ejecuta desde el editor. Es útil para dejar dentro del proyecto el proceso completo de generación.</p>
+<pre><code>flatcam.openGerber("board_copper.gbr");
+flatcam.isolate(0.2, 2, 15);
+flatcam.exportGcode("board_iso.nc");</code></pre>
+
+<div class="tip"><p>Para automatizar un lote, abrí el proyecto, recorré los objetos con <code>get_names</code>, aplicá la herramienta y exportá con nombres derivados. Guardá siempre el proyecto antes de sobrescribir G-code.</p></div>
+
+<nav class="page-nav"><a class="prev" href="preferencias.html"><span class="label">Anterior</span><span class="title">← Preferencias y unidades</span></a><a class="next" href="referencia.html"><span class="label">Siguiente</span><span class="title">Referencia →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

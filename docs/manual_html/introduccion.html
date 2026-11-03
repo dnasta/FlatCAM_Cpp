@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducción · FlatCAM C++</title>
+<meta name="description" content="Qué es FlatCAM C++ y cómo se trabaja">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html" class="active">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Introducción</span></div>
+<h1>Introducción</h1>
+<p class="subtitle">Qué es FlatCAM C++ y cómo se trabaja</p>
+
+<p class="lead">FlatCAM C++ convierte los archivos de diseño de una placa (Gerber y Excellon) en instrucciones de mecanizado (G-code) para una fresadora CNC, un router o una máquina láser.</p>
+
+<h2>El problema que resuelve</h2>
+<p>Los programas de diseño electrónico exportan la información de la placa como capas Gerber (cobre, máscara, serigrafía, contorno) y un archivo Excellon con los taladros. Una fresadora no entiende esos formatos: necesita coordenadas, profundidades, avances y cambios de herramienta. FlatCAM hace de puente:</p>
+<ol class="steps">
+  <li><strong>Importa</strong> las capas y las muestra en el canvas.</li>
+  <li><strong>Calcula</strong> los recorridos que debe seguir la fresa alrededor del cobre, de los taladros y del contorno.</li>
+  <li><strong>Genera</strong> un programa G-code con la herramienta, la profundidad y los avances correctos.</li>
+  <li><strong>Exporta</strong> el programa para tu controlador (GRBL, Mach3, Marlin, etc.).</li>
+</ol>
+
+<h2>Flujo de trabajo recomendado</h2>
+<table>
+<thead><tr><th>Paso</th><th>Qué hacés</th><th>Dónde</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Exportar Gerber/Excellon desde KiCad, Eagle, Altium, etc.</td><td>Tu programa de CAD</td></tr>
+<tr><td>2</td><td>Abrir los archivos y verificar unidades, escala y capas.</td><td><a href="importar.html">Importar</a></td></tr>
+<tr><td>3</td><td>Aislar el cobre con la fresa elegida.</td><td><a href="aislamiento.html">Aislamiento</a></td></tr>
+<tr><td>4</td><td>Taladrar con las brocas del Excellon.</td><td><a href="perforacion.html">Perforación</a></td></tr>
+<tr><td>5</td><td>Cortar el contorno para separar la placa.</td><td><a href="corte.html">Corte</a></td></tr>
+<tr><td>6</td><td>Opcional: remover cobre sobrante (NCC) o pintar áreas.</td><td><a href="ncc.html">NCC y pintura</a></td></tr>
+<tr><td>7</td><td>Revisar el G-code, simular y mecanizar.</td><td><a href="visualizacion.html">Visor 3D</a> / editor</td></tr>
+</tbody>
+</table>
+
+<h2>Objetos del proyecto</h2>
+<p>Todo lo que cargás o generás es un <strong>objeto</strong> con nombre, tipo, geometría y propiedades. El árbol del proyecto los agrupa:</p>
+<table>
+<thead><tr><th>Tipo</th><th>Origen</th><th>Para qué sirve</th></tr></thead>
+<tbody>
+<tr><td><strong>Gerber</strong></td><td>Archivo Gerber</td><td>Cobre, máscara, serigrafía, contorno. Fuente de aislamiento, NCC y corte.</td></tr>
+<tr><td><strong>Excellon</strong></td><td>Archivo Excellon</td><td>Taladros y ranuras. Fuente de la herramienta de perforación.</td></tr>
+<tr><td><strong>Geometry</strong></td><td>SVG, DXF, HPGL, imagen, operaciones</td><td>Geometría genérica editable; sirve como contorno o dibujo.</td></tr>
+<tr><td><strong>CNCJob</strong></td><td>G-code generado</td><td>Programa listo para la máquina, con sus parámetros.</td></tr>
+<tr><td><strong>Document / Script</strong></td><td>Notas y scripts</td><td>Documentación y automatización dentro del proyecto.</td></tr>
+</tbody>
+</table>
+
+<h2>Conceptos clave</h2>
+<h3>Aislamiento</h3>
+<p>Es el recorrido que separa el cobre de las zonas que no deben tener cobre. La fresa avanza alrededor de cada isla de cobre con un desplazamiento igual al radio de la herramienta. Con varias pasadas y solape se cubren separaciones mayores.</p>
+<h3>NCC (Non-Copper Clear)</h3>
+<p>Remueve el cobre que no forma parte del circuito, normalmente con líneas paralelas (hatch) o contornos (paint). Se usa para reducir la cantidad de cobre a fresar o para aislar áreas grandes.</p>
+<h3>Corte de contorno</h3>
+<p>Recorre el borde de la placa con la fresa para separarla del material sobrante. Puede dejar puentes (tabs) para que la placa no se mueva y cortarse en varias pasadas de profundidad.</p>
+<h3>CNCJob</h3>
+<p>Es el resultado de una herramienta: una lista de recorridos con herramienta, profundidad y avances, convertida a G-code. Se puede previsualizar antes de exportar.</p>
+
+<h2>Unidades y coordenadas</h2>
+<p>FlatCAM trabaja internamente en milímetros. La interfaz puede mostrar y aceptar valores en <strong>mm</strong> o <strong>pulgadas</strong> desde <em>Opciones → Mostrar en pulgadas</em>. Las tablas, el editor Excellon y la vista 3D respetan la unidad activa; los datos guardados siguen en mm.</p>
+<div class="warning"><p><strong>Ojo con el eje Y.</strong> Gerber y Excellon usan Y hacia arriba; el canvas también. Al importar SVG (Y hacia abajo) revisá la orientación del dibujo. Si tu máquina tiene el eje Y invertido, corregilo en el postprocesador o en el CAM, no en el archivo original.</p></div>
+
+<h2>Formatos soportados</h2>
+<table>
+<thead><tr><th>Formato</th><th>Importar</th><th>Exportar</th><th>Notas</th></tr></thead>
+<tbody>
+<tr><td>Gerber RS-274X</td><td>✅</td><td>✅</td><td>Aperturas, macros, regiones, polaridad, step &amp; repeat.</td></tr>
+<tr><td>Excellon</td><td>✅</td><td>✅</td><td>Taladros, ranuras, ruteo, repeticiones.</td></tr>
+<tr><td>G-code</td><td>✅ (visor)</td><td>✅</td><td>18 preprocesadores.</td></tr>
+<tr><td>SVG</td><td>✅</td><td>✅</td><td>Curvas, grupos, transformaciones y texto.</td></tr>
+<tr><td>DXF</td><td>✅</td><td>✅</td><td>Bloques/INSERT, arrays, TEXT/MTEXT, splines.</td></tr>
+<tr><td>HPGL2</td><td>✅</td><td>✅</td><td>SC, PA/PR, arcos y rectángulos.</td></tr>
+<tr><td>PDF</td><td>✅</td><td>✅</td><td>Vectorial y raster multipágina.</td></tr>
+<tr><td>PNG/JPG</td><td>✅</td><td>✅</td><td>Vectorización por umbral o color.</td></tr>
+<tr><td>Proyecto</td><td>✅ <code>.FlatPrj</code></td><td>✅</td><td>JSON, opcionalmente comprimido con lzma.</td></tr>
+</tbody>
+</table>
+
+<h2>Seguridad y buenas prácticas</h2>
+<ul>
+<li><strong>Simulá siempre</strong> el G-code antes de ejecutarlo. El visor 3D y el editor muestran lo que se va a mover la máquina.</li>
+<li><strong>Verificá el cero</strong> de la pieza y la altura de seguridad. Un Z mal configurado puede romper la fresa o la placa.</li>
+<li><strong>Hacé una pasada en el aire</strong> con la fresa levantada para comprobar límites y cambios de herramienta.</li>
+<li><strong>Usá la herramienta correcta</strong>: el diámetro de la tabla debe coincidir con la fresa real.</li>
+<li><strong>Guardá el proyecto</strong> antes de generar muchos CNCJob; el proyecto conserva tablas y parámetros.</li>
+</ul>
+
+<nav class="page-nav"><a class="prev" href="index.html"><span class="label">Anterior</span><span class="title">← Inicio</span></a><a class="next" href="instalacion.html"><span class="label">Siguiente</span><span class="title">Instalación →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

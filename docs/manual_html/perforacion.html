@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perforación · FlatCAM C++</title>
+<meta name="description" content="Taladrado, ranuras y optimización">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html" class="active">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Perforación</span></div>
+<h1>Perforación</h1>
+<p class="subtitle">Taladrado, ranuras y optimización</p>
+
+<p class="lead">La herramienta de perforación toma un Excellon, arma una tabla por herramienta y genera taladros y ranuras con sus propios avances, profundidades y orden.</p>
+
+<h2>Origen de los datos</h2>
+<p>El selector <strong>EXCELLON</strong> lista los objetos Excellon cargados. Al elegir uno, la tabla se llena automáticamente con una fila por herramienta y sus diámetros. Los taladros y ranuras se leen del archivo; si editás el objeto en el editor Excellon, la tabla se actualiza.</p>
+
+<h2>Tabla de herramientas</h2>
+<table>
+<thead><tr><th>Columna</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td>#</td><td>Número de herramienta.</td></tr>
+<tr><td>Ø</td><td>Diámetro de la broca (viene del Excellon, editable).</td></tr>
+<tr><td>Av. XY</td><td>Avance entre taladros.</td></tr>
+<tr><td>Av. Z</td><td>Avance de penetración.</td></tr>
+<tr><td>RPM</td><td>Husillo.</td></tr>
+<tr><td>S</td><td>Potencia láser si el postprocesador es láser.</td></tr>
+<tr><td>Z corte</td><td>Profundidad final; debe atravesar la placa.</td></tr>
+<tr><td>Prof.</td><td>Profundidad por pasada (peck). 0 = una sola bajada.</td></tr>
+</tbody>
+</table>
+
+<h2>Parámetros específicos</h2>
+<table>
+<thead><tr><th>Parámetro</th><th>Qué hace</th></tr></thead>
+<tbody>
+<tr><td><strong>Offset X / Y</strong></td><td>Desplaza todos los taladros de esa herramienta. Útil para compensar el cero o una broca descentrada.</td></tr>
+<tr><td><strong>Orden</strong></td><td>Orden de taladrado: tabla, vecino más cercano, 2-opt/Or-opt o TSP exacto hasta 18 puntos.</td></tr>
+<tr><td><strong>Peck</strong></td><td>Baja en escalones de <em>Prof.</em> para evacuar virutas y no romper brocas finas.</td></tr>
+<tr><td><strong>Peck en ranuras</strong></td><td>Aplica la misma lógica a ranuras largas.</td></tr>
+</tbody>
+</table>
+
+<h2>Optimización del recorrido</h2>
+<ul>
+<li><strong>Vecino más cercano:</strong> rápido, buen resultado general.</li>
+<li><strong>2-opt + Or-opt:</strong> mejora el orden y reduce viajes.</li>
+<li><strong>TSP exacto:</strong> Held-Karp hasta 18 taladros por herramienta; da el óptimo real.</li>
+<li><strong>Sin optimizar:</strong> respeta el orden del archivo, útil para depurar.</li>
+</ul>
+
+<h2>Generar</h2>
+<ol class="steps">
+<li>Elegí el objeto <strong>EXCELLON</strong>.</li>
+<li>Revisá que cada diámetro coincida con la broca real.</li>
+<li>Ajustá Z corte: placa de 1,6 mm → −1,8 a −2,0 mm (con respaldo).</li>
+<li>Para brocas &lt; 1 mm, usá peck de 0,5–1 mm y avance Z bajo.</li>
+<li>Pulsá <strong>Previsualizar</strong> y después <strong>Generar CNCJob</strong>.</li>
+</ol>
+
+<h2>Parámetros comunes</h2>
+<ul>
+<li>Z de viaje y Z de cambio de herramienta.</li>
+<li>Dwell tras cada taladro (útil para limpiar).</li>
+<li>X/Y finales.</li>
+<li>Postprocesador y modo láser.</li>
+</ul>
+
+<h2>Valores recomendados</h2>
+<table>
+<thead><tr><th>Broca</th><th>RPM</th><th>Avance Z</th><th>Peck</th></tr></thead>
+<tbody>
+<tr><td>0,6–0,8 mm</td><td>15.000–20.000</td><td>10–20 mm/min</td><td>0,3–0,5 mm</td></tr>
+<tr><td>1,0 mm</td><td>12.000–18.000</td><td>20–30</td><td>0,5–0,8</td></tr>
+<tr><td>1,5–2,0 mm</td><td>8.000–12.000</td><td>30–50</td><td>0,8–1,0</td></tr>
+<tr><td>3,0–3,5 mm</td><td>5.000–8.000</td><td>40–60</td><td>1,0–1,5</td></tr>
+</tbody>
+</table>
+
+<div class="tip"><p>Si la broca “patina” sin morder, subí RPM y bajá avance Z. Si se rompe, bajá avance Z, agregá peck y verificá que la placa esté bien apoyada.</p></div>
+
+<h2>Ranuras</h2>
+<p>Las ranuras se mecanizan bajando en el primer punto, avanzando al segundo con avance XY y retrayendo. Con peck se repite la bajada en escalones. Revisá que la ranura no cruce un pad o una pista.</p>
+
+<h2>Problemas frecuentes</h2>
+<table>
+<thead><tr><th>Síntoma</th><th>Causa</th><th>Solución</th></tr></thead>
+<tbody>
+<tr><td>Taladros corridos</td><td>Offset o cero mal</td><td>Ajustá Offset X/Y o el origen.</td></tr>
+<tr><td>Broca rota</td><td>Avance Z alto, sin peck</td><td>Reducí avance, agregá peck.</td></tr>
+<tr><td>Agujeros más grandes</td><td>Broca equivocada</td><td>Corregí el Ø de la tabla.</td></tr>
+<tr><td>No atraviesa</td><td>Z corte insuficiente</td><td>Bajá Z o revisá el espesor.</td></tr>
+</tbody>
+</table>
+
+<nav class="page-nav"><a class="prev" href="aislamiento.html"><span class="label">Anterior</span><span class="title">← Aislamiento</span></a><a class="next" href="corte.html"><span class="label">Siguiente</span><span class="title">Corte de contorno →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

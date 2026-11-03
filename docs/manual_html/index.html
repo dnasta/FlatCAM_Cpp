@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual de usuario · FlatCAM C++</title>
+<meta name="description" content="Manual de usuario de FlatCAM C++: instalación, interfaz, importación, aislamiento, perforación, corte, NCC, automatización y referencia.">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html" class="active">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="kicker">Manual de usuario · v0.01</span>
+      <h1>FlatCAM C++</h1>
+      <p>Port nativo de <strong>FlatCAM 2024.4</strong> para fabricar placas de circuito impreso: importá Gerber y Excellon, generá aislamiento, taladrado, corte, NCC y pintura, previsualizá el resultado y exportá G-code para tu CNC.</p>
+      <div class="actions">
+        <a class="btn primary" href="introduccion.html">Empezar a leer →</a>
+        <a class="btn" href="instalacion.html">Instalar</a>
+        <a class="btn" href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar v0.01</a>
+      </div>
+      <div class="badges">
+        <span class="badge"><strong>GPLv3</strong></span>
+        <span class="badge"><strong>macOS 14.4+</strong> arm64</span>
+        <span class="badge"><strong>C++20</strong> · Qt 6 · GEOS</span>
+        <span class="badge"><strong>83 + 7</strong> tests</span>
+      </div>
+    </div>
+    <div><img class="logo" src="assets/img/logo.svg" alt="Logo FlatCAM C++"></div>
+  </div>
+</section>
+
+<h2>¿Qué podés hacer con FlatCAM C++?</h2>
+<p class="lead">El flujo completo, desde los archivos de tu CAD hasta el G-code que entiende tu máquina.</p>
+<div class="cards">
+  <a class="card" href="importar.html"><div class="card-icon">📥</div><h3>Importar</h3><p>Gerber RS-274X, Excellon, G-code, SVG, DXF, HPGL2, PDF vectorial e imágenes.</p></a>
+  <a class="card" href="aislamiento.html"><div class="card-icon">⭕</div><h3>Aislar cobre</h3><p>Una o varias pasadas, solape, V-shape, follow, combine y rest machining.</p></a>
+  <a class="card" href="perforacion.html"><div class="card-icon">🕳</div><h3>Perforar</h3><p>Taladros y ranuras desde Excellon, con peck, offsets y orden optimizado.</p></a>
+  <a class="card" href="corte.html"><div class="card-icon">✂</div><h3>Cortar contorno</h3><p>Separá la placa con margen, puentes, multipasada y agujeros internos.</p></a>
+  <a class="card" href="ncc.html"><div class="card-icon">▦</div><h3>NCC y pintura</h3><p>Remoción de cobre no conectado y relleno de áreas con hatch o contornos.</p></a>
+  <a class="card" href="especiales.html"><div class="card-icon">🧰</div><h3>Herramientas</h3><p>Film, panelizado, thieving, solder paste, QR, imagen, punch y calibración.</p></a>
+  <a class="card" href="edicion.html"><div class="card-icon">✎</div><h3>Editar</h3><p>Editores Gerber, Excellon y geometría; booleanas, transformaciones y undo.</p></a>
+  <a class="card" href="automatizacion.html"><div class="card-icon">⌨</div><h3>Automatizar</h3><p>71 comandos Tcl, API JavaScript y CLI para repetir el trabajo sin clics.</p></a>
+</div>
+
+<h2>Inicio rápido</h2>
+<ol class="steps">
+  <li><strong>Abrí un Gerber y un Excellon.</strong> Arrastrá los archivos a la ventana o usá <em>Archivo → Abrir</em>. Cada archivo queda como un objeto del proyecto.</li>
+  <li><strong>Elegí la herramienta.</strong> Para una placa simple: <em>Herramienta → Aislamiento</em> con una fresa de 0,2 mm y una pasada; después <em>Perforación</em> con la tabla del Excellon; por último <em>Corte</em> con el contorno.</li>
+  <li><strong>Previsualizá.</strong> Revisá los recorridos en el canvas y la tabla de herramientas. Ajustá diámetro, solape, profundidad y avances antes de generar.</li>
+  <li><strong>Generá el CNCJob y exportá G-code.</strong> El programa se agrega al grupo <em>G-code</em> del proyecto y se puede abrir en el editor o guardar como <code>.nc</code>.</li>
+</ol>
+
+<div class="tip"><p><strong>Antes de mecanizar:</strong> hacé una simulación en vacío, verificá la altura Z, el cero de la pieza y que el diámetro de la fresa coincida con el de la tabla. Un error de 0,1 mm puede arruinar la placa.</p></div>
+
+<h2>Mapa del manual</h2>
+<div class="cards">
+  <a class="card" href="introduccion.html"><h3>1. Introducción</h3><p>Conceptos, flujo de trabajo, objetos y formatos.</p></a>
+  <a class="card" href="instalacion.html"><h3>2. Instalación</h3><p>DMG, Gatekeeper, CLI y compilación desde fuente.</p></a>
+  <a class="card" href="interfaz.html"><h3>3. Interfaz</h3><p>Menús, pestañas, paneles, canvas y consola.</p></a>
+  <a class="card" href="proyecto.html"><h3>4. Proyecto</h3><p>Objetos, grupos, guardado, configuración y base de datos.</p></a>
+  <a class="card" href="importar.html"><h3>5. Importar/exportar</h3><p>Todos los formatos y sus opciones.</p></a>
+  <a class="card" href="visualizacion.html"><h3>6. Visualización</h3><p>Capas, unidades, medición y vista 3D.</p></a>
+  <a class="card" href="edicion.html"><h3>7. Edición</h3><p>Editores, booleanas, transformaciones y undo.</p></a>
+  <a class="card" href="aislamiento.html"><h3>8. Aislamiento</h3><p>El núcleo del fresado de PCB.</p></a>
+  <a class="card" href="perforacion.html"><h3>9. Perforación</h3><p>Taladros, ranuras, peck y orden.</p></a>
+  <a class="card" href="corte.html"><h3>10. Corte</h3><p>Contorno, puentes y multipasada.</p></a>
+  <a class="card" href="ncc.html"><h3>11. NCC y pintura</h3><p>Despeje y relleno de cobre.</p></a>
+  <a class="card" href="especiales.html"><h3>12. Especiales</h3><p>Film, panel, paste, QR, imagen y más.</p></a>
+  <a class="card" href="preferencias.html"><h3>13. Preferencias</h3><p>Unidades, colores, defaults y tablas.</p></a>
+  <a class="card" href="automatizacion.html"><h3>14. Automatización</h3><p>Tcl, JavaScript y CLI.</p></a>
+  <a class="card" href="referencia.html"><h3>15. Referencia</h3><p>Atajos, formatos, problemas y glosario.</p></a>
+</div>
+
+<h2>Estado de esta versión</h2>
+<p>FlatCAM C++ v0.01 es la primera versión pública. Incluye las 33 herramientas del FlatCAM original con equivalentes funcionales, editores, importación/exportación ampliada y vista 3D. Está probada con una placa real de 5 capas y 120 taladros.</p>
+<div class="note"><p>El binario publicado es para <strong>macOS 14.4 o superior en Apple Silicon</strong>. En Windows y Linux el código compila con Qt 6 y GEOS, pero todavía no hay instaladores oficiales.</p></div>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

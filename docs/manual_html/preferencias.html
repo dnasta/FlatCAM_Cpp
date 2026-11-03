@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preferencias y unidades · FlatCAM C++</title>
+<meta name="description" content="Configuración, colores, tablas y mm/in">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html" class="active">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Preferencias y unidades</span></div>
+<h1>Preferencias y unidades</h1>
+<p class="subtitle">Configuración, colores, tablas y mm/in</p>
+
+<p class="lead">Las preferencias controlan unidades, precisión, colores, archivos, valores por defecto de mecanizado y el nivel de la interfaz. Se guardan en <code>QSettings</code> y se pueden exportar a JSON.</p>
+
+<h2>Abrir preferencias</h2>
+<p><em>Opciones → Preferencias</em>. Las pestañas son General, Gerber, Geometry, Excellon, CNCJob, Colores y Archivos.</p>
+
+<h2>General</h2>
+<table>
+<thead><tr><th>Opción</th><th>Efecto</th></tr></thead>
+<tbody>
+<tr><td>Unidades de trabajo</td><td>Unidad por defecto para archivos nuevos (mm/in).</td></tr>
+<tr><td>Decimales</td><td>Dígitos mostrados en coordenadas y propiedades.</td></tr>
+<tr><td>Pasos por círculo</td><td>Resolución de arcos y círculos (32–128).</td></tr>
+<tr><td>Paso de rejilla</td><td>Separación de la grilla.</td></tr>
+<tr><td>Mostrar rejilla</td><td>Visibilidad inicial.</td></tr>
+<tr><td>Snap a rejilla</td><td>Redondeo de coordenadas de salto/medición.</td></tr>
+<tr><td>Nivel avanzado</td><td>Muestra u oculta parámetros avanzados.</td></tr>
+<tr><td>Tema oscuro</td><td>Se aplica al reiniciar.</td></tr>
+</tbody>
+</table>
+
+<h2>Gerber</h2>
+<ul>
+<li><strong>Simplificar geometría:</strong> reduce vértices al importar.</li>
+<li><strong>Tolerancia:</strong> distancia máxima de simplificación; valores chicos preservan detalles.</li>
+</ul>
+
+<h2>Geometry</h2>
+<ul>
+<li><strong>Simplificar geometría:</strong> aplica a SVG/DXF/geometría importada.</li>
+<li><strong>Tolerancia:</strong> en mm; 0,005–0,02 es habitual.</li>
+</ul>
+
+<h2>Excellon</h2>
+<ul>
+<li><strong>Ø máximo para extraer taladros:</strong> limita qué círculos de un Gerber se convierten en taladros al usar <em>Extraer taladros</em>.</li>
+</ul>
+
+<h2>CNCJob</h2>
+<table>
+<thead><tr><th>Opción</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td>Avance XY</td><td>Valor por defecto para nuevas tablas.</td></tr>
+<tr><td>Avance Z</td><td>Valor por defecto de penetración.</td></tr>
+<tr><td>Husillo (RPM)</td><td>Velocidad por defecto.</td></tr>
+<tr><td>Z de corte</td><td>Profundidad por defecto.</td></tr>
+<tr><td>Aplicar a las tablas actuales</td><td>Actualiza aislamiento, NCC, corte, pintura y taladrado.</td></tr>
+</tbody>
+</table>
+
+<h2>Colores</h2>
+<ul>
+<li>Fondo del canvas.</li>
+<li>Cobre.</li>
+<li>Recorridos (follow).</li>
+<li>Trayectorias/CNCJob.</li>
+<li>Botón <strong>Restablecer</strong> para volver a los colores originales.</li>
+</ul>
+
+<h2>Archivos</h2>
+<ul>
+<li><strong>Backup del proyecto:</strong> carpeta y frecuencia.</li>
+<li><strong>Recientes:</strong> cantidad de archivos en el menú.</li>
+<li><strong>Guardar/abrir configuración:</strong> exporta o importa las preferencias en JSON.</li>
+</ul>
+
+<h2>Unidades mm/in</h2>
+<p>La unidad activa se cambia con <em>Opciones → Mostrar en pulgadas</em>. Se aplica a:</p>
+<ul>
+<li>Campos de longitud de todas las herramientas.</li>
+<li>Tablas de herramientas (Ø, Z corte, profundidad).</li>
+<li>Editor Excellon (diámetros y coordenadas).</li>
+<li>Vista 3D (espesores).</li>
+<li>Diálogos de origen, ir a coordenadas e importación de PDF/imagen.</li>
+<li>Barra de estado y propiedades.</li>
+</ul>
+<p>Los valores internos se guardan en mm. Al cambiar de unidad, los campos y tablas se convierten en caliente; no se pierde precisión.</p>
+<div class="note"><p>Los ángulos, RPM, avances (mm/min), potencia láser y porcentajes no se convierten: no son longitudes.</p></div>
+
+<h2>Valores por defecto recomendados</h2>
+<table>
+<thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+<tbody>
+<tr><td>Decimales</td><td>3</td></tr>
+<tr><td>Pasos por círculo</td><td>64</td></tr>
+<tr><td>Tolerancia Gerber/Geometry</td><td>0,005 mm</td></tr>
+<tr><td>Avance XY</td><td>300 mm/min</td></tr>
+<tr><td>Avance Z</td><td>60 mm/min</td></tr>
+<tr><td>Husillo</td><td>10.000 RPM</td></tr>
+<tr><td>Z de corte</td><td>−1,5 mm</td></tr>
+</tbody>
+</table>
+
+<h2>Base de datos de herramientas</h2>
+<p><em>Herramienta → Base de datos</em>. Es SQLite y guarda nombre, diámetro, avances, RPM, S, Z y profundidad. Se puede sembrar con valores típicos y agregar filas desde cualquier tabla con <strong>Desde DB</strong>.</p>
+
+<h2>Restablecer</h2>
+<p><em>Opciones → Restablecer preferencias</em> vuelve a los valores de fábrica. No borra proyectos ni la base de herramientas.</p>
+
+<nav class="page-nav"><a class="prev" href="especiales.html"><span class="label">Anterior</span><span class="title">← Herramientas especiales</span></a><a class="next" href="automatizacion.html"><span class="label">Siguiente</span><span class="title">Automatización →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

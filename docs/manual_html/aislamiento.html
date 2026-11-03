@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aislamiento · FlatCAM C++</title>
+<meta name="description" content="Rutado de aislamiento de cobre">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html" class="active">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Aislamiento</span></div>
+<h1>Aislamiento</h1>
+<p class="subtitle">Rutado de aislamiento de cobre</p>
+
+<p class="lead">El aislamiento es el recorrido que separa el cobre del resto de la placa. Es la operación más importante para fresar una PCB y la que más parámetros tiene.</p>
+
+<figure><img src="assets/img/aislamiento.png" alt="Previsualización de aislamiento"><figcaption>Aislamiento previsualizado sobre el cobre de la placa de ejemplo.</figcaption></figure>
+
+<h2>Cómo funciona</h2>
+<p>Para cada isla de cobre, FlatCAM calcula un contorno desplazado hacia afuera (offset). La primera pasada usa un desplazamiento de medio diámetro de fresa; las siguientes suman pasos. La fórmula de FlatCAM es:</p>
+<pre><code>offset(i) = Ø × ((2i + 1) / 2) − i × solape × Ø</code></pre>
+<p>Con una fresa de 0,2 mm y una pasada, el recorrido queda a 0,1 mm del cobre. Con 20 % de solape y dos pasadas, la segunda se acerca a la primera para no dejar cobre sin cortar.</p>
+
+<h2>Parámetros de la herramienta</h2>
+<table>
+<thead><tr><th>Parámetro</th><th>Qué hace</th><th>Valores típicos</th></tr></thead>
+<tbody>
+<tr><td><strong>Pasadas</strong></td><td>Cantidad de contornos alrededor del cobre.</td><td>1–4; más pasadas para separaciones grandes.</td></tr>
+<tr><td><strong>Solape (%)</strong></td><td>Cuánto se superpone cada pasada con la anterior.</td><td>10–30 %; 0 % deja líneas sin cortar.</td></tr>
+<tr><td><strong>Orden</strong></td><td>Orden de las herramientas: tabla, diámetro, etc.</td><td>Orden de la tabla para control manual.</td></tr>
+<tr><td><strong>Herramienta</strong></td><td>Forma de la fresa: circular, V-shape o bola.</td><td>Circular para fresas rectas; V para grabado.</td></tr>
+<tr><td><strong>Ángulo V</strong></td><td>Ángulo de la punta V (si aplica).</td><td>30°, 45°, 60°, 90°.</td></tr>
+<tr><td><strong>Profundidad V</strong></td><td>Profundidad de la punta V; define el ancho efectivo.</td><td>0,05–0,2 mm.</td></tr>
+<tr><td><strong>Generar follow</strong></td><td>Agrega el contorno del cobre como recorrido adicional.</td><td>Para repasar bordes.</td></tr>
+<tr><td><strong>Combinar recorridos cercanos</strong></td><td>No retrae entre recorridos cuyos extremos estén a menos de 0,5 mm.</td><td>Reduce tiempos y marcas.</td></tr>
+<tr><td><strong>Rest machining</strong></td><td>Omite recorridos ya cubiertos por una herramienta mayor.</td><td>Al usar varias filas.</td></tr>
+<tr><td><strong>Sentido invertido</strong></td><td>Invierte el sentido de giro (climb/conventional).</td><td>Según tu máquina y acabado.</td></tr>
+</tbody>
+</table>
+
+<div class="warning"><p><strong>Diámetro real:</strong> la tabla debe tener el diámetro exacto de la fresa. Si ponés 0,2 mm y usás 0,3 mm, el aislamiento quedará más angosto y puede no separar el cobre.</p></div>
+
+<h2>V-shape</h2>
+<p>Una fresa en V no tiene un diámetro cilíndrico: el ancho de corte depende de la profundidad. FlatCAM calcula el diámetro efectivo:</p>
+<pre><code>Ø efectivo = 2 × profundidad × tan(ángulo / 2)</code></pre>
+<p>Elegí <em>Herramienta: V-shape</em>, el ángulo y la profundidad. La tabla puede tener varias filas con distintas profundidades para varias pasadas.</p>
+
+<h2>Herramienta bola</h2>
+<p>Para fresas esféricas o de punta redondeada. El diámetro efectivo se calcula con la profundidad y el radio de la bola; se usa para grabado suave o materiales blandos.</p>
+
+<h2>Tabla de herramientas</h2>
+<p>Cada fila es una herramienta independiente:</p>
+<table>
+<thead><tr><th>Columna</th><th>Significado</th></tr></thead>
+<tbody>
+<tr><td><strong>#</strong></td><td>Número de herramienta (T1, T2…).</td></tr>
+<tr><td><strong>Ø</strong></td><td>Diámetro de la fresa en la unidad activa.</td></tr>
+<tr><td><strong>Av. XY</strong></td><td>Avance horizontal (mm/min).</td></tr>
+<tr><td><strong>Av. Z</strong></td><td>Avance de penetración (mm/min).</td></tr>
+<tr><td><strong>RPM</strong></td><td>Husillo.</td></tr>
+<tr><td><strong>S</strong></td><td>Potencia láser (sólo modo láser).</td></tr>
+<tr><td><strong>Z corte</strong></td><td>Profundidad final (negativa).</td></tr>
+<tr><td><strong>Prof.</strong></td><td>Profundidad por pasada; 0 = una sola pasada.</td></tr>
+</tbody>
+</table>
+<p>Botones: <strong>Añadir</strong>, <strong>Eliminar</strong>, <strong>Aplicar a todas</strong>, <strong>Desde DB</strong>.</p>
+
+<h2>Parámetros comunes</h2>
+<ul>
+<li>Z de viaje, Z de cambio de herramienta, Z final.</li>
+<li>Dwell (pausa) tras bajar.</li>
+<li>X/Y finales.</li>
+<li>Postprocesador.</li>
+<li>Ignorar Z en modo láser.</li>
+</ul>
+
+<h2>Generar</h2>
+<ol class="steps">
+<li>Elegí el <strong>GERBER</strong> de cobre en el selector.</li>
+<li>Completá la tabla (diámetro, avances, RPM, Z corte, profundidad).</li>
+<li>Pulsá <strong>Previsualizar</strong> para ver los recorridos.</li>
+<li>Revisá que no invadan pads ni agujeros.</li>
+<li>Pulsá <strong>Generar geometría</strong> para crear la capa de recorridos.</li>
+<li>Pulsá <strong>Generar CNCJob</strong> y guardá el G-code.</li>
+</ol>
+
+<h2>Valores recomendados</h2>
+<table>
+<thead><tr><th>Fresa</th><th>Pasadas</th><th>Solape</th><th>Z corte</th><th>Avance XY</th><th>Avance Z</th><th>RPM</th></tr></thead>
+<tbody>
+<tr><td>0,1 mm</td><td>1–2</td><td>10–15 %</td><td>−0,05 a −0,08</td><td>100–200</td><td>20–40</td><td>12.000–18.000</td></tr>
+<tr><td>0,2 mm</td><td>1–2</td><td>10–20 %</td><td>−0,08 a −0,12</td><td>150–300</td><td>30–60</td><td>10.000–15.000</td></tr>
+<tr><td>0,3 mm</td><td>1–2</td><td>15–25 %</td><td>−0,10 a −0,15</td><td>200–350</td><td>40–70</td><td>8.000–12.000</td></tr>
+</tbody>
+</table>
+<p>Son puntos de partida: ajustá según el material, la rigidez de la máquina y la calidad de la fresa.</p>
+
+<h2>Problemas frecuentes</h2>
+<table>
+<thead><tr><th>Síntoma</th><th>Causa probable</th><th>Solución</th></tr></thead>
+<tbody>
+<tr><td>Queda cobre entre pistas</td><td>Falta una pasada o solape bajo</td><td>Aumentá pasadas o solape.</td></tr>
+<tr><td>El recorrido corta un pad</td><td>Diámetro de tabla mayor al real</td><td>Corregí el Ø.</td></tr>
+<tr><td>La fresa no baja lo suficiente</td><td>Z corte muy alta o placa no plana</td><td>Bajá Z, nivelá la cama.</td></tr>
+<tr><td>Se rompe la fresa</td><td>Avance Z alto, RPM baja, virutas</td><td>Bajá avance Z, subí RPM, aspirá.</td></tr>
+<tr><td>Recorridos duplicados</td><td>Varias filas con el mismo Ø</td><td>Usá rest machining o eliminá filas.</td></tr>
+</tbody>
+</table>
+
+<nav class="page-nav"><a class="prev" href="edicion.html"><span class="label">Anterior</span><span class="title">← Edición</span></a><a class="next" href="perforacion.html"><span class="label">Siguiente</span><span class="title">Perforación →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

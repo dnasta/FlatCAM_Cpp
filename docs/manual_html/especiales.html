@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Herramientas especiales · FlatCAM C++</title>
+<meta name="description" content="Film, panelizado, thieving, paste, QR y más">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html" class="active">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Herramientas especiales</span></div>
+<h1>Herramientas especiales</h1>
+<p class="subtitle">Film, panelizado, thieving, paste, QR y más</p>
+
+<p class="lead">Además de las operaciones principales, FlatCAM C++ incluye herramientas de fabricación, composición, análisis y utilidades. Esta página las agrupa por tipo.</p>
+
+<h2>Film</h2>
+<p>Combina las capas visibles en un film para exposición o inspección.</p>
+<table>
+<thead><tr><th>Parámetro</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td>Margen</td><td>Espacio alrededor del contenido.</td></tr>
+<tr><td>Negativo</td><td>Invierte claro/oscuro.</td></tr>
+<tr><td>Marco</td><td>Dibuja un borde alrededor del film.</td></tr>
+<tr><td>Punched</td><td>Resta los taladros Excellon.</td></tr>
+<tr><td>Tipo de film</td><td>Positivo, negativo o punched.</td></tr>
+<tr><td>Skew</td><td>Inclinación para compensar el proceso.</td></tr>
+<tr><td>Referencia</td><td>Área combinada o un objeto de referencia.</td></tr>
+</tbody>
+</table>
+<p>Se exporta como SVG o se agrega como objeto del proyecto. El film avanzado permite combinar varias capas, margen, marco, negativo y punched en un solo paso.</p>
+
+<h2>Panelizado</h2>
+<p>Duplica el objeto seleccionado en una grilla, fila o columna.</p>
+<ul>
+<li><strong>Filas / columnas:</strong> cantidad de copias.</li>
+<li><strong>Separación X/Y:</strong> espacio entre copias.</li>
+<li><strong>Tipo:</strong> grilla, fila o columna.</li>
+<li><strong>Fillet:</strong> radio de esquina del contorno del panel.</li>
+<li><strong>Referencia:</strong> objeto que define el panel.</li>
+</ul>
+<p>Útil para producir varias placas en una sola pieza. Revisá que las pistas y el contorno no se solapen entre copias.</p>
+
+<h2>Copper Thieving</h2>
+<p>Agrega una grilla de puntos de cobre para uniformizar la densidad y mejorar el proceso de fabricación.</p>
+<table>
+<thead><tr><th>Parámetro</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td>Diámetro</td><td>Tamaño de cada punto.</td></tr>
+<tr><td>Separación</td><td>Distancia entre puntos.</td></tr>
+<tr><td>Distancia al cobre</td><td>Keep-out alrededor del cobre existente.</td></tr>
+<tr><td>Margen</td><td>Expansión del área de trabajo.</td></tr>
+<tr><td>Patrón</td><td>Puntos, cuadrados o líneas.</td></tr>
+<tr><td>Densidad PPM</td><td>Puntos por millón para controlar la cobertura.</td></tr>
+<tr><td>Referencia</td><td>Área de otro objeto.</td></tr>
+</tbody>
+</table>
+
+<h2>Solder Paste</h2>
+<p>Genera la dosificación de pasta desde un Gerber de máscara. Cada pad recibe una boquilla según su tamaño.</p>
+<table>
+<thead><tr><th>Parámetro</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td>Tabla de boquillas</td><td>Diámetro de boquilla y pausa por tamaño de pad.</td></tr>
+<tr><td>Dirección</td><td>Normal o inversa (orden de recorrido).</td></tr>
+<tr><td>Z de viaje</td><td>Altura entre pads.</td></tr>
+<tr><td>Z de dosificación</td><td>Altura de descenso para dispensar.</td></tr>
+<tr><td>Z de retracción</td><td>Altura después de dispensar.</td></tr>
+<tr><td>Avance Z</td><td>Velocidad de bajada.</td></tr>
+<tr><td>Pausa</td><td>Tiempo de dosificación.</td></tr>
+</tbody>
+</table>
+<p>El G-code incluye cambios de boquilla (<code>M0</code>) y pausas. Verificá la viscosidad y la presión de la pasta antes de producir.</p>
+
+<h2>QR Code</h2>
+<ul>
+<li>Texto o URL.</li>
+<li>Módulo (tamaño de cada celda).</li>
+<li>Borde (margen de silencio).</li>
+<li>Corrección de errores (ECC).</li>
+<li>Origen y exportación a Gerber o capa de cobre.</li>
+</ul>
+
+<h2>Importar imagen</h2>
+<p>Convierte PNG/JPG en cobre por umbral, color o máscara. Parámetros: ancho o DPI, modo, umbral, invertir, color objetivo/tolerancia y máscara. Ideal para logos y dibujos de una sola tinta.</p>
+
+<h2>Punch Gerber</h2>
+<p>Resta los taladros de un Excellon al cobre, con una holgura configurable. Se usa para “limpiar” pads o crear alivios. Se puede elegir qué herramientas/aperturas restar.</p>
+
+<h2>Extraer taladros</h2>
+<p>Detecta flashes circulares de un Gerber y crea un objeto Excellon editable, agrupando por diámetro. El parámetro <strong>Ø máximo</strong> limita qué círculos se consideran taladros. Útil cuando sólo tenés el Gerber y no el Excellon.</p>
+
+<h2>Marcas de esquina</h2>
+<p>Agrega marcas en L dentro o fuera del contorno, con longitud y margen. Sirven para alinear la placa en la máquina o para referencia visual.</p>
+
+<h2>Fiduciales</h2>
+<p>Coloca cuatro marcas circulares en las esquinas, con diámetro y distancia al borde. Se usan para alineación óptica en pick-and-place o inspección.</p>
+
+<h2>Herramienta óptima</h2>
+<p>Calcula la separación mínima de cobre y el diámetro de fresa más grande que todavía aísla sin invadir pads.</p>
+<ul>
+<li><strong>Ø máximo:</strong> límite superior a probar.</li>
+<li><strong>Precisión:</strong> paso de búsqueda.</li>
+<li><strong>Frecuencia:</strong> resolución de la lista de pares.</li>
+<li><strong>Pares limitantes:</strong> muestra los puntos que restringen el diámetro.</li>
+</ul>
+
+<h2>Comprobar reglas</h2>
+<table>
+<thead><tr><th>Regla</th><th>Qué detecta</th></tr></thead>
+<tbody>
+<tr><td>Separación</td><td>Pares de objetos más cercanos que el valor.</td></tr>
+<tr><td>Ancho de traza</td><td>Pistas más finas que el mínimo.</td></tr>
+<tr><td>Diámetro de taladro</td><td>Taladros más chicos que el mínimo.</td></tr>
+<tr><td>Anillo anular</td><td>Pads con anillo insuficiente alrededor del taladro.</td></tr>
+<tr><td>Clearance taladro-cobre</td><td>Taladros demasiado cerca de cobre ajeno.</td></tr>
+</tbody>
+</table>
+
+<h2>Calibración de escala</h2>
+<p>Corrige el tamaño del objeto a partir de una distancia medida y una real.</p>
+<ol>
+<li>Medí una distancia conocida en el objeto (con la herramienta de medición).</li>
+<li>Ingresá la distancia real.</li>
+<li>Opcional: usá dos puntos seleccionables.</li>
+<li>Opcional: generá G-code de verificación.</li>
+</ol>
+<p>El factor se aplica a la geometría, no sólo al dibujo.</p>
+
+<h2>Distancia mínima</h2>
+<p>Mide la distancia entre dos objetos, incluyendo recorridos, y dibuja la línea del par de puntos más cercano. Útil para verificar separaciones y clearance.</p>
+
+<h2>Alinear objetos</h2>
+<p>Alinea el objeto seleccionado contra el origen o contra otro objeto en seis posiciones: izquierda, centro, derecha, arriba, medio, abajo. Con undo.</p>
+
+<h2>Doble faz</h2>
+<p>Crea una copia espejada del objeto en X o Y, con offset, como capa nueva. Se usa para placas de doble cara; recordá que el espejado cambia la lectura del texto y las serigrafías.</p>
+
+<h2>Compensación de grabado</h2>
+<p>Aplica un buffer positivo o negativo al cobre. Positivo engorda las pistas; negativo las adelgaza. Se usa para compensar el sobreancho del grabado químico o de la fresa.</p>
+
+<h2>Invertir Gerber</h2>
+<p>Resta el cobre de una caja con margen, generando el negativo. Útil para planos de masa o máscaras invertidas.</p>
+
+<h2>Fresado</h2>
+<p>Sigue los recorridos (<em>follow</em>) del Gerber con la fresa, sin calcular offsets. Parámetros: diámetro, avance, Z, profundidad por pasada y husillo. Se usa para repasar pistas o cortar líneas ya definidas.</p>
+
+<div class="tip"><p>Muchas de estas herramientas generan <strong>capas nuevas</strong> en el grupo Herramientas. Ocultá la capa original para revisar el resultado sin confusión.</p></div>
+
+<nav class="page-nav"><a class="prev" href="ncc.html"><span class="label">Anterior</span><span class="title">← NCC y pintura</span></a><a class="next" href="preferencias.html"><span class="label">Siguiente</span><span class="title">Preferencias y unidades →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

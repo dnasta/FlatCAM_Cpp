@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Corte de contorno · FlatCAM C++</title>
+<meta name="description" content="Separación de la placa, puentes y multipasada">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html" class="active">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Corte de contorno</span></div>
+<h1>Corte de contorno</h1>
+<p class="subtitle">Separación de la placa, puentes y multipasada</p>
+
+<p class="lead">El corte de contorno separa la placa terminada del material sobrante. FlatCAM calcula el recorrido alrededor del borde con la compensación del diámetro de la fresa.</p>
+
+<figure><img src="assets/img/corte.png" alt="Previsualización de corte de contorno"><figcaption>Corte con puentes sobre el contorno de la placa de ejemplo.</figcaption></figure>
+
+<h2>Cómo funciona</h2>
+<p>El objeto de origen suele ser la capa <code>Edge_Cuts</code> o el contorno de la placa. FlatCAM une el contorno, aplica un buffer de <code>margen ± Ø/2</code> y extrae los recorridos exteriores. El margen decide si el corte queda por fuera o por dentro del borde:</p>
+<ul>
+<li><strong>Margen positivo:</strong> la fresa pasa por fuera del contorno; la placa queda con la medida nominal.</li>
+<li><strong>Margen negativo:</strong> la fresa pasa por dentro; la placa queda más chica.</li>
+<li><strong>Margen 0:</strong> la fresa se centra en el contorno; la placa queda Ø/2 más chica.</li>
+</ul>
+
+<h2>Parámetros</h2>
+<table>
+<thead><tr><th>Parámetro</th><th>Qué hace</th><th>Valores típicos</th></tr></thead>
+<tbody>
+<tr><td><strong>Margen</strong></td><td>Separación entre el contorno y el recorrido.</td><td>0,2–1,0 mm; 0,5 mm habitual.</td></tr>
+<tr><td><strong>Separación</strong></td><td>Tipo de corte: con puentes o corte completo.</td><td>Con puentes para placas grandes.</td></tr>
+<tr><td><strong>Puentes</strong></td><td>Cantidad de tramos sin cortar que sostienen la placa.</td><td>2–6; 4 es común.</td></tr>
+<tr><td><strong>Ancho de puente</strong></td><td>Longitud de cada tramo sin cortar.</td><td>1–3 mm.</td></tr>
+<tr><td><strong>Incluir agujeros internos</strong></td><td>Corta también los contornos internos.</td><td>Sólo si hay ventanas o huecos.</td></tr>
+<tr><td><strong>Profundidad</strong></td><td>Z final del corte.</td><td>Placa 1,6 mm → −1,8 a −2,0 mm.</td></tr>
+<tr><td><strong>Profundidad por pasada</strong></td><td>Baja en escalones.</td><td>0,4–0,6 mm por pasada.</td></tr>
+</tbody>
+</table>
+
+<h2>Tabla de herramientas</h2>
+<p>Igual que en aislamiento: Ø, avances, RPM, Z corte y profundidad por pasada. Para corte se suele usar una fresa de 1–2 mm y varias pasadas.</p>
+
+<h2>Puentes vs corte completo</h2>
+<ul>
+<li><strong>Con puentes:</strong> la placa queda sujeta y no se mueve; después se separa con cuidado. Los tramos sin cortar se reparten uniformemente por el perímetro.</li>
+<li><strong>Corte completo:</strong> recorre todo el contorno. La placa puede moverse al final; usá cinta de doble faz o un tablero sacrificial.</li>
+</ul>
+
+<h2>Multipasada</h2>
+<p>Para placas de 1,6 mm no conviene bajar 1,8 mm de una vez. Configurá <em>Prof.</em> en 0,4–0,6 mm: el programa repite el recorrido en escalones hasta la profundidad final. Esto reduce la rotura de fresas y mejora el acabado.</p>
+
+<h2>Generar</h2>
+<ol class="steps">
+<li>Elegí el <strong>GERBER</strong> de contorno.</li>
+<li>Definí margen (0,5 mm es un buen inicio) y fresa.</li>
+<li>Elegí puentes y ancho, o corte completo.</li>
+<li>Configurá Z corte y profundidad por pasada.</li>
+<li>Previsualizá y generá el CNCJob.</li>
+<li>Simulá y verificá que el recorrido no corte pistas cercanas al borde.</li>
+</ol>
+
+<h2>Valores recomendados</h2>
+<table>
+<thead><tr><th>Fresa</th><th>Margen</th><th>Z corte</th><th>Prof./pasada</th><th>Avance XY</th></tr></thead>
+<tbody>
+<tr><td>1,0 mm</td><td>0,3–0,5</td><td>−1,8</td><td>0,4</td><td>150–250</td></tr>
+<tr><td>1,5 mm</td><td>0,4–0,6</td><td>−1,8</td><td>0,5</td><td>200–300</td></tr>
+<tr><td>2,0 mm</td><td>0,5–1,0</td><td>−1,9</td><td>0,6</td><td>250–400</td></tr>
+</tbody>
+</table>
+
+<div class="warning"><p>Si la placa tiene componentes montados o pistas muy cerca del borde, aumentá el margen y revisá el recorrido en el visor. Un corte demasiado interno puede inutilizar la placa.</p></div>
+
+<h2>Problemas frecuentes</h2>
+<table>
+<thead><tr><th>Síntoma</th><th>Causa</th><th>Solución</th></tr></thead>
+<tbody>
+<tr><td>La placa queda chica</td><td>Margen 0 o negativo</td><td>Usá margen positivo ≈ Ø/2.</td></tr>
+<tr><td>El corte no atraviesa</td><td>Z insuficiente o placa gruesa</td><td>Bajá Z o agregá pasadas.</td></tr>
+<tr><td>La placa se mueve</td><td>Corte completo sin sujeción</td><td>Usá puentes o cinta.</td></tr>
+<tr><td>Fresa rota</td><td>Pasada muy profunda</td><td>Reducí Prof. y avance Z.</td></tr>
+</tbody>
+</table>
+
+<nav class="page-nav"><a class="prev" href="perforacion.html"><span class="label">Anterior</span><span class="title">← Perforación</span></a><a class="next" href="ncc.html"><span class="label">Siguiente</span><span class="title">NCC y pintura →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

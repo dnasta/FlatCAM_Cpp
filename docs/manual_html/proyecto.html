@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proyecto · FlatCAM C++</title>
+<meta name="description" content="Objetos, grupos, guardado y configuración">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html" class="active">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Proyecto</span></div>
+<h1>Proyecto</h1>
+<p class="subtitle">Objetos, grupos, guardado y configuración</p>
+
+<p class="lead">El proyecto reúne objetos, tablas de herramientas, scripts y programas G-code en un solo archivo <code>.FlatPrj</code>.</p>
+
+<figure><img src="assets/img/proyecto.png" alt="Proyecto de ejemplo abierto en FlatCAM C++"><figcaption>Proyecto de ejemplo con el cobre y el taladrado agrupados en Archivos.</figcaption></figure>
+
+<h2>Crear y abrir</h2>
+<table>
+<thead><tr><th>Acción</th><th>Cómo</th></tr></thead>
+<tbody>
+<tr><td>Nuevo proyecto</td><td><em>Archivo → Nuevo proyecto</em>. Vacía objetos y tablas, sin borrar archivos del disco.</td></tr>
+<tr><td>Abrir archivos</td><td><em>Archivo → Abrir</em>, selección múltiple o arrastrar a la ventana.</td></tr>
+<tr><td>Abrir proyecto</td><td><em>Archivo → Abrir proyecto</em>. Reconstruye objetos, textos y tablas.</td></tr>
+<tr><td>Guardar</td><td><em>Archivo → Guardar proyecto</em> (si ya tiene ruta) o <em>Guardar como</em>.</td></tr>
+<tr><td>Abrir objeto de proyecto</td><td><em>Archivo → Abrir objeto de proyecto</em>: carga sólo un objeto de un proyecto grande.</td></tr>
+</tbody>
+</table>
+
+<h2>Formato .FlatPrj</h2>
+<p>Es un JSON con la estructura de FlatCAM: lista de objetos, tipo, unidades, geometría en WKT y opciones. Puede estar comprimido con <strong>lzma</strong>; la app lo detecta y lo lee en streaming.</p>
+<ul>
+<li><strong>Proyectos normales:</strong> se cargan completos.</li>
+<li><strong>Proyectos enormes:</strong> la app lista metadatos y carga geometría por objeto para no agotar la memoria.</li>
+<li><strong>Límite:</strong> la carga completa se limita a 512 MiB de JSON descomprimido; para más, usar <em>Abrir objeto</em>.</li>
+</ul>
+
+<h2>Árbol de objetos</h2>
+<p>Los objetos se agrupan automáticamente:</p>
+<table>
+<thead><tr><th>Grupo</th><th>Contenido</th></tr></thead>
+<tbody>
+<tr><td><strong>Archivos</strong></td><td>Gerber, Excellon y geometría importada.</td></tr>
+<tr><td><strong>Herramientas</strong></td><td>Capas generadas: aislamiento, NCC, corte, pintura, fresado, fiduciales, thieving, film, doble faz.</td></tr>
+<tr><td><strong>G-code</strong></td><td>Programas CNCJob generados.</td></tr>
+</tbody>
+</table>
+<p>Ocultar un archivo oculta también las capas generadas a partir de él. El orden del árbol define el orden de dibujo: la fila superior se dibuja encima.</p>
+
+<h3>Visibilidad y selección</h3>
+<ul>
+<li>La columna <strong>Vis</strong> tiene un icono verde (visible) o gris (oculto).</li>
+<li>Un clic en <strong>Vis</strong> alterna la visibilidad sin cambiar la selección.</li>
+<li>Un clic en el nombre selecciona el objeto y actualiza Propiedades y la herramienta.</li>
+<li>Doble clic abre la pestaña Herramienta del objeto.</li>
+<li><strong>Supr</strong> elimina el objeto seleccionado; se puede deshacer.</li>
+<li><strong>Ctrl+D</strong> duplica.</li>
+</ul>
+
+<h2>Propiedades del objeto</h2>
+<p>El panel Propiedades muestra y permite editar:</p>
+<ul>
+<li>Nombre.</li>
+<li>Tipo y área.</li>
+<li>Visibilidad.</li>
+<li>Rango X/Y, ancho y alto en la unidad activa.</li>
+<li>Unidades del archivo original.</li>
+<li>Detalles del formato: aperturas, flashes, segmentos, regiones, sólidos, recorridos, taladros, ranuras y herramientas.</li>
+<li>Propiedades personalizadas del proyecto (clave/valor).</li>
+</ul>
+
+<h2>Texto y scripts</h2>
+<p>Los objetos <strong>Document</strong>, <strong>Script</strong> y <strong>CNCJob</strong> guardan texto. Se editan desde el árbol o desde el editor de texto y se conservan al guardar el proyecto. Los scripts de proyecto se pueden ejecutar desde el editor.</p>
+
+<h2>Archivos recientes y marcadores</h2>
+<ul>
+<li><em>Archivo → Recientes</em> muestra los últimos archivos y proyectos.</li>
+<li><em>Ver → Marcadores</em> guarda posiciones de vista con nombre.</li>
+<li>El gestor de marcadores permite crear, saltar y eliminar.</li>
+</ul>
+
+<h2>Configuración y respaldo</h2>
+<ul>
+<li><em>Archivo → Guardar configuración</em>: exporta las preferencias a JSON.</li>
+<li><em>Archivo → Abrir configuración</em>: las restaura.</li>
+<li><em>Archivo → Backup del proyecto</em>: copia el <code>.FlatPrj</code> actual con fecha.</li>
+<li><em>Preferencias → Archivos</em>: carpeta de backup, recientes y comportamiento al abrir.</li>
+</ul>
+
+<h2>Base de datos de herramientas</h2>
+<p>Es un archivo SQLite con herramientas reutilizables: nombre, diámetro, avances, RPM, potencia láser, Z de corte y profundidad. Desde la tabla de una herramienta, el botón <strong>Desde DB</strong> agrega una fila. La base se puede editar desde <em>Herramienta → Base de datos</em>.</p>
+
+<h2>Qué se guarda en el proyecto</h2>
+<table>
+<thead><tr><th>Elemento</th><th>Se guarda</th></tr></thead>
+<tbody>
+<tr><td>Geometría de objetos</td><td>Sí, en WKT.</td></tr>
+<tr><td>Tablas de aislamiento/NCC/corte/pintura/taladrado</td><td>Sí, en <code>project_options</code>.</td></tr>
+<tr><td>Propiedades por objeto</td><td>Sí, JSON.</td></tr>
+<tr><td>Texto de Document/Script/CNCJob</td><td>Sí.</td></tr>
+<tr><td>Archivo fuente</td><td>Sí, ruta para reeditarlo.</td></tr>
+<tr><td>Preferencias globales</td><td>No; van en <code>QSettings</code>.</td></tr>
+</tbody>
+</table>
+
+<div class="warning"><p>El proyecto no guarda los archivos Gerber/Excellon originales, sólo su geometría y la ruta. Si movés los originales, el editor de fuente no los encontrará, pero la geometría sigue en el proyecto.</p></div>
+
+<nav class="page-nav"><a class="prev" href="interfaz.html"><span class="label">Anterior</span><span class="title">← Interfaz</span></a><a class="next" href="importar.html"><span class="label">Siguiente</span><span class="title">Importar y exportar →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

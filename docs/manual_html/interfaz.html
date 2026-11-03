@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interfaz · FlatCAM C++</title>
+<meta name="description" content="Ventanas, paneles y controles">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html" class="active">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Interfaz</span></div>
+<h1>Interfaz</h1>
+<p class="subtitle">Ventanas, paneles y controles</p>
+
+<p class="lead">La ventana sigue el esquema de FlatCAM: un árbol de proyecto a la izquierda, el visor en el centro y una consola inferior, con paneles de herramienta que se abren como pestañas.</p>
+
+<figure><img src="assets/img/interfaz.png" alt="Ventana principal con el panel de aislamiento abierto"><figcaption>Ventana principal: pestañas de proyecto, propiedades y herramienta; canvas; consola Tcl, JS, G-code e informe.</figcaption></figure>
+
+<h2>Barra de menús</h2>
+<table>
+<thead><tr><th>Menú</th><th>Contenido principal</th></tr></thead>
+<tbody>
+<tr><td><strong>Archivo</strong></td><td>Nuevo, abrir, abrir proyecto, guardar, importar/exportar, imprimir, scripts, preferencias.</td></tr>
+<tr><td><strong>Editar</strong></td><td>Deshacer/rehacer, cortar/copiar/pegar objetos, seleccionar todo, transformar.</td></tr>
+<tr><td><strong>Ver</strong></td><td>Ajustar a ventana, zoom, rejilla, panel de objetos, vista 3D.</td></tr>
+<tr><td><strong>Herramienta</strong></td><td>Aislamiento, NCC, corte, pintura, perforación, fresado, thieving, paste, QR, film, calculadoras.</td></tr>
+<tr><td><strong>Objetos</strong></td><td>Duplicar, eliminar, editores Gerber/Excellon/geometría, booleanas, propiedades.</td></tr>
+<tr><td><strong>Opciones</strong></td><td>Unidades, tema, rejilla, snap, nivel BASIC/ADVANCED, preferencias.</td></tr>
+<tr><td><strong>Ayuda</strong></td><td>Manual, atajos, especificaciones, reportar problema, acerca de.</td></tr>
+</tbody>
+</table>
+
+<h2>Barra de herramientas</h2>
+<p>Los iconos son los originales de FlatCAM. Los más usados:</p>
+<table>
+<thead><tr><th>Icono / acción</th><th>Qué hace</th></tr></thead>
+<tbody>
+<tr><td>Abrir, proyecto, guardar</td><td>Operaciones de archivo y proyecto.</td></tr>
+<tr><td>Ajustar / zoom</td><td>Encaja la vista en el contenido o cambia el zoom.</td></tr>
+<tr><td>Aislar, NCC, cortar, pintar, perforar, fresar</td><td>Abre la pestaña de la herramienta correspondiente.</td></tr>
+<tr><td>Panelizar, film, paste, thieving</td><td>Herramientas de fabricación y composición.</td></tr>
+<tr><td>Punch, extraer taladros, fiduciales, calibrar</td><td>Utilidades sobre objetos existentes.</td></tr>
+<tr><td>Editor, duplicar, eliminar, transformar</td><td>Edición del objeto seleccionado.</td></tr>
+<tr><td>Medir, origen, ir a coordenadas</td><td>Navegación y medición.</td></tr>
+</tbody>
+</table>
+
+<h2>Panel izquierdo</h2>
+<p>Tiene tres pestañas fijas:</p>
+<h3>Proyecto</h3>
+<p>Árbol con los objetos agrupados en <strong>Archivos</strong>, <strong>Herramientas</strong> y <strong>G-code</strong>. La columna <strong>Vis</strong> muestra u oculta cada capa. Un clic selecciona; doble clic abre la pestaña Herramienta del objeto.</p>
+<h3>Propiedades</h3>
+<p>Nombre editable, tipo, área, visibilidad, límites X/Y, ancho/alto, unidades y detalles del formato (aperturas, flashes, segmentos, regiones, taladros, herramientas). También muestra propiedades personalizadas guardadas en el proyecto.</p>
+<h3>Herramienta</h3>
+<p>Se abre al elegir una operación. Su estructura es siempre parecida:</p>
+<ol>
+<li><strong>Selector de objeto</strong> (<em>GERBER:</em> o <em>EXCELLON:</em>).</li>
+<li><strong>Parámetros</strong> propios de la herramienta.</li>
+<li><strong>Tabla de herramientas</strong> con una fila por diámetro.</li>
+<li><strong>Parámetros comunes</strong> de mecanizado (Z, avances, postprocesador).</li>
+<li>Botones <strong>Previsualizar</strong>, <strong>Generar geometría</strong> y <strong>Generar CNCJob</strong>.</li>
+</ol>
+
+<h2>Canvas</h2>
+<ul>
+<li><strong>Rueda:</strong> zoom alrededor del cursor.</li>
+<li><strong>Arrastrar:</strong> desplazar la vista.</li>
+<li><strong>F:</strong> ajustar a ventana.</li>
+<li><strong>Clic:</strong> seleccionar el objeto bajo el cursor.</li>
+<li><strong>Doble clic:</strong> hacer zoom al objeto.</li>
+<li><strong>Barra inferior:</strong> coordenadas X/Y en la unidad activa.</li>
+</ul>
+<p>El cobre se dibuja relleno o como contorno según el modo del objeto. Los recorridos generados se muestran con otro color. La rejilla y los ejes se pueden ocultar desde <em>Ver</em>.</p>
+
+<h2>Consola inferior</h2>
+<table>
+<thead><tr><th>Pestaña</th><th>Uso</th></tr></thead>
+<tbody>
+<tr><td><strong>Shell Tcl</strong></td><td>Intérprete Tcl real con 71 comandos de FlatCAM.</td></tr>
+<tr><td><strong>Consola JS</strong></td><td>API JavaScript con <code>flatcam.*</code>.</td></tr>
+<tr><td><strong>G-code</strong></td><td>Último programa generado, con resaltado y búsqueda.</td></tr>
+<tr><td><strong>Informe</strong></td><td>Mensajes de importación, avisos y errores.</td></tr>
+</tbody>
+</table>
+
+<h2>Barra de estado</h2>
+<p>Muestra la unidad activa (mm/in), las coordenadas del cursor, el estado de la operación y la cantidad de objetos cargados. Los mensajes temporales aparecen a la izquierda.</p>
+
+<h2>Nivel BASIC / ADVANCED</h2>
+<p>En <em>Opciones → Nivel avanzado</em> se alterna entre dos vistas. En BASIC se ocultan parámetros que no se usan habitualmente: V-shape, follow, combine, rest, orden, offsets, conexión NCC, gaps, boquillas, PPM y tipos de film. En ADVANCED se muestra todo. La elección se guarda.</p>
+
+<div class="tip"><p>Si no encontrás un parámetro, revisá que estés en nivel ADVANCED y que la pestaña correcta esté abierta. Cada herramienta recuerda su estado mientras la app está abierta.</p></div>
+
+<h2>Tema y colores</h2>
+<p>El tema oscuro se aplica al reiniciar desde <em>Opciones → Tema oscuro</em>. Los colores de fondo, cobre, recorridos y trayectorias se configuran en <em>Preferencias → Colores</em>.</p>
+
+<nav class="page-nav"><a class="prev" href="instalacion.html"><span class="label">Anterior</span><span class="title">← Instalación</span></a><a class="next" href="proyecto.html"><span class="label">Siguiente</span><span class="title">Proyecto →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

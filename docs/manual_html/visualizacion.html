@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visualización · FlatCAM C++</title>
+<meta name="description" content="Canvas, capas, unidades y vista 3D">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html" class="active">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>Visualización</span></div>
+<h1>Visualización</h1>
+<p class="subtitle">Canvas, capas, unidades y vista 3D</p>
+
+<p class="lead">El visor es la herramienta principal para comprobar que la geometría, los recorridos y las unidades son correctos antes de generar G-code.</p>
+
+<h2>Navegación</h2>
+<table>
+<thead><tr><th>Acción</th><th>Cómo</th></tr></thead>
+<tbody>
+<tr><td>Zoom</td><td>Rueda del mouse, <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>Ctrl</kbd> + <kbd>−</kbd>.</td></tr>
+<tr><td>Desplazar</td><td>Arrastrar con el botón izquierdo.</td></tr>
+<tr><td>Ajustar</td><td><kbd>F</kbd> o <em>Ver → Ajustar a ventana</em>.</td></tr>
+<tr><td>Seleccionar</td><td>Clic sobre un objeto; se resalta y actualiza Propiedades.</td></tr>
+<tr><td>Zoom a objeto</td><td>Doble clic.</td></tr>
+<tr><td>Medir</td><td><em>Herramienta → Medir distancia</em>: elegí dos objetos; se dibuja la línea del par más cercano.</td></tr>
+</tbody>
+</table>
+
+<h2>Capas y colores</h2>
+<ul>
+<li><strong>Vis:</strong> muestra u oculta la capa.</li>
+<li><strong>Orden:</strong> la fila superior se dibuja encima.</li>
+<li><strong>Color del cobre:</strong> <em>Opciones → Color del cobre</em> o Preferencias → Colores.</li>
+<li><strong>Recorridos:</strong> color independiente para trayectorias generadas.</li>
+<li><strong>Sólido / contorno:</strong> el objeto Gerber se puede dibujar relleno o sólo borde.</li>
+<li><strong>Multicolor:</strong> usa colores por apertura para distinguir pistas y pads.</li>
+</ul>
+
+<h2>Unidades y coordenadas</h2>
+<p>La barra de estado muestra la unidad activa y las coordenadas del cursor. <em>Opciones → Mostrar en pulgadas</em> cambia toda la interfaz a pulgadas; las tablas y el editor Excellon convierten los valores al leerlos y escribirlos.</p>
+<div class="note"><p>La unidad de visualización no cambia la geometría: un objeto de 10 mm sigue midiendo 10 mm. Los datos internos y el G-code usan la unidad del proyecto/postprocesador.</p></div>
+
+<h2>Rejilla, snap y origen</h2>
+<ul>
+<li><em>Ver → Rejilla</em>: muestra una grilla de referencia.</li>
+<li><em>Opciones → Snap a rejilla</em>: redondea coordenadas de salto y medición.</li>
+<li><em>Opciones → Paso de rejilla</em>: separación en la unidad activa.</li>
+<li><em>Herramienta → Definir origen</em>: cambia el origen de visualización.</li>
+<li><em>Herramienta → Ir a coordenadas</em>: centra la vista en X/Y.</li>
+</ul>
+
+<h2>Vista 3D</h2>
+<figure><img src="assets/img/3d.png" alt="Vista 3D con cobre extruido y placa"><figcaption>Vista 3D: cobre extruido, placa, taladros y sombreado por cara.</figcaption></figure>
+<p><em>Ver → Vista 3D</em> abre una ventana con el cobre y la placa:</p>
+<table>
+<thead><tr><th>Control</th><th>Efecto</th></tr></thead>
+<tbody>
+<tr><td>Arrastrar</td><td>Rotar yaw/pitch.</td></tr>
+<tr><td>Rueda</td><td>Zoom.</td></tr>
+<tr><td>Espesor de placa</td><td>Altura del sustrato (por defecto 1,6 mm).</td></tr>
+<tr><td>Espesor de cobre</td><td>Altura del cobre extruido (0,08 mm).</td></tr>
+<tr><td>Mostrar placa / cobre</td><td>Muestra u oculta cada parte.</td></tr>
+<tr><td>Guardar PNG</td><td>Exporta la vista actual.</td></tr>
+</tbody>
+</table>
+<p>Los taladros del Excellon se dibujan sobre el cobre. El sombreado es Lambert por cara y el orden es por profundidad; no requiere GPU.</p>
+
+<h2>Rendimiento</h2>
+<ul>
+<li>Para placas grandes, usá <strong>contorno</strong> en vez de sólido relleno.</li>
+<li>Ocultá capas que no estés mirando.</li>
+<li>El zoom extremo puede ralentizar el dibujo de muchos segmentos; ajustá a ventana para recuperar fluidez.</li>
+<li>Los proyectos comprimidos se leen en streaming; abrí un solo objeto si el proyecto supera la memoria disponible.</li>
+</ul>
+
+<h2>Placa real</h2>
+<figure><img src="assets/img/placa-real.png" alt="Placa real mecanizada"><figcaption>Placa “Luz de Noche Pascual” mecanizada y verificada contra el G-code de producción.</figcaption></figure>
+
+<nav class="page-nav"><a class="prev" href="importar.html"><span class="label">Anterior</span><span class="title">← Importar y exportar</span></a><a class="next" href="edicion.html"><span class="label">Siguiente</span><span class="title">Edición →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NCC y pintura · FlatCAM C++</title>
+<meta name="description" content="Remoción de cobre y relleno de áreas">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú">☰</button>
+  <a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><span>FlatCAM C++</span><small>v0.01</small></a>
+  <span class="spacer"></span>
+  <a class="repo" href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio ↗</a>
+  <button class="icon-btn" data-theme-toggle aria-label="Cambiar tema">☾</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="search-wrap"><input type="search" placeholder="Buscar en el manual… (/)" data-nav-search aria-label="Buscar en el manual"></div>
+  <nav>
+<div class="nav-group"><h3>Primeros pasos</h3><a href="index.html">Inicio</a><a href="introduccion.html">Introducción</a><a href="instalacion.html">Instalación</a><a href="interfaz.html">Interfaz</a></div>
+<div class="nav-group"><h3>Trabajo con el proyecto</h3><a href="proyecto.html">Proyecto</a><a href="importar.html">Importar y exportar</a><a href="visualizacion.html">Visualización</a><a href="edicion.html">Edición</a></div>
+<div class="nav-group"><h3>Herramientas CAM</h3><a href="aislamiento.html">Aislamiento</a><a href="perforacion.html">Perforación</a><a href="corte.html">Corte de contorno</a><a href="ncc.html" class="active">NCC y pintura</a><a href="especiales.html">Herramientas especiales</a></div>
+<div class="nav-group"><h3>Configuración y referencia</h3><a href="preferencias.html">Preferencias y unidades</a><a href="automatizacion.html">Automatización</a><a href="referencia.html">Referencia</a></div>
+  </nav>
+  <div class="meta">Manual de usuario de FlatCAM C++ v0.01.<br>Licencia GPLv3.<br><a href="https://github.com/dnasta/FlatCAM_Cpp">github.com/dnasta/FlatCAM_Cpp</a></div>
+</aside>
+<main>
+<div class="content">
+<div class="breadcrumb"><a href="index.html">Manual</a><span class="sep">/</span><span>NCC y pintura</span></div>
+<h1>NCC y pintura</h1>
+<p class="subtitle">Remoción de cobre y relleno de áreas</p>
+
+<p class="lead">NCC (Non-Copper Clear) remueve el cobre que no forma parte del circuito. La pintura (<em>paint</em>) rellena áreas con contornos paralelos. Ambas comparten la lógica de paso y superposición.</p>
+
+<h2>NCC: remoción de cobre</h2>
+<p>La región a fresar es el área de la placa menos el cobre protegido, con una distancia de seguridad. Se genera con dos estrategias:</p>
+<table>
+<thead><tr><th>Estrategia</th><th>Cómo trabaja</th><th>Cuándo usarla</th></tr></thead>
+<tbody>
+<tr><td><strong>Hatch</strong></td><td>Líneas paralelas con un ángulo; cada segmento es un recorrido.</td><td>Despeje rápido de áreas grandes.</td></tr>
+<tr><td><strong>Paint</strong></td><td>Contornos paralelos hacia adentro (offset repetido).</td><td>Acabado más uniforme, áreas irregulares.</td></tr>
+</tbody>
+</table>
+
+<h2>Parámetros</h2>
+<table>
+<thead><tr><th>Parámetro</th><th>Qué hace</th><th>Valores típicos</th></tr></thead>
+<tbody>
+<tr><td><strong>Superposición (%)</strong></td><td>Cuánto se solapa cada línea con la anterior. El paso se calcula como <code>paso = Ø × (1 − superposición)</code>.</td><td>60–80 %.</td></tr>
+<tr><td><strong>Distancia al cobre</strong></td><td>Separación de seguridad entre la fresa y el cobre que se conserva.</td><td>0,1–0,3 mm.</td></tr>
+<tr><td><strong>Margen del área</strong></td><td>Expande el rectángulo de trabajo alrededor del cobre.</td><td>0–2 mm.</td></tr>
+<tr><td><strong>Ángulo</strong></td><td>Orientación de las líneas de hatch.</td><td>0°, 45°, 90°.</td></tr>
+<tr><td><strong>Conectar recorridos</strong></td><td>Une líneas cercanas sin retraer.</td><td>Activo para reducir viajes.</td></tr>
+<tr><td><strong>Rest machining</strong></td><td>Omite zonas ya cubiertas por una herramienta mayor.</td><td>Al usar varias filas.</td></tr>
+</tbody>
+</table>
+
+<h2>Pintura</h2>
+<p>La herramienta <em>Pintura</em> rellena un área con contornos paralelos. Se usa para logos, planos de masa o zonas grandes. Parámetros: diámetro, superposición, margen y conectores. El resultado es una capa de recorridos que se puede convertir en CNCJob.</p>
+
+<h2>Tabla de herramientas</h2>
+<p>Las columnas son las mismas que en aislamiento: Ø, avances, RPM, S, Z corte y Prof. Para NCC se suele usar una fresa más grande (0,5–1,0 mm) y menos pasadas.</p>
+
+<h2>Generar</h2>
+<ol class="steps">
+<li>Elegí el Gerber de cobre y la herramienta.</li>
+<li>Elegí estrategia hatch o paint.</li>
+<li>Ajustá superposición, distancia y margen.</li>
+<li>Previsualizá: el área debe cubrir el cobre sobrante sin tocar pads.</li>
+<li>Generá geometría y CNCJob.</li>
+</ol>
+
+<h2>NCC vs aislamiento</h2>
+<table>
+<thead><tr><th>Aspecto</th><th>Aislamiento</th><th>NCC</th></tr></thead>
+<tbody>
+<tr><td>Objetivo</td><td>Separar islas de cobre.</td><td>Eliminar cobre sobrante.</td></tr>
+<tr><td>Recorrido</td><td>Contornos alrededor del cobre.</td><td>Líneas/contornos dentro del área libre.</td></tr>
+<tr><td>Herramienta</td><td>Fina (0,1–0,3 mm).</td><td>Media (0,5–1,0 mm).</td></tr>
+<tr><td>Tiempo</td><td>Largo.</td><td>Más corto en áreas grandes.</td></tr>
+</tbody>
+</table>
+
+<div class="tip"><p>Para una placa simple no hace falta NCC: el aislamiento y el corte alcanzan. NCC se justifica en planos de masa, RF o placas con mucho cobre sin usar.</p></div>
+
+<h2>Problemas frecuentes</h2>
+<table>
+<thead><tr><th>Síntoma</th><th>Causa</th><th>Solución</th></tr></thead>
+<tbody>
+<tr><td>Quedan islas de cobre</td><td>Superposición baja</td><td>Subí a 70–80 %.</td></tr>
+<tr><td>La fresa toca un pad</td><td>Distancia insuficiente</td><td>Aumentá la distancia al cobre.</td></tr>
+<tr><td>Recorridos muy largos</td><td>Hatch con ángulo desfavorable</td><td>Probá 45° o paint.</td></tr>
+<tr><td>Zona sin fresar</td><td>Margen negativo o área mal definida</td><td>Ajustá el margen.</td></tr>
+</tbody>
+</table>
+
+<nav class="page-nav"><a class="prev" href="corte.html"><span class="label">Anterior</span><span class="title">← Corte de contorno</span></a><a class="next" href="especiales.html"><span class="label">Siguiente</span><span class="title">Herramientas especiales →</span></a></nav>
+<footer class="footer">
+  <strong>FlatCAM C++</strong> · Port nativo de FlatCAM 2024.4 · GPLv3 · v0.01<br>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp">Repositorio</a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01">Descargar</a> ·
+  <a href="referencia.html#glosario">Glosario</a>
+</footer>
+</div>
+</main>
+</div>
+<button class="to-top" data-to-top aria-label="Volver arriba">↑</button>
+<script src="assets/manual.js"></script>
+</body>
+</html>
