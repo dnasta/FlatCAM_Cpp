@@ -1,3 +1,7 @@
+/**
+ * @file ncc.hpp
+ * @brief NCC (Non-Copper Clear): remoción de cobre sobrante.
+ */
 #pragma once
 
 #include <vector>
@@ -6,28 +10,46 @@
 
 namespace fc {
 
-enum class NccStrategy { Hatch, Paint };
+/// Estrategia de despeje.
+enum class NccStrategy {
+    Hatch, ///< Líneas paralelas.
+    Paint  ///< Contornos paralelos.
+};
 
+/**
+ * @brief Parámetros de NCC.
+ */
 struct NccOptions {
-    NccStrategy strategy = NccStrategy::Hatch;
-    double toolDiameter = 0.2;
-    double stepOver = 0.5;   // fraction of the tool diameter
-    double clearance = 0.0;  // extra safety distance from copper
-    double angleDeg = 0.0;   // hatch direction
-    double margin = 0.0;     // extend the hatch beyond the work area
-    int quadrantSegments = 16;
+    NccStrategy strategy = NccStrategy::Hatch; ///< Hatch o paint.
+    double toolDiameter = 0.2; ///< Diámetro de la fresa.
+    double stepOver = 0.5;     ///< Paso como fracción del diámetro.
+    double clearance = 0.0;    ///< Distancia extra de seguridad al cobre.
+    double angleDeg = 0.0;     ///< Dirección del hatch.
+    double margin = 0.0;       ///< Expansión del área de trabajo.
+    int quadrantSegments = 16; ///< Segmentos por cuadrante.
 };
 
+/**
+ * @brief Resultado de NCC.
+ */
 struct NccResult {
-    std::vector<Geom> paths;  // clearing passes (parallel lines)
-    Geom clearedArea;         // area that gets cleared
-    double totalLength = 0.0;
-    BBox bounds;
+    std::vector<Geom> paths; ///< Recorridos de despeje.
+    Geom clearedArea;        ///< Área que se despeja.
+    double totalLength = 0.0;///< Longitud total.
+    BBox bounds;             ///< Límites.
 };
 
-// Clears the area that is not copper: builds a hatch of parallel lines inside
-// `area - buffer(copper, toolRadius + clearance)` at `stepOver * toolDiameter`
-// spacing. This is a first, deterministic NCC strategy (no path linking).
+/**
+ * @brief Despeja el área que no es cobre.
+ *
+ * Construye el área `area - buffer(copper, radio + clearance)` y la recorre
+ * con líneas paralelas separadas `stepOver * diámetro`.
+ *
+ * @param copper Cobre a conservar.
+ * @param area Área de trabajo.
+ * @param options Estrategia, diámetro, paso, clearance y ángulo.
+ * @return Recorridos y área despejada.
+ */
 NccResult clearCopper(const Geom& copper, const Geom& area, const NccOptions& options);
 
 }  // namespace fc

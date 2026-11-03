@@ -1,0 +1,1999 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia de la clase fc::Geom</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('classfc_1_1_geom.html','','classfc_1_1_geom-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia de la clase fc::Geom</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Envoltorio inmutable y compartido de una geometría GEOS.  
+ <a href="#details">Más...</a></p>
+
+<p><code>#include &lt;<a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Métodos públicos</h2></td></tr>
+<tr class="memitem:a8ea201105d0cfc439579429bb09a60d1" id="r_a8ea201105d0cfc439579429bb09a60d1"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom</a> ()=default</td></tr>
+<tr class="memdesc:a8ea201105d0cfc439579429bb09a60d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construye una geometría vacía (sin handle).  <br /></td></tr>
+<tr class="memitem:a322d9e9be30a1ca2ad2fa66e2438b8e9" id="r_a322d9e9be30a1ca2ad2fa66e2438b8e9"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid</a> () const</td></tr>
+<tr class="memitem:aeb91d2056e4ce71e4dba557be1b44f6c" id="r_aeb91d2056e4ce71e4dba557be1b44f6c"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aeb91d2056e4ce71e4dba557be1b44f6c">empty</a> () const</td></tr>
+<tr class="memdesc:aeb91d2056e4ce71e4dba557be1b44f6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indica si el <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> es nulo o si GEOS lo considera vacío.  <br /></td></tr>
+<tr class="memitem:a3f9e323af792e2c534783d0b886aa68f" id="r_a3f9e323af792e2c534783d0b886aa68f"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a3f9e323af792e2c534783d0b886aa68f">area</a> () const</td></tr>
+<tr class="memdesc:a3f9e323af792e2c534783d0b886aa68f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Área total de la geometría.  <br /></td></tr>
+<tr class="memitem:adc5ea20017a3e75139edf655bbbc2d7c" id="r_adc5ea20017a3e75139edf655bbbc2d7c"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#adc5ea20017a3e75139edf655bbbc2d7c">length</a> () const</td></tr>
+<tr class="memdesc:adc5ea20017a3e75139edf655bbbc2d7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Longitud total de la geometría.  <br /></td></tr>
+<tr class="memitem:ad4a03d54f6a2b2185359a628af547354" id="r_ad4a03d54f6a2b2185359a628af547354"><td class="memItemLeft"><a class="el" href="structfc_1_1_b_box.html">BBox</a>&#160;</td><td class="memItemRight"><a class="el" href="#ad4a03d54f6a2b2185359a628af547354">bounds</a> () const</td></tr>
+<tr class="memdesc:ad4a03d54f6a2b2185359a628af547354"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calcula la caja envolvente.  <br /></td></tr>
+<tr class="memitem:aa177c3f5c9137b300047b8afa50744fd" id="r_aa177c3f5c9137b300047b8afa50744fd"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aa177c3f5c9137b300047b8afa50744fd">isValid</a> () const</td></tr>
+<tr class="memdesc:aa177c3f5c9137b300047b8afa50744fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validez topológica según GEOSisValid.  <br /></td></tr>
+<tr class="memitem:a6f94f675d0d22c03f0e89ae9dd724bfb" id="r_a6f94f675d0d22c03f0e89ae9dd724bfb"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a6f94f675d0d22c03f0e89ae9dd724bfb">typeId</a> () const</td></tr>
+<tr class="memdesc:a6f94f675d0d22c03f0e89ae9dd724bfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tipo GEOS (GEOS_POLYGON, GEOS_LINESTRING, ...) o -1 si el <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> es nulo.  <br /></td></tr>
+<tr class="memitem:aa371ed0e43dd217cddf64915cc216760" id="r_aa371ed0e43dd217cddf64915cc216760"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#aa371ed0e43dd217cddf64915cc216760">numGeometries</a> () const</td></tr>
+<tr class="memdesc:aa371ed0e43dd217cddf64915cc216760"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cantidad de partes de una colección; 0 si el <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> es nulo.  <br /></td></tr>
+<tr class="memitem:a3df5d7bba5a521dde960a11e1fa0d5be" id="r_a3df5d7bba5a521dde960a11e1fa0d5be"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a3df5d7bba5a521dde960a11e1fa0d5be">geometryN</a> (int i) const</td></tr>
+<tr class="memdesc:a3df5d7bba5a521dde960a11e1fa0d5be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accede a una componente de una colección.  <br /></td></tr>
+<tr class="memitem:aa0a608bdad679c6f5ccff4588457fc07" id="r_aa0a608bdad679c6f5ccff4588457fc07"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#aa0a608bdad679c6f5ccff4588457fc07">numPoints</a> () const</td></tr>
+<tr class="memdesc:aa0a608bdad679c6f5ccff4588457fc07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cantidad de puntos del contorno principal.  <br /></td></tr>
+<tr class="memitem:a074ca16d120b12b3fb9accc98ecbf4ee" id="r_a074ca16d120b12b3fb9accc98ecbf4ee"><td class="memItemLeft"><a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">Ring</a>&#160;</td><td class="memItemRight"><a class="el" href="#a074ca16d120b12b3fb9accc98ecbf4ee">coords</a> () const</td></tr>
+<tr class="memdesc:a074ca16d120b12b3fb9accc98ecbf4ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vértices del contorno principal como <a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff" title="Secuencia de puntos que describe un anillo, una polilínea o un contorno.">Ring</a>.  <br /></td></tr>
+<tr class="memitem:a60d5524f5a48403ae0d4f477f715892c" id="r_a60d5524f5a48403ae0d4f477f715892c"><td class="memItemLeft">std::vector&lt; <a class="el" href="structfc_1_1_polygon_contours.html">PolygonContours</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a60d5524f5a48403ae0d4f477f715892c">polygons</a> () const</td></tr>
+<tr class="memdesc:a60d5524f5a48403ae0d4f477f715892c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Descompone una geometría poligonal en contornos y agujeros.  <br /></td></tr>
+<tr class="memitem:a0d7a2fcd024c7d64fd3c85a485227131" id="r_a0d7a2fcd024c7d64fd3c85a485227131"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a0d7a2fcd024c7d64fd3c85a485227131">buffer</a> (double distance, int quadSegs=16) const</td></tr>
+<tr class="memdesc:a0d7a2fcd024c7d64fd3c85a485227131"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aplica un buffer (offset) uniforme.  <br /></td></tr>
+<tr class="memitem:a47a0e2dbeb419c1dcb28f249571aa1ff" id="r_a47a0e2dbeb419c1dcb28f249571aa1ff"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a47a0e2dbeb419c1dcb28f249571aa1ff">bufferStyle</a> (double distance, int quadSegs, int capStyle, int joinStyle, double mitreLimit=5.0) const</td></tr>
+<tr class="memdesc:a47a0e2dbeb419c1dcb28f249571aa1ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buffer con estilos de extremo y unión.  <br /></td></tr>
+<tr class="memitem:a156c376753032eb08e8113994b6f2ef4" id="r_a156c376753032eb08e8113994b6f2ef4"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a156c376753032eb08e8113994b6f2ef4">unite</a> (const <a class="el" href="class_geom.html">Geom</a> &amp;other) const</td></tr>
+<tr class="memdesc:a156c376753032eb08e8113994b6f2ef4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unión booleana con otra geometría.  <br /></td></tr>
+<tr class="memitem:ab15fd1d02ef17e9accc0080b8d592268" id="r_ab15fd1d02ef17e9accc0080b8d592268"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#ab15fd1d02ef17e9accc0080b8d592268">difference</a> (const <a class="el" href="class_geom.html">Geom</a> &amp;other) const</td></tr>
+<tr class="memdesc:ab15fd1d02ef17e9accc0080b8d592268"><td class="mdescLeft">&#160;</td><td class="mdescRight">Diferencia booleana (<span class="tt">this - other</span>).  <br /></td></tr>
+<tr class="memitem:a49e89dca4948b779ffde07afe74e3d32" id="r_a49e89dca4948b779ffde07afe74e3d32"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a49e89dca4948b779ffde07afe74e3d32">intersection</a> (const <a class="el" href="class_geom.html">Geom</a> &amp;other) const</td></tr>
+<tr class="memdesc:a49e89dca4948b779ffde07afe74e3d32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intersección booleana.  <br /></td></tr>
+<tr class="memitem:adee9c964dabff6c6b6ac0ea258e6a03f" id="r_adee9c964dabff6c6b6ac0ea258e6a03f"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#adee9c964dabff6c6b6ac0ea258e6a03f">intersects</a> (const <a class="el" href="class_geom.html">Geom</a> &amp;other) const</td></tr>
+<tr class="memdesc:adee9c964dabff6c6b6ac0ea258e6a03f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verdadero si las coberturas se tocan o se cruzan.  <br /></td></tr>
+<tr class="memitem:a3701e104c9611077696df6add35dce41" id="r_a3701e104c9611077696df6add35dce41"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a3701e104c9611077696df6add35dce41">distance</a> (const <a class="el" href="class_geom.html">Geom</a> &amp;other) const</td></tr>
+<tr class="memdesc:a3701e104c9611077696df6add35dce41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Distancia mínima entre las dos geometrías.  <br /></td></tr>
+<tr class="memitem:a072620c03d923a2822b7768800b4c723" id="r_a072620c03d923a2822b7768800b4c723"><td class="memItemLeft">std::pair&lt; <a class="el" href="structfc_1_1_pt.html">Pt</a>, <a class="el" href="structfc_1_1_pt.html">Pt</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a072620c03d923a2822b7768800b4c723">nearestPoints</a> (const <a class="el" href="class_geom.html">Geom</a> &amp;other) const</td></tr>
+<tr class="memdesc:a072620c03d923a2822b7768800b4c723"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtiene el par de puntos más cercano entre dos geometrías.  <br /></td></tr>
+<tr class="memitem:a1a4129c66bcfbc48fb0a16b32cda0d7a" id="r_a1a4129c66bcfbc48fb0a16b32cda0d7a"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a1a4129c66bcfbc48fb0a16b32cda0d7a">unaryUnion</a> () const</td></tr>
+<tr class="memdesc:a1a4129c66bcfbc48fb0a16b32cda0d7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unión de todas las componentes de la geometría.  <br /></td></tr>
+<tr class="memitem:ad7985cdb0f6fc4bc00211fbfb113dff3" id="r_ad7985cdb0f6fc4bc00211fbfb113dff3"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#ad7985cdb0f6fc4bc00211fbfb113dff3">convexHull</a> () const</td></tr>
+<tr class="memdesc:ad7985cdb0f6fc4bc00211fbfb113dff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Envolvente convexa.  <br /></td></tr>
+<tr class="memitem:aec3ecd3eeb8ff26276ffff00e2ff2c14" id="r_aec3ecd3eeb8ff26276ffff00e2ff2c14"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#aec3ecd3eeb8ff26276ffff00e2ff2c14">simplify</a> (double tolerance) const</td></tr>
+<tr class="memdesc:aec3ecd3eeb8ff26276ffff00e2ff2c14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplifica la geometría con el algoritmo Douglas-Peucker.  <br /></td></tr>
+<tr class="memitem:a5812ec5b5fd79abe0d952e07ed95c578" id="r_a5812ec5b5fd79abe0d952e07ed95c578"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a5812ec5b5fd79abe0d952e07ed95c578">fixed</a> () const</td></tr>
+<tr class="memdesc:a5812ec5b5fd79abe0d952e07ed95c578"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repara polígonos auto-intersectados aplicando <span class="tt">buffer(0)</span>.  <br /></td></tr>
+<tr class="memitem:ac6cccc79d631cf73ca2780288adb9b94" id="r_ac6cccc79d631cf73ca2780288adb9b94"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#ac6cccc79d631cf73ca2780288adb9b94">transformXY</a> (const std::function&lt; <a class="el" href="structfc_1_1_pt.html">Pt</a>(<a class="el" href="structfc_1_1_pt.html">Pt</a>)&gt; &amp;fn) const</td></tr>
+<tr class="memdesc:ac6cccc79d631cf73ca2780288adb9b94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforma cada punto con una función arbitraria.  <br /></td></tr>
+<tr class="memitem:aef0d4a35b9d60e8ec1899008325c9e3c" id="r_aef0d4a35b9d60e8ec1899008325c9e3c"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#aef0d4a35b9d60e8ec1899008325c9e3c">translate</a> (double dx, double dy) const</td></tr>
+<tr class="memdesc:aef0d4a35b9d60e8ec1899008325c9e3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Traslada la geometría.  <br /></td></tr>
+<tr class="memitem:aa940eb41506cc43c140f5a50504de4dc" id="r_aa940eb41506cc43c140f5a50504de4dc"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#aa940eb41506cc43c140f5a50504de4dc">rotateDeg</a> (double angle, const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;origin={0.0, 0.0}) const</td></tr>
+<tr class="memdesc:aa940eb41506cc43c140f5a50504de4dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rota la geometría en grados alrededor de un origen.  <br /></td></tr>
+<tr class="memitem:ab48984654afd1ac8254e869e15928605" id="r_ab48984654afd1ac8254e869e15928605"><td class="memItemLeft"><a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#ab48984654afd1ac8254e869e15928605">scale</a> (double sx, double sy, const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;origin={0.0, 0.0}) const</td></tr>
+<tr class="memdesc:ab48984654afd1ac8254e869e15928605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Escala la geometría respecto de un origen.  <br /></td></tr>
+<tr class="memitem:a0a968b0898b501f37d9502080fa4f5bc" id="r_a0a968b0898b501f37d9502080fa4f5bc"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a0a968b0898b501f37d9502080fa4f5bc">toWkt</a> (int decimals=9) const</td></tr>
+<tr class="memdesc:a0a968b0898b501f37d9502080fa4f5bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serializa la geometría a WKT.  <br /></td></tr>
+<tr class="memitem:a220dd7efed8701cc568649240259f9e6" id="r_a220dd7efed8701cc568649240259f9e6"><td class="memItemLeft">GEOSGeometry *&#160;</td><td class="memItemRight"><a class="el" href="#a220dd7efed8701cc568649240259f9e6">raw</a> () const</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Métodos públicos estáticos</h2></td></tr>
+<tr class="memitem:af7dd1bb6ef79f13fa4219226c19a3615" id="r_af7dd1bb6ef79f13fa4219226c19a3615"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#af7dd1bb6ef79f13fa4219226c19a3615">adopt</a> (GEOSGeometry *g)</td></tr>
+<tr class="memdesc:af7dd1bb6ef79f13fa4219226c19a3615"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toma posesión de un <span class="tt">GEOSGeometry*</span> ya creado.  <br /></td></tr>
+<tr class="memitem:ab236e6d1c40906cb7fb73143067d67e7" id="r_ab236e6d1c40906cb7fb73143067d67e7"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#ab236e6d1c40906cb7fb73143067d67e7">emptyPolygon</a> ()</td></tr>
+<tr class="memdesc:ab236e6d1c40906cb7fb73143067d67e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Devuelve un polígono vacío válido para acumular uniones.  <br /></td></tr>
+<tr class="memitem:ad58817ac0fc7f81e717dc87eb58a1b4e" id="r_ad58817ac0fc7f81e717dc87eb58a1b4e"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#ad58817ac0fc7f81e717dc87eb58a1b4e">point</a> (double x, double y)</td></tr>
+<tr class="memdesc:ad58817ac0fc7f81e717dc87eb58a1b4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crea un punto.  <br /></td></tr>
+<tr class="memitem:ace3fa0d648e280ca284383af8cf1c0d7" id="r_ace3fa0d648e280ca284383af8cf1c0d7"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#ace3fa0d648e280ca284383af8cf1c0d7">line</a> (const <a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">Ring</a> &amp;pts)</td></tr>
+<tr class="memdesc:ace3fa0d648e280ca284383af8cf1c0d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crea una polilínea a partir de una secuencia de puntos.  <br /></td></tr>
+<tr class="memitem:af776fc784d39a34a60aa9d7ecc67b6b8" id="r_af776fc784d39a34a60aa9d7ecc67b6b8"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#af776fc784d39a34a60aa9d7ecc67b6b8">polygon</a> (const <a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">Ring</a> &amp;shell, const std::vector&lt; <a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">Ring</a> &gt; &amp;holes={})</td></tr>
+<tr class="memdesc:af776fc784d39a34a60aa9d7ecc67b6b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crea un polígono con agujeros opcionales.  <br /></td></tr>
+<tr class="memitem:a4eebd25faea409eef8635b4643da0edf" id="r_a4eebd25faea409eef8635b4643da0edf"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a4eebd25faea409eef8635b4643da0edf">box</a> (double xmin, double ymin, double xmax, double ymax)</td></tr>
+<tr class="memdesc:a4eebd25faea409eef8635b4643da0edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crea un rectángulo alineado a los ejes.  <br /></td></tr>
+<tr class="memitem:a89b3a3b7bc9484683c6faa96e958adb0" id="r_a89b3a3b7bc9484683c6faa96e958adb0"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a89b3a3b7bc9484683c6faa96e958adb0">circle</a> (const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;center, double radius, int quadSegs=16)</td></tr>
+<tr class="memdesc:a89b3a3b7bc9484683c6faa96e958adb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crea un círculo aproximado por segmentos.  <br /></td></tr>
+<tr class="memitem:ac939e752632b9e014d2395a6b87a77de" id="r_ac939e752632b9e014d2395a6b87a77de"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#ac939e752632b9e014d2395a6b87a77de">obround</a> (const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;center, double width, double height, int quadSegs=16)</td></tr>
+<tr class="memdesc:ac939e752632b9e014d2395a6b87a77de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crea un óvalo (rectángulo con extremos semicirculares).  <br /></td></tr>
+<tr class="memitem:a6eb2dc51d55ed8603645a215b8c565f1" id="r_a6eb2dc51d55ed8603645a215b8c565f1"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a6eb2dc51d55ed8603645a215b8c565f1">regularPolygon</a> (const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;center, double diameter, int vertices, double rotationDeg=0.0)</td></tr>
+<tr class="memdesc:a6eb2dc51d55ed8603645a215b8c565f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crea un polígono regular.  <br /></td></tr>
+<tr class="memitem:a8cbb6d6b0e35bccf6c791e89fb0d81ac" id="r_a8cbb6d6b0e35bccf6c791e89fb0d81ac"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a8cbb6d6b0e35bccf6c791e89fb0d81ac">collection</a> (const std::vector&lt; <a class="el" href="class_geom.html">Geom</a> &gt; &amp;parts, int type=GEOS_MULTIPOLYGON)</td></tr>
+<tr class="memdesc:a8cbb6d6b0e35bccf6c791e89fb0d81ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Agrupa varias geometrías en una colección.  <br /></td></tr>
+<tr class="memitem:a7f5ff7d8a52aad3d02297879b8d190c0" id="r_a7f5ff7d8a52aad3d02297879b8d190c0"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7f5ff7d8a52aad3d02297879b8d190c0">unionOf</a> (const std::vector&lt; <a class="el" href="class_geom.html">Geom</a> &gt; &amp;parts)</td></tr>
+<tr class="memdesc:a7f5ff7d8a52aad3d02297879b8d190c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Une todas las geometrías de una lista.  <br /></td></tr>
+<tr class="memitem:ab8db3e818ddf3fc878654e36b230c7f1" id="r_ab8db3e818ddf3fc878654e36b230c7f1"><td class="memItemLeft">static <a class="el" href="class_geom.html">Geom</a>&#160;</td><td class="memItemRight"><a class="el" href="#ab8db3e818ddf3fc878654e36b230c7f1">fromWkt</a> (const std::string &amp;wkt)</td></tr>
+<tr class="memdesc:ab8db3e818ddf3fc878654e36b230c7f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interpreta geometría en formato WKT.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-types" class="groupheader"><a id="pri-types" name="pri-types"></a>
+Tipos privados</h2></td></tr>
+<tr class="memitem:a9b4c92a325227c4bd6ace48078a5c0ee" id="r_a9b4c92a325227c4bd6ace48078a5c0ee"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a9b4c92a325227c4bd6ace48078a5c0ee">Handle</a> = std::shared_ptr&lt;GEOSGeometry&gt;</td></tr>
+<tr class="memdesc:a9b4c92a325227c4bd6ace48078a5c0ee"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="#a9b4c92a325227c4bd6ace48078a5c0ee" title="Handle compartido con deleter GEOS.">Handle</a> compartido con deleter GEOS.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Métodos privados</h2></td></tr>
+<tr class="memitem:a2fbe50305d1bec882ff4135b2a7a6db1" id="r_a2fbe50305d1bec882ff4135b2a7a6db1"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a2fbe50305d1bec882ff4135b2a7a6db1">Geom</a> (<a class="el" href="#a9b4c92a325227c4bd6ace48078a5c0ee">Handle</a> h)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Atributos privados</h2></td></tr>
+<tr class="memitem:ab7918780a91ba8c1863ff1391a736186" id="r_ab7918780a91ba8c1863ff1391a736186"><td class="memItemLeft"><a class="el" href="#a9b4c92a325227c4bd6ace48078a5c0ee">Handle</a>&#160;</td><td class="memItemRight"><a class="el" href="#ab7918780a91ba8c1863ff1391a736186">h_</a></td></tr>
+<tr class="memdesc:ab7918780a91ba8c1863ff1391a736186"><td class="mdescLeft">&#160;</td><td class="mdescRight">Geometría subyacente.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Envoltorio inmutable y compartido de una geometría GEOS. </p>
+<p>Las copias comparten el mismo <span class="tt">GEOSGeometry</span> mediante <span class="tt">shared_ptr</span>; por eso son baratas y seguras. Cada operación devuelve una geometría nueva y no modifica la original. Las geometrías inválidas se representan con un handle nulo (<span class="tt"><a class="el" href="#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid()</a> == false</span>).</p>
+<dl class="section note"><dt>Nota</dt><dd>GEOS se inicializa perezosamente en las fábricas; no es necesario llamar a <span class="tt"><a class="el" href="namespacefc.html#a19e9194ea470d5408c87bdecd25c3f13" title="Inicializa el runtime global de GEOS.">initGeosRuntime()</a></span> manualmente. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00115">115</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Documentación de los «Typedef» miembros de la clase</h2>
+<a id="a9b4c92a325227c4bd6ace48078a5c0ee" name="a9b4c92a325227c4bd6ace48078a5c0ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b4c92a325227c4bd6ace48078a5c0ee">&#9670;&#160;</a></span>Handle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a9b4c92a325227c4bd6ace48078a5c0ee">fc::Geom::Handle</a> = std::shared_ptr&lt;GEOSGeometry&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="#a9b4c92a325227c4bd6ace48078a5c0ee" title="Handle compartido con deleter GEOS.">Handle</a> compartido con deleter GEOS. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00316">316</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Documentación de constructores y destructores</h2>
+<a id="a8ea201105d0cfc439579429bb09a60d1" name="a8ea201105d0cfc439579429bb09a60d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ea201105d0cfc439579429bb09a60d1">&#9670;&#160;</a></span>Geom() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">fc::Geom::Geom </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel default">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construye una geometría vacía (sin handle). </p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00154">adopt()</a>, <a class="el" href="geometry_8cpp_source.html#l00165">emptyPolygon()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00200">line()</a>, <a class="el" href="geometry_8cpp_source.html#l00176">point()</a> y <a class="el" href="geometry_8cpp_source.html#l00234">polygon()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00154">adopt()</a>, <a class="el" href="geometry_8cpp_source.html#l00269">box()</a>, <a class="el" href="geometry_8cpp_source.html#l00584">buffer()</a>, <a class="el" href="geometry_8cpp_source.html#l00600">bufferStyle()</a>, <a class="el" href="geometry_8cpp_source.html#l00280">circle()</a>, <a class="el" href="geometry_8cpp_source.html#l00383">collection()</a>, <a class="el" href="geometry_8cpp_source.html#l00689">convexHull()</a>, <a class="el" href="geometry_8cpp_source.html#l00621">difference()</a>, <a class="el" href="geometry_8cpp_source.html#l00661">distance()</a>, <a class="el" href="geometry_8cpp_source.html#l00165">emptyPolygon()</a>, <a class="el" href="geometry_8cpp_source.html#l00709">fixed()</a>, <a class="el" href="geometry_8cpp_source.html#l00340">fromWkt()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00486">geometryN()</a>, <a class="el" href="geometry_8cpp_source.html#l00631">intersection()</a>, <a class="el" href="geometry_8cpp_source.html#l00671">intersects()</a>, <a class="el" href="geometry_8cpp_source.html#l00200">line()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="geometry_8cpp_source.html#l00644">nearestPoints()</a>, <a class="el" href="geometry_8cpp_source.html#l00294">obround()</a>, <a class="el" href="geometry_8cpp_source.html#l00176">point()</a>, <a class="el" href="geometry_8cpp_source.html#l00234">polygon()</a>, <a class="el" href="tools_8cpp_source.html#l00310">fc::punchGerber()</a>, <a class="el" href="geometry_8cpp_source.html#l00320">regularPolygon()</a>, <a class="el" href="geometry_8cpp_source.html#l00729">rotateDeg()</a>, <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>, <a class="el" href="geometry_8cpp_source.html#l00746">scale()</a>, <a class="el" href="geometry_8cpp_source.html#l00698">simplify()</a>, <a class="el" href="thieving_8cpp_source.html#l00047">fc::thievingPoints()</a>, <a class="el" href="geometry_8cpp_source.html#l00762">transformXY()</a>, <a class="el" href="geometry_8cpp_source.html#l00720">translate()</a>, <a class="el" href="geometry_8cpp_source.html#l00680">unaryUnion()</a>, <a class="el" href="geometry_8cpp_source.html#l00408">unionOf()</a> y <a class="el" href="geometry_8cpp_source.html#l00611">unite()</a>.</p>
+
+</div>
+</div>
+<a id="a2fbe50305d1bec882ff4135b2a7a6db1" name="a2fbe50305d1bec882ff4135b2a7a6db1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fbe50305d1bec882ff4135b2a7a6db1">&#9670;&#160;</a></span>Geom() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">fc::Geom::Geom </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a9b4c92a325227c4bd6ace48078a5c0ee">Handle</a></td>          <td class="paramname"><span class="paramname"><em>h</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel explicit">explicit</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00319">319</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones miembro</h2>
+<a id="af7dd1bb6ef79f13fa4219226c19a3615" name="af7dd1bb6ef79f13fa4219226c19a3615"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7dd1bb6ef79f13fa4219226c19a3615">&#9670;&#160;</a></span>adopt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::adopt </td>
+          <td>(</td>
+          <td class="paramtype">GEOSGeometry *</td>          <td class="paramname"><span class="paramname"><em>g</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Toma posesión de un <span class="tt">GEOSGeometry*</span> ya creado. </p>
+<p>Toma la propiedad de un puntero GEOS crudo.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>Puntero devuelto por GEOS; puede ser <span class="tt">nullptr</span>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Geometría que libera <span class="tt">g</span> al destruirse.</dd></dl>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>Geometría a adoptar; si es nullptr devuelve un <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> nulo. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> que libera <code class="param">g</code> con GEOSGeom_destroy. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00154">154</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8cpp_source.html#l00141">fc::initGeosRuntime()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00383">collection()</a>, <a class="el" href="geometry_8cpp_source.html#l00165">emptyPolygon()</a>, <a class="el" href="geometry_8cpp_source.html#l00340">fromWkt()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00486">geometryN()</a>, <a class="el" href="geometry_8cpp_source.html#l00200">line()</a>, <a class="el" href="geometry_8cpp_source.html#l00176">point()</a>, <a class="el" href="geometry_8cpp_source.html#l00234">polygon()</a> y <a class="el" href="geometry_8cpp_source.html#l00535">polygons()</a>.</p>
+
+</div>
+</div>
+<a id="a3f9e323af792e2c534783d0b886aa68f" name="a3f9e323af792e2c534783d0b886aa68f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f9e323af792e2c534783d0b886aa68f">&#9670;&#160;</a></span>area()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::Geom::area </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Área total de la geometría. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Área en mm²; 0 para geometrías inválidas.</dd>
+<dd>
+Área en unidades cuadradas; 0 para líneas y puntos, y también si GEOS falla. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00433">433</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10397">MainWindow::addExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l10297">MainWindow::addGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l02252">MainWindow::chooseProjectObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08966">MainWindow::editSource()</a>, <a class="el" href="_main_window_8cpp_source.html#l05807">MainWindow::excellonEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l08408">MainWindow::gerberEditor()</a>, <a class="el" href="_script_api_8cpp_source.html#l00585">fc::ScriptApi::info()</a>, <a class="el" href="_main_window_8cpp_source.html#l06308">MainWindow::invertGerber()</a>, <a class="el" href="paint_8cpp_source.html#l00068">fc::paintArea()</a>, <a class="el" href="_main_window_8cpp_source.html#l06776">MainWindow::pcbWizardImport()</a>, <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::refreshProperties()</a>, <a class="el" href="_main_window_8cpp_source.html#l10495">MainWindow::showExcellon()</a> y <a class="el" href="_main_window_8cpp_source.html#l10425">MainWindow::showGerber()</a>.</p>
+
+</div>
+</div>
+<a id="ad4a03d54f6a2b2185359a628af547354" name="ad4a03d54f6a2b2185359a628af547354"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4a03d54f6a2b2185359a628af547354">&#9670;&#160;</a></span>bounds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structfc_1_1_b_box.html">BBox</a> fc::Geom::bounds </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calcula la caja envolvente. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Caja envolvente; <span class="tt"><a class="el" href="#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid</a> == false</span> si no hay geometría.</dd>
+<dd>
+<a class="el" href="structfc_1_1_b_box.html" title="Caja envolvente alineada a los ejes.">BBox</a> válida, o una <a class="el" href="structfc_1_1_b_box.html" title="Caja envolvente alineada a los ejes.">BBox</a> inválida (valid = false) si el <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> es nulo o vacío. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00456">456</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l07265">MainWindow::addImageGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l06978">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l05015">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l04653">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l02252">MainWindow::chooseProjectObject()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="cutout_8cpp_source.html#l00209">fc::cutoutGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l05807">MainWindow::excellonEditor()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="_main_window_8cpp_source.html#l08408">MainWindow::gerberEditor()</a>, <a class="el" href="isolation_8cpp_source.html#l00073">fc::isolateCopper()</a>, <a class="el" href="_main_window_8cpp_source.html#l06864">MainWindow::loadInfFile()</a>, <a class="el" href="paint_8cpp_source.html#l00068">fc::paintArea()</a>, <a class="el" href="_script_api_8cpp_source.html#l00396">fc::ScriptApi::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l06776">MainWindow::pcbWizardImport()</a>, <a class="el" href="_script_api_8cpp_source.html#l00355">fc::ScriptApi::punch()</a>, <a class="el" href="_main_window_8cpp_source.html#l06546">MainWindow::punchGerberAction()</a> y <a class="el" href="_main_window_8cpp_source.html#l03076">MainWindow::runScriptFile()</a>.</p>
+
+</div>
+</div>
+<a id="a4eebd25faea409eef8635b4643da0edf" name="a4eebd25faea409eef8635b4643da0edf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eebd25faea409eef8635b4643da0edf">&#9670;&#160;</a></span>box()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::box </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>xmin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>ymin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>xmax</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>ymax</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Crea un rectángulo alineado a los ejes. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">xmin</td><td>Esquina inferior izquierda en X. </td></tr>
+    <tr><td class="paramname">ymin</td><td>Esquina inferior izquierda en Y. </td></tr>
+    <tr><td class="paramname">xmax</td><td>Esquina superior derecha en X. </td></tr>
+    <tr><td class="paramname">ymax</td><td>Esquina superior derecha en Y. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Nota</dt><dd>El anillo se entrega ya cerrado (el último punto repite el primero); makeRing detecta el cierre y no lo duplica. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00269">269</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8cpp_source.html#l00234">polygon()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="cutout_8cpp_source.html#l00209">fc::cutoutGeometry()</a>, <a class="el" href="importers_8cpp_source.html#l00386">fc::importSvg()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l10807">MainWindow::nccDialog()</a>, <a class="el" href="qr_8cpp_source.html#l00036">fc::qrCodeGeometry()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
+
+</div>
+</div>
+<a id="a0d7a2fcd024c7d64fd3c85a485227131" name="a0d7a2fcd024c7d64fd3c85a485227131"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d7a2fcd024c7d64fd3c85a485227131">&#9670;&#160;</a></span>buffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::buffer </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>distance</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>quadSegs</em></span><span class="paramdefsep"> = </span><span class="paramdefval">16</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Aplica un buffer (offset) uniforme. </p>
+<p>Aplica un buffer circular uniforme (dilatar o contraer).</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">distance</td><td>Distancia en mm; positiva expande, negativa contrae. </td></tr>
+    <tr><td class="paramname">quadSegs</td><td>Segmentos por cuadrante de las curvas.</td></tr>
+    <tr><td class="paramname">distance</td><td>Radio en mm; un valor negativo contrae la geometría. </td></tr>
+    <tr><td class="paramname">quadSegs</td><td>Segmentos por cuadrante de la aproximación. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Geometría resultante; <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> nulo si el origen es nulo. </dd></dl>
+<dl class="exception"><dt>Excepciones</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>si GEOS falla. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00584">584</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00661">distance()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00280">circle()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="cutout_8cpp_source.html#l00209">fc::cutoutGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l06257">MainWindow::etchCompensation()</a>, <a class="el" href="_main_window_8cpp_source.html#l05807">MainWindow::excellonEditor()</a>, <a class="el" href="geometry_8cpp_source.html#l00709">fixed()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08408">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l06864">MainWindow::loadInfFile()</a>, <a class="el" href="paint_8cpp_source.html#l00068">fc::paintArea()</a>, <a class="el" href="_main_window_8cpp_source.html#l04718">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l06776">MainWindow::pcbWizardImport()</a>, <a class="el" href="tools_8cpp_source.html#l00310">fc::punchGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l06546">MainWindow::punchGerberAction()</a>, <a class="el" href="_main_window_8cpp_source.html#l04066">MainWindow::tclAlignDrillGrid()</a>, <a class="el" href="_main_window_8cpp_source.html#l04014">MainWindow::tclFollow()</a> y <a class="el" href="thieving_8cpp_source.html#l00047">fc::thievingPoints()</a>.</p>
+
+</div>
+</div>
+<a id="a47a0e2dbeb419c1dcb28f249571aa1ff" name="a47a0e2dbeb419c1dcb28f249571aa1ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47a0e2dbeb419c1dcb28f249571aa1ff">&#9670;&#160;</a></span>bufferStyle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::bufferStyle </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>distance</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>quadSegs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>capStyle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>joinStyle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>mitreLimit</em></span><span class="paramdefsep"> = </span><span class="paramdefval">5.0</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Buffer con estilos de extremo y unión. </p>
+<p>Buffer con estilos de extremo y unión configurables.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">distance</td><td>Distancia en mm. </td></tr>
+    <tr><td class="paramname">quadSegs</td><td>Segmentos por cuadrante. </td></tr>
+    <tr><td class="paramname">capStyle</td><td>Estilo de extremo (<span class="tt">GEOS_CAP_ROUND</span>, etc.). </td></tr>
+    <tr><td class="paramname">joinStyle</td><td>Estilo de unión (<span class="tt">GEOS_JOIN_ROUND</span>, etc.). </td></tr>
+    <tr><td class="paramname">mitreLimit</td><td>Límite de inglete para uniones en punta.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Se usa para trazos Gerber y PDF que necesitan extremos planos (cap 2) o cuadrados (cap 3) en vez del redondeo por defecto. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">distance</td><td>Radio del buffer. </td></tr>
+    <tr><td class="paramname">quadSegs</td><td>Segmentos por cuadrante. </td></tr>
+    <tr><td class="paramname">capStyle</td><td>Estilo de extremo GEOS (1 redondo, 2 plano, 3 cuadrado). </td></tr>
+    <tr><td class="paramname">joinStyle</td><td>Estilo de unión GEOS. </td></tr>
+    <tr><td class="paramname">mitreLimit</td><td>Límite de inglete para uniones en punta. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00600">600</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00661">distance()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+</div>
+</div>
+<a id="a89b3a3b7bc9484683c6faa96e958adb0" name="a89b3a3b7bc9484683c6faa96e958adb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89b3a3b7bc9484683c6faa96e958adb0">&#9670;&#160;</a></span>circle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::circle </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>center</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>quadSegs</em></span><span class="paramdefsep"> = </span><span class="paramdefval">16</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Crea un círculo aproximado por segmentos. </p>
+<p>Crea un círculo como buffer de un punto.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">center</td><td>Centro en mm. </td></tr>
+    <tr><td class="paramname">radius</td><td>Radio en mm. </td></tr>
+    <tr><td class="paramname">quadSegs</td><td>Segmentos por cuadrante (más = más suave).</td></tr>
+    <tr><td class="paramname">center</td><td>Centro en mm. </td></tr>
+    <tr><td class="paramname">radius</td><td>Radio en mm. </td></tr>
+    <tr><td class="paramname">quadSegs</td><td>Segmentos por cuadrante; más segmentos, más fidelidad. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Polígono que aproxima el círculo. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00280">280</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00584">buffer()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00176">point()</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a> y <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="importers_8cpp_source.html#l00386">fc::importSvg()</a>, <a class="el" href="geometry_8cpp_source.html#l00294">obround()</a> y <a class="el" href="thieving_8cpp_source.html#l00047">fc::thievingPoints()</a>.</p>
+
+</div>
+</div>
+<a id="a8cbb6d6b0e35bccf6c791e89fb0d81ac" name="a8cbb6d6b0e35bccf6c791e89fb0d81ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cbb6d6b0e35bccf6c791e89fb0d81ac">&#9670;&#160;</a></span>collection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::collection </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="class_geom.html">Geom</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>parts</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>type</em></span><span class="paramdefsep"> = </span><span class="paramdefval">GEOS_MULTIPOLYGON</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Agrupa varias geometrías en una colección. </p>
+<p>Agrupa varias geometrías en una colección GEOS del tipo pedido.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parts</td><td>Componentes. </td></tr>
+    <tr><td class="paramname">type</td><td>Tipo GEOS de la colección (por defecto <span class="tt">GEOS_MULTIPOLYGON</span>).</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Clona cada parte válida, de modo que el resultado no comparte memoria con las entradas; si no queda ninguna devuelve un polígono vacío. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parts</td><td>Geometrías a agrupar. </td></tr>
+    <tr><td class="paramname">type</td><td>Identificador GEOS de colección (por ejemplo GEOS_MULTIPOLYGON). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Excepciones</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>si GEOS no puede crear la colección. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00383">383</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00154">adopt()</a>, <a class="el" href="geometry_8cpp_source.html#l00165">emptyPolygon()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00313">raw()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00408">unionOf()</a>.</p>
+
+</div>
+</div>
+<a id="ad7985cdb0f6fc4bc00211fbfb113dff3" name="ad7985cdb0f6fc4bc00211fbfb113dff3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7985cdb0f6fc4bc00211fbfb113dff3">&#9670;&#160;</a></span>convexHull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::convexHull </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Envolvente convexa. </p>
+<p>Envolvente convexa de la geometría.</p>
+<dl class="section note"><dt>Nota</dt><dd>Se usa para el barrido de trazos con apertura rectangular. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00689">689</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00294">obround()</a>.</p>
+
+</div>
+</div>
+<a id="a074ca16d120b12b3fb9accc98ecbf4ee" name="a074ca16d120b12b3fb9accc98ecbf4ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a074ca16d120b12b3fb9accc98ecbf4ee">&#9670;&#160;</a></span>coords()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">Ring</a> fc::Geom::coords </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Vértices del contorno principal como <a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff" title="Secuencia de puntos que describe un anillo, una polilínea o un contorno.">Ring</a>. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Coordenadas de la primera secuencia (exterior o línea).</dd></dl>
+<p>En polígonos devuelve el anillo exterior (incluido el punto de cierre); en líneas, todos sus puntos. </p><dl class="section return"><dt>Devuelve</dt><dd>Lista de puntos; vacía si el <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> es nulo o no tiene coordenadas. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00519">519</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00100">Canvas::appendLinePath()</a>, <a class="el" href="_main_window_8cpp_source.html#l10722">MainWindow::applyCutout()</a>, <a class="el" href="_main_window_8cpp_source.html#l10613">MainWindow::applyIsolation()</a>, <a class="el" href="_main_window_8cpp_source.html#l10167">MainWindow::applyNcc()</a>, <a class="el" href="_main_window_8cpp_source.html#l10206">MainWindow::applyPaint()</a>, <a class="el" href="_script_api_8cpp_source.html#l00181">fc::ScriptApi::cutout()</a>, <a class="el" href="_main_window_8cpp_source.html#l02506">MainWindow::editGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l10769">MainWindow::exportCutoutGCode()</a>, <a class="el" href="dxf_8cpp_source.html#l00051">fc::exportDxf()</a>, <a class="el" href="importers_8cpp_source.html#l01137">fc::exportHpgl()</a>, <a class="el" href="_main_window_8cpp_source.html#l11025">MainWindow::exportIsolationGCode()</a>, <a class="el" href="_script_api_8cpp_source.html#l00142">fc::ScriptApi::isolate()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_script_api_8cpp_source.html#l00254">fc::ScriptApi::paint()</a> y <a class="el" href="_main_window_8cpp_source.html#l04096">MainWindow::tclCreateCncJob()</a>.</p>
+
+</div>
+</div>
+<a id="ab15fd1d02ef17e9accc0080b8d592268" name="ab15fd1d02ef17e9accc0080b8d592268"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab15fd1d02ef17e9accc0080b8d592268">&#9670;&#160;</a></span>difference()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::difference </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_geom.html">Geom</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Diferencia booleana (<span class="tt">this - other</span>). </p>
+<p>Diferencia A menos B (resta de coberturas).</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>Operando a restar. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Resultado; <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> nulo si falta alguno de los operandos. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00621">621</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05015">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l02874">MainWindow::booleanDialog()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08408">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l06308">MainWindow::invertGerber()</a>, <a class="el" href="tools_8cpp_source.html#l00310">fc::punchGerber()</a>, <a class="el" href="_text_geometry_8cpp_source.html#l00137">svgTextGeometry()</a> y <a class="el" href="_main_window_8cpp_source.html#l03988">MainWindow::tclSubtractShape()</a>.</p>
+
+</div>
+</div>
+<a id="a3701e104c9611077696df6add35dce41" name="a3701e104c9611077696df6add35dce41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3701e104c9611077696df6add35dce41">&#9670;&#160;</a></span>distance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::Geom::distance </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_geom.html">Geom</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Distancia mínima entre las dos geometrías. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Distancia mínima en mm entre ambas geometrías.</dd>
+<dd>
+Distancia en mm; también 0 cuando GEOS falla o hay nulos, por lo que no distingue "se tocan" de "error". </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00661">661</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00584">buffer()</a>, <a class="el" href="geometry_8cpp_source.html#l00600">bufferStyle()</a>, <a class="el" href="tools_8cpp_source.html#l00191">fc::layersDistance()</a>, <a class="el" href="_script_api_8cpp_source.html#l00521">fc::ScriptApi::rulesCheck()</a> y <a class="el" href="_main_window_8cpp_source.html#l07353">MainWindow::rulesCheck()</a>.</p>
+
+</div>
+</div>
+<a id="aeb91d2056e4ce71e4dba557be1b44f6c" name="aeb91d2056e4ce71e4dba557be1b44f6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb91d2056e4ce71e4dba557be1b44f6c">&#9670;&#160;</a></span>empty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::Geom::empty </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Indica si el <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> es nulo o si GEOS lo considera vacío. </p>
+<dl class="section return"><dt>Devuelve</dt><dd><span class="tt">true</span> si GEOS considera la geometría vacía. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00426">426</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00100">Canvas::appendLinePath()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="cutout_8cpp_source.html#l00209">fc::cutoutGeometry()</a>, <a class="el" href="excellon_8hpp_source.html#l00068">fc::ExcellonResult::empty()</a>, <a class="el" href="gerber_8hpp_source.html#l00107">fc::GerberResult::empty()</a>, <a class="el" href="_main_window_8cpp_source.html#l06257">MainWindow::etchCompensation()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="isolation_8cpp_source.html#l00073">fc::isolateCopper()</a>, <a class="el" href="isolation_8cpp_source.html#l00178">fc::isolateRest()</a>, <a class="el" href="tools_8cpp_source.html#l00191">fc::layersDistance()</a>, <a class="el" href="tools_8cpp_source.html#l00056">fc::optimalIsolationDiameter()</a>, <a class="el" href="tools_8cpp_source.html#l00121">fc::optimalIsolationGaps()</a>, <a class="el" href="_main_window_8cpp_source.html#l06420">MainWindow::optimalTool()</a>, <a class="el" href="paint_8cpp_source.html#l00068">fc::paintArea()</a>, <a class="el" href="_script_api_8cpp_source.html#l00355">fc::ScriptApi::punch()</a>, <a class="el" href="tools_8cpp_source.html#l00310">fc::punchGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l06546">MainWindow::punchGerberAction()</a>, <a class="el" href="_text_geometry_8cpp_source.html#l00137">svgTextGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l03862">MainWindow::tclGeoUnion()</a>, <a class="el" href="_main_window_8cpp_source.html#l03976">MainWindow::tclNRegions()</a>, <a class="el" href="_main_window_8cpp_source.html#l03475">MainWindow::tclOptimal()</a>, <a class="el" href="_main_window_8cpp_source.html#l03420">MainWindow::tclPunch()</a>, <a class="el" href="_main_window_8cpp_source.html#l03820">MainWindow::tclRings()</a> y <a class="el" href="_main_window_8cpp_source.html#l03988">MainWindow::tclSubtractShape()</a>.</p>
+
+</div>
+</div>
+<a id="ab236e6d1c40906cb7fb73143067d67e7" name="ab236e6d1c40906cb7fb73143067d67e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab236e6d1c40906cb7fb73143067d67e7">&#9670;&#160;</a></span>emptyPolygon()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::emptyPolygon </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Devuelve un polígono vacío válido para acumular uniones. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Polígono vacío válido (útil como identidad de uniones).</dd></dl>
+<dl class="section note"><dt>Nota</dt><dd>Se usa como valor inicial de reducciones (por ejemplo en la construcción de macros) para no tratar aparte el caso "sin geometría". </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00165">165</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00154">adopt()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8cpp_source.html#l00141">fc::initGeosRuntime()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00383">collection()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00294">obround()</a>, <a class="el" href="geometry_8cpp_source.html#l00234">polygon()</a>, <a class="el" href="geometry_8cpp_source.html#l00320">regularPolygon()</a> y <a class="el" href="geometry_8cpp_source.html#l00408">unionOf()</a>.</p>
+
+</div>
+</div>
+<a id="a5812ec5b5fd79abe0d952e07ed95c578" name="a5812ec5b5fd79abe0d952e07ed95c578"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5812ec5b5fd79abe0d952e07ed95c578">&#9670;&#160;</a></span>fixed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::fixed </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Repara polígonos auto-intersectados aplicando <span class="tt">buffer(0)</span>. </p>
+<p>Devuelve una versión topológicamente válida de la geometría.</p>
+<p>Si GEOS ya la considera válida devuelve una copia compartida; si no, aplica buffer(0), el recurso habitual para reparar auto-intersecciones. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00709">709</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00584">buffer()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8hpp_source.html#l00317">h_</a> y <a class="el" href="geometry_8cpp_source.html#l00471">isValid()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02506">MainWindow::editGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l06257">MainWindow::etchCompensation()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l06308">MainWindow::invertGerber()</a>, <a class="el" href="_text_geometry_8cpp_source.html#l00137">svgTextGeometry()</a> y <a class="el" href="_main_window_8cpp_source.html#l03988">MainWindow::tclSubtractShape()</a>.</p>
+
+</div>
+</div>
+<a id="ab8db3e818ddf3fc878654e36b230c7f1" name="ab8db3e818ddf3fc878654e36b230c7f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8db3e818ddf3fc878654e36b230c7f1">&#9670;&#160;</a></span>fromWkt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::fromWkt </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>wkt</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Interpreta geometría en formato WKT. </p>
+<p>Interpreta geometría en WKT (usado al leer proyectos .FlatPrj).</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">wkt</td><td>Texto WKT (POINT, LINESTRING, POLYGON, MULTIPOLYGON...). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Excepciones</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>si el WKT no se puede parsear.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">wkt</td><td>Texto WKT (POLYGON, MULTIPOLYGON, LINESTRING, ...). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Excepciones</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>si GEOS no puede crear el lector o el WKT es inválido. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00340">340</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00154">adopt()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8cpp_source.html#l00141">fc::initGeosRuntime()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00579">fc::AllObjectsSax::string()</a>.</p>
+
+</div>
+</div>
+<a id="a3df5d7bba5a521dde960a11e1fa0d5be" name="a3df5d7bba5a521dde960a11e1fa0d5be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3df5d7bba5a521dde960a11e1fa0d5be">&#9670;&#160;</a></span>geometryN()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::geometryN </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>i</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Accede a una componente de una colección. </p>
+<p>Devuelve una parte de la colección como <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> independiente.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>Índice basado en cero. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Componente; geometría vacía si el índice no es válido.</dd></dl>
+<p>Clona la parte para que el resultado sobreviva al original. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>Índice de la parte. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Parte solicitada, o <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> nulo si el índice no existe. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00486">486</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00154">adopt()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00100">Canvas::appendLinePath()</a>, <a class="el" href="_main_window_8cpp_source.html#l02506">MainWindow::editGeometry()</a>, <a class="el" href="dxf_8cpp_source.html#l00051">fc::exportDxf()</a> y <a class="el" href="importers_8cpp_source.html#l01137">fc::exportHpgl()</a>.</p>
+
+</div>
+</div>
+<a id="a49e89dca4948b779ffde07afe74e3d32" name="a49e89dca4948b779ffde07afe74e3d32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49e89dca4948b779ffde07afe74e3d32">&#9670;&#160;</a></span>intersection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::intersection </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_geom.html">Geom</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Intersección booleana. </p>
+<p>Intersección de coberturas.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>Operando derecho. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Resultado; <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> nulo si falta alguno de los operandos. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00631">631</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02874">MainWindow::booleanDialog()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="cutout_8cpp_source.html#l00209">fc::cutoutGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08408">MainWindow::gerberEditor()</a> y <a class="el" href="_text_geometry_8cpp_source.html#l00137">svgTextGeometry()</a>.</p>
+
+</div>
+</div>
+<a id="adee9c964dabff6c6b6ac0ea258e6a03f" name="adee9c964dabff6c6b6ac0ea258e6a03f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adee9c964dabff6c6b6ac0ea258e6a03f">&#9670;&#160;</a></span>intersects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::Geom::intersects </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_geom.html">Geom</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Verdadero si las coberturas se tocan o se cruzan. </p>
+<dl class="section return"><dt>Devuelve</dt><dd><span class="tt">true</span> si ambas geometrías se tocan o solapan. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00671">671</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="isolation_8cpp_source.html#l00073">fc::isolateCopper()</a>, <a class="el" href="isolation_8cpp_source.html#l00178">fc::isolateRest()</a> y <a class="el" href="thieving_8cpp_source.html#l00047">fc::thievingPoints()</a>.</p>
+
+</div>
+</div>
+<a id="aa177c3f5c9137b300047b8afa50744fd" name="aa177c3f5c9137b300047b8afa50744fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa177c3f5c9137b300047b8afa50744fd">&#9670;&#160;</a></span>isValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::Geom::isValid </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Validez topológica según GEOSisValid. </p>
+<dl class="section return"><dt>Devuelve</dt><dd><span class="tt">true</span> si GEOS valida la topología (sin auto-intersecciones).</dd></dl>
+<dl class="section note"><dt>Nota</dt><dd>Un polígono auto-intersectado es inválido; <a class="el" href="#a5812ec5b5fd79abe0d952e07ed95c578" title="Repara polígonos auto-intersectados aplicando buffer(0).">Geom::fixed()</a> lo repara. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00471">471</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00709">fixed()</a>.</p>
+
+</div>
+</div>
+<a id="adc5ea20017a3e75139edf655bbbc2d7c" name="adc5ea20017a3e75139edf655bbbc2d7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc5ea20017a3e75139edf655bbbc2d7c">&#9670;&#160;</a></span>length()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::Geom::length </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Longitud total de la geometría. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Longitud/perímetro en mm; 0 para geometrías inválidas.</dd>
+<dd>
+Perímetro en polígonos y largo en líneas; 0 si GEOS falla. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00444">444</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="isolation_8cpp_source.html#l00073">fc::isolateCopper()</a> y <a class="el" href="paint_8cpp_source.html#l00068">fc::paintArea()</a>.</p>
+
+</div>
+</div>
+<a id="ace3fa0d648e280ca284383af8cf1c0d7" name="ace3fa0d648e280ca284383af8cf1c0d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace3fa0d648e280ca284383af8cf1c0d7">&#9670;&#160;</a></span>line()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::line </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">Ring</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>pts</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Crea una polilínea a partir de una secuencia de puntos. </p>
+<p>Crea una LineString con los puntos dados.</p>
+<p>Con menos de 2 puntos devuelve una LineString vacía en lugar de fallar, para que los llamadores puedan filtrar con <a class="el" href="#aeb91d2056e4ce71e4dba557be1b44f6c" title="Indica si el Geom es nulo o si GEOS lo considera vacío.">empty()</a> sin ramas extra. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pts</td><td>Vértices en orden. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Excepciones</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>si GEOS falla al crear la secuencia o la línea. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00200">200</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00154">adopt()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8cpp_source.html#l00141">fc::initGeosRuntime()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="tools_8cpp_source.html#l00436">fc::cornerMarks()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="importers_8cpp_source.html#l00877">fc::importHpgl()</a>, <a class="el" href="importers_8cpp_source.html#l00386">fc::importSvg()</a>, <a class="el" href="isolation_8cpp_source.html#l00073">fc::isolateCopper()</a>, <a class="el" href="_script_api_8cpp_source.html#l00289">fc::ScriptApi::mill()</a> y <a class="el" href="paint_8cpp_source.html#l00068">fc::paintArea()</a>.</p>
+
+</div>
+</div>
+<a id="a072620c03d923a2822b7768800b4c723" name="a072620c03d923a2822b7768800b4c723"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a072620c03d923a2822b7768800b4c723">&#9670;&#160;</a></span>nearestPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; <a class="el" href="structfc_1_1_pt.html">Pt</a>, <a class="el" href="structfc_1_1_pt.html">Pt</a> &gt; fc::Geom::nearestPoints </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_geom.html">Geom</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Obtiene el par de puntos más cercano entre dos geometrías. </p>
+<p>Par de puntos más cercanos entre dos geometrías.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>Primer punto en <span class="tt">this</span>, segundo en <span class="tt">other</span>; <span class="tt">(0,0)</span> si falla.</dd></dl>
+<p>Es el dato que usan las herramientas de distancia mínima y de diámetro óptimo para dibujar la cota sobre el lienzo. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>Geometría con la que se mide. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>{punto en this, punto en other}; ceros si no hay resultado. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00644">644</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8hpp_source.html#l00317">h_</a> y <a class="el" href="geometry_8cpp_source.html#l00141">fc::initGeosRuntime()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="tools_8cpp_source.html#l00191">fc::layersDistance()</a>.</p>
+
+</div>
+</div>
+<a id="aa371ed0e43dd217cddf64915cc216760" name="aa371ed0e43dd217cddf64915cc216760"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa371ed0e43dd217cddf64915cc216760">&#9670;&#160;</a></span>numGeometries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fc::Geom::numGeometries </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cantidad de partes de una colección; 0 si el <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> es nulo. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Cantidad de componentes de una colección. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00477">477</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l07265">MainWindow::addImageGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00100">Canvas::appendLinePath()</a>, <a class="el" href="geometry_8cpp_source.html#l00535">polygons()</a> y <a class="el" href="_script_api_8cpp_source.html#l00355">fc::ScriptApi::punch()</a>.</p>
+
+</div>
+</div>
+<a id="aa0a608bdad679c6f5ccff4588457fc07" name="aa0a608bdad679c6f5ccff4588457fc07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0a608bdad679c6f5ccff4588457fc07">&#9670;&#160;</a></span>numPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fc::Geom::numPoints </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cantidad de puntos del contorno principal. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Cantidad de puntos de la primera secuencia de coordenadas.</dd></dl>
+<p>En polígonos cuenta el anillo exterior (los huecos no se incluyen); en el resto usa la secuencia de coordenadas de la propia geometría. </p><dl class="section return"><dt>Devuelve</dt><dd>Cantidad de vértices; 0 si no aplica. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00500">500</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+</div>
+</div>
+<a id="ac939e752632b9e014d2395a6b87a77de" name="ac939e752632b9e014d2395a6b87a77de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac939e752632b9e014d2395a6b87a77de">&#9670;&#160;</a></span>obround()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::obround </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>center</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>width</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>height</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>quadSegs</em></span><span class="paramdefsep"> = </span><span class="paramdefval">16</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Crea un óvalo (rectángulo con extremos semicirculares). </p>
+<p>Crea un óvalo (obround) de ancho y alto dados.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">center</td><td>Centro en mm. </td></tr>
+    <tr><td class="paramname">width</td><td>Ancho total. </td></tr>
+    <tr><td class="paramname">height</td><td>Alto total. </td></tr>
+    <tr><td class="paramname">quadSegs</td><td>Segmentos por cuadrante de los extremos.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Coloca dos círculos de radio min(w,h)/2 separados a lo largo del lado mayor y toma su envolvente convexa, que es el óvalo exacto. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">center</td><td>Centro del óvalo. </td></tr>
+    <tr><td class="paramname">width</td><td>Ancho total; si es &lt;= 0 devuelve vacío. </td></tr>
+    <tr><td class="paramname">height</td><td>Alto total; si es &lt;= 0 devuelve vacío. </td></tr>
+    <tr><td class="paramname">quadSegs</td><td>Segmentos por cuadrante de cada círculo. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00294">294</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00280">circle()</a>, <a class="el" href="geometry_8cpp_source.html#l00689">convexHull()</a>, <a class="el" href="geometry_8cpp_source.html#l00165">emptyPolygon()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00611">unite()</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a> y <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>.</p>
+
+</div>
+</div>
+<a id="ad58817ac0fc7f81e717dc87eb58a1b4e" name="ad58817ac0fc7f81e717dc87eb58a1b4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad58817ac0fc7f81e717dc87eb58a1b4e">&#9670;&#160;</a></span>point()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::point </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Crea un punto. </p>
+<p>Crea una geometría puntual.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Coordenada X. </td></tr>
+    <tr><td class="paramname">y</td><td>Coordenada Y. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Excepciones</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>si GEOS no crea la secuencia o el punto. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00176">176</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00154">adopt()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8cpp_source.html#l00141">fc::initGeosRuntime()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00280">circle()</a> y <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>.</p>
+
+</div>
+</div>
+<a id="af776fc784d39a34a60aa9d7ecc67b6b8" name="af776fc784d39a34a60aa9d7ecc67b6b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af776fc784d39a34a60aa9d7ecc67b6b8">&#9670;&#160;</a></span>polygon()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::polygon </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">Ring</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>shell</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">Ring</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>holes</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{}</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Crea un polígono con agujeros opcionales. </p>
+<p>Crea un polígono con contorno exterior y agujeros.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shell</td><td>Anillo exterior. </td></tr>
+    <tr><td class="paramname">holes</td><td>Agujeros interiores.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Sólo usa los agujeros con 3 o más puntos; si el exterior tiene menos de 3 devuelve un polígono vacío. Ante cualquier fallo libera los anillos ya creados antes de propagar la excepción. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">shell</td><td>Contorno exterior. </td></tr>
+    <tr><td class="paramname">holes</td><td>Agujeros (opcional). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Excepciones</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>si GEOS no puede crear el polígono. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Nota</dt><dd>No valida auto-intersecciones ni la orientación de los anillos. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00234">234</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00154">adopt()</a>, <a class="el" href="geometry_8cpp_source.html#l00165">emptyPolygon()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8cpp_source.html#l00141">fc::initGeosRuntime()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00269">box()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="importers_8cpp_source.html#l00877">fc::importHpgl()</a>, <a class="el" href="importers_8cpp_source.html#l00386">fc::importSvg()</a>, <a class="el" href="isolation_8cpp_source.html#l00073">fc::isolateCopper()</a>, <a class="el" href="isolation_8cpp_source.html#l00178">fc::isolateRest()</a>, <a class="el" href="tools_8cpp_source.html#l00056">fc::optimalIsolationDiameter()</a>, <a class="el" href="tools_8cpp_source.html#l00121">fc::optimalIsolationGaps()</a> y <a class="el" href="geometry_8cpp_source.html#l00320">regularPolygon()</a>.</p>
+
+</div>
+</div>
+<a id="a60d5524f5a48403ae0d4f477f715892c" name="a60d5524f5a48403ae0d4f477f715892c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60d5524f5a48403ae0d4f477f715892c">&#9670;&#160;</a></span>polygons()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="structfc_1_1_polygon_contours.html">PolygonContours</a> &gt; fc::Geom::polygons </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Descompone una geometría poligonal en contornos y agujeros. </p>
+<p>Descompone la geometría en contornos exteriores con sus huecos.</p>
+<dl class="section return"><dt>Devuelve</dt><dd>Lista de <span class="tt"><a class="el" href="structfc_1_1_polygon_contours.html" title="Contorno exterior con sus agujeros.">PolygonContours</a></span>; vacía si no hay polígonos.</dd></dl>
+<p>Maneja Polygon, MultiPolygon y GeometryCollection (recursivo por parte). Descarta contornos con menos de 3 puntos y huecos degenerados, de modo que el resultado sólo contiene polígonos dibujables. </p><dl class="section return"><dt>Devuelve</dt><dd>Lista de <a class="el" href="structfc_1_1_polygon_contours.html" title="Contorno exterior con sus agujeros.">PolygonContours</a> en el orden de las partes. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00535">535</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00154">adopt()</a>, <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>, <a class="el" href="geometry_8hpp_source.html#l00101">fc::PolygonContours::holes</a>, <a class="el" href="geometry_8cpp_source.html#l00477">numGeometries()</a>, <a class="el" href="geometry_8hpp_source.html#l00100">fc::PolygonContours::outer</a> y <a class="el" href="geometry_8cpp_source.html#l00535">polygons()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="cutout_8cpp_source.html#l00209">fc::cutoutGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="isolation_8cpp_source.html#l00073">fc::isolateCopper()</a>, <a class="el" href="isolation_8cpp_source.html#l00178">fc::isolateRest()</a>, <a class="el" href="tools_8cpp_source.html#l00056">fc::optimalIsolationDiameter()</a>, <a class="el" href="tools_8cpp_source.html#l00121">fc::optimalIsolationGaps()</a>, <a class="el" href="paint_8cpp_source.html#l00068">fc::paintArea()</a>, <a class="el" href="_main_window_8cpp_source.html#l04718">MainWindow::panelize()</a>, <a class="el" href="geometry_8cpp_source.html#l00535">polygons()</a>, <a class="el" href="_main_window_8cpp_source.html#l03976">MainWindow::tclNRegions()</a> y <a class="el" href="_main_window_8cpp_source.html#l03820">MainWindow::tclRings()</a>.</p>
+
+</div>
+</div>
+<a id="a220dd7efed8701cc568649240259f9e6" name="a220dd7efed8701cc568649240259f9e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a220dd7efed8701cc568649240259f9e6">&#9670;&#160;</a></span>raw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GEOSGeometry * fc::Geom::raw </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Devuelve</dt><dd>Puntero crudo a GEOS (no transferir la propiedad). </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00313">313</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00383">collection()</a> y <a class="el" href="rtree_8cpp_source.html#l00066">fc::SpatialIndex::insert()</a>.</p>
+
+</div>
+</div>
+<a id="a6eb2dc51d55ed8603645a215b8c565f1" name="a6eb2dc51d55ed8603645a215b8c565f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6eb2dc51d55ed8603645a215b8c565f1">&#9670;&#160;</a></span>regularPolygon()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::regularPolygon </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>center</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>diameter</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>vertices</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>rotationDeg</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.0</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Crea un polígono regular. </p>
+<p>Crea un polígono regular inscripto en un círculo.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">center</td><td>Centro en mm. </td></tr>
+    <tr><td class="paramname">diameter</td><td>Diámetro de la circunferencia circunscrita. </td></tr>
+    <tr><td class="paramname">vertices</td><td>Cantidad de vértices (≥ 3). </td></tr>
+    <tr><td class="paramname">rotationDeg</td><td>Rotación inicial en grados.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Genera los vértices empezando en el ángulo 0 y, si hace falta, rota el resultado alrededor de <code class="param">center</code>. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">center</td><td>Centro y eje de rotación. </td></tr>
+    <tr><td class="paramname">diameter</td><td>Diámetro del círculo circunscripto. </td></tr>
+    <tr><td class="paramname">vertices</td><td>Cantidad de lados (mínimo 3). </td></tr>
+    <tr><td class="paramname">rotationDeg</td><td>Rotación final en grados. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Polígono; vacío si los parámetros no son utilizables. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00320">320</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00165">emptyPolygon()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00234">polygon()</a>, <a class="el" href="geometry_8cpp_source.html#l00729">rotateDeg()</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a> y <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>.</p>
+
+</div>
+</div>
+<a id="aa940eb41506cc43c140f5a50504de4dc" name="aa940eb41506cc43c140f5a50504de4dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa940eb41506cc43c140f5a50504de4dc">&#9670;&#160;</a></span>rotateDeg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::rotateDeg </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>angle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>origin</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{0.0,&#160;0.0}</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Rota la geometría en grados alrededor de un origen. </p>
+<p>Rota la geometría alrededor de un origen.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle</td><td>Ángulo en grados, sentido antihorario. </td></tr>
+    <tr><td class="paramname">origin</td><td>Punto de giro. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00729">729</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00762">transformXY()</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a> y <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="_script_api_8cpp_source.html#l00396">fc::ScriptApi::panelize()</a> y <a class="el" href="geometry_8cpp_source.html#l00320">regularPolygon()</a>.</p>
+
+</div>
+</div>
+<a id="ab48984654afd1ac8254e869e15928605" name="ab48984654afd1ac8254e869e15928605"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab48984654afd1ac8254e869e15928605">&#9670;&#160;</a></span>scale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::scale </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>sx</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>sy</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>origin</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{0.0,&#160;0.0}</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Escala la geometría respecto de un origen. </p>
+<p>Escala de forma independiente en X e Y respecto de un origen.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sx</td><td>Factor de escala en X. </td></tr>
+    <tr><td class="paramname">sy</td><td>Factor de escala en Y. </td></tr>
+    <tr><td class="paramname">origin</td><td>Punto fijo de la transformación. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00746">746</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00762">transformXY()</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a> y <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08252">MainWindow::doubleSided()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a> y <a class="el" href="importers_8cpp_source.html#l00386">fc::importSvg()</a>.</p>
+
+</div>
+</div>
+<a id="aec3ecd3eeb8ff26276ffff00e2ff2c14" name="aec3ecd3eeb8ff26276ffff00e2ff2c14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec3ecd3eeb8ff26276ffff00e2ff2c14">&#9670;&#160;</a></span>simplify()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::simplify </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>tolerance</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Simplifica la geometría con el algoritmo Douglas-Peucker. </p>
+<p>Simplifica el contorno con la tolerancia dada (Douglas-Peucker).</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tolerance</td><td>Tolerancia en mm.</td></tr>
+    <tr><td class="paramname">tolerance</td><td>Distancia máxima en mm que puede apartarse el contorno. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00698">698</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>.</p>
+
+</div>
+</div>
+<a id="a0a968b0898b501f37d9502080fa4f5bc" name="a0a968b0898b501f37d9502080fa4f5bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a968b0898b501f37d9502080fa4f5bc">&#9670;&#160;</a></span>toWkt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string fc::Geom::toWkt </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>decimals</em></span><span class="paramdefsep"> = </span><span class="paramdefval">9</span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Serializa la geometría a WKT. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">decimals</td><td>Decimales de las coordenadas.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Configura el escritor sin espacios sobrantes y con la precisión pedida, que es la que determina el tamaño de los proyectos guardados. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">decimals</td><td>Dígitos decimales de redondeo. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Texto WKT; "POLYGON EMPTY" si el <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> es nulo. </dd></dl>
+<dl class="exception"><dt>Excepciones</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>si el escritor falla. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00359">359</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a> y <a class="el" href="geometry_8cpp_source.html#l00141">fc::initGeosRuntime()</a>.</p>
+
+</div>
+</div>
+<a id="ac6cccc79d631cf73ca2780288adb9b94" name="ac6cccc79d631cf73ca2780288adb9b94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6cccc79d631cf73ca2780288adb9b94">&#9670;&#160;</a></span>transformXY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::transformXY </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; <a class="el" href="structfc_1_1_pt.html">Pt</a>(<a class="el" href="structfc_1_1_pt.html">Pt</a>)&gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>fn</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Transforma cada punto con una función arbitraria. </p>
+<p>Aplica una función arbitraria a cada vértice.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fn</td><td>Función <span class="tt">(<a class="el" href="structfc_1_1_pt.html" title="Punto bidimensional en milímetros.">Pt</a>) -&gt; <a class="el" href="structfc_1_1_pt.html" title="Punto bidimensional en milímetros.">Pt</a></span> aplicada a cada vértice.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Es la primitiva de translate/rotate/scale y la que usan los importadores (SVG, DXF, HPGL, PDF) para aplicar matrices afines. Delega en GEOSGeom_transformXY, que crea una geometría nueva. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fn</td><td>Functor <a class="el" href="structfc_1_1_pt.html" title="Punto bidimensional en milímetros.">Pt</a> a <a class="el" href="structfc_1_1_pt.html" title="Punto bidimensional en milímetros.">Pt</a> aplicado a cada coordenada. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Copia transformada; <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> nulo si el origen es nulo. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00762">762</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05015">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="geometry_8cpp_source.html#l00729">rotateDeg()</a>, <a class="el" href="geometry_8cpp_source.html#l00746">scale()</a> y <a class="el" href="geometry_8cpp_source.html#l00720">translate()</a>.</p>
+
+</div>
+</div>
+<a id="aef0d4a35b9d60e8ec1899008325c9e3c" name="aef0d4a35b9d60e8ec1899008325c9e3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef0d4a35b9d60e8ec1899008325c9e3c">&#9670;&#160;</a></span>translate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::translate </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>dx</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>dy</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Traslada la geometría. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dx</td><td>Desplazamiento en X. </td></tr>
+    <tr><td class="paramname">dy</td><td>Desplazamiento en Y. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00720">720</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00762">transformXY()</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a> y <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08252">MainWindow::doubleSided()</a>, <a class="el" href="_script_api_8cpp_source.html#l00396">fc::ScriptApi::panelize()</a> y <a class="el" href="_main_window_8cpp_source.html#l04027">MainWindow::tclAlignDrill()</a>.</p>
+
+</div>
+</div>
+<a id="a6f94f675d0d22c03f0e89ae9dd724bfb" name="a6f94f675d0d22c03f0e89ae9dd724bfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f94f675d0d22c03f0e89ae9dd724bfb">&#9670;&#160;</a></span>typeId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fc::Geom::typeId </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tipo GEOS (GEOS_POLYGON, GEOS_LINESTRING, ...) o -1 si el <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> es nulo. </p>
+<dl class="section return"><dt>Devuelve</dt><dd>Identificador GEOS (<span class="tt">GEOS_POLYGON</span>, <span class="tt">GEOS_LINESTRING</span>, etc.). </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00474">474</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l06978">MainWindow::addVectorGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00100">Canvas::appendLinePath()</a>, <a class="el" href="_main_window_8cpp_source.html#l02506">MainWindow::editGeometry()</a>, <a class="el" href="dxf_8cpp_source.html#l00051">fc::exportDxf()</a> y <a class="el" href="importers_8cpp_source.html#l01137">fc::exportHpgl()</a>.</p>
+
+</div>
+</div>
+<a id="a1a4129c66bcfbc48fb0a16b32cda0d7a" name="a1a4129c66bcfbc48fb0a16b32cda0d7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a4129c66bcfbc48fb0a16b32cda0d7a">&#9670;&#160;</a></span>unaryUnion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::unaryUnion </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unión de todas las componentes de la geometría. </p>
+<p>Une las partes de una colección en un resultado sin solapes.</p>
+<dl class="section note"><dt>Nota</dt><dd>Es la operación que limpia el resultado de acumular flashes y trazos. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00680">680</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="cutout_8cpp_source.html#l00209">fc::cutoutGeometry()</a> y <a class="el" href="geometry_8cpp_source.html#l00408">unionOf()</a>.</p>
+
+</div>
+</div>
+<a id="a7f5ff7d8a52aad3d02297879b8d190c0" name="a7f5ff7d8a52aad3d02297879b8d190c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f5ff7d8a52aad3d02297879b8d190c0">&#9670;&#160;</a></span>unionOf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::unionOf </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="class_geom.html">Geom</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>parts</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Une todas las geometrías de una lista. </p>
+<p>Unión de muchas geometrías en un solo resultado.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parts</td><td>Componentes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Unión; polígono vacío si la lista está vacía.</dd></dl>
+<p>Descarta nulos y vacíos, devuelve directamente el único elemento si queda uno solo y, con varios, arma un MultiPolygon y aplica unaryUnion, que es más eficiente que encadenar uniones binarias. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parts</td><td>Geometrías a unir. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Unión; polígono vacío si no hay partes utilizables. </dd></dl>
+<dl class="section note"><dt>Nota</dt><dd>Con una sola parte válida se devuelve compartiendo memoria con ella. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00408">408</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00383">collection()</a>, <a class="el" href="geometry_8cpp_source.html#l00165">emptyPolygon()</a>, <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00680">unaryUnion()</a> y <a class="el" href="geometry_8hpp_source.html#l00195">valid()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02252">MainWindow::chooseProjectObject()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="isolation_8cpp_source.html#l00073">fc::isolateCopper()</a>, <a class="el" href="isolation_8cpp_source.html#l00178">fc::isolateRest()</a> y <a class="el" href="qr_8cpp_source.html#l00036">fc::qrCodeGeometry()</a>.</p>
+
+</div>
+</div>
+<a id="a156c376753032eb08e8113994b6f2ef4" name="a156c376753032eb08e8113994b6f2ef4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a156c376753032eb08e8113994b6f2ef4">&#9670;&#160;</a></span>unite()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_geom.html">Geom</a> fc::Geom::unite </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_geom.html">Geom</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unión booleana con otra geometría. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>Operando derecho. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Resultado de GEOSUnion; <a class="el" href="classfc_1_1_geom.html" title="Envoltorio inmutable y compartido de una geometría GEOS.">Geom</a> nulo si falta alguno de los operandos. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8cpp_source.html#l00611">611</a> del archivo <a class="el" href="geometry_8cpp_source.html">geometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a8ea201105d0cfc439579429bb09a60d1">Geom()</a> y <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02874">MainWindow::booleanDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="geometry_8cpp_source.html#l00294">obround()</a>, <a class="el" href="_text_geometry_8cpp_source.html#l00137">svgTextGeometry()</a> y <a class="el" href="_main_window_8cpp_source.html#l03862">MainWindow::tclGeoUnion()</a>.</p>
+
+</div>
+</div>
+<a id="a322d9e9be30a1ca2ad2fa66e2438b8e9" name="a322d9e9be30a1ca2ad2fa66e2438b8e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a322d9e9be30a1ca2ad2fa66e2438b8e9">&#9670;&#160;</a></span>valid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::Geom::valid </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Devuelve</dt><dd><span class="tt">true</span> si el handle interno no es nulo. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00195">195</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00317">h_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l06978">MainWindow::addVectorGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00100">Canvas::appendLinePath()</a>, <a class="el" href="_main_window_8cpp_source.html#l02874">MainWindow::booleanDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l04653">MainWindow::buildConsole()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="cutout_8cpp_source.html#l00209">fc::cutoutGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l06257">MainWindow::etchCompensation()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="rtree_8cpp_source.html#l00066">fc::SpatialIndex::insert()</a>, <a class="el" href="_main_window_8cpp_source.html#l06308">MainWindow::invertGerber()</a>, <a class="el" href="isolation_8cpp_source.html#l00073">fc::isolateCopper()</a>, <a class="el" href="isolation_8cpp_source.html#l00178">fc::isolateRest()</a>, <a class="el" href="tools_8cpp_source.html#l00191">fc::layersDistance()</a>, <a class="el" href="_main_window_8cpp_source.html#l06864">MainWindow::loadInfFile()</a>, <a class="el" href="tools_8cpp_source.html#l00056">fc::optimalIsolationDiameter()</a>, <a class="el" href="tools_8cpp_source.html#l00121">fc::optimalIsolationGaps()</a>, <a class="el" href="_main_window_8cpp_source.html#l06420">MainWindow::optimalTool()</a>, <a class="el" href="paint_8cpp_source.html#l00068">fc::paintArea()</a>, <a class="el" href="_main_window_8cpp_source.html#l06776">MainWindow::pcbWizardImport()</a>, <a class="el" href="_script_api_8cpp_source.html#l00355">fc::ScriptApi::punch()</a>, <a class="el" href="tools_8cpp_source.html#l00310">fc::punchGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l06546">MainWindow::punchGerberAction()</a>, <a class="el" href="_main_window_8cpp_source.html#l03076">MainWindow::runScriptFile()</a>, <a class="el" href="_text_geometry_8cpp_source.html#l00137">svgTextGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l03862">MainWindow::tclGeoUnion()</a>, <a class="el" href="_main_window_8cpp_source.html#l03976">MainWindow::tclNRegions()</a>, <a class="el" href="_main_window_8cpp_source.html#l03475">MainWindow::tclOptimal()</a>, <a class="el" href="_main_window_8cpp_source.html#l03420">MainWindow::tclPunch()</a>, <a class="el" href="_main_window_8cpp_source.html#l03820">MainWindow::tclRings()</a>, <a class="el" href="_main_window_8cpp_source.html#l03988">MainWindow::tclSubtractShape()</a>, <a class="el" href="thieving_8cpp_source.html#l00047">fc::thievingPoints()</a> y <a class="el" href="geometry_8cpp_source.html#l00408">unionOf()</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Documentación de datos miembro</h2>
+<a id="ab7918780a91ba8c1863ff1391a736186" name="ab7918780a91ba8c1863ff1391a736186"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7918780a91ba8c1863ff1391a736186">&#9670;&#160;</a></span>h_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a9b4c92a325227c4bd6ace48078a5c0ee">Handle</a> fc::Geom::h_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Geometría subyacente. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00317">317</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8cpp_source.html#l00433">area()</a>, <a class="el" href="geometry_8cpp_source.html#l00456">bounds()</a>, <a class="el" href="geometry_8cpp_source.html#l00584">buffer()</a>, <a class="el" href="geometry_8cpp_source.html#l00600">bufferStyle()</a>, <a class="el" href="geometry_8cpp_source.html#l00689">convexHull()</a>, <a class="el" href="geometry_8cpp_source.html#l00519">coords()</a>, <a class="el" href="geometry_8cpp_source.html#l00621">difference()</a>, <a class="el" href="geometry_8cpp_source.html#l00661">distance()</a>, <a class="el" href="geometry_8cpp_source.html#l00426">empty()</a>, <a class="el" href="geometry_8cpp_source.html#l00709">fixed()</a>, <a class="el" href="geometry_8hpp_source.html#l00319">Geom()</a>, <a class="el" href="geometry_8cpp_source.html#l00486">geometryN()</a>, <a class="el" href="geometry_8cpp_source.html#l00631">intersection()</a>, <a class="el" href="geometry_8cpp_source.html#l00671">intersects()</a>, <a class="el" href="geometry_8cpp_source.html#l00471">isValid()</a>, <a class="el" href="geometry_8cpp_source.html#l00444">length()</a>, <a class="el" href="geometry_8cpp_source.html#l00644">nearestPoints()</a>, <a class="el" href="geometry_8cpp_source.html#l00477">numGeometries()</a>, <a class="el" href="geometry_8cpp_source.html#l00500">numPoints()</a>, <a class="el" href="geometry_8cpp_source.html#l00535">polygons()</a>, <a class="el" href="geometry_8hpp_source.html#l00313">raw()</a>, <a class="el" href="geometry_8cpp_source.html#l00698">simplify()</a>, <a class="el" href="geometry_8cpp_source.html#l00359">toWkt()</a>, <a class="el" href="geometry_8cpp_source.html#l00762">transformXY()</a>, <a class="el" href="geometry_8cpp_source.html#l00474">typeId()</a>, <a class="el" href="geometry_8cpp_source.html#l00680">unaryUnion()</a>, <a class="el" href="geometry_8cpp_source.html#l00611">unite()</a> y <a class="el" href="geometry_8hpp_source.html#l00195">valid()</a>.</p>
+
+</div>
+</div>
+<hr/>La documentación de esta clase está generada de los siguientes archivos:<ul>
+<li>include/flatcam/<a class="el" href="geometry_8hpp_source.html">geometry.hpp</a></li>
+<li>src/core/<a class="el" href="geometry_8cpp_source.html">geometry.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacefc.html">fc</a></li><li class="navelem"><a href="classfc_1_1_geom.html">Geom</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

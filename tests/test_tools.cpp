@@ -1,3 +1,10 @@
+/**
+ * @file test_tools.cpp
+ * @brief Pruebas de utilidades CAM (óptima, punch, reglas, aperturas).
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include <cmath>

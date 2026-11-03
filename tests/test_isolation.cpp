@@ -1,3 +1,10 @@
+/**
+ * @file test_isolation.cpp
+ * @brief Pruebas de aislamiento de cobre.
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include <cmath>

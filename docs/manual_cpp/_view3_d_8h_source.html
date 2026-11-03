@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente src/gui/View3D.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('_view3_d_8h_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">View3D.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_view3_d_8h.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file View3D.h</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Vista 3D de la placa y el cobre (QPainter, sin GPU).</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Genera caras extruidas para la placa, el cobre y sus paredes, las sombrea</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * con iluminación Lambert y las dibuja ordenadas por profundidad.</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;QDialog&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;QPoint&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="geometry_8hpp.html">flatcam/geometry.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="_unit_spin_box_8h.html">UnitSpinBox.h</a>&quot;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">class </span>QDoubleSpinBox;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">class </span>QWidget;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"></span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * @brief Diálogo de vista 3D.</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00023" data-start="{" data-end="};">
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="class_view3_d.html">   23</a></span><span class="keyword">class </span><a class="code hl_function" href="class_view3_d.html#a76693c706b7942afbc77b453ccb699d4">View3D</a> : <span class="keyword">public</span> QDialog {</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    Q_OBJECT</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">public</span>:<span class="comment"></span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">    /**</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">     * @brief Crea la vista 3D.</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">     * @param solids Cobre visible.</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">     * @param holes Taladros a dibujar sobre la placa.</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">     * @param parent Widget padre.</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <a class="code hl_function" href="class_view3_d.html#a76693c706b7942afbc77b453ccb699d4">View3D</a>(std::vector&lt;fc::Geom&gt; solids, std::vector&lt;fc::Geom&gt; holes = {},</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>           QWidget* parent = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_view3_d.html#a6393aad692d69ec73ba2568bc90cf9c3">paintEvent</a>(QPaintEvent* event) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_view3_d.html#a4c9c4abfa45b1389af23e288d301cf28">mousePressEvent</a>(QMouseEvent* event) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_view3_d.html#a9438fa7b4e79d0cf61e92d0edc9cc449">mouseMoveEvent</a>(QMouseEvent* event) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_view3_d.html#a223f93953844d22192f1c70442631fb8">wheelEvent</a>(QWheelEvent* event) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">private</span>:<span class="comment"></span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment">    /// Cara proyectada con profundidad y sombreado.</span></div>
+<div class="foldopen" id="foldopen00044" data-start="{" data-end="};">
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="struct_view3_d_1_1_face.html">   44</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="struct_view3_d_1_1_face.html">Face</a> {</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="struct_view3_d_1_1_face.html#a08c53888a5833dd588c331e94c69432f">   45</a></span>        std::vector&lt;QPointF&gt; <a class="code hl_variable" href="struct_view3_d_1_1_face.html#a08c53888a5833dd588c331e94c69432f">points</a>;                 <span class="comment">///&lt; Contorno exterior proyectado.</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="struct_view3_d_1_1_face.html#a1e53bca1ee61df4d7f0f615b2f222294">   46</a></span>        std::vector&lt;std::vector&lt;QPointF&gt;&gt; <a class="code hl_variable" href="struct_view3_d_1_1_face.html#a1e53bca1ee61df4d7f0f615b2f222294">holes</a>;     <span class="comment">///&lt; Agujeros proyectados.</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="struct_view3_d_1_1_face.html#aaf066dab4a954480d07ac8f2df086a86">   47</a></span>        <span class="keywordtype">double</span> <a class="code hl_variable" href="struct_view3_d_1_1_face.html#aaf066dab4a954480d07ac8f2df086a86">depth</a> = 0.0;                          <span class="comment">///&lt; Profundidad media para ordenar.</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="struct_view3_d_1_1_face.html#aef78ab2e1df75dbafcb99411c631b188">   48</a></span>        <span class="keywordtype">double</span> <a class="code hl_variable" href="struct_view3_d_1_1_face.html#aef78ab2e1df75dbafcb99411c631b188">shade</a> = 1.0;                          <span class="comment">///&lt; Factor de iluminación.</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="struct_view3_d_1_1_face.html#a79ef728be73c6001e335f6e9cc789e79">   49</a></span>        <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_view3_d_1_1_face.html#a79ef728be73c6001e335f6e9cc789e79">top</a> = <span class="keyword">true</span>;                             <span class="comment">///&lt; Cara superior.</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="struct_view3_d_1_1_face.html#af5380cf1911ea6ff2c1fe649293e0095">   50</a></span>        <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_view3_d_1_1_face.html#af5380cf1911ea6ff2c1fe649293e0095">copper</a> = <span class="keyword">true</span>;                          <span class="comment">///&lt; Cobre o placa.</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    };</div>
+</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"></span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment">    /// Recalcula caras, sombreado y orden.</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_view3_d.html#ad58f693eb8b71f00b203875b99ec88c0">rebuildFaces</a>();</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"></span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment">    /// Proyecta un punto 3D a pantalla y devuelve profundidad.</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    QPointF <a class="code hl_function" href="class_view3_d.html#aa7a044e62e8aeeed4019853f6d04a6f7">project</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y, <span class="keywordtype">double</span> z, <span class="keywordtype">double</span>* depth) <span class="keyword">const</span>;<span class="comment"></span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment">    /// Ajusta escala y desplazamiento al contenido.</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_view3_d.html#a6e5a3556b725dd712aa7fd09ae9671b3">fitView</a>();</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="class_view3_d.html#a2eccedf40e223d574c15ae4dc9351725">   61</a></span>    std::vector&lt;fc::Geom&gt; <a class="code hl_variable" href="class_view3_d.html#a2eccedf40e223d574c15ae4dc9351725">solids_</a>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="class_view3_d.html#a707942f5971980cbdae1e5032222cd12">   62</a></span>    std::vector&lt;fc::Geom&gt; <a class="code hl_variable" href="class_view3_d.html#a707942f5971980cbdae1e5032222cd12">holes_</a>;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="class_view3_d.html#ab67668dd0dc33b395c29ece4d8c6d0ab">   63</a></span>    <a class="code hl_struct" href="structfc_1_1_b_box.html">fc::BBox</a> <a class="code hl_variable" href="class_view3_d.html#ab67668dd0dc33b395c29ece4d8c6d0ab">board_</a>;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="class_view3_d.html#a58ae7f730186528ab01379c7fe7f62d3">   64</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="class_view3_d.html#a58ae7f730186528ab01379c7fe7f62d3">showBoard_</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="class_view3_d.html#a4c9d92b37ddaadab333d778b9d96ce52">   65</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="class_view3_d.html#a4c9d92b37ddaadab333d778b9d96ce52">showCopper_</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="class_view3_d.html#ace705eec19b9a0e67327b70da102e0ee">   66</a></span>    std::vector&lt;Face&gt; <a class="code hl_variable" href="class_view3_d.html#ace705eec19b9a0e67327b70da102e0ee">topFaces_</a>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="class_view3_d.html#aca749d291593c2f5fa770587df330a55">   67</a></span>    std::vector&lt;Face&gt; <a class="code hl_variable" href="class_view3_d.html#aca749d291593c2f5fa770587df330a55">bottomFaces_</a>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="class_view3_d.html#ab8ecd375871e192b27a24863ecb2d1d0">   68</a></span>    std::vector&lt;Face&gt; <a class="code hl_variable" href="class_view3_d.html#ab8ecd375871e192b27a24863ecb2d1d0">boardFaces_</a>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="class_view3_d.html#aba56f57af4aa081815b6533e91b4b1ca">   69</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_view3_d.html#aba56f57af4aa081815b6533e91b4b1ca">thickness_</a> = 1.6;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="class_view3_d.html#a6bc16a980ae5040053064ae2c8498218">   70</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_view3_d.html#a6bc16a980ae5040053064ae2c8498218">copperThickness_</a> = 0.08;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="class_view3_d.html#a67d5b1e0a90a8be72dad5c7e1af8f973">   71</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_view3_d.html#a67d5b1e0a90a8be72dad5c7e1af8f973">yaw_</a> = 0.6;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="class_view3_d.html#a5033cf67b1388791ec3cd19905d2fbff">   72</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_view3_d.html#a5033cf67b1388791ec3cd19905d2fbff">pitch_</a> = 0.9;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="class_view3_d.html#a757c469d58034fca2722ece5d63f6155">   73</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_view3_d.html#a757c469d58034fca2722ece5d63f6155">zoom_</a> = 1.0;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="class_view3_d.html#a2a701ffb634024a61a30824353b9de04">   74</a></span>    QPointF <a class="code hl_variable" href="class_view3_d.html#a2a701ffb634024a61a30824353b9de04">center_</a>;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="class_view3_d.html#ad49362a8fd50f05e098e4346110157ca">   75</a></span>    QPoint <a class="code hl_variable" href="class_view3_d.html#ad49362a8fd50f05e098e4346110157ca">lastMouse_</a>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="class_view3_d.html#a11cf2d19342faa631e40809fa9d90e86">   76</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="class_view3_d.html#a11cf2d19342faa631e40809fa9d90e86">dragging_</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="class_view3_d.html#a7f93f51afef5836f3aaa071f99b2c368">   77</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_view3_d.html#a7f93f51afef5836f3aaa071f99b2c368">scale_</a> = 1.0;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="class_view3_d.html#a1207ff6e3776399b74a53d9ccae00be6">   78</a></span>    QPointF <a class="code hl_variable" href="class_view3_d.html#a1207ff6e3776399b74a53d9ccae00be6">offset_</a>;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="class_view3_d.html#adeb7ff856a29a4f6ff1fc592aa188ede">   79</a></span>    <a class="code hl_class" href="class_unit_spin_box.html">UnitSpinBox</a>* <a class="code hl_variable" href="class_view3_d.html#adeb7ff856a29a4f6ff1fc592aa188ede">thicknessSpin_</a> = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="class_view3_d.html#a1000f601ab2f4c37c78042f8281d85e7">   80</a></span>    <a class="code hl_class" href="class_unit_spin_box.html">UnitSpinBox</a>* <a class="code hl_variable" href="class_view3_d.html#a1000f601ab2f4c37c78042f8281d85e7">copperSpin_</a> = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>};</div>
+</div>
+<div class="ttc" id="a_unit_spin_box_8h_html"><div class="ttname"><a href="_unit_spin_box_8h.html">UnitSpinBox.h</a></div><div class="ttdoc">QDoubleSpinBox que guarda longitudes en mm y las muestra en mm/in.</div></div>
+<div class="ttc" id="aclass_unit_spin_box_html"><div class="ttname"><a href="class_unit_spin_box.html">UnitSpinBox</a></div><div class="ttdoc">Campo numérico con unidad de longitud conmutable.</div><div class="ttdef"><b>Definición</b> <a href="_unit_spin_box_8h_source.html#l00024">UnitSpinBox.h:24</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a1000f601ab2f4c37c78042f8281d85e7"><div class="ttname"><a href="class_view3_d.html#a1000f601ab2f4c37c78042f8281d85e7">View3D::copperSpin_</a></div><div class="ttdeci">UnitSpinBox * copperSpin_</div><div class="ttdef"><b>Definición</b> <a href="#l00080">View3D.h:80</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a11cf2d19342faa631e40809fa9d90e86"><div class="ttname"><a href="class_view3_d.html#a11cf2d19342faa631e40809fa9d90e86">View3D::dragging_</a></div><div class="ttdeci">bool dragging_</div><div class="ttdef"><b>Definición</b> <a href="#l00076">View3D.h:76</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a1207ff6e3776399b74a53d9ccae00be6"><div class="ttname"><a href="class_view3_d.html#a1207ff6e3776399b74a53d9ccae00be6">View3D::offset_</a></div><div class="ttdeci">QPointF offset_</div><div class="ttdef"><b>Definición</b> <a href="#l00078">View3D.h:78</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a223f93953844d22192f1c70442631fb8"><div class="ttname"><a href="class_view3_d.html#a223f93953844d22192f1c70442631fb8">View3D::wheelEvent</a></div><div class="ttdeci">void wheelEvent(QWheelEvent *event) override</div><div class="ttdoc">Acerca o aleja la escena con la rueda.</div><div class="ttdef"><b>Definición</b> <a href="_view3_d_8cpp_source.html#l00480">View3D.cpp:480</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a2a701ffb634024a61a30824353b9de04"><div class="ttname"><a href="class_view3_d.html#a2a701ffb634024a61a30824353b9de04">View3D::center_</a></div><div class="ttdeci">QPointF center_</div><div class="ttdef"><b>Definición</b> <a href="#l00074">View3D.h:74</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a2eccedf40e223d574c15ae4dc9351725"><div class="ttname"><a href="class_view3_d.html#a2eccedf40e223d574c15ae4dc9351725">View3D::solids_</a></div><div class="ttdeci">std::vector&lt; fc::Geom &gt; solids_</div><div class="ttdef"><b>Definición</b> <a href="#l00061">View3D.h:61</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a4c9c4abfa45b1389af23e288d301cf28"><div class="ttname"><a href="class_view3_d.html#a4c9c4abfa45b1389af23e288d301cf28">View3D::mousePressEvent</a></div><div class="ttdeci">void mousePressEvent(QMouseEvent *event) override</div><div class="ttdoc">Inicia la rotación con el botón izquierdo.</div><div class="ttdef"><b>Definición</b> <a href="_view3_d_8cpp_source.html#l00443">View3D.cpp:443</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a4c9d92b37ddaadab333d778b9d96ce52"><div class="ttname"><a href="class_view3_d.html#a4c9d92b37ddaadab333d778b9d96ce52">View3D::showCopper_</a></div><div class="ttdeci">bool showCopper_</div><div class="ttdef"><b>Definición</b> <a href="#l00065">View3D.h:65</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a5033cf67b1388791ec3cd19905d2fbff"><div class="ttname"><a href="class_view3_d.html#a5033cf67b1388791ec3cd19905d2fbff">View3D::pitch_</a></div><div class="ttdeci">double pitch_</div><div class="ttdef"><b>Definición</b> <a href="#l00072">View3D.h:72</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a58ae7f730186528ab01379c7fe7f62d3"><div class="ttname"><a href="class_view3_d.html#a58ae7f730186528ab01379c7fe7f62d3">View3D::showBoard_</a></div><div class="ttdeci">bool showBoard_</div><div class="ttdef"><b>Definición</b> <a href="#l00064">View3D.h:64</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a6393aad692d69ec73ba2568bc90cf9c3"><div class="ttname"><a href="class_view3_d.html#a6393aad692d69ec73ba2568bc90cf9c3">View3D::paintEvent</a></div><div class="ttdeci">void paintEvent(QPaintEvent *event) override</div><div class="ttdoc">Dibuja la escena 3D completa sobre el diálogo.</div><div class="ttdef"><b>Definición</b> <a href="_view3_d_8cpp_source.html#l00351">View3D.cpp:351</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a67d5b1e0a90a8be72dad5c7e1af8f973"><div class="ttname"><a href="class_view3_d.html#a67d5b1e0a90a8be72dad5c7e1af8f973">View3D::yaw_</a></div><div class="ttdeci">double yaw_</div><div class="ttdef"><b>Definición</b> <a href="#l00071">View3D.h:71</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a6bc16a980ae5040053064ae2c8498218"><div class="ttname"><a href="class_view3_d.html#a6bc16a980ae5040053064ae2c8498218">View3D::copperThickness_</a></div><div class="ttdeci">double copperThickness_</div><div class="ttdef"><b>Definición</b> <a href="#l00070">View3D.h:70</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a6e5a3556b725dd712aa7fd09ae9671b3"><div class="ttname"><a href="class_view3_d.html#a6e5a3556b725dd712aa7fd09ae9671b3">View3D::fitView</a></div><div class="ttdeci">void fitView()</div><div class="ttdoc">Ajusta escala y desplazamiento al contenido.</div><div class="ttdef"><b>Definición</b> <a href="_view3_d_8cpp_source.html#l00313">View3D.cpp:313</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a707942f5971980cbdae1e5032222cd12"><div class="ttname"><a href="class_view3_d.html#a707942f5971980cbdae1e5032222cd12">View3D::holes_</a></div><div class="ttdeci">std::vector&lt; fc::Geom &gt; holes_</div><div class="ttdef"><b>Definición</b> <a href="#l00062">View3D.h:62</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a757c469d58034fca2722ece5d63f6155"><div class="ttname"><a href="class_view3_d.html#a757c469d58034fca2722ece5d63f6155">View3D::zoom_</a></div><div class="ttdeci">double zoom_</div><div class="ttdef"><b>Definición</b> <a href="#l00073">View3D.h:73</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a76693c706b7942afbc77b453ccb699d4"><div class="ttname"><a href="class_view3_d.html#a76693c706b7942afbc77b453ccb699d4">View3D::View3D</a></div><div class="ttdeci">View3D(std::vector&lt; fc::Geom &gt; solids, std::vector&lt; fc::Geom &gt; holes={}, QWidget *parent=nullptr)</div><div class="ttdoc">Crea la vista 3D.</div><div class="ttdef"><b>Definición</b> <a href="_view3_d_8cpp_source.html#l00049">View3D.cpp:49</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a7f93f51afef5836f3aaa071f99b2c368"><div class="ttname"><a href="class_view3_d.html#a7f93f51afef5836f3aaa071f99b2c368">View3D::scale_</a></div><div class="ttdeci">double scale_</div><div class="ttdef"><b>Definición</b> <a href="#l00077">View3D.h:77</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_a9438fa7b4e79d0cf61e92d0edc9cc449"><div class="ttname"><a href="class_view3_d.html#a9438fa7b4e79d0cf61e92d0edc9cc449">View3D::mouseMoveEvent</a></div><div class="ttdeci">void mouseMoveEvent(QMouseEvent *event) override</div><div class="ttdoc">Rota la escena siguiendo el arrastre del ratón.</div><div class="ttdef"><b>Definición</b> <a href="_view3_d_8cpp_source.html#l00460">View3D.cpp:460</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_aa7a044e62e8aeeed4019853f6d04a6f7"><div class="ttname"><a href="class_view3_d.html#aa7a044e62e8aeeed4019853f6d04a6f7">View3D::project</a></div><div class="ttdeci">QPointF project(double x, double y, double z, double *depth) const</div><div class="ttdoc">Proyecta un punto 3D a pantalla y devuelve profundidad.</div><div class="ttdef"><b>Definición</b> <a href="_view3_d_8cpp_source.html#l00147">View3D.cpp:147</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_ab67668dd0dc33b395c29ece4d8c6d0ab"><div class="ttname"><a href="class_view3_d.html#ab67668dd0dc33b395c29ece4d8c6d0ab">View3D::board_</a></div><div class="ttdeci">fc::BBox board_</div><div class="ttdef"><b>Definición</b> <a href="#l00063">View3D.h:63</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_ab8ecd375871e192b27a24863ecb2d1d0"><div class="ttname"><a href="class_view3_d.html#ab8ecd375871e192b27a24863ecb2d1d0">View3D::boardFaces_</a></div><div class="ttdeci">std::vector&lt; Face &gt; boardFaces_</div><div class="ttdef"><b>Definición</b> <a href="#l00068">View3D.h:68</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_aba56f57af4aa081815b6533e91b4b1ca"><div class="ttname"><a href="class_view3_d.html#aba56f57af4aa081815b6533e91b4b1ca">View3D::thickness_</a></div><div class="ttdeci">double thickness_</div><div class="ttdef"><b>Definición</b> <a href="#l00069">View3D.h:69</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_aca749d291593c2f5fa770587df330a55"><div class="ttname"><a href="class_view3_d.html#aca749d291593c2f5fa770587df330a55">View3D::bottomFaces_</a></div><div class="ttdeci">std::vector&lt; Face &gt; bottomFaces_</div><div class="ttdef"><b>Definición</b> <a href="#l00067">View3D.h:67</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_ace705eec19b9a0e67327b70da102e0ee"><div class="ttname"><a href="class_view3_d.html#ace705eec19b9a0e67327b70da102e0ee">View3D::topFaces_</a></div><div class="ttdeci">std::vector&lt; Face &gt; topFaces_</div><div class="ttdef"><b>Definición</b> <a href="#l00066">View3D.h:66</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_ad49362a8fd50f05e098e4346110157ca"><div class="ttname"><a href="class_view3_d.html#ad49362a8fd50f05e098e4346110157ca">View3D::lastMouse_</a></div><div class="ttdeci">QPoint lastMouse_</div><div class="ttdef"><b>Definición</b> <a href="#l00075">View3D.h:75</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_ad58f693eb8b71f00b203875b99ec88c0"><div class="ttname"><a href="class_view3_d.html#ad58f693eb8b71f00b203875b99ec88c0">View3D::rebuildFaces</a></div><div class="ttdeci">void rebuildFaces()</div><div class="ttdoc">Recalcula caras, sombreado y orden.</div><div class="ttdef"><b>Definición</b> <a href="_view3_d_8cpp_source.html#l00181">View3D.cpp:181</a></div></div>
+<div class="ttc" id="aclass_view3_d_html_adeb7ff856a29a4f6ff1fc592aa188ede"><div class="ttname"><a href="class_view3_d.html#adeb7ff856a29a4f6ff1fc592aa188ede">View3D::thicknessSpin_</a></div><div class="ttdeci">UnitSpinBox * thicknessSpin_</div><div class="ttdef"><b>Definición</b> <a href="#l00079">View3D.h:79</a></div></div>
+<div class="ttc" id="ageometry_8hpp_html"><div class="ttname"><a href="geometry_8hpp.html">geometry.hpp</a></div><div class="ttdoc">Núcleo geométrico inmutable sobre la API C de GEOS.</div></div>
+<div class="ttc" id="astruct_view3_d_1_1_face_html"><div class="ttname"><a href="struct_view3_d_1_1_face.html">View3D::Face</a></div><div class="ttdoc">Cara proyectada con profundidad y sombreado.</div><div class="ttdef"><b>Definición</b> <a href="#l00044">View3D.h:44</a></div></div>
+<div class="ttc" id="astruct_view3_d_1_1_face_html_a08c53888a5833dd588c331e94c69432f"><div class="ttname"><a href="struct_view3_d_1_1_face.html#a08c53888a5833dd588c331e94c69432f">View3D::Face::points</a></div><div class="ttdeci">std::vector&lt; QPointF &gt; points</div><div class="ttdoc">Contorno exterior proyectado.</div><div class="ttdef"><b>Definición</b> <a href="#l00045">View3D.h:45</a></div></div>
+<div class="ttc" id="astruct_view3_d_1_1_face_html_a1e53bca1ee61df4d7f0f615b2f222294"><div class="ttname"><a href="struct_view3_d_1_1_face.html#a1e53bca1ee61df4d7f0f615b2f222294">View3D::Face::holes</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; QPointF &gt; &gt; holes</div><div class="ttdoc">Agujeros proyectados.</div><div class="ttdef"><b>Definición</b> <a href="#l00046">View3D.h:46</a></div></div>
+<div class="ttc" id="astruct_view3_d_1_1_face_html_a79ef728be73c6001e335f6e9cc789e79"><div class="ttname"><a href="struct_view3_d_1_1_face.html#a79ef728be73c6001e335f6e9cc789e79">View3D::Face::top</a></div><div class="ttdeci">bool top</div><div class="ttdoc">Cara superior.</div><div class="ttdef"><b>Definición</b> <a href="#l00049">View3D.h:49</a></div></div>
+<div class="ttc" id="astruct_view3_d_1_1_face_html_aaf066dab4a954480d07ac8f2df086a86"><div class="ttname"><a href="struct_view3_d_1_1_face.html#aaf066dab4a954480d07ac8f2df086a86">View3D::Face::depth</a></div><div class="ttdeci">double depth</div><div class="ttdoc">Profundidad media para ordenar.</div><div class="ttdef"><b>Definición</b> <a href="#l00047">View3D.h:47</a></div></div>
+<div class="ttc" id="astruct_view3_d_1_1_face_html_aef78ab2e1df75dbafcb99411c631b188"><div class="ttname"><a href="struct_view3_d_1_1_face.html#aef78ab2e1df75dbafcb99411c631b188">View3D::Face::shade</a></div><div class="ttdeci">double shade</div><div class="ttdoc">Factor de iluminación.</div><div class="ttdef"><b>Definición</b> <a href="#l00048">View3D.h:48</a></div></div>
+<div class="ttc" id="astruct_view3_d_1_1_face_html_af5380cf1911ea6ff2c1fe649293e0095"><div class="ttname"><a href="struct_view3_d_1_1_face.html#af5380cf1911ea6ff2c1fe649293e0095">View3D::Face::copper</a></div><div class="ttdeci">bool copper</div><div class="ttdoc">Cobre o placa.</div><div class="ttdef"><b>Definición</b> <a href="#l00050">View3D.h:50</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html"><div class="ttname"><a href="structfc_1_1_b_box.html">fc::BBox</a></div><div class="ttdoc">Caja envolvente alineada a los ejes.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00048">geometry.hpp:48</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_99d0482cf009f9d97a0877749b817f19.html">gui</a></li><li class="navelem"><a href="_view3_d_8h.html">View3D.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

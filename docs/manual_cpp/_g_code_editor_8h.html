@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia del archivo src/gui/GCodeEditor.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('_g_code_editor_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo GCodeEditor.h</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Editor de G-code con resaltado de sintaxis.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &lt;QDialog&gt;</code><br />
+<code>#include &lt;QString&gt;</code><br />
+</div>
+<p><a href="_g_code_editor_8h_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:ac9a6a7ece39173ec9492604baaa84172" id="r_ac9a6a7ece39173ec9492604baaa84172"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac9a6a7ece39173ec9492604baaa84172">openGCodeEditor</a> (const QString &amp;path, QWidget *parent=nullptr)</td></tr>
+<tr class="memdesc:ac9a6a7ece39173ec9492604baaa84172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abre el editor de G-code para un archivo.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Editor de G-code con resaltado de sintaxis. </p>
+
+<p class="definition">Definición en el archivo <a class="el" href="_g_code_editor_8h_source.html">GCodeEditor.h</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="ac9a6a7ece39173ec9492604baaa84172" name="ac9a6a7ece39173ec9492604baaa84172"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9a6a7ece39173ec9492604baaa84172">&#9670;&#160;</a></span>openGCodeEditor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void openGCodeEditor </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>path</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QWidget *</td>          <td class="paramname"><span class="paramname"><em>parent</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Abre el editor de G-code para un archivo. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Archivo a editar. </td></tr>
+    <tr><td class="paramname">parent</td><td>Widget padre.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Lee el archivo como UTF-8 y crea un <span class="tt">QDialog</span> no modal con <span class="tt">WA_DeleteOnClose</span> (se libera al cerrarse), un <span class="tt">QPlainTextEdit</span> con fuente monoespaciada y fondo oscuro, el resaltador asociado y una caja con Guardar/Cerrar. El botón Guardar <b>sobrescribe el archivo original</b> con el contenido del editor, sin copia de seguridad, y marca el título con el sufijo "(guardado)".</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Archivo a editar. </td></tr>
+    <tr><td class="paramname">parent</td><td>Widget padre del diálogo. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Nota</dt><dd>Si el archivo no se puede leer se muestra un aviso y no se abre nada. El texto se carga completo en memoria: archivos de cientos de MB pueden consumir mucha RAM. </dd></dl>
+<dl class="section warning"><dt>Atención</dt><dd>No se pide confirmación al cerrar con cambios sin guardar y el botón Guardar no cierra el diálogo ni controla el estado modificado (<a class="el" href="_g_code_editor_8cpp.html" title="Editor modal de G-code con resaltado de sintaxis y guardado en sitio.">GCodeEditor.cpp</a>:150-162). </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="_g_code_editor_8cpp_source.html#l00137">137</a> del archivo <a class="el" href="_g_code_editor_8cpp_source.html">GCodeEditor.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_g_code_editor_8cpp_source.html#l00137">openGCodeEditor()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01142">MainWindow::buildLayout()</a> y <a class="el" href="_g_code_editor_8cpp_source.html#l00137">openGCodeEditor()</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_99d0482cf009f9d97a0877749b817f19.html">gui</a></li><li class="navelem"><a href="_g_code_editor_8h.html">GCodeEditor.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

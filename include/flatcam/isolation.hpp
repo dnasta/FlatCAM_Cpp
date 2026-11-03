@@ -1,3 +1,11 @@
+/**
+ * @file isolation.hpp
+ * @brief Aislamiento de cobre por offsets sucesivos.
+ *
+ * Implementa el esquema de FlatCAM: para cada pasada se calcula
+ * `offset = Ø * ((2i+1)/2) - i * solape * Ø`, se hace un buffer del cobre y se
+ * extraen los contornos exteriores e interiores como recorridos.
+ */
 #pragma once
 
 #include <vector>
@@ -6,35 +14,49 @@
 
 namespace fc {
 
+/**
+ * @brief Parámetros del aislamiento.
+ */
 struct IsolationOptions {
-    double toolDiameter = 0.2;
-    int passes = 1;
-    double overlap = 0.0;  // fraction of the tool diameter, 0.0 .. 0.99
-    int quadrantSegments = 16;
-    bool invert = false;         // reverse ring direction (climb vs conventional)
-    bool exteriorsOnly = false;  // only outer contours
-    bool interiorsOnly = false;  // only holes / inner contours
-    // Rest machining: skip passes whose buffered area would collide with a
-    // neighbouring copper feature (FlatCAM's generate_rest_geometry check).
-    bool avoidIntersections = false;
+    double toolDiameter = 0.2; ///< Diámetro de la fresa.
+    int passes = 1;            ///< Cantidad de pasadas.
+    double overlap = 0.0;      ///< Solape como fracción del diámetro (0..0.99).
+    int quadrantSegments = 16; ///< Segmentos por cuadrante.
+    bool invert = false;       ///< Invierte el sentido (climb/conventional).
+    bool exteriorsOnly = false;///< Sólo contornos exteriores.
+    bool interiorsOnly = false;///< Sólo agujeros/contornos interiores.
+    bool avoidIntersections = false; ///< Omite pasadas que chocan con otro cobre (rest).
 };
 
+/**
+ * @brief Resultado del aislamiento.
+ */
 struct IsolationResult {
-    std::vector<Geom> paths;      // tool centre paths (LineStrings), app units
-    std::vector<Geom> envelopes;  // buffered copper per pass (Polygons), for preview
-    std::vector<Geom> notIsolated;  // polygons that had no valid pass
-    double totalLength = 0.0;
-    BBox bounds;
+    std::vector<Geom> paths;       ///< Recorridos del centro de la fresa.
+    std::vector<Geom> envelopes;   ///< Cobre dilatado por pasada (preview).
+    std::vector<Geom> notIsolated; ///< Polígonos sin pasada válida.
+    double totalLength = 0.0;     ///< Longitud total.
+    BBox bounds;                  ///< Límites.
 };
 
-// Port of FlatCAM's isolation_geometry() + pass loop:
-//   offset_i = toolDiameter * ((2*i + 1) / 2) - i * overlap * toolDiameter
-//   envelope_i = union(copper_polygon.buffer(offset_i, quadSegs))
-//   paths_i    = exterior + interiors of every envelope_i polygon
+/**
+ * @brief Calcula el aislamiento de una geometría de cobre.
+ * @param copper Cobre original.
+ * @param options Pasadas, solape, filtros y sentido.
+ * @return Recorridos, envolventes y longitud.
+ */
 IsolationResult isolateCopper(const Geom& copper, const IsolationOptions& options);
 
-// Rest machining: reuse a large tool's work and isolate, with a smaller tool,
-// only the regions the large tool could not reach.
+/**
+ * @brief Rest machining con una herramienta menor.
+ *
+ * Reutiliza el trabajo de una herramienta mayor y aísla sólo las zonas que
+ * ésta no pudo alcanzar.
+ *
+ * @param copper Cobre original.
+ * @param previousToolDiameter Diámetro de la herramienta anterior.
+ * @param options Opciones de la herramienta menor.
+ */
 IsolationResult isolateRest(const Geom& copper, double previousToolDiameter,
                             const IsolationOptions& options);
 

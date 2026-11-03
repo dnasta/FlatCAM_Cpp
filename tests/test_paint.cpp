@@ -1,3 +1,10 @@
+/**
+ * @file test_paint.cpp
+ * @brief Pruebas de pintura por contornos paralelos.
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include "flatcam/paint.hpp"

@@ -1,3 +1,10 @@
+/**
+ * @file test_thieving.cpp
+ * @brief Pruebas de copper thieving.
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include <filesystem>

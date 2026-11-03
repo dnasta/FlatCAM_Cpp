@@ -1,3 +1,13 @@
+/**
+ * @file View3D.cpp
+ * @brief Vista 3D sin GPU: extrusión de la placa y el cobre con `QPainter`.
+ *
+ * Construye caras (tapa, fondo y paredes) a partir de los polígonos de cobre y
+ * de la caja de la placa, las proyecta con una rotación yaw/pitch, las sombrea
+ * con un modelo Lambert simplificado y las dibuja ordenadas por profundidad
+ * media. Incluye controles de espesor de placa y de cobre, toggles de
+ * visibilidad y exportación a PNG.
+ */
 #include "View3D.h"
 
 #include <QMouseEvent>
@@ -6,6 +16,7 @@
 #include <QDoubleSpinBox>
 #include <QSettings>
 #include <QCheckBox>
+#include <QMessageBox>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QFileDialog>
@@ -16,6 +27,25 @@
 #include <algorithm>
 #include <cmath>
 
+/**
+ * @brief Construye el diálogo, sus controles y la primera malla de caras.
+ *
+ * Crea los dos `UnitSpinBox` de espesor (placa y cobre, en mm o pulgadas según
+ * la preferencia global), los toggles de placa/cobre, el botón de exportación
+ * PNG y las conexiones que reconstruyen la malla al cambiar un espesor. Calcula
+ * la caja de la placa como la unión de los límites de los sólidos, expandida
+ * 2 mm por lado, y termina llamando a rebuildFaces().
+ *
+ * @param solids Polígonos de cobre a extruir (se mueven al miembro `solids_`).
+ * @param holes Taladros a dibujar sobre el cobre (se mueven a `holes_`).
+ * @param parent Widget padre del diálogo.
+ * @note La caja de la placa se deriva **sólo** de los sólidos: si no hay cobre
+ *       válido la placa no existe y la vista queda vacía aunque haya taladros.
+ * @warning El nombre sugerido del PNG usa un ternario con ramas idénticas
+ *          (View3D.cpp:93-95): `QFileInfo::exists(".")` siempre es cierto, de
+ *          modo que la intención original (proponer otra ruta si el directorio
+ *          actual no existe) quedó sin efecto.
+ */
 View3D::View3D(std::vector<fc::Geom> solids, std::vector<fc::Geom> holes, QWidget* parent)
     : QDialog(parent), solids_(std::move(solids)), holes_(std::move(holes)) {
     setWindowTitle(tr("Vista 3D"));
@@ -61,11 +91,13 @@ View3D::View3D(std::vector<fc::Geom> solids, std::vector<fc::Geom> holes, QWidge
         update();
     });
     connect(save, &QPushButton::clicked, this, [this] {
-        const QString path = QFileDialog::getSaveFileName(
-            this, tr("Guardar vista 3D"), QFileInfo::exists(".") ? "vista3d.png" : "vista3d.png",
-            tr("PNG (*.png)"));
+        QString path = QFileDialog::getSaveFileName(
+            this, tr("Guardar vista 3D"), "vista3d.png", tr("PNG (*.png)"));
         if (path.isEmpty()) return;
-        grab().save(path, "PNG");
+        if (!path.endsWith(".png", Qt::CaseInsensitive)) path += ".png";
+        if (!grab().save(path, "PNG"))
+            QMessageBox::warning(this, tr("Guardar vista 3D"),
+                                 tr("No se pudo guardar la imagen en %1.").arg(path));
     });
     for (const fc::Geom& solid : solids_) {
         const fc::BBox b = solid.bounds();
@@ -96,6 +128,22 @@ View3D::View3D(std::vector<fc::Geom> solids, std::vector<fc::Geom> holes, QWidge
     rebuildFaces();
 }
 
+/**
+ * @brief Proyecta un punto 3D a coordenadas de pantalla normalizadas.
+ *
+ * Aplica la rotación de guiñada (yaw) sobre el plano XY, centra en `center_` y
+ * luego la inclinación (pitch) para obtener la coordenada vertical de pantalla.
+ * La profundidad, cuando se pide, se calcula con el eje de vista
+ * `(sin(yaw)·cos(pitch), cos(yaw)·cos(pitch), sin(pitch))`, que es el usado
+ * para ordenar las caras.
+ *
+ * @param x Coordenada X de mundo (mm).
+ * @param y Coordenada Y de mundo.
+ * @param z Altura (mm), positiva sobre la cara superior del cobre.
+ * @param depth Si no es nulo, recibe la profundidad a lo largo del eje de vista.
+ * @return Punto en el espacio de la vista (aún sin escala ni desplazamiento; el
+ *         llamador aplica `scale_ * zoom_` y `offset_`).
+ */
 QPointF View3D::project(double x, double y, double z, double* depth) const {
     const double cx = x - center_.x();
     const double cy = y - center_.y();
@@ -110,6 +158,26 @@ QPointF View3D::project(double x, double y, double z, double* depth) const {
     return QPointF(rx, sy);
 }
 
+/**
+ * @brief Reconstruye toda la malla de caras, su sombreado y su orden.
+ *
+ * Para cada polígono de cobre genera cuatro grupos de caras: tapa (z =
+ * espesor de cobre), fondo (z = 0) y paredes laterales del contorno exterior y
+ * de cada agujero (de z = 0 al espesor de cobre). La placa se modela como una
+ * caja: tapa en z = 0, fondo en z = −espesor de placa y cuatro paredes. Cada
+ * cara guarda su profundidad media y un factor de sombreado Lambert; al final
+ * las tres listas se ordenan por profundidad y se recalcula el encuadre con
+ * fitView().
+ *
+ * @note Las tapas y el fondo se descartan si el anillo tiene menos de 3 puntos,
+ *       y las paredes de lados de longitud ~0 se omiten para no generar caras
+ *       degeneradas. El sombreado es independiente del color final: el color
+ *       base lo pone paintEvent.
+ * @warning Es una reconstrucción completa (proyección de miles de vértices y
+ *          tres ordenamientos) que se ejecuta también en cada evento de
+ *          arrastre; en placas con mucho cobre la rotación puede perder
+ *          fluidez.
+ */
 void View3D::rebuildFaces() {
     topFaces_.clear();
     bottomFaces_.clear();
@@ -120,6 +188,8 @@ void View3D::rebuildFaces() {
     const double cp = std::cos(pitch_);
     const double sp = std::sin(pitch_);
 
+    /// Iluminación Lambert con dirección de luz fija (0.25, -0.35, 0.90),
+    /// normal rotada por guiñada/pitch y contraste acotado a [0.25, 1.05].
     auto shade = [&](double nx, double ny, double nz) {
         const double rx = nx * cyaw - ny * syaw;
         const double ry = nx * syaw + ny * cyaw;
@@ -129,6 +199,8 @@ void View3D::rebuildFaces() {
         return std::clamp(0.35 + 0.65 * lambert, 0.25, 1.05);
     };
 
+    /// Proyecta una tapa/fondo: contorno exterior con profundidad media y
+    /// agujeros proyectados; descarta el contorno si tiene menos de 3 puntos.
     auto makeFace = [&](const fc::PolygonContours& pc, double z, bool top, double normalZ,
                         bool copper, std::vector<Face>& target) {
         Face face;
@@ -152,6 +224,8 @@ void View3D::rebuildFaces() {
         target.push_back(std::move(face));
     };
 
+    /// Genera un cuadrilátero vertical por cada lado del anillo, de z = 0 a la
+    /// altura del material, con la normal exterior y la profundidad del centro.
     auto addWalls = [&](const fc::Ring& ring, bool copper, std::vector<Face>& target) {
         if (ring.size() < 2) return;
         const double wallHeight = copper ? copperThickness_ : thickness_;
@@ -224,8 +298,21 @@ void View3D::rebuildFaces() {
     fitView();
 }
 
+/**
+ * @brief Encaja la escena proyectada en el área útil del diálogo.
+ *
+ * Recorre las caras ya proyectadas para obtener la caja 2D, reserva 80 px de
+ * margen horizontal y 120 px vertical, y calcula escala y desplazamiento para
+ * centrar el dibujo con un pequeño sesgo hacia arriba (30 px).
+ *
+ * @note Si no hay caras (caja vacía) retorna sin tocar la vista. Como se llama
+ *       desde rebuildFaces, la escala se recalcula en cada rotación: el zoom
+ *       manual se conserva (vive en `zoom_`) pero el centro siempre queda en el
+ *       centro del diálogo.
+ */
 void View3D::fitView() {
     double xmin = 1e18, ymin = 1e18, xmax = -1e18, ymax = -1e18;
+    /// Extiende la caja 2D de encuadre con los puntos proyectados de la lista.
     auto extend = [&](const std::vector<Face>& faces) {
         for (const Face& f : faces)
             for (const QPointF& p : f.points) {
@@ -246,6 +333,21 @@ void View3D::fitView() {
                       height() / 2.0 + 30.0 - (ymin + ymax) / 2.0 * scale_);
 }
 
+/**
+ * @brief Dibuja la escena 3D completa sobre el diálogo.
+ *
+ * Pinta el fondo oscuro y, si no hay caras, un mensaje. Después dibuja en
+ * orden: placa (si está visible), fondo del cobre, tapa del cobre y taladros
+ * (siempre que el cobre esté visible). Cada cara se convierte a `QPainterPath`
+ * con sus agujeros y regla par-impar, se rellena con el color base modulado por
+ * el sombreado (las caras no superiores se oscurecen un 18 %) y se perfila con
+ * un trazo fino para separar planos.
+ *
+ * @param event Evento de pintado (no se usa; se redibuja todo).
+ * @note Usa alfa 230-235, por lo que el orden de dibujado importa. Los taladros
+ *       se proyectan a `copperThickness_ + 0.02` mm para quedar por encima del
+ *       cobre y evitar que el relleno los tape.
+ */
 void View3D::paintEvent(QPaintEvent*) {
     QPainter painter(this);
     painter.fillRect(rect(), QColor(16, 20, 24));
@@ -257,17 +359,20 @@ void View3D::paintEvent(QPaintEvent*) {
         return;
     }
 
+    /// Convierte un punto del espacio de vista a píxeles del diálogo.
     auto screen = [&](const QPointF& p) {
         return QPointF(offset_.x() + p.x() * scale_ * zoom_,
                        offset_.y() + p.y() * scale_ * zoom_);
     };
 
+    /// Aplica el factor de sombreado al color base con saturación a 0..255.
     auto shaded = [](const QColor& base, double shade, int alpha) {
         return QColor(std::clamp(static_cast<int>(base.red() * shade), 0, 255),
                       std::clamp(static_cast<int>(base.green() * shade), 0, 255),
                       std::clamp(static_cast<int>(base.blue() * shade), 0, 255), alpha);
     };
 
+    /// Dibuja una lista de caras ya ordenada, con agujeros par-impar y perfil.
     auto drawFaces = [&](const std::vector<Face>& faces, const QColor& base, int alpha,
                          const QColor& edge) {
         for (const Face& face : faces) {
@@ -330,6 +435,11 @@ void View3D::paintEvent(QPaintEvent*) {
                      tr("Arrastrar: rotar · Rueda: zoom · Espesor de placa arriba"));
 }
 
+/**
+ * @brief Inicia la rotación con el botón izquierdo.
+ *
+ * @param event Evento de presión; otros botones se ignoran.
+ */
 void View3D::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         dragging_ = true;
@@ -337,6 +447,16 @@ void View3D::mousePressEvent(QMouseEvent* event) {
     }
 }
 
+/**
+ * @brief Rota la escena siguiendo el arrastre del ratón.
+ *
+ * El desplazamiento horizontal (sin límite) suma a la guiñada y el vertical a
+ * la inclinación, que se limita al rango [0.15, 1.5] rad para no cruzar el
+ * cénit ni el horizonte. Tras cada movimiento se reconstruyen las caras.
+ *
+ * @param event Evento de movimiento.
+ * @note El factor 0.01 rad/px equivale a unos 0.57° por píxel.
+ */
 void View3D::mouseMoveEvent(QMouseEvent* event) {
     if (!dragging_) return;
     const QPoint delta = event->pos() - lastMouse_;
@@ -347,6 +467,16 @@ void View3D::mouseMoveEvent(QMouseEvent* event) {
     update();
 }
 
+/**
+ * @brief Acerca o aleja la escena con la rueda.
+ *
+ * Multiplica `zoom_` por 1.1 o su inverso según el signo del giro y lo limita a
+ * [0.1, 20] para evitar escalas degeneradas.
+ *
+ * @param event Evento de rueda.
+ * @note No se ancla al cursor (el zoom es siempre respecto del centro del
+ *       diálogo) y se ignora la magnitud del delta.
+ */
 void View3D::wheelEvent(QWheelEvent* event) {
     zoom_ *= event->angleDelta().y() > 0 ? 1.1 : 1.0 / 1.1;
     zoom_ = std::clamp(zoom_, 0.1, 20.0);

@@ -1,0 +1,835 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia de la estructura fc::AllObjectsSax</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('structfc_1_1_all_objects_sax.html','','structfc_1_1_all_objects_sax-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia de la estructura fc::AllObjectsSax</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Handler SAX que entrega cada objeto al visitante y lo libera.  
+ <a href="#details">Más...</a></p>
+<div id="dynsection-0" class="dynheader closed"><span class="dynarrow"><span class="arrowhead closed"></span></span>Diagrama de herencia de fc::AllObjectsSax</div>
+<div id="dynsection-0-summary" class="dynsummary">
+</div>
+<div id="dynsection-0-content" class="dyncontent hidden">
+ <div class="center">
+  <img src="structfc_1_1_all_objects_sax.png" alt=""/>
+ </div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Tipos públicos</h2></td></tr>
+<tr class="memitem:aa5593e43a39cc9af10e16219caf50222" id="r_aa5593e43a39cc9af10e16219caf50222"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#aa5593e43a39cc9af10e16219caf50222">GeomMode</a> { <br />
+&#160;&#160;<a class="el" href="#aa5593e43a39cc9af10e16219caf50222a6adf97f83acf6453d4a6a4b1070f3754">None</a>
+, <br />
+&#160;&#160;<a class="el" href="#aa5593e43a39cc9af10e16219caf50222ae41480b6bbfbf7407974a88d3d34f4fa">Solid</a>
+, <br />
+&#160;&#160;<a class="el" href="#aa5593e43a39cc9af10e16219caf50222a3903aab323863bd2e9b68218a7a65ebd">Follow</a>
+<br />
+ }</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Métodos públicos</h2></td></tr>
+<tr class="memitem:a74968d3f3e88b9ab6fb49541dc793692" id="r_a74968d3f3e88b9ab6fb49541dc793692"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a74968d3f3e88b9ab6fb49541dc793692">null</a> () override</td></tr>
+<tr class="memitem:a83e2f45e8bdaea34a563bd6193d692c4" id="r_a83e2f45e8bdaea34a563bd6193d692c4"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a83e2f45e8bdaea34a563bd6193d692c4">boolean</a> (bool) override</td></tr>
+<tr class="memitem:af269c5e4a625f897b3b3434ada546c52" id="r_af269c5e4a625f897b3b3434ada546c52"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#af269c5e4a625f897b3b3434ada546c52">number_integer</a> (number_integer_t) override</td></tr>
+<tr class="memitem:af5f83dd09aa3421455e27a032e22f3ad" id="r_af5f83dd09aa3421455e27a032e22f3ad"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#af5f83dd09aa3421455e27a032e22f3ad">number_unsigned</a> (number_unsigned_t) override</td></tr>
+<tr class="memitem:ae31de03ae83c03162557f4c134d82424" id="r_ae31de03ae83c03162557f4c134d82424"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ae31de03ae83c03162557f4c134d82424">number_float</a> (number_float_t, const string_t &amp;) override</td></tr>
+<tr class="memitem:aa198c47124c3b3dbde57edd25cd9b26d" id="r_aa198c47124c3b3dbde57edd25cd9b26d"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aa198c47124c3b3dbde57edd25cd9b26d">binary</a> (binary_t &amp;) override</td></tr>
+<tr class="memitem:ae72fe2c9c77de6611e2fc620293fedff" id="r_ae72fe2c9c77de6611e2fc620293fedff"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ae72fe2c9c77de6611e2fc620293fedff">string</a> (string_t &amp;value) override</td></tr>
+<tr class="memitem:aab6c231affbb30fc1aba394404eca500" id="r_aab6c231affbb30fc1aba394404eca500"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aab6c231affbb30fc1aba394404eca500">start_object</a> (std::size_t) override</td></tr>
+<tr class="memitem:a192e2fc7ef90f490468c89ce1673d5c9" id="r_a192e2fc7ef90f490468c89ce1673d5c9"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a192e2fc7ef90f490468c89ce1673d5c9">key</a> (string_t &amp;value) override</td></tr>
+<tr class="memitem:a87018c1d9910690b3f544c30a8892fdf" id="r_a87018c1d9910690b3f544c30a8892fdf"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a87018c1d9910690b3f544c30a8892fdf">finishObject</a> ()</td></tr>
+<tr class="memdesc:a87018c1d9910690b3f544c30a8892fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Completa y entrega el objeto recién leído.  <br /></td></tr>
+<tr class="memitem:a13c564894827a2b2c02150b6904a7f6d" id="r_a13c564894827a2b2c02150b6904a7f6d"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a13c564894827a2b2c02150b6904a7f6d">end_object</a> () override</td></tr>
+<tr class="memitem:a4ea7a0779b42c87573dd88dd25e23af0" id="r_a4ea7a0779b42c87573dd88dd25e23af0"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a4ea7a0779b42c87573dd88dd25e23af0">start_array</a> (std::size_t) override</td></tr>
+<tr class="memitem:a7dd6aa04a49c5aa8abb9031c64194eba" id="r_a7dd6aa04a49c5aa8abb9031c64194eba"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a7dd6aa04a49c5aa8abb9031c64194eba">end_array</a> () override</td></tr>
+<tr class="memitem:a1a2b05808599effa3c63dffe2f773890" id="r_a1a2b05808599effa3c63dffe2f773890"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a1a2b05808599effa3c63dffe2f773890">parse_error</a> (std::size_t, const std::string &amp;, const nlohmann::detail::exception &amp;) override</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Atributos públicos</h2></td></tr>
+<tr class="memitem:afd2669ce12445c149c6256f82b67a594" id="r_afd2669ce12445c149c6256f82b67a594"><td class="memItemLeft"><a class="el" href="namespacefc.html#a2ea18c51ce9b6c8cc55875e17b103b1b">ProjectObjectVisitor</a>&#160;</td><td class="memItemRight"><a class="el" href="#afd2669ce12445c149c6256f82b67a594">visitor</a></td></tr>
+<tr class="memitem:a8a1798011937fdd202ceb5b50125e6e6" id="r_a8a1798011937fdd202ceb5b50125e6e6"><td class="memItemLeft">std::vector&lt; <a class="el" href="structfc_1_1_project_object_summary.html">ProjectObjectSummary</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a8a1798011937fdd202ceb5b50125e6e6">summaries</a></td></tr>
+<tr class="memitem:ae1d6f1d0d1681e469e973221b46a0233" id="r_ae1d6f1d0d1681e469e973221b46a0233"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ae1d6f1d0d1681e469e973221b46a0233">depth</a> = 0</td></tr>
+<tr class="memitem:a42a4197dd86bbd31717f791ac642ded6" id="r_a42a4197dd86bbd31717f791ac642ded6"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a42a4197dd86bbd31717f791ac642ded6">inObjects</a> = false</td></tr>
+<tr class="memitem:a853314c8e94202ca09e2f2e64ce8222c" id="r_a853314c8e94202ca09e2f2e64ce8222c"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a853314c8e94202ca09e2f2e64ce8222c">collecting</a> = false</td></tr>
+<tr class="memitem:a9a5c5efd42736cd2293d134fa760b368" id="r_a9a5c5efd42736cd2293d134fa760b368"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a9a5c5efd42736cd2293d134fa760b368">currentKey</a></td></tr>
+<tr class="memitem:af540c4d6ac2da3f593a3614fff3cbb71" id="r_af540c4d6ac2da3f593a3614fff3cbb71"><td class="memItemLeft">enum <a class="el" href="#aa5593e43a39cc9af10e16219caf50222">fc::AllObjectsSax::GeomMode</a>&#160;</td><td class="memItemRight"><a class="el" href="#af540c4d6ac2da3f593a3614fff3cbb71">mode</a> = <a class="el" href="#aa5593e43a39cc9af10e16219caf50222a6adf97f83acf6453d4a6a4b1070f3754">GeomMode::None</a></td></tr>
+<tr class="memitem:a8c7493bda6057cdd7746726d5fb2ab20" id="r_a8c7493bda6057cdd7746726d5fb2ab20"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a8c7493bda6057cdd7746726d5fb2ab20">geomDepth</a> = 0</td></tr>
+<tr class="memitem:a1a5fd3f57cfa8afa50e1d9a89452ab08" id="r_a1a5fd3f57cfa8afa50e1d9a89452ab08"><td class="memItemLeft"><a class="el" href="structfc_1_1_project_object.html">ProjectObject</a>&#160;</td><td class="memItemRight"><a class="el" href="#a1a5fd3f57cfa8afa50e1d9a89452ab08">object</a></td></tr>
+<tr class="memitem:af10ab1e089ef04aa06498405f49545c1" id="r_af10ab1e089ef04aa06498405f49545c1"><td class="memItemLeft">std::vector&lt; <a class="el" href="class_geom.html">Geom</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#af10ab1e089ef04aa06498405f49545c1">solids</a></td></tr>
+<tr class="memitem:a7a288ab987f92349d1db6a39902796ae" id="r_a7a288ab987f92349d1db6a39902796ae"><td class="memItemLeft">std::vector&lt; <a class="el" href="class_geom.html">Geom</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a7a288ab987f92349d1db6a39902796ae">follows</a></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Handler SAX que entrega cada objeto al visitante y lo libera. </p>
+<p>Es el modo de carga secuencial: mantiene un solo objeto en memoria, calcula un resumen (clase, nombre, unidades, cantidad de geometrías, área y caja) y llama al visitante; si éste devuelve false se aborta el parseo. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00557">557</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+</div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Documentación de las enumeraciones miembro de la clase</h2>
+<a id="aa5593e43a39cc9af10e16219caf50222" name="aa5593e43a39cc9af10e16219caf50222"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5593e43a39cc9af10e16219caf50222">&#9670;&#160;</a></span>GeomMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#aa5593e43a39cc9af10e16219caf50222">fc::AllObjectsSax::GeomMode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Valores de enumeraciones</th></tr><tr><td class="fieldname"><a id="aa5593e43a39cc9af10e16219caf50222a6adf97f83acf6453d4a6a4b1070f3754" name="aa5593e43a39cc9af10e16219caf50222a6adf97f83acf6453d4a6a4b1070f3754"></a>None&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa5593e43a39cc9af10e16219caf50222ae41480b6bbfbf7407974a88d3d34f4fa" name="aa5593e43a39cc9af10e16219caf50222ae41480b6bbfbf7407974a88d3d34f4fa"></a>Solid&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa5593e43a39cc9af10e16219caf50222a3903aab323863bd2e9b68218a7a65ebd" name="aa5593e43a39cc9af10e16219caf50222a3903aab323863bd2e9b68218a7a65ebd"></a>Follow&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00565">565</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones miembro</h2>
+<a id="aa198c47124c3b3dbde57edd25cd9b26d" name="aa198c47124c3b3dbde57edd25cd9b26d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa198c47124c3b3dbde57edd25cd9b26d">&#9670;&#160;</a></span>binary()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::binary </td>
+          <td>(</td>
+          <td class="paramtype">binary_t &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00577">577</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a83e2f45e8bdaea34a563bd6193d692c4" name="a83e2f45e8bdaea34a563bd6193d692c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83e2f45e8bdaea34a563bd6193d692c4">&#9670;&#160;</a></span>boolean()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::boolean </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00573">573</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a7dd6aa04a49c5aa8abb9031c64194eba" name="a7dd6aa04a49c5aa8abb9031c64194eba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dd6aa04a49c5aa8abb9031c64194eba">&#9670;&#160;</a></span>end_array()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::end_array </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00681">681</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="project_8cpp_source.html#l00560">depth</a>, <a class="el" href="project_8cpp_source.html#l00566">geomDepth</a>, <a class="el" href="project_8cpp_source.html#l00561">inObjects</a>, <a class="el" href="#af540c4d6ac2da3f593a3614fff3cbb71">mode</a> y <a class="el" href="project_8cpp_source.html#l00565">None</a>.</p>
+
+</div>
+</div>
+<a id="a13c564894827a2b2c02150b6904a7f6d" name="a13c564894827a2b2c02150b6904a7f6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13c564894827a2b2c02150b6904a7f6d">&#9670;&#160;</a></span>end_object()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::end_object </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00658">658</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="project_8cpp_source.html#l00562">collecting</a>, <a class="el" href="project_8cpp_source.html#l00560">depth</a>, <a class="el" href="project_8cpp_source.html#l00626">finishObject()</a>, <a class="el" href="project_8cpp_source.html#l00566">geomDepth</a>, <a class="el" href="project_8cpp_source.html#l00561">inObjects</a>, <a class="el" href="#af540c4d6ac2da3f593a3614fff3cbb71">mode</a> y <a class="el" href="project_8cpp_source.html#l00565">None</a>.</p>
+
+</div>
+</div>
+<a id="a87018c1d9910690b3f544c30a8892fdf" name="a87018c1d9910690b3f544c30a8892fdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87018c1d9910690b3f544c30a8892fdf">&#9670;&#160;</a></span>finishObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::finishObject </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Completa y entrega el objeto recién leído. </p>
+<p>Rellena clase y nombre faltantes, mueve las geometrías acumuladas, calcula el resumen (suma de áreas y unión de cajas de los sólidos) y llama al visitante. </p><dl class="section return"><dt>Devuelve</dt><dd>false si el visitante pidió detener el recorrido. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00626">626</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="project_8hpp_source.html#l00104">fc::ProjectObjectSummary::area</a>, <a class="el" href="project_8hpp_source.html#l00105">fc::ProjectObjectSummary::bounds</a>, <a class="el" href="project_8cpp_source.html#l00570">follows</a>, <a class="el" href="project_8hpp_source.html#l00103">fc::ProjectObjectSummary::follows</a>, <a class="el" href="project_8hpp_source.html#l00099">fc::ProjectObjectSummary::kind</a>, <a class="el" href="project_8hpp_source.html#l00100">fc::ProjectObjectSummary::name</a>, <a class="el" href="project_8cpp_source.html#l00569">solids</a>, <a class="el" href="project_8hpp_source.html#l00102">fc::ProjectObjectSummary::solids</a>, <a class="el" href="project_8cpp_source.html#l00559">summaries</a>, <a class="el" href="project_8hpp_source.html#l00101">fc::ProjectObjectSummary::units</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="project_8cpp_source.html#l00558">visitor</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00658">end_object()</a>.</p>
+
+</div>
+</div>
+<a id="a192e2fc7ef90f490468c89ce1673d5c9" name="a192e2fc7ef90f490468c89ce1673d5c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a192e2fc7ef90f490468c89ce1673d5c9">&#9670;&#160;</a></span>key()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::key </td>
+          <td>(</td>
+          <td class="paramtype">string_t &amp;</td>          <td class="paramname"><span class="paramname"><em>value</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00613">613</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="project_8cpp_source.html#l00563">currentKey</a>.</p>
+
+</div>
+</div>
+<a id="a74968d3f3e88b9ab6fb49541dc793692" name="a74968d3f3e88b9ab6fb49541dc793692"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74968d3f3e88b9ab6fb49541dc793692">&#9670;&#160;</a></span>null()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::null </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00572">572</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae31de03ae83c03162557f4c134d82424" name="ae31de03ae83c03162557f4c134d82424"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae31de03ae83c03162557f4c134d82424">&#9670;&#160;</a></span>number_float()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::number_float </td>
+          <td>(</td>
+          <td class="paramtype">number_float_t</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string_t &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00576">576</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af269c5e4a625f897b3b3434ada546c52" name="af269c5e4a625f897b3b3434ada546c52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af269c5e4a625f897b3b3434ada546c52">&#9670;&#160;</a></span>number_integer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::number_integer </td>
+          <td>(</td>
+          <td class="paramtype">number_integer_t</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00574">574</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af5f83dd09aa3421455e27a032e22f3ad" name="af5f83dd09aa3421455e27a032e22f3ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5f83dd09aa3421455e27a032e22f3ad">&#9670;&#160;</a></span>number_unsigned()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::number_unsigned </td>
+          <td>(</td>
+          <td class="paramtype">number_unsigned_t</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00575">575</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a1a2b05808599effa3c63dffe2f773890" name="a1a2b05808599effa3c63dffe2f773890"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a2b05808599effa3c63dffe2f773890">&#9670;&#160;</a></span>parse_error()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::parse_error </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const nlohmann::detail::exception &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00688">688</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a4ea7a0779b42c87573dd88dd25e23af0" name="a4ea7a0779b42c87573dd88dd25e23af0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ea7a0779b42c87573dd88dd25e23af0">&#9670;&#160;</a></span>start_array()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::start_array </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00668">668</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="project_8cpp_source.html#l00562">collecting</a>, <a class="el" href="project_8cpp_source.html#l00563">currentKey</a>, <a class="el" href="project_8cpp_source.html#l00560">depth</a>, <a class="el" href="project_8cpp_source.html#l00565">Follow</a>, <a class="el" href="project_8cpp_source.html#l00566">geomDepth</a>, <a class="el" href="project_8cpp_source.html#l00561">inObjects</a>, <a class="el" href="#af540c4d6ac2da3f593a3614fff3cbb71">mode</a>, <a class="el" href="project_8cpp_source.html#l00565">None</a> y <a class="el" href="project_8cpp_source.html#l00565">Solid</a>.</p>
+
+</div>
+</div>
+<a id="aab6c231affbb30fc1aba394404eca500" name="aab6c231affbb30fc1aba394404eca500"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab6c231affbb30fc1aba394404eca500">&#9670;&#160;</a></span>start_object()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::start_object </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00596">596</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="project_8cpp_source.html#l00562">collecting</a>, <a class="el" href="project_8cpp_source.html#l00563">currentKey</a>, <a class="el" href="project_8cpp_source.html#l00560">depth</a>, <a class="el" href="project_8cpp_source.html#l00565">Follow</a>, <a class="el" href="project_8cpp_source.html#l00570">follows</a>, <a class="el" href="project_8cpp_source.html#l00566">geomDepth</a>, <a class="el" href="project_8cpp_source.html#l00561">inObjects</a>, <a class="el" href="#af540c4d6ac2da3f593a3614fff3cbb71">mode</a>, <a class="el" href="project_8cpp_source.html#l00565">None</a>, <a class="el" href="project_8cpp_source.html#l00565">Solid</a> y <a class="el" href="project_8cpp_source.html#l00569">solids</a>.</p>
+
+</div>
+</div>
+<a id="ae72fe2c9c77de6611e2fc620293fedff" name="ae72fe2c9c77de6611e2fc620293fedff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae72fe2c9c77de6611e2fc620293fedff">&#9670;&#160;</a></span>string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::string </td>
+          <td>(</td>
+          <td class="paramtype">string_t &amp;</td>          <td class="paramname"><span class="paramname"><em>value</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00579">579</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="project_8cpp_source.html#l00562">collecting</a>, <a class="el" href="project_8cpp_source.html#l00563">currentKey</a>, <a class="el" href="project_8cpp_source.html#l00560">depth</a>, <a class="el" href="project_8cpp_source.html#l00570">follows</a>, <a class="el" href="geometry_8cpp_source.html#l00340">fc::Geom::fromWkt()</a>, <a class="el" href="#af540c4d6ac2da3f593a3614fff3cbb71">mode</a>, <a class="el" href="project_8cpp_source.html#l00565">None</a>, <a class="el" href="project_8cpp_source.html#l00565">Solid</a> y <a class="el" href="project_8cpp_source.html#l00569">solids</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Documentación de datos miembro</h2>
+<a id="a853314c8e94202ca09e2f2e64ce8222c" name="a853314c8e94202ca09e2f2e64ce8222c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a853314c8e94202ca09e2f2e64ce8222c">&#9670;&#160;</a></span>collecting</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::collecting = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00562">562</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00658">end_object()</a>, <a class="el" href="project_8cpp_source.html#l00668">start_array()</a>, <a class="el" href="project_8cpp_source.html#l00596">start_object()</a> y <a class="el" href="project_8cpp_source.html#l00579">string()</a>.</p>
+
+</div>
+</div>
+<a id="a9a5c5efd42736cd2293d134fa760b368" name="a9a5c5efd42736cd2293d134fa760b368"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a5c5efd42736cd2293d134fa760b368">&#9670;&#160;</a></span>currentKey</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string fc::AllObjectsSax::currentKey</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00563">563</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00613">key()</a>, <a class="el" href="project_8cpp_source.html#l00668">start_array()</a>, <a class="el" href="project_8cpp_source.html#l00596">start_object()</a> y <a class="el" href="project_8cpp_source.html#l00579">string()</a>.</p>
+
+</div>
+</div>
+<a id="ae1d6f1d0d1681e469e973221b46a0233" name="ae1d6f1d0d1681e469e973221b46a0233"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1d6f1d0d1681e469e973221b46a0233">&#9670;&#160;</a></span>depth</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fc::AllObjectsSax::depth = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00560">560</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00681">end_array()</a>, <a class="el" href="project_8cpp_source.html#l00658">end_object()</a>, <a class="el" href="project_8cpp_source.html#l00668">start_array()</a>, <a class="el" href="project_8cpp_source.html#l00596">start_object()</a> y <a class="el" href="project_8cpp_source.html#l00579">string()</a>.</p>
+
+</div>
+</div>
+<a id="a7a288ab987f92349d1db6a39902796ae" name="a7a288ab987f92349d1db6a39902796ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a288ab987f92349d1db6a39902796ae">&#9670;&#160;</a></span>follows</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="class_geom.html">Geom</a>&gt; fc::AllObjectsSax::follows</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00570">570</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00626">finishObject()</a>, <a class="el" href="project_8cpp_source.html#l00596">start_object()</a> y <a class="el" href="project_8cpp_source.html#l00579">string()</a>.</p>
+
+</div>
+</div>
+<a id="a8c7493bda6057cdd7746726d5fb2ab20" name="a8c7493bda6057cdd7746726d5fb2ab20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c7493bda6057cdd7746726d5fb2ab20">&#9670;&#160;</a></span>geomDepth</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fc::AllObjectsSax::geomDepth = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00566">566</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00681">end_array()</a>, <a class="el" href="project_8cpp_source.html#l00658">end_object()</a>, <a class="el" href="project_8cpp_source.html#l00668">start_array()</a> y <a class="el" href="project_8cpp_source.html#l00596">start_object()</a>.</p>
+
+</div>
+</div>
+<a id="a42a4197dd86bbd31717f791ac642ded6" name="a42a4197dd86bbd31717f791ac642ded6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42a4197dd86bbd31717f791ac642ded6">&#9670;&#160;</a></span>inObjects</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::AllObjectsSax::inObjects = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00561">561</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00681">end_array()</a>, <a class="el" href="project_8cpp_source.html#l00658">end_object()</a>, <a class="el" href="project_8cpp_source.html#l00668">start_array()</a> y <a class="el" href="project_8cpp_source.html#l00596">start_object()</a>.</p>
+
+</div>
+</div>
+<a id="af540c4d6ac2da3f593a3614fff3cbb71" name="af540c4d6ac2da3f593a3614fff3cbb71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af540c4d6ac2da3f593a3614fff3cbb71">&#9670;&#160;</a></span>mode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#aa5593e43a39cc9af10e16219caf50222">fc::AllObjectsSax::GeomMode</a> fc::AllObjectsSax::mode = <a class="el" href="#aa5593e43a39cc9af10e16219caf50222a6adf97f83acf6453d4a6a4b1070f3754">GeomMode::None</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00681">end_array()</a>, <a class="el" href="project_8cpp_source.html#l00658">end_object()</a>, <a class="el" href="project_8cpp_source.html#l00668">start_array()</a>, <a class="el" href="project_8cpp_source.html#l00596">start_object()</a> y <a class="el" href="project_8cpp_source.html#l00579">string()</a>.</p>
+
+</div>
+</div>
+<a id="a1a5fd3f57cfa8afa50e1d9a89452ab08" name="a1a5fd3f57cfa8afa50e1d9a89452ab08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a5fd3f57cfa8afa50e1d9a89452ab08">&#9670;&#160;</a></span>object</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structfc_1_1_project_object.html">ProjectObject</a> fc::AllObjectsSax::object</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00568">568</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af10ab1e089ef04aa06498405f49545c1" name="af10ab1e089ef04aa06498405f49545c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af10ab1e089ef04aa06498405f49545c1">&#9670;&#160;</a></span>solids</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="class_geom.html">Geom</a>&gt; fc::AllObjectsSax::solids</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00569">569</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00626">finishObject()</a>, <a class="el" href="project_8cpp_source.html#l00596">start_object()</a> y <a class="el" href="project_8cpp_source.html#l00579">string()</a>.</p>
+
+</div>
+</div>
+<a id="a8a1798011937fdd202ceb5b50125e6e6" name="a8a1798011937fdd202ceb5b50125e6e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a1798011937fdd202ceb5b50125e6e6">&#9670;&#160;</a></span>summaries</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structfc_1_1_project_object_summary.html">ProjectObjectSummary</a>&gt; fc::AllObjectsSax::summaries</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00559">559</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00626">finishObject()</a> y <a class="el" href="project_8cpp_source.html#l00701">fc::forEachProjectObject()</a>.</p>
+
+</div>
+</div>
+<a id="afd2669ce12445c149c6256f82b67a594" name="afd2669ce12445c149c6256f82b67a594"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd2669ce12445c149c6256f82b67a594">&#9670;&#160;</a></span>visitor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacefc.html#a2ea18c51ce9b6c8cc55875e17b103b1b">ProjectObjectVisitor</a> fc::AllObjectsSax::visitor</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="project_8cpp_source.html#l00558">558</a> del archivo <a class="el" href="project_8cpp_source.html">project.cpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="project_8cpp_source.html#l00626">finishObject()</a> y <a class="el" href="project_8cpp_source.html#l00701">fc::forEachProjectObject()</a>.</p>
+
+</div>
+</div>
+<hr/>La documentación de esta estructura está generada del siguiente archivo:<ul>
+<li>src/core/<a class="el" href="project_8cpp_source.html">project.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacefc.html">fc</a></li><li class="navelem"><a href="structfc_1_1_all_objects_sax.html">AllObjectsSax</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

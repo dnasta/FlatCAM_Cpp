@@ -1,8 +1,20 @@
+/**
+ * @file tcl_embed.cpp
+ * @brief Shell Tcl real embebido con libtcl.
+ *
+ * Se compila cuando `FC_HAVE_TCL` está definido. Crea un `Tcl_Interp`,
+ * inicializa la biblioteca estándar (`set`, `puts`, `if`, `proc`, `expr`, …) y
+ * registra los comandos CAM de FlatCAM como comandos Tcl nativos: `open_gerber`,
+ * `open_excellon`, `isolate`, `cutout`, `ncc`, `paint`, `mill`, `export_gcode`,
+ * `export_svg`, `export_dxf`, `thieving` e `info`, sobre un `ShellState` común.
+ */
+
 #ifdef FC_HAVE_TCL
 
 #include <tcl.h>
 
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -22,6 +34,13 @@
 namespace fc {
 namespace {
 
+/**
+ * @brief Estado compartido por todos los comandos Tcl registrados.
+ *
+ * Mantiene el último Gerber y Excellon abiertos, sus banderas de validez y el
+ * trabajo activo (`PathJob` o `DrillJob`) que exportará `export_gcode`. Los dos
+ * trabajos son mutuamente excluyentes.
+ */
 struct ShellState {
     GerberResult gerber;
     bool hasGerber = false;
@@ -33,10 +52,35 @@ struct ShellState {
     bool hasDrillJob = false;
 };
 
+/**
+ * @brief Devuelve un argumento Tcl como cadena, o `nullptr` si falta.
+ * @param objv Vector de objetos del comando.
+ * @param index Posición a leer.
+ * @param count Cantidad de argumentos (`objc`).
+ * @return Puntero interno al texto (válido mientras viva el objeto Tcl).
+ *
+ * @note Es código muerto en la versión actual: ningún comando lo usa y puede
+ *       generar un aviso de función no utilizada según el compilador.
+ */
 const char* arg(Tcl_Interp*, Tcl_Obj* const objv[], int index, int count) {
     return index < count ? Tcl_GetString(objv[index]) : nullptr;
 }
 
+/**
+ * @brief Lee un argumento numérico Tcl con valor de reserva.
+ *
+ * Usa `Tcl_GetDoubleFromObj`, que puede dejar un mensaje de error en el
+ * intérprete si el objeto no es numérico; en ese caso se devuelve el valor de
+ * reserva y el mensaje residual se sobrescribe al fijar el resultado del
+ * comando.
+ *
+ * @param interp Intérprete Tcl.
+ * @param objv Vector de objetos del comando.
+ * @param index Posición a leer.
+ * @param count Cantidad de argumentos.
+ * @param fallback Valor a devolver si falta el argumento o no es numérico.
+ * @return Número convertido o `fallback`.
+ */
 double numberArg(Tcl_Interp* interp, Tcl_Obj* const objv[], int index, int count, double fallback) {
     if (index >= count) return fallback;
     double value = fallback;
@@ -44,6 +88,15 @@ double numberArg(Tcl_Interp* interp, Tcl_Obj* const objv[], int index, int count
     return value;
 }
 
+/**
+ * @brief Reemplaza el trabajo de recorridos y desactiva el de taladrado.
+ * @param state Estado a modificar.
+ * @param paths Recorridos producidos por la herramienta.
+ * @param bounds Límites del trabajo.
+ * @param tool Diámetro de herramienta informativo.
+ *
+ * @note Los recorridos con menos de 2 puntos se descartan.
+ */
 void setPaths(ShellState& state, const std::vector<Geom>& paths, const BBox& bounds, double tool) {
     state.paths = PathJob{};
     state.paths.bounds = bounds;
@@ -56,6 +109,21 @@ void setPaths(ShellState& state, const std::vector<Geom>& paths, const BBox& bou
     state.hasDrillJob = false;
 }
 
+/**
+ * @brief Implementa `open_gerber <archivo>`.
+ *
+ * Parsea el Gerber con `GerberParser` y lo deja como objeto activo. Devuelve la
+ * ruta como resultado Tcl.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumentos (`open_gerber`, ruta).
+ * @return `TCL_OK` o `TCL_ERROR` con el mensaje de la excepción.
+ *
+ * @note No reinicia el trabajo de taladrado previo; ver la advertencia de
+ *       `runTclScript`.
+ */
 int cmdOpenGerber(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (objc < 2) {
@@ -73,6 +141,18 @@ int cmdOpenGerber(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const 
     }
 }
 
+/**
+ * @brief Implementa `open_excellon <archivo>`.
+ *
+ * Parsea el Excellon, construye el `DrillJob` y lo deja como trabajo activo,
+ * desactivando cualquier `PathJob` anterior.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumentos (`open_excellon`, ruta).
+ * @return `TCL_OK` o `TCL_ERROR` con el mensaje de la excepción.
+ */
 int cmdOpenExcellon(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (objc < 2) {
@@ -93,6 +173,22 @@ int cmdOpenExcellon(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* cons
     }
 }
 
+/**
+ * @brief Implementa `isolate <Ø> <pasadas> <solape%>`.
+ *
+ * Genera el aislamiento del Gerber activo y deja el resultado como `PathJob`.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumentos posicionales opcionales (Ø 0,2; pasadas 1; solape 0).
+ * @return `TCL_OK` con la cantidad de recorridos, o `TCL_ERROR` si no hay
+ *         Gerber cargado.
+ *
+ * @warning No captura excepciones de GEOS: si el cálculo falla, la excepción
+ *          atraviesa el callback de Tcl (comportamiento indefinido) en lugar de
+ *          convertirse en `TCL_ERROR`.
+ */
 int cmdIsolate(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (!state->hasGerber) {
@@ -109,6 +205,21 @@ int cmdIsolate(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const obj
     return TCL_OK;
 }
 
+/**
+ * @brief Implementa `cutout <Ø> <margen> <puentes> <ancho>`.
+ *
+ * Calcula el corte de contorno del Gerber activo y lo deja como `PathJob`.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumentos posicionales (Ø 1,0; margen 0; puentes 0; ancho 0).
+ * @return `TCL_OK` con la cantidad de recorridos, o `TCL_ERROR` sin Gerber.
+ *
+ * @note El corte es siempre externo: este comando no expone `external` ni
+ *       `invert`.
+ * @warning Igual que `cmdIsolate`, no captura excepciones de GEOS.
+ */
 int cmdCutout(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (!state->hasGerber) {
@@ -126,6 +237,23 @@ int cmdCutout(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv
     return TCL_OK;
 }
 
+/**
+ * @brief Implementa `ncc <Ø> <paso%>`.
+ *
+ * Despeja el cobre sobrante usando como área de trabajo el bounding box del
+ * Gerber expandido 1 mm. Estrategia `Hatch` con el ángulo y el clearance por
+ * defecto.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumentos posicionales (Ø 0,5; paso 50 %).
+ * @return `TCL_OK` con la cantidad de recorridos, o `TCL_ERROR` sin Gerber.
+ *
+ * @note El argumento es porcentaje de paso (`50` = 50 % del diámetro), no
+ *       superposición, a diferencia de la UI.
+ * @warning No captura excepciones de GEOS.
+ */
 int cmdNcc(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (!state->hasGerber) {
@@ -143,6 +271,20 @@ int cmdNcc(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[])
     return TCL_OK;
 }
 
+/**
+ * @brief Implementa `paint <Ø> <paso%>`.
+ *
+ * Rellena el cobre activo con contornos paralelos y deja el resultado como
+ * `PathJob`.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumentos posicionales (Ø 0,1; paso 50 %).
+ * @return `TCL_OK` con la cantidad de recorridos, o `TCL_ERROR` sin Gerber.
+ *
+ * @warning No captura excepciones de GEOS.
+ */
 int cmdPaint(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (!state->hasGerber) {
@@ -158,6 +300,22 @@ int cmdPaint(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[
     return TCL_OK;
 }
 
+/**
+ * @brief Implementa `mill <Ø>`: fresado siguiendo los recorridos del Gerber.
+ *
+ * Recorre `gerber.follows` y convierte en `PathJob` los elementos que sean
+ * `LineString` o `LinearRing` de primer nivel.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumento opcional con el diámetro (0,2 por defecto).
+ * @return `TCL_OK` con la cantidad de recorridos, o `TCL_ERROR` sin Gerber.
+ *
+ * @warning A diferencia de `collectLineStrings` de la CLI, aquí no se recurre
+ *          en `MultiLineString` ni `GeometryCollection`: esos recorridos se
+ *          pierden silenciosamente y el fresado queda incompleto.
+ */
 int cmdMill(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (!state->hasGerber) {
@@ -165,13 +323,22 @@ int cmdMill(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]
         return TCL_ERROR;
     }
     std::vector<std::vector<Pt>> lines;
-    for (const Geom& g : state->gerber.follows) {
-        if (!g.valid() || g.empty()) continue;
-        if (g.typeId() == GEOS_LINESTRING || g.typeId() == GEOS_LINEARRING) {
+    // Recorre colecciones anidadas (MULTILINESTRING, GEOMETRYCOLLECTION) para
+    // no perder recorridos al fresar.
+    std::function<void(const Geom&)> collect = [&](const Geom& g) {
+        if (!g.valid() || g.empty()) return;
+        const int type = g.typeId();
+        if (type == GEOS_LINESTRING || type == GEOS_LINEARRING) {
             Ring ring = g.coords();
             if (ring.size() >= 2) lines.emplace_back(ring.begin(), ring.end());
+            return;
         }
-    }
+        if (type == GEOS_MULTILINESTRING || type == GEOS_GEOMETRYCOLLECTION ||
+            type == GEOS_MULTIPOLYGON) {
+            for (int i = 0; i < g.numGeometries(); ++i) collect(g.geometryN(i));
+        }
+    };
+    for (const Geom& g : state->gerber.follows) collect(g);
     state->paths = PathJob{};
     state->paths.paths = std::move(lines);
     state->paths.bounds = state->gerber.bounds;
@@ -182,6 +349,20 @@ int cmdMill(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]
     return TCL_OK;
 }
 
+/**
+ * @brief Implementa `export_svg <archivo>`.
+ *
+ * Exporta el Gerber activo (sólidos, recorridos y límites) mediante `exportSvg`.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumentos (`export_svg`, ruta).
+ * @return `TCL_OK`, o `TCL_ERROR` sin Gerber o sin ruta.
+ *
+ * @note No devuelve texto como resultado (queda vacío), por lo que un script no
+ *       puede verificar el éxito más allá del código de error de Tcl.
+ */
 int cmdExportSvg(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (!state->hasGerber || objc < 2) {
@@ -193,6 +374,20 @@ int cmdExportSvg(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const o
     return TCL_OK;
 }
 
+/**
+ * @brief Implementa `export_dxf <archivo>`.
+ *
+ * Exporta los sólidos y recorridos del Gerber activo a DXF AC1015.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumentos (`export_dxf`, ruta).
+ * @return `TCL_OK`, o `TCL_ERROR` sin Gerber o sin ruta.
+ *
+ * @note No informa del error de escritura: `exportDxf` no devuelve estado, de
+ *       modo que un fallo de disco produce `TCL_OK` igualmente.
+ */
 int cmdExportDxf(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (!state->hasGerber || objc < 2) {
@@ -203,6 +398,22 @@ int cmdExportDxf(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const o
     return TCL_OK;
 }
 
+/**
+ * @brief Implementa `thieving <Ø> <separación> <clearance>`.
+ *
+ * Calcula los puntos de cobre que no invaden el cobre existente y devuelve sólo
+ * la cantidad.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumentos posicionales (Ø 0,5; separación 2,0; clearance 0,5).
+ * @return `TCL_OK` con la cantidad de puntos, o `TCL_ERROR` sin Gerber.
+ *
+ * @warning El comando no guarda ni escribe los puntos: es informativo y no
+ *          permite exportar el Gerber de thieving desde Tcl (a diferencia de la
+ *          CLI, que sí lo hace).
+ */
 int cmdThieving(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (!state->hasGerber) {
@@ -218,6 +429,24 @@ int cmdThieving(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const ob
     return TCL_OK;
 }
 
+/**
+ * @brief Implementa `export_gcode <archivo>`.
+ *
+ * Exporta el trabajo activo: si hay `DrillJob` genera taladrado y, si no, los
+ * recorridos de geometría. Usa `GCodeOptions` por defecto (milímetros,
+ * preprocesador `Default`, Z estándar).
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @param objc Cantidad de argumentos.
+ * @param objv Argumentos (`export_gcode`, ruta).
+ * @return `TCL_OK`, o `TCL_ERROR` si no hay trabajo, falta la ruta o no se
+ *         puede escribir el archivo.
+ *
+ * @warning No hay forma de pasar parámetros de máquina desde Tcl: avances, Z,
+ *          husillo y postprocesador quedan siempre en los valores por defecto
+ *          de `GCodeOptions`.
+ */
 int cmdExportGcode(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[]) {
     auto* state = static_cast<ShellState*>(data);
     if (objc < 2) {
@@ -241,6 +470,18 @@ int cmdExportGcode(ClientData data, Tcl_Interp* interp, int objc, Tcl_Obj* const
     return TCL_OK;
 }
 
+/**
+ * @brief Implementa `info`: resumen del estado actual.
+ *
+ * Emite una línea por dato disponible: área del Gerber, cantidad de taladros,
+ * recorridos y herramientas.
+ *
+ * @param data Puntero al `ShellState`.
+ * @param interp Intérprete Tcl.
+ * @return Siempre `TCL_OK`.
+ *
+ * @note Ignora los argumentos: `info algo` no produce error.
+ */
 int cmdInfo(ClientData data, Tcl_Interp* interp, int, Tcl_Obj* const[]) {
     auto* state = static_cast<ShellState*>(data);
     std::ostringstream os;
@@ -256,6 +497,29 @@ int cmdInfo(ClientData data, Tcl_Interp* interp, int, Tcl_Obj* const[]) {
 
 }  // namespace
 
+/**
+ * @brief Crea el intérprete Tcl, registra los comandos y ejecuta el script.
+ *
+ * Flujo: `Tcl_FindExecutable`, `Tcl_CreateInterp`, `Tcl_Init` (un fallo sólo se
+ * informa como advertencia, porque los comandos del núcleo siguen
+ * disponibles), registro de los doce comandos CAM con `&state` como
+ * `ClientData` y ejecución:
+ * - con `path` vacío o `-`: REPL por `stdin`, evaluando línea por línea;
+ * - en otro caso: `Tcl_EvalFile` del script completo.
+ *
+ * @param path Ruta del script o cadena vacía (o `-`) para modo interactivo.
+ * @return 0 en éxito; 1 si no se puede crear el intérprete o el script falla.
+ *
+ * @note El estado vive en la pila de esta función y el intérprete se destruye
+ *       antes de salir, por lo que ningún comando conserva punteros colgantes.
+ * @note En el REPL los errores se informan y el bucle continúa; en modo script
+ *       el primer error aborta con código 1.
+ * @warning El REPL evalúa una línea por vez, de modo que una definición
+ *          multilínea (`proc f {} {` … `}`) falla por script incompleto.
+ * @warning `Tcl_Init` depende de `TCL_LIBRARY` o del framework detectado; si el
+ *          entorno no lo encuentra, `proc`, `if` y `expr` no estarán
+ *          disponibles aunque la advertencia sugiera lo contrario.
+ */
 int runTclScript(const std::string& path) {
     Tcl_FindExecutable(nullptr);
     Tcl_Interp* interp = Tcl_CreateInterp();

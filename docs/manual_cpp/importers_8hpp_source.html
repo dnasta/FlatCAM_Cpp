@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente include/flatcam/importers.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('importers_8hpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">importers.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="importers_8hpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file importers.hpp</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Importadores/exportadores vectoriales y de imágenes.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Agrupa SVG, DXF, HPGL2, PDF, imágenes y escritores Gerber/Excellon/HPGL.</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * La geometría de salida está en milímetros, salvo que se indique otra cosa.</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="geometry_8hpp.html">flatcam/geometry.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="units_8hpp.html">flatcam/units.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacefc.html">fc</a> {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment"></span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> * @brief Importa geometría de un SVG.</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> * @param path Archivo SVG.</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * @return Formas, curvas aplanadas, transformaciones y texto.</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>std::vector&lt;Geom&gt; <a class="code hl_function" href="namespacefc.html#a72be113ffb643c93ac1427528268de8c">importSvg</a>(<span class="keyword">const</span> std::string&amp; path);<span class="comment"></span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * @brief Importa geometría de un DXF.</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * @param path Archivo DXF.</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> * @return Líneas, polilíneas, arcos, elipses, splines, bloques y texto resuelto.</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>std::vector&lt;Geom&gt; <a class="code hl_function" href="namespacefc.html#a74688f06a5b6e2ee248a967c46b13553">importDxf</a>(<span class="keyword">const</span> std::string&amp; path);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"></span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * @brief Entidad TEXT/MTEXT resuelta a su posición final.</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment"> * Incluye las transformaciones de los INSERT. La GUI la convierte en contornos</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment"> * con la fuente del sistema.</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00037" data-start="{" data-end="};">
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="structfc_1_1_dxf_text.html">   37</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structfc_1_1_dxf_text.html">DxfText</a> {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="structfc_1_1_dxf_text.html#a67cd91d22c40f874e2c3f42da750cbe9">   38</a></span>    std::string <a class="code hl_variable" href="structfc_1_1_dxf_text.html#a67cd91d22c40f874e2c3f42da750cbe9">text</a>;       <span class="comment">///&lt; Texto.</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="structfc_1_1_dxf_text.html#a6010349dae5bb9d1f1d3627957fd9d8c">   39</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_dxf_text.html#a6010349dae5bb9d1f1d3627957fd9d8c">x</a> = 0.0;         <span class="comment">///&lt; Punto de anclaje X (mm).</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="structfc_1_1_dxf_text.html#ac461e50d85e3629e93fbc5c63a2c2196">   40</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_dxf_text.html#ac461e50d85e3629e93fbc5c63a2c2196">y</a> = 0.0;         <span class="comment">///&lt; Punto de anclaje Y (mm).</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="structfc_1_1_dxf_text.html#aeb2151c19a627527c1120c8d5776b2c8">   41</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_dxf_text.html#aeb2151c19a627527c1120c8d5776b2c8">height</a> = 2.5;    <span class="comment">///&lt; Altura nominal de mayúsculas (mm).</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="structfc_1_1_dxf_text.html#ab372a29eb0c1b402a3e240198931c251">   42</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_dxf_text.html#ab372a29eb0c1b402a3e240198931c251">rotation</a> = 0.0;  <span class="comment">///&lt; Rotación en grados, antihoraria.</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="structfc_1_1_dxf_text.html#ad66c5156ee12eb14901f240b952bb630">   43</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfc_1_1_dxf_text.html#ad66c5156ee12eb14901f240b952bb630">hAlign</a> = 0;         <span class="comment">///&lt; 0 izquierda, 1 centro, 2 derecha.</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="structfc_1_1_dxf_text.html#ac31a1a5fc743003cdab29a047e2d93ed">   44</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfc_1_1_dxf_text.html#ac31a1a5fc743003cdab29a047e2d93ed">vAlign</a> = 0;         <span class="comment">///&lt; 0 línea base, 1 abajo, 2 medio, 3 arriba.</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>};<span class="comment"></span></div>
+</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> * @brief Importa sólo los textos de un DXF, ya transformados.</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * @param path Archivo DXF.</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>std::vector&lt;DxfText&gt; <a class="code hl_function" href="namespacefc.html#a187043d2c2f015d5227df4a9fbf86d1f">importDxfTexts</a>(<span class="keyword">const</span> std::string&amp; path);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"></span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> * @brief Importa geometría de un HPGL2.</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> * @param path Archivo HPGL/HPG/PLT.</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>std::vector&lt;Geom&gt; <a class="code hl_function" href="namespacefc.html#a93bd790bcf3db3b576368959529007c0">importHpgl</a>(<span class="keyword">const</span> std::string&amp; path);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"></span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> * @brief Escribe un Gerber con polígonos como regiones y trazos.</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"> * @param path Archivo de salida.</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"> * @param solids Polígonos rellenos.</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"> * @param follows Trazos.</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment"> * @param units Unidades del archivo.</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacefc.html#adcc008188dceeeba190fe40c8405fd70">writeGerber</a>(<span class="keyword">const</span> std::string&amp; path, <span class="keyword">const</span> std::vector&lt;Geom&gt;&amp; solids,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                 <span class="keyword">const</span> std::vector&lt;Geom&gt;&amp; follows, <a class="code hl_enumeration" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00">Units</a> units);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"></span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment"> * @brief Escribe un Excellon a partir de las herramientas parseadas.</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> * @param path Archivo de salida.</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * @param result Taladros, ranuras y diámetros.</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> * @param units Unidades del archivo.</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="namespacefc.html#afbb099bdc6135f2e158e8a00263b7d6a">   74</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacefc.html#afbb099bdc6135f2e158e8a00263b7d6a">writeExcellon</a>(<span class="keyword">const</span> std::string&amp; path, <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code hl_struct" href="structfc_1_1_excellon_result.html">ExcellonResult</a>&amp; result, <a class="code hl_enumeration" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00">Units</a> units);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment"></span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment"> * @brief Exporta sólidos y trazos a HPGL.</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment"> * @param path Archivo de salida.</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"> * @param solids Polígonos.</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment"> * @param follows Trazos.</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacefc.html#ad2c040074b33085c5663333011d56779">exportHpgl</a>(<span class="keyword">const</span> std::string&amp; path, <span class="keyword">const</span> std::vector&lt;Geom&gt;&amp; solids,</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>                <span class="keyword">const</span> std::vector&lt;Geom&gt;&amp; follows);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>}  <span class="comment">// namespace fc</span></div>
+<div class="ttc" id="ageometry_8hpp_html"><div class="ttname"><a href="geometry_8hpp.html">geometry.hpp</a></div><div class="ttdoc">Núcleo geométrico inmutable sobre la API C de GEOS.</div></div>
+<div class="ttc" id="anamespacefc_html"><div class="ttname"><a href="namespacefc.html">fc</a></div><div class="ttdef"><b>Definición</b> <a href="cutout_8hpp_source.html#l00016">cutout.hpp:16</a></div></div>
+<div class="ttc" id="anamespacefc_html_a187043d2c2f015d5227df4a9fbf86d1f"><div class="ttname"><a href="namespacefc.html#a187043d2c2f015d5227df4a9fbf86d1f">fc::importDxfTexts</a></div><div class="ttdeci">std::vector&lt; DxfText &gt; importDxfTexts(const std::string &amp;path)</div><div class="ttdoc">Importa sólo los textos de un DXF, ya transformados.</div><div class="ttdef"><b>Definición</b> <a href="importers_8cpp_source.html#l00859">importers.cpp:859</a></div></div>
+<div class="ttc" id="anamespacefc_html_a72be113ffb643c93ac1427528268de8c"><div class="ttname"><a href="namespacefc.html#a72be113ffb643c93ac1427528268de8c">fc::importSvg</a></div><div class="ttdeci">std::vector&lt; Geom &gt; importSvg(const std::string &amp;path)</div><div class="ttdoc">Importa geometría de un SVG.</div><div class="ttdef"><b>Definición</b> <a href="importers_8cpp_source.html#l00386">importers.cpp:386</a></div></div>
+<div class="ttc" id="anamespacefc_html_a74688f06a5b6e2ee248a967c46b13553"><div class="ttname"><a href="namespacefc.html#a74688f06a5b6e2ee248a967c46b13553">fc::importDxf</a></div><div class="ttdeci">std::vector&lt; Geom &gt; importDxf(const std::string &amp;path)</div><div class="ttdoc">Importa geometría de un DXF.</div><div class="ttdef"><b>Definición</b> <a href="importers_8cpp_source.html#l00854">importers.cpp:854</a></div></div>
+<div class="ttc" id="anamespacefc_html_a93bd790bcf3db3b576368959529007c0"><div class="ttname"><a href="namespacefc.html#a93bd790bcf3db3b576368959529007c0">fc::importHpgl</a></div><div class="ttdeci">std::vector&lt; Geom &gt; importHpgl(const std::string &amp;path)</div><div class="ttdoc">Importa geometría de un HPGL2.</div><div class="ttdef"><b>Definición</b> <a href="importers_8cpp_source.html#l00877">importers.cpp:877</a></div></div>
+<div class="ttc" id="anamespacefc_html_acb79184d1e00b1635d60b5596d70db00"><div class="ttname"><a href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00">fc::Units</a></div><div class="ttdeci">Units</div><div class="ttdoc">Unidad de trabajo de un archivo o de la aplicación.</div><div class="ttdef"><b>Definición</b> <a href="units_8hpp_source.html#l00017">units.hpp:17</a></div></div>
+<div class="ttc" id="anamespacefc_html_ad2c040074b33085c5663333011d56779"><div class="ttname"><a href="namespacefc.html#ad2c040074b33085c5663333011d56779">fc::exportHpgl</a></div><div class="ttdeci">void exportHpgl(const std::string &amp;path, const std::vector&lt; Geom &gt; &amp;solids, const std::vector&lt; Geom &gt; &amp;follows)</div><div class="ttdoc">Exporta sólidos y trazos a HPGL.</div><div class="ttdef"><b>Definición</b> <a href="importers_8cpp_source.html#l01137">importers.cpp:1137</a></div></div>
+<div class="ttc" id="anamespacefc_html_adcc008188dceeeba190fe40c8405fd70"><div class="ttname"><a href="namespacefc.html#adcc008188dceeeba190fe40c8405fd70">fc::writeGerber</a></div><div class="ttdeci">void writeGerber(const std::string &amp;path, const std::vector&lt; Geom &gt; &amp;solids, const std::vector&lt; Geom &gt; &amp;follows, Units units)</div><div class="ttdoc">Escribe un Gerber con polígonos como regiones y trazos.</div><div class="ttdef"><b>Definición</b> <a href="importers_8cpp_source.html#l01065">importers.cpp:1065</a></div></div>
+<div class="ttc" id="anamespacefc_html_afbb099bdc6135f2e158e8a00263b7d6a"><div class="ttname"><a href="namespacefc.html#afbb099bdc6135f2e158e8a00263b7d6a">fc::writeExcellon</a></div><div class="ttdeci">void writeExcellon(const std::string &amp;path, const struct ExcellonResult &amp;result, Units units)</div><div class="ttdoc">Escribe un Excellon a partir de las herramientas parseadas.</div></div>
+<div class="ttc" id="astructfc_1_1_dxf_text_html"><div class="ttname"><a href="structfc_1_1_dxf_text.html">fc::DxfText</a></div><div class="ttdoc">Entidad TEXT/MTEXT resuelta a su posición final.</div><div class="ttdef"><b>Definición</b> <a href="#l00037">importers.hpp:37</a></div></div>
+<div class="ttc" id="astructfc_1_1_dxf_text_html_a6010349dae5bb9d1f1d3627957fd9d8c"><div class="ttname"><a href="structfc_1_1_dxf_text.html#a6010349dae5bb9d1f1d3627957fd9d8c">fc::DxfText::x</a></div><div class="ttdeci">double x</div><div class="ttdoc">Punto de anclaje X (mm).</div><div class="ttdef"><b>Definición</b> <a href="#l00039">importers.hpp:39</a></div></div>
+<div class="ttc" id="astructfc_1_1_dxf_text_html_a67cd91d22c40f874e2c3f42da750cbe9"><div class="ttname"><a href="structfc_1_1_dxf_text.html#a67cd91d22c40f874e2c3f42da750cbe9">fc::DxfText::text</a></div><div class="ttdeci">std::string text</div><div class="ttdoc">Texto.</div><div class="ttdef"><b>Definición</b> <a href="#l00038">importers.hpp:38</a></div></div>
+<div class="ttc" id="astructfc_1_1_dxf_text_html_ab372a29eb0c1b402a3e240198931c251"><div class="ttname"><a href="structfc_1_1_dxf_text.html#ab372a29eb0c1b402a3e240198931c251">fc::DxfText::rotation</a></div><div class="ttdeci">double rotation</div><div class="ttdoc">Rotación en grados, antihoraria.</div><div class="ttdef"><b>Definición</b> <a href="#l00042">importers.hpp:42</a></div></div>
+<div class="ttc" id="astructfc_1_1_dxf_text_html_ac31a1a5fc743003cdab29a047e2d93ed"><div class="ttname"><a href="structfc_1_1_dxf_text.html#ac31a1a5fc743003cdab29a047e2d93ed">fc::DxfText::vAlign</a></div><div class="ttdeci">int vAlign</div><div class="ttdoc">0 línea base, 1 abajo, 2 medio, 3 arriba.</div><div class="ttdef"><b>Definición</b> <a href="#l00044">importers.hpp:44</a></div></div>
+<div class="ttc" id="astructfc_1_1_dxf_text_html_ac461e50d85e3629e93fbc5c63a2c2196"><div class="ttname"><a href="structfc_1_1_dxf_text.html#ac461e50d85e3629e93fbc5c63a2c2196">fc::DxfText::y</a></div><div class="ttdeci">double y</div><div class="ttdoc">Punto de anclaje Y (mm).</div><div class="ttdef"><b>Definición</b> <a href="#l00040">importers.hpp:40</a></div></div>
+<div class="ttc" id="astructfc_1_1_dxf_text_html_ad66c5156ee12eb14901f240b952bb630"><div class="ttname"><a href="structfc_1_1_dxf_text.html#ad66c5156ee12eb14901f240b952bb630">fc::DxfText::hAlign</a></div><div class="ttdeci">int hAlign</div><div class="ttdoc">0 izquierda, 1 centro, 2 derecha.</div><div class="ttdef"><b>Definición</b> <a href="#l00043">importers.hpp:43</a></div></div>
+<div class="ttc" id="astructfc_1_1_dxf_text_html_aeb2151c19a627527c1120c8d5776b2c8"><div class="ttname"><a href="structfc_1_1_dxf_text.html#aeb2151c19a627527c1120c8d5776b2c8">fc::DxfText::height</a></div><div class="ttdeci">double height</div><div class="ttdoc">Altura nominal de mayúsculas (mm).</div><div class="ttdef"><b>Definición</b> <a href="#l00041">importers.hpp:41</a></div></div>
+<div class="ttc" id="astructfc_1_1_excellon_result_html"><div class="ttname"><a href="structfc_1_1_excellon_result.html">fc::ExcellonResult</a></div><div class="ttdoc">Resultado completo de parsear un Excellon.</div><div class="ttdef"><b>Definición</b> <a href="excellon_8hpp_source.html#l00049">excellon.hpp:49</a></div></div>
+<div class="ttc" id="aunits_8hpp_html"><div class="ttname"><a href="units_8hpp.html">units.hpp</a></div><div class="ttdoc">Unidades, conversiones y lectura de coordenadas Gerber.</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a href="dir_a1a815e8788d98990c3f3cc2cf9418f5.html">flatcam</a></li><li class="navelem"><a href="importers_8hpp.html">importers.hpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente src/core/qr.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('qr_8cpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">qr.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="qr_8cpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file qr.cpp</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Generación de la geometría de un código QR lista para fresar.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Envoltorio de la librería qrcodegen (Nayuki): codifica el texto, agrupa los</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * módulos oscuros contiguos de cada fila en rectángulos y los une en un único</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * polígono. La salida está en milímetros, con origen configurable y borde</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * opcional, de modo que se puede usar como capa de cobre.</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="qr_8hpp.html">flatcam/qr.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;flatcam/qrcodegen.hpp&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacefc.html">fc</a> {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment"></span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment"> * @brief Convierte un texto en la geometría de un QR en coordenadas CAD.</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> * Elige la corrección de errores desde @p ecc (&#39;L&#39;, &#39;Q&#39; o &#39;H&#39;; cualquier otro</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> * valor, incluido &#39;M&#39;, cae en MEDIUM), codifica con qrcodegen y recorre las</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * filas agrupando módulos oscuros consecutivos en cajas de moduleSize. Cada</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * caja se desplaza por el borde y el eje Y se invierte porque la librería</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * numera las filas de arriba hacia abajo. Al final une todas las cajas con</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * Geom::unionOf para entregar un solo polígono.</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * @param text Contenido a codificar.</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * @param moduleSize Lado del módulo en mm; si es &lt;= 0 devuelve vacío.</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> * @param borderModules Borde en módulos (se satura a &gt;= 0).</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> * @param originX Coordenada X de la esquina inferior izquierda (mm).</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment"> * @param originY Ídem en Y (mm).</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"> * @param ecc Nivel de corrección: &#39;L&#39;, &#39;M&#39;, &#39;Q&#39; o &#39;H&#39;.</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> * @return Vector con un único Geom; vacío si no hay módulos oscuros o si el</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> *         tamaño de módulo no es positivo.</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> * @note qrcodegen lanza excepción si el texto no cabe en el nivel pedido; este</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment"> *       módulo no la captura.</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00036" data-start="{" data-end="}">
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="namespacefc.html#a0e8d41950007d362d585911564a48b03">   36</a></span>std::vector&lt;Geom&gt; <a class="code hl_function" href="namespacefc.html#a0e8d41950007d362d585911564a48b03">qrCodeGeometry</a>(<span class="keyword">const</span> std::string&amp; text, <span class="keywordtype">double</span> moduleSize, <span class="keywordtype">int</span> borderModules,</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                                 <span class="keywordtype">double</span> originX, <span class="keywordtype">double</span> originY, <span class="keywordtype">char</span> ecc) {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordflow">if</span> (moduleSize &lt;= 0.0) <span class="keywordflow">return</span> {};</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    qrcodegen::QrCode::Ecc level = qrcodegen::QrCode::Ecc::MEDIUM;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordflow">switch</span> (ecc) {</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keywordflow">case</span> <span class="charliteral">&#39;L&#39;</span>: level = qrcodegen::QrCode::Ecc::LOW; <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keywordflow">case</span> <span class="charliteral">&#39;Q&#39;</span>: level = qrcodegen::QrCode::Ecc::QUARTILE; <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordflow">case</span> <span class="charliteral">&#39;H&#39;</span>: level = qrcodegen::QrCode::Ecc::HIGH; <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keywordflow">default</span>: level = qrcodegen::QrCode::Ecc::MEDIUM; <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    }</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keyword">const</span> qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(text.c_str(), level);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> size = qr.getSize();</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> border = std::max(0, borderModules);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> origin = border * moduleSize;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    std::vector&lt;Geom&gt; runs;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    runs.reserve(<span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(size * size / 3));</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> y = 0; y &lt; size; ++y) {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keywordtype">int</span> start = -1;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> x = 0; x &lt;= size; ++x) {</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <span class="keyword">const</span> <span class="keywordtype">bool</span> dark = x &lt; size &amp;&amp; qr.getModule(x, y);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            <span class="keywordflow">if</span> (dark &amp;&amp; start &lt; 0) start = x;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            <span class="keywordflow">if</span> (!dark &amp;&amp; start &gt;= 0) {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                <span class="comment">// QR y grows downwards in the library; flip it for CAD.</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                <span class="keyword">const</span> <span class="keywordtype">double</span> y0 = originY + origin + (size - 1 - y) * moduleSize;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                runs.push_back(<a class="code hl_function" href="classfc_1_1_geom.html#a4eebd25faea409eef8635b4643da0edf">Geom::box</a>(originX + origin + start * moduleSize, y0,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                                         originX + origin + x * moduleSize, y0 + moduleSize));</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                start = -1;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>            }</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        }</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    }</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordflow">if</span> (runs.empty()) <span class="keywordflow">return</span> {};</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordflow">return</span> {<a class="code hl_function" href="classfc_1_1_geom.html#a7f5ff7d8a52aad3d02297879b8d190c0">Geom::unionOf</a>(runs)};</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>}</div>
+</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>}  <span class="comment">// namespace fc</span></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a4eebd25faea409eef8635b4643da0edf"><div class="ttname"><a href="classfc_1_1_geom.html#a4eebd25faea409eef8635b4643da0edf">fc::Geom::box</a></div><div class="ttdeci">static Geom box(double xmin, double ymin, double xmax, double ymax)</div><div class="ttdoc">Crea un rectángulo alineado a los ejes.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00269">geometry.cpp:269</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a7f5ff7d8a52aad3d02297879b8d190c0"><div class="ttname"><a href="classfc_1_1_geom.html#a7f5ff7d8a52aad3d02297879b8d190c0">fc::Geom::unionOf</a></div><div class="ttdeci">static Geom unionOf(const std::vector&lt; Geom &gt; &amp;parts)</div><div class="ttdoc">Une todas las geometrías de una lista.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00408">geometry.cpp:408</a></div></div>
+<div class="ttc" id="anamespacefc_html"><div class="ttname"><a href="namespacefc.html">fc</a></div><div class="ttdef"><b>Definición</b> <a href="cutout_8hpp_source.html#l00016">cutout.hpp:16</a></div></div>
+<div class="ttc" id="anamespacefc_html_a0e8d41950007d362d585911564a48b03"><div class="ttname"><a href="namespacefc.html#a0e8d41950007d362d585911564a48b03">fc::qrCodeGeometry</a></div><div class="ttdeci">std::vector&lt; Geom &gt; qrCodeGeometry(const std::string &amp;text, double moduleSize, int borderModules=4, double originX=0.0, double originY=0.0, char ecc=&#39;M&#39;)</div><div class="ttdoc">Convierte un texto en la geometría de un código QR.</div><div class="ttdef"><b>Definición</b> <a href="#l00036">qr.cpp:36</a></div></div>
+<div class="ttc" id="aqr_8hpp_html"><div class="ttname"><a href="qr_8hpp.html">qr.hpp</a></div><div class="ttdoc">Generación de geometría de códigos QR.</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_aebb8dcc11953d78e620bbef0b9e2183.html">core</a></li><li class="navelem"><a href="qr_8cpp.html">qr.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

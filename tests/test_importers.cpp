@@ -1,3 +1,10 @@
+/**
+ * @file test_importers.cpp
+ * @brief Pruebas de importadores SVG, DXF, HPGL y PDF.
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include <filesystem>
@@ -213,5 +220,16 @@ TEST(Importers, HpglRelativeArcAndRectangle) {
     EXPECT_NEAR(geoms[0].length(), M_PI * 12.5, 0.5);
     const BBox rect = geoms[1].bounds();
     EXPECT_NEAR(rect.xmax - rect.xmin, 25.0, 1e-6);
+    std::filesystem::remove(path);
+}
+
+TEST(Importers, SvgImplicitLineToCommands) {
+    const auto path = writeTemp("flatcam_implicit.svg",
+        R"svg(<svg xmlns="http://www.w3.org/2000/svg">
+  <path d="M 0 0 10 0 10 10 Z"/>
+</svg>)svg");
+    const std::vector<Geom> geoms = importSvg(path.string());
+    ASSERT_EQ(geoms.size(), std::size_t{1});
+    EXPECT_NEAR(geoms.front().area(), 50.0, 1e-6);
     std::filesystem::remove(path);
 }

@@ -1,3 +1,18 @@
+/**
+ * @file MainWindow.h
+ * @brief Ventana principal de FlatCAM C++.
+ *
+ * `MainWindow` concentra la interfaz Qt y la lógica de aplicación:
+ * - carga/guardado de Gerber, Excellon, proyectos y scripts,
+ * - árbol de objetos y panel de propiedades,
+ * - paneles de herramientas CAM y tablas de mecanizado,
+ * - editores Gerber/Excellon/Geometría/G-code,
+ * - vista 3D, preferencias, consola Tcl/JS y exportaciones,
+ * - API de comandos Tcl (`tcl*`).
+ *
+ * La geometría y los algoritmos viven en `fc` (src/core, src/cam); esta clase
+ * los orquesta y mantiene el estado de la sesión.
+ */
 #pragma once
 
 #include <QMainWindow>
@@ -31,87 +46,163 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QUndoStack;
 
+/**
+ * @brief Ventana principal y controlador de la aplicación.
+ */
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
+    /// @brief Construye la ventana, los paneles y las preferencias.
     explicit MainWindow(QWidget* parent = nullptr);
 
+    /// @brief Abre un archivo individual detectando su tipo.
     bool openPath(const QString& path);
+    /// @brief Abre la vista 3D del cobre visible.
     void show3D();
+    /// @brief Abre el editor gráfico de Excellon.
     void excellonEditor();
+    /// @brief Convierte mm a la unidad de visualización.
     double displayLength(double mm) const;
+    /// @brief Convierte un valor mostrado a mm.
     double lengthToMm(double value) const;
+    /// @brief Formatea una longitud en la unidad activa.
     QString lengthText(double mm, int decimals = 3) const;
+    /// @brief Convierte las tablas de herramientas a mm/in.
     void convertToolTableUnits(bool toInch);
+    /// @brief Abre varios archivos como capas independientes.
     bool openFiles(const QStringList& paths);
+    /// @brief Abre un proyecto `.FlatPrj`.
     bool openProject(const QString& path);
+    /// @brief Ejecuta un script JavaScript.
     bool runScriptFile(const QString& path);
+    /// @brief Comando Tcl: abre Gerber o Excellon.
     bool tclOpen(const QString& path, bool excellon);
+    /// @brief Comando Tcl: aislamiento.
     int tclIsolate(double dia, int passes, double overlap);
+    /// @brief Comando Tcl: corte.
     int tclCutout(double dia, double margin, int tabs, double width);
+    /// @brief Comando Tcl: NCC.
     int tclNcc(double dia, double overlapPercent);
+    /// @brief Comando Tcl: pintura.
     int tclPaint(double dia, double overlapPercent);
+    /// @brief Comando Tcl: exporta G-code.
     bool tclExportGcode(const QString& path);
+    /// @brief Comando Tcl: exporta Gerber.
     bool tclExportGerber(const QString& path);
+    /// @brief Comando Tcl: extrae taladros.
     int tclExtractDrills(double maxDiameter);
+    /// @brief Comando Tcl: punch de taladros.
     int tclPunch(double margin);
+    /// @brief Comando Tcl: paneliza.
     int tclPanelize(int rows, int cols, double gapX, double gapY);
+    /// @brief Comando Tcl: genera QR.
     int tclQr(const QString& text, double module, int border);
+    /// @brief Comando Tcl: marcas de esquina.
     int tclCorners(double length, double margin);
+    /// @brief Comando Tcl: herramienta óptima.
     double tclOptimal(double maxDiameter);
+    /// @brief Comando Tcl: resumen del estado.
     QString tclInfo() const;
+    /// @brief Comando Tcl: versión.
     QString tclVersion() const;
+    /// @brief Comando Tcl: ayuda.
     QString tclHelp() const;
+    /// @brief Comando Tcl: nombres de objetos.
     QString tclGetNames(const QString& kind = QString()) const;
+    /// @brief Comando Tcl: límites de un objeto.
     QString tclBBox(const QString& name) const;
+    /// @brief Comando Tcl: activa un objeto.
     bool tclSetActive(const QString& name);
+    /// @brief Comando Tcl: traslada un objeto.
     bool tclOffset(const QString& name, double dx, double dy);
+    /// @brief Comando Tcl: escala un objeto.
     bool tclScale(const QString& name, double factor);
+    /// @brief Comando Tcl: espeja un objeto.
     bool tclMirror(const QString& name, const QString& axis);
+    /// @brief Comando Tcl: elimina un objeto.
     bool tclDelete(const QString& name);
+    /// @brief Comando Tcl: guarda el proyecto.
     bool tclSaveProject(const QString& path);
+    /// @brief Comando Tcl: exporta DXF.
     bool tclExportDxf(const QString& path);
+    /// @brief Comando Tcl: exporta SVG.
     bool tclExportSvg(const QString& path);
+    /// @brief Comando Tcl: redibuja todo.
     void tclPlotAll();
+    /// @brief Comando Tcl: define el origen.
     void tclSetOrigin(double x, double y);
+    /// @brief Comando Tcl: crea una capa vacía.
     bool tclNewObject(const QString& name, const QString& kind);
+    /// @brief Comando Tcl: agrega un círculo.
     bool tclAddCircle(const QString& name, double cx, double cy, double dia);
+    /// @brief Comando Tcl: agrega un rectángulo.
     bool tclAddRectangle(const QString& name, double x1, double y1, double x2, double y2);
+    /// @brief Comando Tcl: agrega un polígono.
     bool tclAddPolygon(const QString& name, const std::vector<double>& coords);
+    /// @brief Comando Tcl: agrega una polilínea.
     bool tclAddPolyline(const QString& name, const std::vector<double>& coords);
+    /// @brief Comando Tcl: nuevo objeto.
     bool tclNew(const QString& name);
+    /// @brief Comando Tcl: cuenta contornos o agujeros.
     int tclRings(const QString& name, bool holes);
+    /// @brief Comando Tcl: une objetos.
     bool tclJoin(const QString& a, const QString& b);
+    /// @brief Comando Tcl: unión geométrica.
     bool tclGeoUnion(const QString& a, const QString& b);
+    /// @brief Comando Tcl: exporta Excellon.
     bool tclExportExcellon(const QString& path);
+    /// @brief Comando Tcl: ruta actual.
     QString tclGetPath() const;
+    /// @brief Comando Tcl: define la ruta actual.
     void tclSetPath(const QString& path);
+    /// @brief Comando Tcl: lee una preferencia.
     QString tclGetSys(const QString& key) const;
+    /// @brief Comando Tcl: escribe una preferencia.
     void tclSetSys(const QString& key, const QString& value);
+    /// @brief Comando Tcl: lista preferencias.
     QString tclListSys() const;
+    /// @brief Comando Tcl: guarda preferencias.
     void tclSaveSys();
+    /// @brief Comando Tcl: opciones activas.
     QString tclOptions() const;
+    /// @brief Comando Tcl: cuenta regiones.
     int tclNRegions(const QString& name);
+    /// @brief Comando Tcl: resta una forma.
     bool tclSubtractShape(const QString& name, const std::vector<double>& coords, bool rectangle);
+    /// @brief Comando Tcl: genera follow.
     bool tclFollow(const QString& name, double diameter);
+    /// @brief Comando Tcl: alinea taladros.
     bool tclAlignDrill(const QString& name, const QString& reference);
+    /// @brief Comando Tcl: alinea a grilla.
     bool tclAlignDrillGrid(const QString& name, double grid);
+    /// @brief Comando Tcl: crea un CNCJob.
     bool tclCreateCncJob(const QString& name, bool drillJob);
+    /// @brief Comando Tcl: fresa taladros.
     bool tclMillDrills(const QString& name, double diameter);
+    /// @brief Comando Tcl: fresa ranuras.
     bool tclMillSlots(const QString& name, double diameter);
+    /// @brief Comando Tcl: redibuja objetos.
     void tclPlotObjects(const QStringList& names);
+    /// @brief Aplica aislamiento y actualiza capas/preview.
     bool applyIsolation(double toolDiameter, int passes, double overlapPercent, bool invert,
                         const fc::GCodeOptions& gcode = {});
+    /// @brief Aplica corte de contorno.
     bool applyCutout(double toolDiameter, double margin, bool external,
                      const fc::GCodeOptions& gcode = {});
+    /// @brief Aplica NCC (hatch o paint).
     bool applyNcc(double toolDiameter, double stepOverPercent, double clearance, double angle,
                   double margin, bool paintStrategy, const fc::GCodeOptions& gcode = {});
+    /// @brief Aplica pintura.
     bool applyPaint(double toolDiameter, double stepOverPercent, double margin,
                     const fc::GCodeOptions& gcode = {});
+    /// @brief Aplica taladrado al Excellon activo.
     bool applyDrill(const fc::GCodeOptions& gcode = {});
+    /// @brief Abre una pestaña de herramienta.
     void openToolTab(const QString& title);
+    /// @brief Muestra la pestaña Herramienta.
     void showObjectTool();
+    /// @brief Ejecuta un comando Tcl y devuelve el resultado.
     QString runTclCommand(const QString& command);
 
 protected:
@@ -160,12 +251,17 @@ private slots:
     void exportFilm();
 
 private:
+    /// @name Construcción de la interfaz
+    /// @{
     void buildMenus();
     void buildLayout();
     void buildToolPanel(QTabWidget* tabs);
     QWidget* buildCalculatorPage();
     void showCalculators();
     void showPreferences();
+    /// @}
+    /// @name Editores y utilidades
+    /// @{
     void editSource();
     void scriptEditor(const QString& path);
     void gerberEditor();
@@ -197,6 +293,7 @@ private:
     void printView();
     void loadInfFile();
     void pcbWizardImport();
+    /// @}
     void openGCodeFile();
     bool addGCodeLayer(const QString& path);
     void rulesCheck();

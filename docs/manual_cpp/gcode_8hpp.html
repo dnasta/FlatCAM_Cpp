@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia del archivo include/flatcam/gcode.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('gcode_8hpp.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo gcode.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Generación de G-code, optimización de recorridos y preprocesadores.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &lt;optional&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+<code>#include &quot;<a class="el" href="geometry_8hpp_source.html">flatcam/geometry.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="units_8hpp_source.html">flatcam/units.hpp</a>&quot;</code><br />
+</div>
+<p><a href="gcode_8hpp_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Clases</h2></td></tr>
+<tr class="memitem:fc_3A_3AGCodeOptions" id="r_fc_3A_3AGCodeOptions"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structfc_1_1_g_code_options.html">fc::GCodeOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parámetros de generación de un programa G-code.  <a href="structfc_1_1_g_code_options.html#details">Más...</a><br /></td></tr>
+<tr class="memitem:fc_3A_3ADrillTool" id="r_fc_3A_3ADrillTool"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structfc_1_1_drill_tool.html">fc::DrillTool</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una herramienta de taladrado con sus agujeros y overrides.  <a href="structfc_1_1_drill_tool.html#details">Más...</a><br /></td></tr>
+<tr class="memitem:fc_3A_3ADrillJob" id="r_fc_3A_3ADrillJob"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structfc_1_1_drill_job.html">fc::DrillJob</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conjunto de herramientas de taladrado.  <a href="structfc_1_1_drill_job.html#details">Más...</a><br /></td></tr>
+<tr class="memitem:fc_3A_3APasteJob" id="r_fc_3A_3APasteJob"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structfc_1_1_paste_job.html">fc::PasteJob</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trabajo de dosificación de pasta de soldar.  <a href="structfc_1_1_paste_job.html#details">Más...</a><br /></td></tr>
+<tr class="memitem:fc_3A_3APathJob" id="r_fc_3A_3APathJob"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structfc_1_1_path_job.html">fc::PathJob</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trabajo de recorridos para una sola herramienta.  <a href="structfc_1_1_path_job.html#details">Más...</a><br /></td></tr>
+<tr class="memitem:fc_3A_3APathToolJob" id="r_fc_3A_3APathToolJob"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structfc_1_1_path_tool_job.html">fc::PathToolJob</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Herramienta y recorridos para un programa multiherramienta.  <a href="structfc_1_1_path_tool_job.html#details">Más...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
+Espacios de nombres</h2></td></tr>
+<tr class="memitem:fc" id="r_fc"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html">fc</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumeraciones</h2></td></tr>
+<tr class="memitem:ab1000db7f3672945f3128b82831cdf62" id="r_ab1000db7f3672945f3128b82831cdf62"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62">fc::GCodeFlavor</a> { <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a7a1920d61156abc05a60135aefe8bc67">fc::Default</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62aafe30ad452e178eec7644a33701910a1">fc::DefaultNoM6</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a755bfe93ade55a8f1e558cc433d8ae0c">fc::Grbl</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a341bc1449438702d061aa2b7255de14d">fc::GrblNoM6</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a4857c449b3a57b44072b1808be93662b">fc::GrblLaser</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62ab1e3f1b10558445963aa5bbf4d20249c">fc::Marlin</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a84e86a153e19f6a20d4b3d3f894fe2a2">fc::MarlinLaserFan</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a89024585413238960089845165d9c01d">fc::MarlinLaserSpindle</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62af2add82806c3acf50b7a66ff4ce7fcdd">fc::Repetier</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a50ed83ef4cb6a7c41e7a974194515b8c">fc::Berta</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62ac5891789a4d56fa8e7c4f7fef9b95d7e">fc::Isel</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a8bf80ce5fb3296b73d73e4cb9d29699e">fc::IselIcp</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a4ef56ad09e77a8ad1110260c8ad3a0fa">fc::Roland</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62adbbe131fcd7bf08efa32dfb86352e0c7">fc::ToolchangeManual</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a228c0d9cb6aedc869e59ff89d79c4c66">fc::ToolchangeProbe</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a165775e2a291d7bd0d37148fe9d3def4">fc::ZLaser</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a29b6ecd55043100b1265401d3b7a0832">fc::Hpgl</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a4c30cc1cee72f3b392aac3be87ee674f">fc::LineXyz</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62aee9d3e0094bcbe0c302f2ee7e56f855b">fc::ToolchangeCustom</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:ab1000db7f3672945f3128b82831cdf62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perfil de postprocesador (firmware/controlador).  <a href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62">Más...</a><br /></td></tr>
+<tr class="memitem:ad0f2792bab4de9d1ceaa4a709a05632a" id="r_ad0f2792bab4de9d1ceaa4a709a05632a"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#ad0f2792bab4de9d1ceaa4a709a05632a">fc::DrillOrder</a> { <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ad0f2792bab4de9d1ceaa4a709a05632aa2a299b97d622f2c29576b3bc2c709db0">fc::AsIs</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacefc.html#ad0f2792bab4de9d1ceaa4a709a05632aaaa020331bb30d2fa2ecf7c3a0777823f">fc::NearestNeighbor</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:ad0f2792bab4de9d1ceaa4a709a05632a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estrategia de ordenamiento de taladros.  <a href="namespacefc.html#ad0f2792bab4de9d1ceaa4a709a05632a">Más...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:aacd8a69ad439509b798e1cecc648e4d4" id="r_aacd8a69ad439509b798e1cecc648e4d4"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#aacd8a69ad439509b798e1cecc648e4d4">fc::drillTravelDistance</a> (const <a class="el" href="structfc_1_1_drill_job.html">DrillJob</a> &amp;job, const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;start={0.0, 0.0})</td></tr>
+<tr class="memdesc:aacd8a69ad439509b798e1cecc648e4d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calcula el recorrido XY total del trabajo.  <br /></td></tr>
+<tr class="memitem:ab255a56c000128eb1b8f1c1b65ffc011" id="r_ab255a56c000128eb1b8f1c1b65ffc011"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#ab255a56c000128eb1b8f1c1b65ffc011">fc::optimizeDrillOrder</a> (<a class="el" href="structfc_1_1_drill_job.html">DrillJob</a> &amp;job, <a class="el" href="namespacefc.html#ad0f2792bab4de9d1ceaa4a709a05632a">DrillOrder</a> order=<a class="el" href="namespacefc.html#ad0f2792bab4de9d1ceaa4a709a05632aaaa020331bb30d2fa2ecf7c3a0777823f">DrillOrder::NearestNeighbor</a>, const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;start={0.0, 0.0})</td></tr>
+<tr class="memdesc:ab255a56c000128eb1b8f1c1b65ffc011"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reordena taladros y ranuras para reducir los rápidos.  <br /></td></tr>
+<tr class="memitem:aa33df8dd2b3cd9194e2daac23d15b7ea" id="r_aa33df8dd2b3cd9194e2daac23d15b7ea"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#aa33df8dd2b3cd9194e2daac23d15b7ea">fc::pasteGCode</a> (const <a class="el" href="structfc_1_1_paste_job.html">PasteJob</a> &amp;job, const <a class="el" href="structfc_1_1_g_code_options.html">GCodeOptions</a> &amp;options)</td></tr>
+<tr class="memdesc:aa33df8dd2b3cd9194e2daac23d15b7ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Genera G-code de dosificación de pasta.  <br /></td></tr>
+<tr class="memitem:a654c2281fbf8a33443e8649ecd50e9ea" id="r_a654c2281fbf8a33443e8649ecd50e9ea"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#a654c2281fbf8a33443e8649ecd50e9ea">fc::optimizePathOrder</a> (<a class="el" href="structfc_1_1_path_job.html">PathJob</a> &amp;job, const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;start={0.0, 0.0})</td></tr>
+<tr class="memdesc:a654c2281fbf8a33443e8649ecd50e9ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reordena recorridos por punto de inicio más cercano.  <br /></td></tr>
+<tr class="memitem:a3236fdeab653badcb4b75943f61591a5" id="r_a3236fdeab653badcb4b75943f61591a5"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#a3236fdeab653badcb4b75943f61591a5">fc::drillingGCode</a> (const <a class="el" href="structfc_1_1_drill_job.html">DrillJob</a> &amp;job, const <a class="el" href="structfc_1_1_g_code_options.html">GCodeOptions</a> &amp;options)</td></tr>
+<tr class="memdesc:a3236fdeab653badcb4b75943f61591a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Genera un programa de taladrado.  <br /></td></tr>
+<tr class="memitem:a7d77bb5f8634fbe7256db1f3f975c50e" id="r_a7d77bb5f8634fbe7256db1f3f975c50e"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#a7d77bb5f8634fbe7256db1f3f975c50e">fc::pathsGCode</a> (const <a class="el" href="structfc_1_1_path_job.html">PathJob</a> &amp;job, const <a class="el" href="structfc_1_1_g_code_options.html">GCodeOptions</a> &amp;options)</td></tr>
+<tr class="memdesc:a7d77bb5f8634fbe7256db1f3f975c50e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Genera G-code de geometría.  <br /></td></tr>
+<tr class="memitem:a779fbee52b4ecfbe773a0fbee32a88ef" id="r_a779fbee52b4ecfbe773a0fbee32a88ef"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#a779fbee52b4ecfbe773a0fbee32a88ef">fc::pathsGCodeMulti</a> (const std::vector&lt; <a class="el" href="structfc_1_1_path_tool_job.html">PathToolJob</a> &gt; &amp;tools, const <a class="el" href="structfc_1_1_g_code_options.html">GCodeOptions</a> &amp;header)</td></tr>
+<tr class="memdesc:a779fbee52b4ecfbe773a0fbee32a88ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">G-code de geometría con varias herramientas.  <br /></td></tr>
+<tr class="memitem:adef21979c457113a9702549de2cfb2f7" id="r_adef21979c457113a9702549de2cfb2f7"><td class="memItemLeft"><a class="el" href="structfc_1_1_drill_job.html">DrillJob</a>&#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#adef21979c457113a9702549de2cfb2f7">fc::drillJobFromExcellon</a> (const struct <a class="el" href="structfc_1_1_excellon_result.html">ExcellonResult</a> &amp;result)</td></tr>
+<tr class="memdesc:adef21979c457113a9702549de2cfb2f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construye un trabajo de taladrado desde un Excellon parseado.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Generación de G-code, optimización de recorridos y preprocesadores. </p>
+<p>El módulo convierte recorridos y taladros en programas G-code para distintos firmwares (MACH3, GRBL, Marlin, Repetier, etc.). También ofrece:</p>
+<ul>
+<li>optimización de orden de taladros y recorridos,</li>
+<li>G-code de geometría mono y multiherramienta,</li>
+<li>G-code de taladrado y de dosificación de pasta,</li>
+<li>construcción de trabajos a partir de un <span class="tt">ExcellonResult</span>. </li>
+</ul>
+
+<p class="definition">Definición en el archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+</div></div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a href="dir_a1a815e8788d98990c3f3cc2cf9418f5.html">flatcam</a></li><li class="navelem"><a href="gcode_8hpp.html">gcode.hpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia de la estructura fc::GCodeOptions</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('structfc_1_1_g_code_options.html','','structfc_1_1_g_code_options-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia de la estructura fc::GCodeOptions</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Parámetros de generación de un programa G-code.  
+ <a href="#details">Más...</a></p>
+
+<p><code>#include &lt;<a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Atributos públicos</h2></td></tr>
+<tr class="memitem:a62b8ce055f30bdc9cd0a92aa30fc220f" id="r_a62b8ce055f30bdc9cd0a92aa30fc220f"><td class="memItemLeft"><a class="el" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00">Units</a>&#160;</td><td class="memItemRight"><a class="el" href="#a62b8ce055f30bdc9cd0a92aa30fc220f">units</a> = <a class="el" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00a07f07b623b4a00b57dc150ff2e59cb92">Units::Mm</a></td></tr>
+<tr class="memdesc:a62b8ce055f30bdc9cd0a92aa30fc220f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unidades del programa (<span class="tt">G20</span>/<span class="tt">G21</span>).  <br /></td></tr>
+<tr class="memitem:aec7c27d3e32d3b61278569e344497fb8" id="r_aec7c27d3e32d3b61278569e344497fb8"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#aec7c27d3e32d3b61278569e344497fb8">decimals</a> = 4</td></tr>
+<tr class="memdesc:aec7c27d3e32d3b61278569e344497fb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decimales de coordenadas.  <br /></td></tr>
+<tr class="memitem:a3bf86965069d8cfc0a4aeadb87641927" id="r_a3bf86965069d8cfc0a4aeadb87641927"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a3bf86965069d8cfc0a4aeadb87641927">feedDecimals</a> = 2</td></tr>
+<tr class="memdesc:a3bf86965069d8cfc0a4aeadb87641927"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decimales de avances.  <br /></td></tr>
+<tr class="memitem:adcd487c2138fda9e44e587fe7adcaacb" id="r_adcd487c2138fda9e44e587fe7adcaacb"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#adcd487c2138fda9e44e587fe7adcaacb">toolDiameter</a> = 0.0</td></tr>
+<tr class="memdesc:adcd487c2138fda9e44e587fe7adcaacb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Diámetro informativo para comentarios/exportación.  <br /></td></tr>
+<tr class="memitem:a59efb43280627dc32dbb6817df5cdff9" id="r_a59efb43280627dc32dbb6817df5cdff9"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a59efb43280627dc32dbb6817df5cdff9">feedXY</a> = 200.0</td></tr>
+<tr class="memdesc:a59efb43280627dc32dbb6817df5cdff9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Avance horizontal en mm/min.  <br /></td></tr>
+<tr class="memitem:a9758c511a269e831f6a746f0a11b3479" id="r_a9758c511a269e831f6a746f0a11b3479"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a9758c511a269e831f6a746f0a11b3479">feedZ</a> = 60.0</td></tr>
+<tr class="memdesc:a9758c511a269e831f6a746f0a11b3479"><td class="mdescLeft">&#160;</td><td class="mdescRight">Avance de penetración en mm/min.  <br /></td></tr>
+<tr class="memitem:a108096383fe3de2ffef1f485de9b1ff1" id="r_a108096383fe3de2ffef1f485de9b1ff1"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a108096383fe3de2ffef1f485de9b1ff1">zMove</a> = 2.0</td></tr>
+<tr class="memdesc:a108096383fe3de2ffef1f485de9b1ff1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Altura de viaje.  <br /></td></tr>
+<tr class="memitem:a5ecbbafafcce6b457d0fbb5c8f4e48e8" id="r_a5ecbbafafcce6b457d0fbb5c8f4e48e8"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a5ecbbafafcce6b457d0fbb5c8f4e48e8">zCut</a> = -1.5</td></tr>
+<tr class="memdesc:a5ecbbafafcce6b457d0fbb5c8f4e48e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Profundidad final de corte.  <br /></td></tr>
+<tr class="memitem:ac67d3b6ba90b46954b22978cb3c362a5" id="r_ac67d3b6ba90b46954b22978cb3c362a5"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ac67d3b6ba90b46954b22978cb3c362a5">zStart</a> = 5.0</td></tr>
+<tr class="memdesc:ac67d3b6ba90b46954b22978cb3c362a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Z inicial del programa.  <br /></td></tr>
+<tr class="memitem:a64960a538cda8be5b9cc32bb01571858" id="r_a64960a538cda8be5b9cc32bb01571858"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a64960a538cda8be5b9cc32bb01571858">zEnd</a> = 5.0</td></tr>
+<tr class="memdesc:a64960a538cda8be5b9cc32bb01571858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Z final del programa.  <br /></td></tr>
+<tr class="memitem:a7847fed28d6a8d9bc526f850a561c321" id="r_a7847fed28d6a8d9bc526f850a561c321"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a7847fed28d6a8d9bc526f850a561c321">depthPerPass</a> = 0.0</td></tr>
+<tr class="memdesc:a7847fed28d6a8d9bc526f850a561c321"><td class="mdescLeft">&#160;</td><td class="mdescRight">Profundidad por pasada; 0 = una sola bajada.  <br /></td></tr>
+<tr class="memitem:a3701ab5018c4741f52ede134660c27fd" id="r_a3701ab5018c4741f52ede134660c27fd"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a3701ab5018c4741f52ede134660c27fd">spindleSpeed</a> = 1000.0</td></tr>
+<tr class="memdesc:a3701ab5018c4741f52ede134660c27fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Velocidad del husillo (RPM).  <br /></td></tr>
+<tr class="memitem:aaaa67f723c5706806b0e4714f3907a74" id="r_aaaa67f723c5706806b0e4714f3907a74"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aaaa67f723c5706806b0e4714f3907a74">spindleCw</a> = true</td></tr>
+<tr class="memdesc:aaaa67f723c5706806b0e4714f3907a74"><td class="mdescLeft">&#160;</td><td class="mdescRight"><span class="tt">true</span> para <span class="tt">M03</span>, <span class="tt">false</span> para <span class="tt">M04</span>.  <br /></td></tr>
+<tr class="memitem:a1c7f6ea7e8e207b6680d679484ad2199" id="r_a1c7f6ea7e8e207b6680d679484ad2199"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a1c7f6ea7e8e207b6680d679484ad2199">includeToolChange</a> = true</td></tr>
+<tr class="memdesc:a1c7f6ea7e8e207b6680d679484ad2199"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emite cambios de herramienta.  <br /></td></tr>
+<tr class="memitem:a3927a9732b87fa46ff8e8ccfa4b1bb05" id="r_a3927a9732b87fa46ff8e8ccfa4b1bb05"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a3927a9732b87fa46ff8e8ccfa4b1bb05">zToolchange</a> = 10.0</td></tr>
+<tr class="memdesc:a3927a9732b87fa46ff8e8ccfa4b1bb05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Z segura para cambiar herramienta.  <br /></td></tr>
+<tr class="memitem:a9e2e897c91160c7a7bfa68ab5831ffe8" id="r_a9e2e897c91160c7a7bfa68ab5831ffe8"><td class="memItemLeft">std::optional&lt; <a class="el" href="structfc_1_1_pt.html">Pt</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a9e2e897c91160c7a7bfa68ab5831ffe8">toolchangeXY</a></td></tr>
+<tr class="memdesc:a9e2e897c91160c7a7bfa68ab5831ffe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Posición XY opcional para el cambio.  <br /></td></tr>
+<tr class="memitem:a6b637f6f6b2ca5dc81925fea075c5c19" id="r_a6b637f6f6b2ca5dc81925fea075c5c19"><td class="memItemLeft">std::optional&lt; <a class="el" href="structfc_1_1_pt.html">Pt</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a6b637f6f6b2ca5dc81925fea075c5c19">endXY</a></td></tr>
+<tr class="memdesc:a6b637f6f6b2ca5dc81925fea075c5c19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Posición XY final opcional.  <br /></td></tr>
+<tr class="memitem:a5c1834860f56d512ccb82fb5b8ef16f1" id="r_a5c1834860f56d512ccb82fb5b8ef16f1"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a5c1834860f56d512ccb82fb5b8ef16f1">connectPaths</a> = false</td></tr>
+<tr class="memdesc:a5c1834860f56d512ccb82fb5b8ef16f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Une recorridos cercanos sin retraer.  <br /></td></tr>
+<tr class="memitem:adf3718a2c5ae66dda76d8aced6f49690" id="r_adf3718a2c5ae66dda76d8aced6f49690"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#adf3718a2c5ae66dda76d8aced6f49690">connectTolerance</a> = 0.5</td></tr>
+<tr class="memdesc:adf3718a2c5ae66dda76d8aced6f49690"><td class="mdescLeft">&#160;</td><td class="mdescRight">Distancia máxima para conectar (mm).  <br /></td></tr>
+<tr class="memitem:a2c07cd16e06ba3859c5509448204cf01" id="r_a2c07cd16e06ba3859c5509448204cf01"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a2c07cd16e06ba3859c5509448204cf01">dwellTime</a> = 0.0</td></tr>
+<tr class="memdesc:a2c07cd16e06ba3859c5509448204cf01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pausa tras bajar (segundos).  <br /></td></tr>
+<tr class="memitem:a6675486e1c35af615d0d69206cd0cd20" id="r_a6675486e1c35af615d0d69206cd0cd20"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a6675486e1c35af615d0d69206cd0cd20">laserPower</a> = 300.0</td></tr>
+<tr class="memdesc:a6675486e1c35af615d0d69206cd0cd20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Potencia láser (<span class="tt">S</span>).  <br /></td></tr>
+<tr class="memitem:a7efa80979ec6b7433244eb5e669ac952" id="r_a7efa80979ec6b7433244eb5e669ac952"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a7efa80979ec6b7433244eb5e669ac952">zFocus</a> = 0.0</td></tr>
+<tr class="memdesc:a7efa80979ec6b7433244eb5e669ac952"><td class="mdescLeft">&#160;</td><td class="mdescRight">Z de foco en modo láser.  <br /></td></tr>
+<tr class="memitem:a455441d8804debff7394b0d981cdda41" id="r_a455441d8804debff7394b0d981cdda41"><td class="memItemLeft"><a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62">GCodeFlavor</a>&#160;</td><td class="memItemRight"><a class="el" href="#a455441d8804debff7394b0d981cdda41">flavor</a> = <a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a7a1920d61156abc05a60135aefe8bc67">GCodeFlavor::Default</a></td></tr>
+<tr class="memdesc:a455441d8804debff7394b0d981cdda41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Postprocesador.  <br /></td></tr>
+<tr class="memitem:ace08148f0468d59bfdc75a2a270ea789" id="r_ace08148f0468d59bfdc75a2a270ea789"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#ace08148f0468d59bfdc75a2a270ea789">customToolchange</a></td></tr>
+<tr class="memdesc:ace08148f0468d59bfdc75a2a270ea789"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plantilla para <span class="tt">ToolchangeCustom</span>; admite <span class="tt">{tool}</span>, <span class="tt">{diameter}</span>, <span class="tt">{z}</span>, <span class="tt">{x}</span> e <span class="tt">{y}</span>.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Parámetros de generación de un programa G-code. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00055">55</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Documentación de datos miembro</h2>
+<a id="a5c1834860f56d512ccb82fb5b8ef16f1" name="a5c1834860f56d512ccb82fb5b8ef16f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c1834860f56d512ccb82fb5b8ef16f1">&#9670;&#160;</a></span>connectPaths</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::GCodeOptions::connectPaths = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Une recorridos cercanos sin retraer. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00077">77</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="adf3718a2c5ae66dda76d8aced6f49690" name="adf3718a2c5ae66dda76d8aced6f49690"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf3718a2c5ae66dda76d8aced6f49690">&#9670;&#160;</a></span>connectTolerance</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::connectTolerance = 0.5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Distancia máxima para conectar (mm). </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00078">78</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="ace08148f0468d59bfdc75a2a270ea789" name="ace08148f0468d59bfdc75a2a270ea789"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace08148f0468d59bfdc75a2a270ea789">&#9670;&#160;</a></span>customToolchange</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string fc::GCodeOptions::customToolchange</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Plantilla para <span class="tt">ToolchangeCustom</span>; admite <span class="tt">{tool}</span>, <span class="tt">{diameter}</span>, <span class="tt">{z}</span>, <span class="tt">{x}</span> e <span class="tt">{y}</span>. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00085">85</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="aec7c27d3e32d3b61278569e344497fb8" name="aec7c27d3e32d3b61278569e344497fb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec7c27d3e32d3b61278569e344497fb8">&#9670;&#160;</a></span>decimals</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fc::GCodeOptions::decimals = 4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Decimales de coordenadas. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00057">57</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00432">fc::drillingGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a7847fed28d6a8d9bc526f850a561c321" name="a7847fed28d6a8d9bc526f850a561c321"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7847fed28d6a8d9bc526f850a561c321">&#9670;&#160;</a></span>depthPerPass</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::depthPerPass = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Profundidad por pasada; 0 = una sola bajada. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00067">67</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10722">MainWindow::applyCutout()</a>, <a class="el" href="_main_window_8cpp_source.html#l10660">MainWindow::cutoutDialog()</a>, <a class="el" href="gui_2main_8cpp_source.html#l00102">main()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a2c07cd16e06ba3859c5509448204cf01" name="a2c07cd16e06ba3859c5509448204cf01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c07cd16e06ba3859c5509448204cf01">&#9670;&#160;</a></span>dwellTime</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::dwellTime = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pausa tras bajar (segundos). </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00079">79</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>.</p>
+
+</div>
+</div>
+<a id="a6b637f6f6b2ca5dc81925fea075c5c19" name="a6b637f6f6b2ca5dc81925fea075c5c19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b637f6f6b2ca5dc81925fea075c5c19">&#9670;&#160;</a></span>endXY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;<a class="el" href="structfc_1_1_pt.html">Pt</a>&gt; fc::GCodeOptions::endXY</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Posición XY final opcional. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00075">75</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00432">fc::drillingGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a3bf86965069d8cfc0a4aeadb87641927" name="a3bf86965069d8cfc0a4aeadb87641927"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bf86965069d8cfc0a4aeadb87641927">&#9670;&#160;</a></span>feedDecimals</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fc::GCodeOptions::feedDecimals = 2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Decimales de avances. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00058">58</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a59efb43280627dc32dbb6817df5cdff9" name="a59efb43280627dc32dbb6817df5cdff9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59efb43280627dc32dbb6817df5cdff9">&#9670;&#160;</a></span>feedXY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::feedXY = 200.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Avance horizontal en mm/min. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00061">61</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a9758c511a269e831f6a746f0a11b3479" name="a9758c511a269e831f6a746f0a11b3479"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9758c511a269e831f6a746f0a11b3479">&#9670;&#160;</a></span>feedZ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::feedZ = 60.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Avance de penetración en mm/min. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00062">62</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a455441d8804debff7394b0d981cdda41" name="a455441d8804debff7394b0d981cdda41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a455441d8804debff7394b0d981cdda41">&#9670;&#160;</a></span>flavor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62">GCodeFlavor</a> fc::GCodeOptions::flavor = <a class="el" href="namespacefc.html#ab1000db7f3672945f3128b82831cdf62a7a1920d61156abc05a60135aefe8bc67">GCodeFlavor::Default</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Postprocesador. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00082">82</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a1c7f6ea7e8e207b6680d679484ad2199" name="a1c7f6ea7e8e207b6680d679484ad2199"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c7f6ea7e8e207b6680d679484ad2199">&#9670;&#160;</a></span>includeToolChange</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::GCodeOptions::includeToolChange = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Emite cambios de herramienta. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00072">72</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a>.</p>
+
+</div>
+</div>
+<a id="a6675486e1c35af615d0d69206cd0cd20" name="a6675486e1c35af615d0d69206cd0cd20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6675486e1c35af615d0d69206cd0cd20">&#9670;&#160;</a></span>laserPower</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::laserPower = 300.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Potencia láser (<span class="tt">S</span>). </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00080">80</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="aaaa67f723c5706806b0e4714f3907a74" name="aaaa67f723c5706806b0e4714f3907a74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaaa67f723c5706806b0e4714f3907a74">&#9670;&#160;</a></span>spindleCw</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::GCodeOptions::spindleCw = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><span class="tt">true</span> para <span class="tt">M03</span>, <span class="tt">false</span> para <span class="tt">M04</span>. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00070">70</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a>.</p>
+
+</div>
+</div>
+<a id="a3701ab5018c4741f52ede134660c27fd" name="a3701ab5018c4741f52ede134660c27fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3701ab5018c4741f52ede134660c27fd">&#9670;&#160;</a></span>spindleSpeed</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::spindleSpeed = 1000.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Velocidad del husillo (RPM). </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00069">69</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00432">fc::drillingGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a9e2e897c91160c7a7bfa68ab5831ffe8" name="a9e2e897c91160c7a7bfa68ab5831ffe8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e2e897c91160c7a7bfa68ab5831ffe8">&#9670;&#160;</a></span>toolchangeXY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;<a class="el" href="structfc_1_1_pt.html">Pt</a>&gt; fc::GCodeOptions::toolchangeXY</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Posición XY opcional para el cambio. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00074">74</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a>.</p>
+
+</div>
+</div>
+<a id="adcd487c2138fda9e44e587fe7adcaacb" name="adcd487c2138fda9e44e587fe7adcaacb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcd487c2138fda9e44e587fe7adcaacb">&#9670;&#160;</a></span>toolDiameter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::toolDiameter = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Diámetro informativo para comentarios/exportación. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00060">60</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10167">MainWindow::applyNcc()</a>, <a class="el" href="_main_window_8cpp_source.html#l10206">MainWindow::applyPaint()</a>, <a class="el" href="_main_window_8cpp_source.html#l10807">MainWindow::nccDialog()</a> y <a class="el" href="_main_window_8cpp_source.html#l10934">MainWindow::paintDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a62b8ce055f30bdc9cd0a92aa30fc220f" name="a62b8ce055f30bdc9cd0a92aa30fc220f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62b8ce055f30bdc9cd0a92aa30fc220f">&#9670;&#160;</a></span>units</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00">Units</a> fc::GCodeOptions::units = <a class="el" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00a07f07b623b4a00b57dc150ff2e59cb92">Units::Mm</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unidades del programa (<span class="tt">G20</span>/<span class="tt">G21</span>). </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00056">56</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11064">MainWindow::exportGCode()</a>, <a class="el" href="_main_window_8cpp_source.html#l10807">MainWindow::nccDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l10934">MainWindow::paintDialog()</a>, <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>, <a class="el" href="_main_window_8cpp_source.html#l04096">MainWindow::tclCreateCncJob()</a>, <a class="el" href="_main_window_8cpp_source.html#l04119">MainWindow::tclMillDrills()</a> y <a class="el" href="_main_window_8cpp_source.html#l04148">MainWindow::tclMillSlots()</a>.</p>
+
+</div>
+</div>
+<a id="a5ecbbafafcce6b457d0fbb5c8f4e48e8" name="a5ecbbafafcce6b457d0fbb5c8f4e48e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ecbbafafcce6b457d0fbb5c8f4e48e8">&#9670;&#160;</a></span>zCut</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::zCut = -1.5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Profundidad final de corte. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00064">64</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10722">MainWindow::applyCutout()</a>, <a class="el" href="_main_window_8cpp_source.html#l10660">MainWindow::cutoutDialog()</a>, <a class="el" href="gui_2main_8cpp_source.html#l00102">main()</a>, <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a64960a538cda8be5b9cc32bb01571858" name="a64960a538cda8be5b9cc32bb01571858"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64960a538cda8be5b9cc32bb01571858">&#9670;&#160;</a></span>zEnd</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::zEnd = 5.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Z final del programa. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00066">66</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00432">fc::drillingGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a7efa80979ec6b7433244eb5e669ac952" name="a7efa80979ec6b7433244eb5e669ac952"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7efa80979ec6b7433244eb5e669ac952">&#9670;&#160;</a></span>zFocus</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::zFocus = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Z de foco en modo láser. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00081">81</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a108096383fe3de2ffef1f485de9b1ff1" name="a108096383fe3de2ffef1f485de9b1ff1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a108096383fe3de2ffef1f485de9b1ff1">&#9670;&#160;</a></span>zMove</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::zMove = 2.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Altura de viaje. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00063">63</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="ac67d3b6ba90b46954b22978cb3c362a5" name="ac67d3b6ba90b46954b22978cb3c362a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac67d3b6ba90b46954b22978cb3c362a5">&#9670;&#160;</a></span>zStart</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::zStart = 5.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Z inicial del programa. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00065">65</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<a id="a3927a9732b87fa46ff8e8ccfa4b1bb05" name="a3927a9732b87fa46ff8e8ccfa4b1bb05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3927a9732b87fa46ff8e8ccfa4b1bb05">&#9670;&#160;</a></span>zToolchange</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GCodeOptions::zToolchange = 10.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Z segura para cambiar herramienta. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00073">73</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a> y <a class="el" href="gcode_8cpp_source.html#l01121">fc::pathsGCodeMulti()</a>.</p>
+
+</div>
+</div>
+<hr/>La documentación de esta estructura está generada del siguiente archivo:<ul>
+<li>include/flatcam/<a class="el" href="gcode_8hpp_source.html">gcode.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacefc.html">fc</a></li><li class="navelem"><a href="structfc_1_1_g_code_options.html">GCodeOptions</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

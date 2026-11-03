@@ -1,9 +1,38 @@
+/**
+ * @file qr.cpp
+ * @brief Generación de la geometría de un código QR lista para fresar.
+ *
+ * Envoltorio de la librería qrcodegen (Nayuki): codifica el texto, agrupa los
+ * módulos oscuros contiguos de cada fila en rectángulos y los une en un único
+ * polígono. La salida está en milímetros, con origen configurable y borde
+ * opcional, de modo que se puede usar como capa de cobre.
+ */
 #include "flatcam/qr.hpp"
 
 #include "flatcam/qrcodegen.hpp"
 
 namespace fc {
 
+/**
+ * @brief Convierte un texto en la geometría de un QR en coordenadas CAD.
+ *
+ * Elige la corrección de errores desde @p ecc ('L', 'Q' o 'H'; cualquier otro
+ * valor, incluido 'M', cae en MEDIUM), codifica con qrcodegen y recorre las
+ * filas agrupando módulos oscuros consecutivos en cajas de moduleSize. Cada
+ * caja se desplaza por el borde y el eje Y se invierte porque la librería
+ * numera las filas de arriba hacia abajo. Al final une todas las cajas con
+ * Geom::unionOf para entregar un solo polígono.
+ * @param text Contenido a codificar.
+ * @param moduleSize Lado del módulo en mm; si es <= 0 devuelve vacío.
+ * @param borderModules Borde en módulos (se satura a >= 0).
+ * @param originX Coordenada X de la esquina inferior izquierda (mm).
+ * @param originY Ídem en Y (mm).
+ * @param ecc Nivel de corrección: 'L', 'M', 'Q' o 'H'.
+ * @return Vector con un único Geom; vacío si no hay módulos oscuros o si el
+ *         tamaño de módulo no es positivo.
+ * @note qrcodegen lanza excepción si el texto no cabe en el nivel pedido; este
+ *       módulo no la captura.
+ */
 std::vector<Geom> qrCodeGeometry(const std::string& text, double moduleSize, int borderModules,
                                  double originX, double originY, char ecc) {
     if (moduleSize <= 0.0) return {};

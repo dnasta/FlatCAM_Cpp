@@ -1,3 +1,7 @@
+/**
+ * @file svg.hpp
+ * @brief Exportación de geometría a SVG.
+ */
 #pragma once
 
 #include <string>
@@ -7,7 +11,13 @@
 
 namespace fc {
 
-// Exports polygon geometry (filled) and strokes to a plain SVG file.
+/**
+ * @brief Exporta sólidos y recorridos a un SVG plano.
+ * @param path Archivo de salida.
+ * @param solids Polígonos rellenos (con regla even-odd para agujeros).
+ * @param follows Trazos.
+ * @param bounds Límites para el `viewBox`.
+ */
 void exportSvg(const std::string& path, const std::vector<Geom>& solids,
                const std::vector<Geom>& follows, const BBox& bounds);
 

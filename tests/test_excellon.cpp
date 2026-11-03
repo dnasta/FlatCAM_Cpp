@@ -1,3 +1,10 @@
+/**
+ * @file test_excellon.cpp
+ * @brief Pruebas del parser Excellon.
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include <cmath>
@@ -87,4 +94,27 @@ M30
     EXPECT_EQ(r.drillCount, std::size_t{2});
     EXPECT_TRUE(r.tools.count(1) == 1);
     EXPECT_NEAR(r.tools.at(1).diameter, 0.5, 1e-9);
+}
+
+TEST(Excellon, LeadingZeroSuppressionScalesByFractionDigits) {
+    const char* src = R"EXC(
+M48
+METRIC,LZ
+T1C0.500
+%
+T1
+X500Y500
+X1500Y500
+M30
+)EXC";
+    ExcellonOptions opt;
+    opt.appUnits = Units::Mm;
+    const ExcellonResult r = ExcellonParser(opt).parseString(src);
+    ASSERT_EQ(r.drillCount, std::size_t{2});
+    ASSERT_TRUE(r.bounds.valid);
+    // 3.3 format, leading zeros omitted: "500" = 0.500 mm.
+    EXPECT_NEAR(r.bounds.xmin, 0.25, 1e-6);
+    EXPECT_NEAR(r.bounds.xmax, 1.75, 1e-6);
+    EXPECT_NEAR(r.bounds.ymin, 0.25, 1e-6);
+    EXPECT_NEAR(r.bounds.ymax, 0.75, 1e-6);
 }

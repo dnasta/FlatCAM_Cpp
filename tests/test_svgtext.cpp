@@ -1,3 +1,10 @@
+/**
+ * @file test_svgtext.cpp
+ * @brief Pruebas de texto SVG/DXF y del campo de unidades.
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include "TextGeometry.h"
 #include "UnitSpinBox.h"
 

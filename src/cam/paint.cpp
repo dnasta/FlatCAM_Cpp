@@ -1,3 +1,14 @@
+/**
+ * @file paint.cpp
+ * @brief Relleno de áreas por contornos paralelos (pocket/paint).
+ *
+ * Implementa `fc::paintArea`: parte de la región a pintar, la contrae un radio
+ * de herramienta y luego la encoge repetidamente en `paso` para obtener
+ * anillos concéntricos que el centro de la fresa puede recorrer sin salirse
+ * del material. Cada anillo (y opcionalmente cada hueco) se emite como un
+ * recorrido independiente.
+ */
+
 #include "flatcam/paint.hpp"
 
 #include <algorithm>
@@ -6,6 +17,7 @@
 namespace fc {
 namespace {
 
+/// @brief Acumula `b` dentro de `target`, ignorando cajas inválidas.
 void addBounds(BBox& target, const BBox& b) {
     if (!b.valid) return;
     if (!target.valid) {
@@ -18,6 +30,7 @@ void addBounds(BBox& target, const BBox& b) {
     target.ymax = std::max(target.ymax, b.ymax);
 }
 
+/// @brief Copia `ring` invirtiendo el orden de sus vértices si `invert`.
 Ring oriented(Ring ring, bool invert) {
     if (invert) std::reverse(ring.begin(), ring.end());
     return ring;
@@ -25,6 +38,33 @@ Ring oriented(Ring ring, bool invert) {
 
 }  // namespace
 
+/**
+ * @brief Rellena una región con recorridos concéntricos paralelos al contorno.
+ *
+ * Pasos del algoritmo:
+ * 1. Se expande la región con `buffer(margin)` si el margen es distinto de 0.
+ * 2. Se contrae un radio de herramienta para que el centro de la fresa quede
+ *    siempre dentro del área original (compensación de radio).
+ * 3. En cada iteración se emiten el contorno exterior y —si
+ *    `options.includeHoles`— los huecos de cada polígono, y luego se contrae
+ *    la región otro `paso`.
+ * 4. El bucle corta cuando la región queda vacía, cuando el área deja de
+ *    disminuir (delta menor que 1e-9 relativo al área inicial, señal de
+ *    colapso numérico) o al alcanzar 10000 iteraciones.
+ *
+ * @param area Región a pintar (normalmente el cobre de un Gerber).
+ * @param options Diámetro de herramienta, superposición, margen, sentido y
+ *                si se pintan los huecos.
+ * @return Recorridos del centro de la fresa, longitud total y límites.
+ *
+ * @note El paso efectivo es `stepOver × toolDiameter` con un mínimo de
+ *       0,01 mm; `stepOver` es una fracción (0,5 = 50 % de superposición).
+ * @note `result.bounds` corresponde a la región con margen, no al conjunto de
+ *       recorridos, por lo que puede ser algo mayor que el área realmente
+ *       mecanizada.
+ * @warning Si el diámetro es mayor que la región, el buffer negativo la vacía
+ *          y el resultado queda sin recorridos (no es un error).
+ */
 PaintResult paintArea(const Geom& area, const PaintOptions& options) {
     PaintResult result;
     if (!area.valid() || area.empty()) return result;

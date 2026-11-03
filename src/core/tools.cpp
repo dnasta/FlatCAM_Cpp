@@ -1,3 +1,13 @@
+/**
+ * @file tools.cpp
+ * @brief Utilidades CAM transversales: herramienta óptima, extracción de
+ *        taladros, punch, edición de aperturas y marcas de esquina.
+ *
+ * Agrupa operaciones que trabajan sobre resultados ya parseados
+ * (GerberResult, ExcellonResult) o sobre texto Gerber crudo, sin depender de
+ * la GUI. La edición de aperturas es textual, por expresiones regulares sobre
+ * el archivo fuente, porque el modelo no conserva el texto de cada comando.
+ */
 #include "flatcam/tools.hpp"
 
 #include <algorithm>
@@ -11,6 +21,10 @@ namespace fc {
 
 namespace {
 
+/**
+ * @brief Une un vector de geometrías ignorando nulos y vacíos.
+ * @return Unión; Geom nulo si no queda ninguna parte utilizable.
+ */
 Geom unionAll(const std::vector<Geom>& parts) {
     std::vector<Geom> valid;
     valid.reserve(parts.size());
@@ -24,6 +38,21 @@ Geom unionAll(const std::vector<Geom>& parts) {
 
 }  // namespace
 
+/**
+ * @brief Calcula el diámetro de fresa más grande que todavía aísla el cobre.
+ *
+ * Modela cada isla de cobre y cada agujero como features independientes y
+ * busca la menor distancia entre features que no pertenezcan al mismo dueño
+ * (una isla y su propio agujero se tocan por definición y no limitan la fresa).
+ * El diámetro devuelto es el 98 % de esa separación, para que la fresa no roce
+ * ambas paredes.
+ * @param copper Geometría del cobre (polígonos con huecos).
+ * @param maxDiameter Tope superior y valor de retorno si no hay pares válidos.
+ * @return Estructura con diámetro, separación, los dos puntos de la cota y la
+ *         bandera valid.
+ * @note Es una búsqueda cuadrática sobre features; aceptable para una capa
+ *       típica, pero costosa en cobres con cientos de islas.
+ */
 OptimalTool optimalIsolationDiameter(const Geom& copper, double maxDiameter) {
     OptimalTool result;
     result.diameter = maxDiameter;
@@ -76,6 +105,19 @@ OptimalTool optimalIsolationDiameter(const Geom& copper, double maxDiameter) {
     return result;
 }
 
+/**
+ * @brief Lista las separaciones de cobre que limitan el diámetro de fresa.
+ *
+ * Hace el mismo relevamiento de features que optimalIsolationDiameter pero
+ * conserva todos los pares con separación menor que maxDiameter, los ordena de
+ * menor a mayor y descarta los que caen a menos de minSeparation de otro par ya
+ * elegido, para no dibujar cotas superpuestas.
+ * @param copper Cobre a analizar.
+ * @param maxDiameter Las separaciones mayores o iguales se descartan.
+ * @param limit Cantidad máxima de pares devueltos.
+ * @param minSeparation Distancia mínima entre cotas; 0 desactiva el filtro.
+ * @return Pares ordenados por separación creciente.
+ */
 std::vector<OptimalTool> optimalIsolationGaps(const Geom& copper, double maxDiameter,
                                              std::size_t limit, double minSeparation) {
     std::vector<OptimalTool> gaps;
@@ -135,6 +177,17 @@ std::vector<OptimalTool> optimalIsolationGaps(const Geom& copper, double maxDiam
     return gaps;
 }
 
+/**
+ * @brief Distancia mínima entre dos conjuntos de geometrías (dos capas).
+ *
+ * Une cada conjunto por separado para que las partes de una misma capa no
+ * cuenten como obstáculo y mide entre los dos resultados.
+ * @param a Primera capa.
+ * @param b Segunda capa.
+ * @param[out] nearestA Punto más cercano en la capa A (puede ser nullptr).
+ * @param[out] nearestB Punto más cercano en la capa B (puede ser nullptr).
+ * @return Distancia en mm, o -1 si alguna capa queda vacía o inválida.
+ */
 double layersDistance(const std::vector<Geom>& a, const std::vector<Geom>& b, Pt* nearestA,
                       Pt* nearestB) {
     const Geom ua = unionAll(a);
@@ -146,6 +199,24 @@ double layersDistance(const std::vector<Geom>& a, const std::vector<Geom>& b, Pt
     return ua.distance(ub);
 }
 
+/**
+ * @brief Deduce taladros a partir de los flashes circulares de un Gerber.
+ *
+ * Recorre las aperturas circulares, descarta las que superan maxDiameter y
+ * examina su geometría: sólo acepta piezas aproximadamente cuadradas en su
+ * caja (un flash redondo) y de tamaño coherente con el diámetro, con lo que
+ * quedan afuera los trazos, que son cápsulas alargadas. Deduplica por
+ * diámetro y centro redondeados a micrón y agrupa los taladros en herramientas
+ * por diámetro.
+ * @param gerber Resultado del parser Gerber con aperturas y geometría.
+ * @param maxDiameter Diámetro máximo a considerar; los pads grandes no son
+ *        taladros.
+ * @param appUnits Unidades con las que se informa el Excellon resultante.
+ * @param stepsPerCircle Segmentos por círculo de la geometría generada.
+ * @return ExcellonResult con herramientas, taladros, geometría y límites.
+ * @note Es una heurística geométrica: los pads cuadrados o rectangulares se
+ *       descartan por la comprobación de caja, no por leer atributos.
+ */
 ExcellonResult extractDrills(const GerberResult& gerber, double maxDiameter, Units appUnits,
                              int stepsPerCircle) {
     ExcellonResult result;
@@ -226,6 +297,16 @@ ExcellonResult extractDrills(const GerberResult& gerber, double maxDiameter, Uni
     return result;
 }
 
+/**
+ * @brief Resta los taladros al cobre (punch) para obtener el negativo.
+ *
+ * Aplica primero un buffer de holgura a los taladros y luego los descuenta del
+ * sólido del Gerber.
+ * @param gerber Gerber con el cobre; se usa gerber.solid.
+ * @param drills Excellon con los taladros a restar.
+ * @param margin Holgura en mm; si es <= 0 se resta el taladro exacto.
+ * @return Cobre perforado, o el cobre original si no hay taladros.
+ */
 Geom punchGerber(const GerberResult& gerber, const ExcellonResult& drills, double margin) {
     if (!gerber.solid.valid() || gerber.solid.empty()) return Geom();
     if (!drills.solid.valid() || drills.solid.empty()) return gerber.solid;
@@ -233,6 +314,19 @@ Geom punchGerber(const GerberResult& gerber, const ExcellonResult& drills, doubl
     return gerber.solid.difference(holes);
 }
 
+/**
+ * @brief Reescribe el diámetro de una apertura circular en el texto Gerber.
+ *
+ * Busca %ADD<code>C,<diámetro>[X<hueco>]*% y reemplaza el diámetro, respetando
+ * el segundo valor X (hueco) si estaba presente. No toca otras aperturas ni
+ * los comandos de dibujo.
+ * @param gerber Texto Gerber completo.
+ * @param code Código de apertura, por ejemplo "10".
+ * @param diameter Nuevo diámetro en las unidades del archivo.
+ * @param decimals Decimales con que se escribe el valor.
+ * @param[out] changed Cantidad de reemplazos (puede ser nullptr).
+ * @return Texto modificado, o el original si no hubo coincidencias.
+ */
 std::string editCircleAperture(std::string gerber, const std::string& code, double diameter,
                                int decimals, int* changed) {
     if (changed) *changed = 0;
@@ -258,6 +352,20 @@ std::string editCircleAperture(std::string gerber, const std::string& code, doub
     return count > 0 ? out : gerber;
 }
 
+/**
+ * @brief Cambia el tamaño de una apertura circular, rectangular u obround.
+ *
+ * Intenta primero la variante circular; si no hay coincidencias prueba R y O,
+ * escalando ambos lados para conservar la relación de aspecto con el lado
+ * mayor como referencia, y por último P (polígono), donde cambia el diámetro y
+ * conserva vértices y rotación.
+ * @param gerber Texto Gerber completo.
+ * @param code Código de apertura.
+ * @param size Tamaño objetivo en las unidades del archivo.
+ * @param decimals Decimales de salida.
+ * @param[out] changed Cantidad de aperturas modificadas.
+ * @return Texto modificado, o el original si no hubo coincidencias.
+ */
 std::string editApertureSize(std::string gerber, const std::string& code, double size,
                              int decimals, int* changed) {
     if (changed) *changed = 0;
@@ -312,6 +420,19 @@ std::string editApertureSize(std::string gerber, const std::string& code, double
     return count > 0 ? gerber : out;
 }
 
+/**
+ * @brief Genera las marcas en L de las cuatro esquinas de una caja.
+ *
+ * Cada esquina aporta dos segmentos de largo @p length. Con outside en false
+ * las marcas quedan hacia adentro de la caja, desplazadas margin; con outside
+ * en true se dibujan hacia afuera e invertidas, para usarlas como referencia de
+ * alineación fuera del contorno.
+ * @param b Caja de referencia; si no es válida devuelve vacío.
+ * @param length Largo de cada brazo en mm.
+ * @param margin Separación al borde en mm.
+ * @param outside true para marcas exteriores.
+ * @return Hasta 8 LineString, dos por esquina.
+ */
 std::vector<Geom> cornerMarks(const BBox& b, double length, double margin, bool outside) {
     std::vector<Geom> out;
     if (!b.valid || length <= 0.0) return out;

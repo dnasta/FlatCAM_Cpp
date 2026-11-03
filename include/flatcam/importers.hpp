@@ -1,3 +1,10 @@
+/**
+ * @file importers.hpp
+ * @brief Importadores/exportadores vectoriales y de imágenes.
+ *
+ * Agrupa SVG, DXF, HPGL2, PDF, imágenes y escritores Gerber/Excellon/HPGL.
+ * La geometría de salida está en milímetros, salvo que se indique otra cosa.
+ */
 #pragma once
 
 #include <string>
@@ -8,34 +15,70 @@
 
 namespace fc {
 
-// Importers: SVG (paths, basic shapes, groups and text) and DXF
-// (LINE/LWPOLYLINE/CIRCLE/ARC/ELLIPSE/SPLINE, INSERTed blocks and TEXT/MTEXT).
-// Curves are approximated with segments.
+/**
+ * @brief Importa geometría de un SVG.
+ * @param path Archivo SVG.
+ * @return Formas, curvas aplanadas, transformaciones y texto.
+ */
 std::vector<Geom> importSvg(const std::string& path);
+/**
+ * @brief Importa geometría de un DXF.
+ * @param path Archivo DXF.
+ * @return Líneas, polilíneas, arcos, elipses, splines, bloques y texto resuelto.
+ */
 std::vector<Geom> importDxf(const std::string& path);
 
-// A TEXT/MTEXT entity resolved to its final position (INSERT transforms
-// included). The GUI turns it into outlines with the system font engine.
+/**
+ * @brief Entidad TEXT/MTEXT resuelta a su posición final.
+ *
+ * Incluye las transformaciones de los INSERT. La GUI la convierte en contornos
+ * con la fuente del sistema.
+ */
 struct DxfText {
-    std::string text;
-    double x = 0.0;         // anchor point in millimetres
-    double y = 0.0;
-    double height = 2.5;    // nominal cap height in millimetres
-    double rotation = 0.0;  // degrees, counter-clockwise
-    int hAlign = 0;         // 0 left, 1 centre, 2 right
-    int vAlign = 0;         // 0 baseline, 1 bottom, 2 middle, 3 top
+    std::string text;       ///< Texto.
+    double x = 0.0;         ///< Punto de anclaje X (mm).
+    double y = 0.0;         ///< Punto de anclaje Y (mm).
+    double height = 2.5;    ///< Altura nominal de mayúsculas (mm).
+    double rotation = 0.0;  ///< Rotación en grados, antihoraria.
+    int hAlign = 0;         ///< 0 izquierda, 1 centro, 2 derecha.
+    int vAlign = 0;         ///< 0 línea base, 1 abajo, 2 medio, 3 arriba.
 };
+/**
+ * @brief Importa sólo los textos de un DXF, ya transformados.
+ * @param path Archivo DXF.
+ */
 std::vector<DxfText> importDxfTexts(const std::string& path);
+
+/**
+ * @brief Importa geometría de un HPGL2.
+ * @param path Archivo HPGL/HPG/PLT.
+ */
 std::vector<Geom> importHpgl(const std::string& path);
 
-// Writes a Gerber file with polygons as regions and paths as strokes.
+/**
+ * @brief Escribe un Gerber con polígonos como regiones y trazos.
+ * @param path Archivo de salida.
+ * @param solids Polígonos rellenos.
+ * @param follows Trazos.
+ * @param units Unidades del archivo.
+ */
 void writeGerber(const std::string& path, const std::vector<Geom>& solids,
                  const std::vector<Geom>& follows, Units units);
 
-// Writes an Excellon drill file from the parsed tools (drills, slots, diameters).
+/**
+ * @brief Escribe un Excellon a partir de las herramientas parseadas.
+ * @param path Archivo de salida.
+ * @param result Taladros, ranuras y diámetros.
+ * @param units Unidades del archivo.
+ */
 void writeExcellon(const std::string& path, const struct ExcellonResult& result, Units units);
 
-// Minimal HPGL plotter output for solids and strokes (millimetres / plotter units).
+/**
+ * @brief Exporta sólidos y trazos a HPGL.
+ * @param path Archivo de salida.
+ * @param solids Polígonos.
+ * @param follows Trazos.
+ */
 void exportHpgl(const std::string& path, const std::vector<Geom>& solids,
                 const std::vector<Geom>& follows);
 

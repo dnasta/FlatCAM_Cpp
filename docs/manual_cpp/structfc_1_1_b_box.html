@@ -1,0 +1,502 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia de la estructura fc::BBox</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('structfc_1_1_b_box.html','','structfc_1_1_b_box-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia de la estructura fc::BBox</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Caja envolvente alineada a los ejes.  
+ <a href="#details">Más...</a></p>
+
+<p><code>#include &lt;<a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Métodos públicos</h2></td></tr>
+<tr class="memitem:a49551712e872181b03936affe6b552bb" id="r_a49551712e872181b03936affe6b552bb"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a49551712e872181b03936affe6b552bb">BBox</a> ()=default</td></tr>
+<tr class="memitem:a618663938c9e95d3601bcea6d78ad8b1" id="r_a618663938c9e95d3601bcea6d78ad8b1"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a618663938c9e95d3601bcea6d78ad8b1">BBox</a> (double x0, double y0, double x1, double y1)</td></tr>
+<tr class="memdesc:a618663938c9e95d3601bcea6d78ad8b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construye una caja válida a partir de sus límites.  <br /></td></tr>
+<tr class="memitem:a8d09024c6f764d7056f1ae572ca3f044" id="r_a8d09024c6f764d7056f1ae572ca3f044"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a8d09024c6f764d7056f1ae572ca3f044">width</a> () const</td></tr>
+<tr class="memitem:a3cb5cc0c1ab69bd0b0bc57838d0f076f" id="r_a3cb5cc0c1ab69bd0b0bc57838d0f076f"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a3cb5cc0c1ab69bd0b0bc57838d0f076f">height</a> () const</td></tr>
+<tr class="memitem:a5e2eb8f8f83895164684bff5feba3d9d" id="r_a5e2eb8f8f83895164684bff5feba3d9d"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a5e2eb8f8f83895164684bff5feba3d9d">contains</a> (const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;p) const</td></tr>
+<tr class="memdesc:a5e2eb8f8f83895164684bff5feba3d9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indica si un punto cae dentro de la caja.  <br /></td></tr>
+<tr class="memitem:ace6d9629c21081773f052059bcd4956d" id="r_ace6d9629c21081773f052059bcd4956d"><td class="memItemLeft"><a class="el" href="#a49551712e872181b03936affe6b552bb">BBox</a>&#160;</td><td class="memItemRight"><a class="el" href="#ace6d9629c21081773f052059bcd4956d">expanded</a> (double margin) const</td></tr>
+<tr class="memdesc:ace6d9629c21081773f052059bcd4956d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expande la caja un margen uniforme.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Atributos públicos</h2></td></tr>
+<tr class="memitem:a32e6c7b1b402701621aae0aca300a11a" id="r_a32e6c7b1b402701621aae0aca300a11a"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a32e6c7b1b402701621aae0aca300a11a">xmin</a> = 0.0</td></tr>
+<tr class="memdesc:a32e6c7b1b402701621aae0aca300a11a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Límite inferior en X.  <br /></td></tr>
+<tr class="memitem:a4e5d39ce96f218172a5917e52f886461" id="r_a4e5d39ce96f218172a5917e52f886461"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a4e5d39ce96f218172a5917e52f886461">ymin</a> = 0.0</td></tr>
+<tr class="memdesc:a4e5d39ce96f218172a5917e52f886461"><td class="mdescLeft">&#160;</td><td class="mdescRight">Límite inferior en Y.  <br /></td></tr>
+<tr class="memitem:a19c807697cdf8436448ef538057abca2" id="r_a19c807697cdf8436448ef538057abca2"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a19c807697cdf8436448ef538057abca2">xmax</a> = 0.0</td></tr>
+<tr class="memdesc:a19c807697cdf8436448ef538057abca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Límite superior en X.  <br /></td></tr>
+<tr class="memitem:a3fcb5b246dbd0dede37b13c09c5588ac" id="r_a3fcb5b246dbd0dede37b13c09c5588ac"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a3fcb5b246dbd0dede37b13c09c5588ac">ymax</a> = 0.0</td></tr>
+<tr class="memdesc:a3fcb5b246dbd0dede37b13c09c5588ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Límite superior en Y.  <br /></td></tr>
+<tr class="memitem:aa01e601be965de7902d629f1137cb914" id="r_aa01e601be965de7902d629f1137cb914"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aa01e601be965de7902d629f1137cb914">valid</a> = false</td></tr>
+<tr class="memdesc:aa01e601be965de7902d629f1137cb914"><td class="mdescLeft">&#160;</td><td class="mdescRight"><span class="tt">true</span> si la caja contiene geometría.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Caja envolvente alineada a los ejes. </p>
+<p><span class="tt"><a class="el" href="#aa01e601be965de7902d629f1137cb914" title="true si la caja contiene geometría.">valid</a></span> distingue una caja vacía (sin geometría) de una caja real en el origen. Las operaciones de expansión y contención respetan esa bandera. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00048">48</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Documentación de constructores y destructores</h2>
+<a id="a49551712e872181b03936affe6b552bb" name="a49551712e872181b03936affe6b552bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49551712e872181b03936affe6b552bb">&#9670;&#160;</a></span>BBox() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">fc::BBox::BBox </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel default">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenciado por <a class="el" href="geometry_8hpp_source.html#l00087">expanded()</a>.</p>
+
+</div>
+</div>
+<a id="a618663938c9e95d3601bcea6d78ad8b1" name="a618663938c9e95d3601bcea6d78ad8b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a618663938c9e95d3601bcea6d78ad8b1">&#9670;&#160;</a></span>BBox() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">fc::BBox::BBox </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>x0</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y0</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>x1</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y1</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construye una caja válida a partir de sus límites. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x0</td><td>Límite inferior X. </td></tr>
+    <tr><td class="paramname">y0</td><td>Límite inferior Y. </td></tr>
+    <tr><td class="paramname">x1</td><td>Límite superior X. </td></tr>
+    <tr><td class="paramname">y1</td><td>Límite superior Y. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00064">64</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00053">valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">ymin</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones miembro</h2>
+<a id="a5e2eb8f8f83895164684bff5feba3d9d" name="a5e2eb8f8f83895164684bff5feba3d9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e2eb8f8f83895164684bff5feba3d9d">&#9670;&#160;</a></span>contains()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::BBox::contains </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structfc_1_1_pt.html">Pt</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>p</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Indica si un punto cae dentro de la caja. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>Punto a comprobar. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd><span class="tt">true</span> si la caja es válida y el punto está dentro o en el borde. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00078">78</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00053">valid</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a>, <a class="el" href="geometry_8hpp_source.html#l00051">xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>, <a class="el" href="geometry_8hpp_source.html#l00052">ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">ymin</a>.</p>
+
+</div>
+</div>
+<a id="ace6d9629c21081773f052059bcd4956d" name="ace6d9629c21081773f052059bcd4956d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace6d9629c21081773f052059bcd4956d">&#9670;&#160;</a></span>expanded()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a49551712e872181b03936affe6b552bb">BBox</a> fc::BBox::expanded </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>margin</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Expande la caja un margen uniforme. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">margin</td><td>Distancia en milímetros (puede ser negativa). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Nueva caja expandida; la original si no era válida. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00087">87</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="#a49551712e872181b03936affe6b552bb">BBox()</a>, <a class="el" href="geometry_8hpp_source.html#l00053">valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">ymin</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05015">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l06308">MainWindow::invertGerber()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l04718">MainWindow::panelize()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D::View3D()</a>.</p>
+
+</div>
+</div>
+<a id="a3cb5cc0c1ab69bd0b0bc57838d0f076f" name="a3cb5cc0c1ab69bd0b0bc57838d0f076f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cb5cc0c1ab69bd0b0bc57838d0f076f">&#9670;&#160;</a></span>height()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::BBox::height </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Devuelve</dt><dd>Alto de la caja (puede ser negativo si está mal construida). </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00071">71</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00052">ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">ymin</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="_canvas_8cpp_source.html#l00707">Canvas::exportSvg()</a>, <a class="el" href="svg_8cpp_source.html#l00034">fc::exportSvg()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="_canvas_8cpp_source.html#l00768">Canvas::fit()</a>, <a class="el" href="_canvas_8cpp_source.html#l00906">Canvas::paintEvent()</a>, <a class="el" href="_script_api_8cpp_source.html#l00396">fc::ScriptApi::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l04718">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::refreshProperties()</a> y <a class="el" href="_main_window_8cpp_source.html#l03436">MainWindow::tclPanelize()</a>.</p>
+
+</div>
+</div>
+<a id="a8d09024c6f764d7056f1ae572ca3f044" name="a8d09024c6f764d7056f1ae572ca3f044"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d09024c6f764d7056f1ae572ca3f044">&#9670;&#160;</a></span>width()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::BBox::width </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Devuelve</dt><dd>Ancho de la caja (puede ser negativo si está mal construida). </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00068">68</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00051">xmax</a> y <a class="el" href="geometry_8hpp_source.html#l00049">xmin</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="_main_window_8cpp_source.html#l08252">MainWindow::doubleSided()</a>, <a class="el" href="_canvas_8cpp_source.html#l00707">Canvas::exportSvg()</a>, <a class="el" href="svg_8cpp_source.html#l00034">fc::exportSvg()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="_canvas_8cpp_source.html#l00768">Canvas::fit()</a>, <a class="el" href="_canvas_8cpp_source.html#l00906">Canvas::paintEvent()</a>, <a class="el" href="_script_api_8cpp_source.html#l00396">fc::ScriptApi::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l04718">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::refreshProperties()</a> y <a class="el" href="_main_window_8cpp_source.html#l03436">MainWindow::tclPanelize()</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Documentación de datos miembro</h2>
+<a id="aa01e601be965de7902d629f1137cb914" name="aa01e601be965de7902d629f1137cb914"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa01e601be965de7902d629f1137cb914">&#9670;&#160;</a></span>valid</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::BBox::valid = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><span class="tt">true</span> si la caja contiene geometría. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00053">53</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l06510">MainWindow::addCornerMarks()</a>, <a class="el" href="_main_window_8cpp_source.html#l04865">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l05015">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l08183">MainWindow::alignObjects()</a>, <a class="el" href="_canvas_8cpp_source.html#l00252">Canvas::appendGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l10167">MainWindow::applyNcc()</a>, <a class="el" href="geometry_8hpp_source.html#l00064">BBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l01142">MainWindow::buildLayout()</a>, <a class="el" href="_main_window_8cpp_source.html#l01359">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l04908">MainWindow::calibrate()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="geometry_8hpp_source.html#l00078">contains()</a>, <a class="el" href="tools_8cpp_source.html#l00436">fc::cornerMarks()</a>, <a class="el" href="_script_api_8cpp_source.html#l00472">fc::ScriptApi::cornerMarks()</a>, <a class="el" href="_main_window_8cpp_source.html#l08252">MainWindow::doubleSided()</a>, <a class="el" href="geometry_8hpp_source.html#l00087">expanded()</a>, <a class="el" href="svg_8cpp_source.html#l00034">fc::exportSvg()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="project_8cpp_source.html#l00626">fc::AllObjectsSax::finishObject()</a>, <a class="el" href="_canvas_8cpp_source.html#l00868">Canvas::fitTo()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l06308">MainWindow::invertGerber()</a>, <a class="el" href="_canvas_8cpp_source.html#l00413">Canvas::layerBounds()</a>, <a class="el" href="_main_window_8cpp_source.html#l08069">MainWindow::moveToOrigin()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l10807">MainWindow::nccDialog()</a>, <a class="el" href="_canvas_8cpp_source.html#l00906">Canvas::paintEvent()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00351">View3D::paintEvent()</a>, <a class="el" href="_script_api_8cpp_source.html#l00396">fc::ScriptApi::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l04718">MainWindow::panelize()</a>, <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a>, <a class="el" href="_main_window_8cpp_source.html#l03196">MainWindow::projectObjectSelected()</a>, <a class="el" href="rtree_8cpp_source.html#l00093">fc::SpatialIndex::query()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00181">View3D::rebuildFaces()</a>, <a class="el" href="_canvas_8cpp_source.html#l00539">Canvas::recomputeBounds()</a>, <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::refreshProperties()</a>, <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>, <a class="el" href="_canvas_8cpp_source.html#l00177">Canvas::setGeometryData()</a>, <a class="el" href="_main_window_8cpp_source.html#l10495">MainWindow::showExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l10425">MainWindow::showGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l04027">MainWindow::tclAlignDrill()</a>, <a class="el" href="_main_window_8cpp_source.html#l03565">MainWindow::tclBBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l03463">MainWindow::tclCorners()</a>, <a class="el" href="_main_window_8cpp_source.html#l04119">MainWindow::tclMillDrills()</a>, <a class="el" href="_main_window_8cpp_source.html#l03631">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03436">MainWindow::tclPanelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l03606">MainWindow::tclScale()</a>, <a class="el" href="thieving_8cpp_source.html#l00047">fc::thievingPoints()</a>, <a class="el" href="_main_window_8cpp_source.html#l02969">MainWindow::transformSelectedObject()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D::View3D()</a>.</p>
+
+</div>
+</div>
+<a id="a19c807697cdf8436448ef538057abca2" name="a19c807697cdf8436448ef538057abca2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19c807697cdf8436448ef538057abca2">&#9670;&#160;</a></span>xmax</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::BBox::xmax = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Límite superior en X. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00051">51</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l04865">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l05015">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l08183">MainWindow::alignObjects()</a>, <a class="el" href="_canvas_8cpp_source.html#l00252">Canvas::appendGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l10167">MainWindow::applyNcc()</a>, <a class="el" href="geometry_8hpp_source.html#l00064">BBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l04908">MainWindow::calibrate()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="geometry_8hpp_source.html#l00078">contains()</a>, <a class="el" href="tools_8cpp_source.html#l00436">fc::cornerMarks()</a>, <a class="el" href="_main_window_8cpp_source.html#l08252">MainWindow::doubleSided()</a>, <a class="el" href="geometry_8hpp_source.html#l00087">expanded()</a>, <a class="el" href="svg_8cpp_source.html#l00034">fc::exportSvg()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="project_8cpp_source.html#l00626">fc::AllObjectsSax::finishObject()</a>, <a class="el" href="_canvas_8cpp_source.html#l00768">Canvas::fit()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08408">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l06308">MainWindow::invertGerber()</a>, <a class="el" href="_canvas_8cpp_source.html#l00413">Canvas::layerBounds()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l10807">MainWindow::nccDialog()</a>, <a class="el" href="_canvas_8cpp_source.html#l00906">Canvas::paintEvent()</a>, <a class="el" href="_script_api_8cpp_source.html#l00396">fc::ScriptApi::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l04718">MainWindow::panelize()</a>, <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a>, <a class="el" href="rtree_8cpp_source.html#l00093">fc::SpatialIndex::query()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00181">View3D::rebuildFaces()</a>, <a class="el" href="_canvas_8cpp_source.html#l00539">Canvas::recomputeBounds()</a>, <a class="el" href="_main_window_8cpp_source.html#l05244">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::refreshProperties()</a>, <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>, <a class="el" href="_canvas_8cpp_source.html#l00177">Canvas::setGeometryData()</a>, <a class="el" href="_main_window_8cpp_source.html#l10495">MainWindow::showExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l10425">MainWindow::showGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l03565">MainWindow::tclBBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l03631">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03606">MainWindow::tclScale()</a>, <a class="el" href="thieving_8cpp_source.html#l00047">fc::thievingPoints()</a>, <a class="el" href="_main_window_8cpp_source.html#l02969">MainWindow::transformSelectedObject()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D::View3D()</a> y <a class="el" href="geometry_8hpp_source.html#l00068">width()</a>.</p>
+
+</div>
+</div>
+<a id="a32e6c7b1b402701621aae0aca300a11a" name="a32e6c7b1b402701621aae0aca300a11a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32e6c7b1b402701621aae0aca300a11a">&#9670;&#160;</a></span>xmin</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::BBox::xmin = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Límite inferior en X. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00049">49</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l04865">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l05015">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l08183">MainWindow::alignObjects()</a>, <a class="el" href="_canvas_8cpp_source.html#l00252">Canvas::appendGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l10167">MainWindow::applyNcc()</a>, <a class="el" href="geometry_8hpp_source.html#l00064">BBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l04908">MainWindow::calibrate()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="geometry_8hpp_source.html#l00078">contains()</a>, <a class="el" href="tools_8cpp_source.html#l00436">fc::cornerMarks()</a>, <a class="el" href="_main_window_8cpp_source.html#l08252">MainWindow::doubleSided()</a>, <a class="el" href="geometry_8hpp_source.html#l00087">expanded()</a>, <a class="el" href="_canvas_8cpp_source.html#l00707">Canvas::exportSvg()</a>, <a class="el" href="svg_8cpp_source.html#l00034">fc::exportSvg()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="project_8cpp_source.html#l00626">fc::AllObjectsSax::finishObject()</a>, <a class="el" href="_canvas_8cpp_source.html#l00768">Canvas::fit()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08408">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l06308">MainWindow::invertGerber()</a>, <a class="el" href="_canvas_8cpp_source.html#l00413">Canvas::layerBounds()</a>, <a class="el" href="_main_window_8cpp_source.html#l08069">MainWindow::moveToOrigin()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l10807">MainWindow::nccDialog()</a>, <a class="el" href="_canvas_8cpp_source.html#l00906">Canvas::paintEvent()</a>, <a class="el" href="_script_api_8cpp_source.html#l00396">fc::ScriptApi::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l04718">MainWindow::panelize()</a>, <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a>, <a class="el" href="rtree_8cpp_source.html#l00093">fc::SpatialIndex::query()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00181">View3D::rebuildFaces()</a>, <a class="el" href="_canvas_8cpp_source.html#l00539">Canvas::recomputeBounds()</a>, <a class="el" href="_main_window_8cpp_source.html#l05244">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::refreshProperties()</a>, <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>, <a class="el" href="_canvas_8cpp_source.html#l00177">Canvas::setGeometryData()</a>, <a class="el" href="_main_window_8cpp_source.html#l10495">MainWindow::showExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l10425">MainWindow::showGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l04027">MainWindow::tclAlignDrill()</a>, <a class="el" href="_main_window_8cpp_source.html#l03565">MainWindow::tclBBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l03631">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03606">MainWindow::tclScale()</a>, <a class="el" href="thieving_8cpp_source.html#l00047">fc::thievingPoints()</a>, <a class="el" href="_main_window_8cpp_source.html#l02969">MainWindow::transformSelectedObject()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D::View3D()</a> y <a class="el" href="geometry_8hpp_source.html#l00068">width()</a>.</p>
+
+</div>
+</div>
+<a id="a3fcb5b246dbd0dede37b13c09c5588ac" name="a3fcb5b246dbd0dede37b13c09c5588ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fcb5b246dbd0dede37b13c09c5588ac">&#9670;&#160;</a></span>ymax</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::BBox::ymax = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Límite superior en Y. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00052">52</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l04865">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l05015">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l08183">MainWindow::alignObjects()</a>, <a class="el" href="_canvas_8cpp_source.html#l00252">Canvas::appendGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l10167">MainWindow::applyNcc()</a>, <a class="el" href="geometry_8hpp_source.html#l00064">BBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l04908">MainWindow::calibrate()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="geometry_8hpp_source.html#l00078">contains()</a>, <a class="el" href="tools_8cpp_source.html#l00436">fc::cornerMarks()</a>, <a class="el" href="_main_window_8cpp_source.html#l08252">MainWindow::doubleSided()</a>, <a class="el" href="geometry_8hpp_source.html#l00087">expanded()</a>, <a class="el" href="_canvas_8cpp_source.html#l00707">Canvas::exportSvg()</a>, <a class="el" href="svg_8cpp_source.html#l00034">fc::exportSvg()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="project_8cpp_source.html#l00626">fc::AllObjectsSax::finishObject()</a>, <a class="el" href="_canvas_8cpp_source.html#l00768">Canvas::fit()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08408">MainWindow::gerberEditor()</a>, <a class="el" href="geometry_8hpp_source.html#l00071">height()</a>, <a class="el" href="_main_window_8cpp_source.html#l06308">MainWindow::invertGerber()</a>, <a class="el" href="_canvas_8cpp_source.html#l00413">Canvas::layerBounds()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l10807">MainWindow::nccDialog()</a>, <a class="el" href="_canvas_8cpp_source.html#l00906">Canvas::paintEvent()</a>, <a class="el" href="_script_api_8cpp_source.html#l00396">fc::ScriptApi::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l04718">MainWindow::panelize()</a>, <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a>, <a class="el" href="rtree_8cpp_source.html#l00093">fc::SpatialIndex::query()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00181">View3D::rebuildFaces()</a>, <a class="el" href="_canvas_8cpp_source.html#l00539">Canvas::recomputeBounds()</a>, <a class="el" href="_main_window_8cpp_source.html#l05244">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::refreshProperties()</a>, <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>, <a class="el" href="_canvas_8cpp_source.html#l00177">Canvas::setGeometryData()</a>, <a class="el" href="_main_window_8cpp_source.html#l10495">MainWindow::showExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l10425">MainWindow::showGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l03565">MainWindow::tclBBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l03631">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03606">MainWindow::tclScale()</a>, <a class="el" href="thieving_8cpp_source.html#l00047">fc::thievingPoints()</a>, <a class="el" href="_main_window_8cpp_source.html#l02969">MainWindow::transformSelectedObject()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D::View3D()</a>.</p>
+
+</div>
+</div>
+<a id="a4e5d39ce96f218172a5917e52f886461" name="a4e5d39ce96f218172a5917e52f886461"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e5d39ce96f218172a5917e52f886461">&#9670;&#160;</a></span>ymin</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::BBox::ymin = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Límite inferior en Y. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00050">50</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l04865">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l05015">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l08183">MainWindow::alignObjects()</a>, <a class="el" href="_canvas_8cpp_source.html#l00252">Canvas::appendGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l10167">MainWindow::applyNcc()</a>, <a class="el" href="geometry_8hpp_source.html#l00064">BBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l04908">MainWindow::calibrate()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="geometry_8hpp_source.html#l00078">contains()</a>, <a class="el" href="tools_8cpp_source.html#l00436">fc::cornerMarks()</a>, <a class="el" href="_main_window_8cpp_source.html#l08252">MainWindow::doubleSided()</a>, <a class="el" href="geometry_8hpp_source.html#l00087">expanded()</a>, <a class="el" href="_canvas_8cpp_source.html#l00707">Canvas::exportSvg()</a>, <a class="el" href="svg_8cpp_source.html#l00034">fc::exportSvg()</a>, <a class="el" href="tools_8cpp_source.html#l00220">fc::extractDrills()</a>, <a class="el" href="project_8cpp_source.html#l00626">fc::AllObjectsSax::finishObject()</a>, <a class="el" href="_canvas_8cpp_source.html#l00768">Canvas::fit()</a>, <a class="el" href="_main_window_8cpp_source.html#l02721">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08408">MainWindow::gerberEditor()</a>, <a class="el" href="geometry_8hpp_source.html#l00071">height()</a>, <a class="el" href="_main_window_8cpp_source.html#l06308">MainWindow::invertGerber()</a>, <a class="el" href="_canvas_8cpp_source.html#l00413">Canvas::layerBounds()</a>, <a class="el" href="_main_window_8cpp_source.html#l08069">MainWindow::moveToOrigin()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l10807">MainWindow::nccDialog()</a>, <a class="el" href="_canvas_8cpp_source.html#l00906">Canvas::paintEvent()</a>, <a class="el" href="_script_api_8cpp_source.html#l00396">fc::ScriptApi::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l04718">MainWindow::panelize()</a>, <a class="el" href="gcode_8cpp_source.html#l00896">fc::pasteGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l00972">fc::pathsGCode()</a>, <a class="el" href="rtree_8cpp_source.html#l00093">fc::SpatialIndex::query()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00181">View3D::rebuildFaces()</a>, <a class="el" href="_canvas_8cpp_source.html#l00539">Canvas::recomputeBounds()</a>, <a class="el" href="_main_window_8cpp_source.html#l05244">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::refreshProperties()</a>, <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>, <a class="el" href="_canvas_8cpp_source.html#l00177">Canvas::setGeometryData()</a>, <a class="el" href="_main_window_8cpp_source.html#l10495">MainWindow::showExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l10425">MainWindow::showGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l04027">MainWindow::tclAlignDrill()</a>, <a class="el" href="_main_window_8cpp_source.html#l03565">MainWindow::tclBBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l03631">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03606">MainWindow::tclScale()</a>, <a class="el" href="thieving_8cpp_source.html#l00047">fc::thievingPoints()</a>, <a class="el" href="_main_window_8cpp_source.html#l02969">MainWindow::transformSelectedObject()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D::View3D()</a>.</p>
+
+</div>
+</div>
+<hr/>La documentación de esta estructura está generada del siguiente archivo:<ul>
+<li>include/flatcam/<a class="el" href="geometry_8hpp_source.html">geometry.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacefc.html">fc</a></li><li class="navelem"><a href="structfc_1_1_b_box.html">BBox</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia del archivo src/cli/main.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('cli_2main_8cpp.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo main.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Punto de entrada de <span class="tt">flatcam-cli</span>: despacho de subcomandos CAM.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &lt;array&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;filesystem&gt;</code><br />
+<code>#include &lt;fstream&gt;</code><br />
+<code>#include &lt;iomanip&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+<code>#include &quot;<a class="el" href="excellon_8hpp_source.html">flatcam/excellon.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="gcode_8hpp_source.html">flatcam/gcode.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="gerber_8hpp_source.html">flatcam/gerber.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="cutout_8hpp_source.html">flatcam/cutout.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="isolation_8hpp_source.html">flatcam/isolation.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="ncc_8hpp_source.html">flatcam/ncc.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="paint_8hpp_source.html">flatcam/paint.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="svg_8hpp_source.html">flatcam/svg.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="dxf_8hpp_source.html">flatcam/dxf.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="thieving_8hpp_source.html">flatcam/thieving.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="importers_8hpp_source.html">flatcam/importers.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="project_8hpp_source.html">flatcam/project.hpp</a>&quot;</code><br />
+</div>
+<p><a href="cli_2main_8cpp_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
+Espacios de nombres</h2></td></tr>
+<tr class="memitem:fc" id="r_fc"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html">fc</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:adfd95b456849653e316bb33f4f1f4f3c" id="r_adfd95b456849653e316bb33f4f1f4f3c"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="namespacefc.html#adfd95b456849653e316bb33f4f1f4f3c">fc::runTclScript</a> (const std::string &amp;path)</td></tr>
+<tr class="memdesc:adfd95b456849653e316bb33f4f1f4f3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ejecuta un script Tcl (implementado en <span class="tt"><a class="el" href="tcl_8cpp.html" title="Shell Tcl mínimo de respaldo cuando no se encontró libtcl.">tcl.cpp</a></span> o <span class="tt"><a class="el" href="tcl__embed_8cpp.html" title="Shell Tcl real embebido con libtcl.">tcl_embed.cpp</a></span>).  <br /></td></tr>
+<tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627" id="r_a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
+<tr class="memdesc:a3c04138a5bfe5d72780bb7e82a18e627"><td class="mdescLeft">&#160;</td><td class="mdescRight">Punto de entrada: interpreta los argumentos y despacha el subcomando.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Punto de entrada de <span class="tt">flatcam-cli</span>: despacho de subcomandos CAM. </p>
+<p>La CLI interpreta un primer argumento (<span class="tt">gerber</span>, <span class="tt">excellon</span>, <span class="tt">gcode</span>, <span class="tt">isolate</span>, <span class="tt">cutout</span>, <span class="tt">ncc</span>, <span class="tt">paint</span>, <span class="tt">mill</span>, <span class="tt">svg</span>, <span class="tt">dxf</span>, <span class="tt">film</span>, <span class="tt">import-svg</span>, <span class="tt">import-dxf</span>, <span class="tt">thieving</span>, <span class="tt">project</span>, <span class="tt">tcl</span>) y ejecuta el parser o la herramienta correspondiente. Las opciones se comparten entre comandos mediante una única estructura <span class="tt">Args</span> y cada ejecución termina en una función <span class="tt">runXxx</span> que imprime estadísticas en texto o JSON o escribe el archivo de salida pedido. </p>
+
+<p class="definition">Definición en el archivo <a class="el" href="cli_2main_8cpp_source.html">main.cpp</a>.</p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a3c04138a5bfe5d72780bb7e82a18e627" name="a3c04138a5bfe5d72780bb7e82a18e627"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c04138a5bfe5d72780bb7e82a18e627">&#9670;&#160;</a></span>main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int main </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>argc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>argv</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Punto de entrada: interpreta los argumentos y despacha el subcomando. </p>
+<p>Envuelve <span class="tt">parseArgs</span> y el despacho en un <span class="tt">try/catch</span> que convierte cualquier excepción de la biblioteca estándar o del parser en un mensaje <span class="tt">error: ...</span> con código de salida 1.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argc</td><td>Cantidad de argumentos. </td></tr>
+    <tr><td class="paramname">argv</td><td>Vector de argumentos. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>0 en éxito; 1 si una excepción interrumpe la ejecución; 2 si la línea de comandos es inválida o el subcomando es desconocido.</dd></dl>
+<dl class="section note"><dt>Nota</dt><dd>El subcomando <span class="tt">tcl</span> se delega en <span class="tt"><a class="el" href="namespacefc.html#adfd95b456849653e316bb33f4f1f4f3c" title="Ejecuta un script Tcl (implementado en tcl.cpp o tcl_embed.cpp).">fc::runTclScript</a></span>, cuya implementación depende de si el build encontró libtcl. </dd>
+<dd>
+Cada <span class="tt">runXxx</span> recibe la estructura completa de opciones; no hay validación cruzada entre el subcomando y las banderas, de modo que opciones irrelevantes se aceptan y se ignoran. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="cli_2main_8cpp_source.html#l01362">1362</a> del archivo <a class="el" href="cli_2main_8cpp_source.html">main.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="cli_2main_8cpp_source.html#l01362">main()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="cli_2main_8cpp_source.html#l01362">main()</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_b78fdfbbb632ce54d070469d6a721373.html">cli</a></li><li class="navelem"><a href="cli_2main_8cpp.html">main.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

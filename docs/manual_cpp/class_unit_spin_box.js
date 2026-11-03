@@ -1,0 +1,23 @@
+var class_unit_spin_box =
+[
+    [ "UnitSpinBox", "class_unit_spin_box.html#a84d10aa7460804c283da9fb72194a057", null ],
+    [ "~UnitSpinBox", "class_unit_spin_box.html#a6b3739c4e39177c9c3c36e74be1aefb2", null ],
+    [ "applyConversion", "class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded", null ],
+    [ "displayInch", "class_unit_spin_box.html#ac17899a5e76f401654411e3f7d604404", null ],
+    [ "instances", "class_unit_spin_box.html#aae73d9deef8fbadc4b07d842a28ed4d6", null ],
+    [ "setDecimals", "class_unit_spin_box.html#aba11b75abd1e8312f268a882ea5fae0a", null ],
+    [ "setDisplayInch", "class_unit_spin_box.html#aedf450d74a26f50b154baba8a9007492", null ],
+    [ "setRange", "class_unit_spin_box.html#a36241af247867fd2e8df2db43c556930", null ],
+    [ "setSingleStep", "class_unit_spin_box.html#a90ceb18a9a19082d2e93cca1d1d4153c", null ],
+    [ "setSuffix", "class_unit_spin_box.html#a2913ef2017ec11806b4467453c90fc13", null ],
+    [ "setValue", "class_unit_spin_box.html#a4c369b7f7c3753a89a2cd9ac6df1cc65", null ],
+    [ "value", "class_unit_spin_box.html#aed1e76da29da302738059263c27284ce", null ],
+    [ "displayInch_", "class_unit_spin_box.html#a33ecaa2f4602a44b5f0313671da52777", null ],
+    [ "length_", "class_unit_spin_box.html#ab877bc4f815150020bb487ef1a6ec237", null ],
+    [ "rawDecimals_", "class_unit_spin_box.html#a434d101b1d8d2853dbe7bb429827ef18", null ],
+    [ "rawMax_", "class_unit_spin_box.html#a5620bdd59b17a37fdedaf50f6b12137b", null ],
+    [ "rawMin_", "class_unit_spin_box.html#a5280d6bd4af35b7d760154ca8c1385c2", null ],
+    [ "rawStep_", "class_unit_spin_box.html#a59e3ab71413923feb2470fdb078e88d3", null ],
+    [ "rawSuffix_", "class_unit_spin_box.html#ab7fa55aab522dffa4372505189667a30", null ],
+    [ "rawValue_", "class_unit_spin_box.html#a92c60e67a9fca34e5bc2a8b3c99d7f6f", null ]
+];

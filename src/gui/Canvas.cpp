@@ -1,3 +1,14 @@
+/**
+ * @file Canvas.cpp
+ * @brief Implementación del visor 2D: capas, rutas Qt, zoom, pan y selección.
+ *
+ * Convierte la geometría GEOS de cada capa en `QPainterPath` (sólidos con
+ * regla par-impar y recorridos abiertos), mantiene los límites globales para
+ * ajustar la vista, dibuja rejilla adaptativa, ejes, área de trabajo, cobre,
+ * recorridos, trayectorias y HUD, y traduce los eventos de ratón a zoom,
+ * desplazamiento y selección. La exportación de film reutiliza las mismas rutas
+ * mediante `QSvgGenerator`.
+ */
 #include "Canvas.h"
 
 #include <QMouseEvent>
@@ -10,6 +21,18 @@
 #include <cmath>
 #include <limits>
 
+/**
+ * @brief Construye el canvas vacío y configura el widget.
+ *
+ * Fija un tamaño mínimo de 400x300 px, activa el seguimiento del ratón (para
+ * refrescar el HUD y la barra de estado sin pulsar botones) y el foco por
+ * teclado. El rol de fondo `QPalette::Base` deja que la hoja de estilo de la
+ * aplicación tiña el lienzo de forma coherente con el tema activo.
+ *
+ * @param parent Widget contenedor; la propiedad la asume Qt por jerarquía.
+ * @note No carga geometría: mientras `hasData_` sea falso, paintEvent dibuja
+ *       el mensaje de bienvenida.
+ */
 Canvas::Canvas(QWidget* parent) : QWidget(parent) {
     setMinimumSize(400, 300);
     setMouseTracking(true);
@@ -17,6 +40,23 @@ Canvas::Canvas(QWidget* parent) : QWidget(parent) {
     setBackgroundRole(QPalette::Base);
 }
 
+/**
+ * @brief Convierte polígonos GEOS en una única ruta Qt con agujeros.
+ *
+ * Recorre todas las geometrías y todos sus `PolygonContours`. Por cada contorno
+ * agrega el anillo exterior y luego cada agujero como subcamino independiente,
+ * cerrando ambos con `closeSubpath()`. La ruta se crea con regla de relleno
+ * **par-impar** (`Qt::OddEvenFill`): así un agujero contenido en el exterior
+ * queda vacío sin depender de la orientación de los anillos.
+ *
+ * @param geoms Sólidos a dibujar; puede estar vacío.
+ * @return Ruta lista para `QPainter::drawPath`, o ruta vacía si ningún anillo
+ *         tiene al menos 3 puntos.
+ * @note Las coordenadas se copian sin transformar (unidades de mundo, mm por
+ *       convención) y se descartan los contornos degenerados. No se aplica
+ *       grosor de línea: el trazo es cosmético y lo decide el `QPen` del
+ *       llamador.
+ */
 QPainterPath Canvas::buildPath(const std::vector<fc::Geom>& geoms) {
     QPainterPath path;
     path.setFillRule(Qt::OddEvenFill);
@@ -41,6 +81,22 @@ QPainterPath Canvas::buildPath(const std::vector<fc::Geom>& geoms) {
     return path;
 }
 
+/**
+ * @brief Agrega a una ruta los tramos de una geometría de tipo línea.
+ *
+ * Resuelve de forma recursiva `LINESTRING`/`LINEARRING` y las colecciones
+ * (`MULTILINESTRING`, `GEOMETRYCOLLECTION`, `MULTIPOLYGON`) recorriendo sus
+ * componentes con `geometryN()`. Para una línea usa `moveTo()` en el primer
+ * vértice y `lineTo()` en los restantes; no cierra el anillo porque un
+ * `LINEARRING` de GEOS ya repite el primer punto al final.
+ *
+ * @param path Ruta destino; se modifica en sitio.
+ * @param g Geometría de origen.
+ * @note Las geometrías sin componentes de línea (polígonos sueltos) se ignoran:
+ *       los contornos rellenos se dibujan con buildPath, no aquí.
+ * @warning Sólo se soportan segmentos rectos; los arcos ya llegan aplanados
+ *          desde el parser, así que no se pierde información práctica.
+ */
 void Canvas::appendLinePath(QPainterPath& path, const fc::Geom& g) {
     if (!g.valid() || g.empty()) return;
     const int type = g.typeId();
@@ -58,12 +114,29 @@ void Canvas::appendLinePath(QPainterPath& path, const fc::Geom& g) {
     }
 }
 
+/**
+ * @brief Construye la ruta de recorridos (líneas) de un conjunto de geometrías.
+ *
+ * @param geoms Recorridos de la capa (contornos de aislamiento, taladros,
+ *        G-code, etc.).
+ * @return Ruta con todos los tramos; vacía si ninguna geometría aporta líneas.
+ * @see appendLinePath
+ */
 QPainterPath Canvas::buildLinePath(const std::vector<fc::Geom>& geoms) {
     QPainterPath path;
     for (const fc::Geom& g : geoms) appendLinePath(path, g);
     return path;
 }
 
+/**
+ * @brief Busca una capa por identificador para modificarla.
+ *
+ * @param id Identificador estable de la capa.
+ * @return Puntero a la capa, o `nullptr` si no existe.
+ * @note Búsqueda lineal: el número de capas es pequeño (decenas). El puntero
+ *       deja de ser válido si se agrega o elimina una capa, porque
+ *       `layers_` es un `std::vector`.
+ */
 Canvas::Layer* Canvas::findLayer(int id) {
     for (Layer& layer : layers_) {
         if (layer.id == id) return &layer;
@@ -71,6 +144,12 @@ Canvas::Layer* Canvas::findLayer(int id) {
     return nullptr;
 }
 
+/**
+ * @brief Variante constante de findLayer.
+ *
+ * @param id Identificador estable de la capa.
+ * @return Puntero de sólo lectura a la capa, o `nullptr` si no existe.
+ */
 const Canvas::Layer* Canvas::findLayer(int id) const {
     for (const Layer& layer : layers_) {
         if (layer.id == id) return &layer;
@@ -78,6 +157,23 @@ const Canvas::Layer* Canvas::findLayer(int id) const {
     return nullptr;
 }
 
+/**
+ * @brief Reemplaza todo el contenido del visor por una única capa.
+ *
+ * Descarta las capas existentes y los límites previos, construye la capa con
+ * las rutas de sólidos y recorridos, conserva la geometría GEOS y calcula la
+ * caja envolvente global: primero con los sólidos y, si ninguno aporta límites
+ * válidos, con los recorridos (caso típico de una capa sólo de G-code). Al
+ * final ajusta la vista y repinta.
+ *
+ * @param solids Polígonos de cobre.
+ * @param follows Recorridos abiertos.
+ * @note `hasData_` sólo queda activo si la caja resultante es válida; si no,
+ *       el visor sigue mostrando el mensaje de bienvenida.
+ * @warning No limpia `toolpathPath_` (la previsualización CAM); para eso está
+ *          clearData(). Tampoco reinicia `nextId_`, por lo que los
+ *          identificadores siguen creciendo entre cargas.
+ */
 void Canvas::setGeometryData(const std::vector<fc::Geom>& solids,
                              const std::vector<fc::Geom>& follows) {
     layers_.clear();
@@ -122,22 +218,50 @@ void Canvas::setGeometryData(const std::vector<fc::Geom>& solids,
     update();
 }
 
+/**
+ * @brief Inicia una carga por lotes de varias capas.
+ *
+ * Vacía capas, límites y la bandera de datos, pero **no** repinta: la
+ * intención es que el llamador encadene varios appendGeometry y cierre con
+ * endGeometry, que calcula el ajuste una sola vez.
+ *
+ * @note No limpia `toolpathPath_`.
+ */
 void Canvas::beginGeometry() {
     layers_.clear();
     bounds_ = fc::BBox();
     hasData_ = false;
 }
 
+/**
+ * @brief Agrega una capa nueva durante una carga por lotes.
+ *
+ * Construye las rutas Qt de sólidos y recorridos, guarda la geometría GEOS,
+ * extiende la caja global con los límites válidos de cada geometría y
+ * devuelve el identificador asignado. La capa se agrega al final de la lista,
+ * es decir, encima de las anteriores.
+ *
+ * @param solids Polígonos de la capa.
+ * @param follows Recorridos de la capa.
+ * @param keepGeometry `true` conserva la geometría GEOS para edición,
+ *        exportación y undo; `false` la descarta para ahorrar memoria en
+ *        proyectos grandes (sólo queda el dibujo).
+ * @return Identificador de la capa recién creada.
+ * @note No repinta ni ajusta la vista: eso lo hace endGeometry().
+ */
 int Canvas::appendGeometry(const std::vector<fc::Geom>& solids,
                            const std::vector<fc::Geom>& follows, bool keepGeometry) {
     Layer layer;
     layer.id = nextId_++;
     layer.solid = buildPath(solids);
     layer.follow = buildLinePath(follows);
-    layer.solids = solids;
-    layer.follows = follows;
+    if (keepGeometry) {
+        layer.solids = solids;
+        layer.follows = follows;
+    }
     layers_.push_back(std::move(layer));
 
+    /// Extiende la caja global con los límites válidos de una geometría.
     auto grow = [this](const fc::BBox& gb) {
         if (!gb.valid) return;
         if (!bounds_.valid) {
@@ -155,11 +279,23 @@ int Canvas::appendGeometry(const std::vector<fc::Geom>& solids,
     return layer.id;
 }
 
+/**
+ * @brief Cierra una carga por lotes.
+ *
+ * Ajusta la vista a la caja acumulada y repinta una sola vez, evitando el
+ * coste de reajustar por cada capa agregada.
+ */
 void Canvas::endGeometry() {
     fit();
     update();
 }
 
+/**
+ * @brief Devuelve los identificadores de capa en orden de dibujo.
+ *
+ * @return Lista de ids de abajo hacia arriba (el último se dibuja encima).
+ * @note Se usa para sincronizar el árbol del proyecto con el canvas.
+ */
 std::vector<int> Canvas::layerIds() const {
     std::vector<int> ids;
     ids.reserve(layers_.size());
@@ -167,13 +303,28 @@ std::vector<int> Canvas::layerIds() const {
     return ids;
 }
 
+/**
+ * @brief Reordena las capas según una lista de identificadores.
+ *
+ * Primero copia las capas en el orden pedido (ignorando los ids que no
+ * existen) y después agrega al final, conservando su orden relativo, las capas
+ * que no aparecían en la lista. Así nunca se pierde ninguna capa.
+ *
+ * @param ids Orden deseado, de abajo hacia arriba.
+ * @note El coste es O(n·m) con n capas y m ids, aceptable para decenas de
+ *       capas. Los identificadores repetidos se ignoran y no se recalcula la
+ *       caja (las capas no cambian de posición).
+ */
 void Canvas::setLayerOrder(const std::vector<int>& ids) {
     std::vector<Layer> ordered;
     ordered.reserve(layers_.size());
+    std::vector<int> seen;
     for (int id : ids) {
+        if (std::find(seen.begin(), seen.end(), id) != seen.end()) continue;
         for (const Layer& layer : layers_) {
             if (layer.id == id) {
                 ordered.push_back(layer);
+                seen.push_back(id);
                 break;
             }
         }
@@ -187,6 +338,16 @@ void Canvas::setLayerOrder(const std::vector<int>& ids) {
     update();
 }
 
+/**
+ * @brief Muestra u oculta una capa.
+ *
+ * @param id Identificador de la capa.
+ * @param visible Estado deseado.
+ * @note Las capas ocultas no se dibujan, no participan de
+ *       `visibleSolids()`/`mergeVisibleLayers()` ni de la exportación SVG, pero
+ *       sí cuentan en los límites globales. Recalcula el repintado; si el id no
+ *       existe la llamada es inocua.
+ */
 void Canvas::setLayerVisible(int id, bool visible) {
     Layer* layer = findLayer(id);
     if (!layer) return;
@@ -194,13 +355,37 @@ void Canvas::setLayerVisible(int id, bool visible) {
     update();
 }
 
+/**
+ * @brief Elimina una capa por identificador.
+ *
+ * Usa el idioma *erase-remove* sobre el vector de capas, por lo que se
+ * conservan el orden relativo y los ids de las restantes. Repinta al final.
+ *
+ * @param id Capa a quitar; si no existe no ocurre nada.
+ * @note Recalcula límites y `hasData_`, así que `fit()` y `exportSvg()` quedan
+ *       consistentes tras el borrado. No limpia `toolpathPath_`, que es una
+ *       previsualización independiente.
+ */
 void Canvas::removeLayer(int id) {
     layers_.erase(std::remove_if(layers_.begin(), layers_.end(),
                                  [id](const Layer& layer) { return layer.id == id; }),
                   layers_.end());
+    recomputeBounds();
     update();
 }
 
+/**
+ * @brief Duplica una capa y la coloca encima de todas.
+ *
+ * Copia las rutas (compartidas implícitamente hasta que se modifiquen), la
+ * geometría GEOS y los indicadores de visibilidad, relleno y multicolor, y
+ * asigna un identificador nuevo.
+ *
+ * @param id Capa de origen.
+ * @return Id de la copia, o -1 si la capa no existe.
+ * @note No extiende los límites ni ajusta la vista: la copia ocupa la misma
+ *       zona que el original, así que la caja no cambia.
+ */
 int Canvas::duplicateLayer(int id) {
     const Layer* source = findLayer(id);
     if (!source) return -1;
@@ -211,6 +396,20 @@ int Canvas::duplicateLayer(int id) {
     return copy.id;
 }
 
+/**
+ * @brief Calcula los límites de una capa a partir de sus rutas.
+ *
+ * Une el rectángulo envolvente de los sólidos con el de los recorridos (los
+ * recorridos pueden sobresalir del cobre, por ejemplo en un aislamiento) y
+ * convierte el resultado a `fc::BBox`.
+ *
+ * @param id Identificador de la capa.
+ * @return Caja válida en coordenadas de mundo, o caja inválida si la capa no
+ *         existe o ambas rutas están vacías.
+ * @note Es más barato que recorrer la geometría GEOS y sirve para hacer zoom a
+ *       un objeto; el lado superior/izquierdo de `QRectF` coincide con el
+ *       mínimo de cada eje.
+ */
 fc::BBox Canvas::layerBounds(int id) const {
     fc::BBox b;
     const Layer* layer = findLayer(id);
@@ -227,6 +426,19 @@ fc::BBox Canvas::layerBounds(int id) const {
     return b;
 }
 
+/**
+ * @brief Captura el estado completo de una capa para undo/redo.
+ *
+ * Copia id, rutas, geometría GEOS y visibilidad. El snapshot es
+ * independiente del canvas: puede guardarse en un `QUndoCommand` y
+ * reinsertarse después.
+ *
+ * @param id Capa a capturar.
+ * @return Snapshot con id 0 si la capa no existe (las capas reales empiezan
+ *         en 1).
+ * @note No guarda los indicadores `filled` y `multicolor`: al deshacer un
+ *       borrado esas preferencias de dibujo vuelven a su valor por defecto.
+ */
 Canvas::LayerSnapshot Canvas::layerSnapshot(int id) const {
     LayerSnapshot snapshot;
     const Layer* layer = findLayer(id);
@@ -240,6 +452,17 @@ Canvas::LayerSnapshot Canvas::layerSnapshot(int id) const {
     return snapshot;
 }
 
+/**
+ * @brief Reinserta una capa a partir de un snapshot (deshacer borrado).
+ *
+ * Reconstruye la capa con el id original, restaura rutas, geometría y
+ * visibilidad, y eleva `nextId_` para que los ids futuros no colisionen con el
+ * restaurado.
+ *
+ * @param snapshot Estado capturado previamente con layerSnapshot().
+ * @note La capa se agrega al final (queda dibujada encima); se recalculan
+ *       límites y `hasData_` para que el visor vuelva a ajustarse correctamente.
+ */
 void Canvas::insertLayer(const LayerSnapshot& snapshot) {
     Layer layer;
     layer.id = snapshot.id;
@@ -250,19 +473,47 @@ void Canvas::insertLayer(const LayerSnapshot& snapshot) {
     layer.visible = snapshot.visible;
     layers_.push_back(std::move(layer));
     nextId_ = std::max(nextId_, snapshot.id + 1);
+    recomputeBounds();
     update();
 }
 
+/**
+ * @brief Devuelve los sólidos GEOS de una capa.
+ *
+ * @param id Identificador de la capa.
+ * @return Copia de la geometría de cobre; vector vacío si la capa no existe o
+ *         se creó sólo con rutas (por ejemplo, mergeVisibleLayers).
+ * @note La copia es superficial para GEOS: `fc::Geom` comparte la geometría
+ *       subyacente, así que es barata.
+ */
 std::vector<fc::Geom> Canvas::layerSolids(int id) const {
     const Layer* layer = findLayer(id);
     return layer ? layer->solids : std::vector<fc::Geom>{};
 }
 
+/**
+ * @brief Devuelve los recorridos GEOS de una capa.
+ *
+ * @param id Identificador de la capa.
+ * @return Copia de los recorridos; vector vacío si la capa no existe.
+ */
 std::vector<fc::Geom> Canvas::layerFollows(int id) const {
     const Layer* layer = findLayer(id);
     return layer ? layer->follows : std::vector<fc::Geom>{};
 }
 
+/**
+ * @brief Reemplaza la geometría de una capa y regenera su dibujo.
+ *
+ * Sustituye sólidos y recorridos, reconstruye ambas rutas Qt, recalcula los
+ * límites globales (sin reajustar la vista) y repinta. Es el camino que usan
+ * los editores, las transformaciones y las operaciones booleanas.
+ *
+ * @param id Capa a modificar; si no existe no ocurre nada.
+ * @param solids Nuevos polígonos.
+ * @param follows Nuevos recorridos.
+ * @note Conserva la visibilidad y el modo de dibujo de la capa.
+ */
 void Canvas::setLayerGeometry(int id, const std::vector<fc::Geom>& solids,
                               const std::vector<fc::Geom>& follows) {
     Layer* layer = findLayer(id);
@@ -275,6 +526,16 @@ void Canvas::setLayerGeometry(int id, const std::vector<fc::Geom>& solids,
     update();
 }
 
+/**
+ * @brief Recalcula la caja envolvente de todas las capas.
+ *
+ * Parte de una caja inválida y la extiende con la unión de las rutas de sólidos
+ * y recorridos de cada capa, incluidas las ocultas. Actualiza `hasData_` según
+ * el resultado.
+ *
+ * @note No ajusta la vista ni repinta: eso queda a cargo del llamador, para
+ *       permitir ediciones encadenadas sin saltos de zoom.
+ */
 void Canvas::recomputeBounds() {
     bounds_ = fc::BBox();
     for (const Layer& layer : layers_) {
@@ -295,13 +556,31 @@ void Canvas::recomputeBounds() {
     hasData_ = bounds_.valid;
 }
 
+/**
+ * @brief Combina las capas visibles en una capa nueva ("film" interno).
+ *
+ * Une los sólidos con `QPainterPath::united()` y concatena los recorridos con
+ * `addPath()`. El resultado se agrega encima de las demás capas; las originales
+ * no se ocultan ni se borran.
+ *
+ * @return Id de la capa combinada, o -1 si no hay nada visible con contenido.
+ * @note También concatena `solids`/`follows` de las capas visibles. Las capas
+ *       cargadas en modo streaming (sin geometría) sólo aportan su dibujo, por
+ *       lo que no se pueden transformar después.
+ * @note La unión de rutas es una operación costosa con mucho cobre; en placas
+ *       grandes puede tardar segundos.
+ */
 int Canvas::mergeVisibleLayers() {
     QPainterPath mergedSolid;
     QPainterPath mergedFollow;
+    std::vector<fc::Geom> mergedSolids;
+    std::vector<fc::Geom> mergedFollows;
     for (const Layer& layer : layers_) {
         if (!layer.visible) continue;
         mergedSolid = mergedSolid.united(layer.solid);
         mergedFollow.addPath(layer.follow);
+        mergedSolids.insert(mergedSolids.end(), layer.solids.begin(), layer.solids.end());
+        mergedFollows.insert(mergedFollows.end(), layer.follows.begin(), layer.follows.end());
     }
     if (mergedSolid.isEmpty() && mergedFollow.isEmpty()) return -1;
 
@@ -309,11 +588,22 @@ int Canvas::mergeVisibleLayers() {
     layer.id = nextId_++;
     layer.solid = mergedSolid;
     layer.follow = mergedFollow;
+    layer.solids = std::move(mergedSolids);
+    layer.follows = std::move(mergedFollows);
     layers_.push_back(std::move(layer));
+    recomputeBounds();
     update();
     return layer.id;
 }
 
+/**
+ * @brief Define si la capa se dibuja rellena o sólo con contorno.
+ *
+ * @param id Identificador de la capa.
+ * @param filled `true` para rellenar el cobre, `false` para dibujar el borde.
+ * @note Sólo afecta al render; no cambia la geometría ni la exportación SVG,
+ *       que siempre dibuja relleno.
+ */
 void Canvas::setLayerFilled(int id, bool filled) {
     Layer* layer = findLayer(id);
     if (!layer) return;
@@ -321,16 +611,38 @@ void Canvas::setLayerFilled(int id, bool filled) {
     update();
 }
 
+/**
+ * @brief Consulta el modo de relleno de una capa.
+ *
+ * @param id Identificador de la capa.
+ * @return `true` si se dibuja rellena; `true` también si la capa no existe
+ *         (valor por defecto del visor).
+ */
 bool Canvas::layerFilled(int id) const {
     const Layer* layer = findLayer(id);
     return layer ? layer->filled : true;
 }
 
+/**
+ * @brief Consulta si la capa usa coloreado por primitiva.
+ *
+ * @param id Identificador de la capa.
+ * @return `true` en modo multicolor, `false` si la capa no existe.
+ */
 bool Canvas::layerMulticolor(int id) const {
     const Layer* layer = findLayer(id);
     return layer ? layer->multicolor : false;
 }
 
+/**
+ * @brief Activa o desactiva el coloreado por primitiva de una capa.
+ *
+ * En modo multicolor cada sólido recibe un tono derivado de su índice
+ * (`i * 47 % 360`), lo que ayuda a distinguir aperturas y regiones contiguas.
+ *
+ * @param id Identificador de la capa.
+ * @param multicolor Estado deseado.
+ */
 void Canvas::setLayerMulticolor(int id, bool multicolor) {
     Layer* layer = findLayer(id);
     if (!layer) return;
@@ -338,9 +650,23 @@ void Canvas::setLayerMulticolor(int id, bool multicolor) {
     update();
 }
 
+/**
+ * @brief Aplica una transformación afín a la geometría de una capa.
+ *
+ * Recorre sólidos y recorridos y transforma cada vértice con
+ * `fc::Geom::transformXY`, usando el `QTransform` recibido como función de
+ * mapeo; después reconstruye las rutas Qt y repinta. Al trabajar sobre GEOS, la
+ * transformación también queda reflejada en las exportaciones.
+ *
+ * @param id Capa a transformar.
+ * @param transform Mover/rotar/escalar/sesgar en coordenadas de mundo.
+ * @note Recalcula límites y `hasData_`; el ajuste de vista y `exportSvg()`
+ *       reflejan la transformación de inmediato.
+ */
 void Canvas::transformLayer(int id, const QTransform& transform) {
     Layer* layer = findLayer(id);
     if (!layer) return;
+    /// Mapea cada vértice de cada geometría con la transformación dada.
     auto apply = [&transform](const std::vector<fc::Geom>& input) {
         std::vector<fc::Geom> output;
         output.reserve(input.size());
@@ -356,9 +682,28 @@ void Canvas::transformLayer(int id, const QTransform& transform) {
     layer->follows = apply(layer->follows);
     layer->solid = buildPath(layer->solids);
     layer->follow = buildLinePath(layer->follows);
+    recomputeBounds();
     update();
 }
 
+/**
+ * @brief Exporta las capas visibles a un SVG (film de fabricación).
+ *
+ * Calcula un alto en píxeles proporcional a la caja (ancho fijo de 1400 px),
+ * define el `viewBox` en unidades de mundo y aplica una matriz que invierte el
+ * eje Y (`[1 0 0 -1 0 ymin+ymax]`) para que el SVG, cuyo origen está arriba,
+ * coincida con el mundo CAM, cuyo origen está abajo. Dibuja el cobre relleno y
+ * los recorridos como líneas.
+ *
+ * @param path Ruta de destino del archivo `.svg`.
+ * @return `true` si se escribió; `false` si no hay datos o si
+ *         `QPainter::begin()` no pudo abrir el generador (ruta inválida, sin
+ *         permisos, etc.).
+ * @warning Usa colores fijos (cobre `200,149,46`, recorridos `74,144,217`) e
+ *          ignora `setColors`. No incluye rejilla, ejes, área de trabajo,
+ *          trayectorias ni HUD, y no comprueba el resultado final de la
+ *          escritura.
+ */
 bool Canvas::exportSvg(const QString& path) const {
     if (!hasData_) return false;
 
@@ -370,9 +715,7 @@ bool Canvas::exportSvg(const QString& path) const {
     QSvgGenerator generator;
     generator.setFileName(path);
     generator.setSize(QSize(pixelWidth, pixelHeight));
-    generator.setViewBox(QRect(static_cast<int>(std::floor(bounds_.xmin)),
-                               static_cast<int>(std::floor(bounds_.ymin)),
-                               static_cast<int>(std::ceil(w)), static_cast<int>(std::ceil(h))));
+    generator.setViewBox(QRectF(bounds_.xmin, bounds_.ymin, w, h));
     generator.setTitle(QStringLiteral("FlatCAM C++"));
     generator.setDescription(QStringLiteral("Film export"));
 
@@ -395,6 +738,14 @@ bool Canvas::exportSvg(const QString& path) const {
     return true;
 }
 
+/**
+ * @brief Vacía el visor por completo.
+ *
+ * Elimina todas las capas, la previsualización de trayectorias, los límites y
+ * la bandera de datos, y repinta el mensaje de bienvenida.
+ *
+ * @note Conserva escala, desplazamiento, colores y preferencias de rejilla/HUD.
+ */
 void Canvas::clearData() {
     layers_.clear();
     toolpathPath_ = QPainterPath();
@@ -403,6 +754,17 @@ void Canvas::clearData() {
     update();
 }
 
+/**
+ * @brief Ajusta escala y desplazamiento para encuadrar todo el contenido.
+ *
+ * Reserva un margen fijo de 40 px, calcula la escala como el menor factor que
+ * cabe en ancho y alto, descarta valores no finitos o no positivos (caja
+ * degenerada o widget diminuto, que caen a escala 1.0) y centra la caja en el
+ * widget invirtiendo el eje Y.
+ *
+ * @note No hace nada si `hasData_` es falso. No repinta: el llamador decide
+ *       cuándo actualizar.
+ */
 void Canvas::fit() {
     if (!hasData_) return;
     const double w = std::max(1, width());
@@ -416,6 +778,18 @@ void Canvas::fit() {
     offset_ = QPointF(w / 2.0 - cx * scale_, h / 2.0 + cy * scale_);
 }
 
+/**
+ * @brief Configura la paleta del visor.
+ *
+ * Guarda el color de fondo y el de cobre; el borde del cobre se deriva
+ * automáticamente aclarando un 30 % el relleno para que el contorno se
+ * distinga tanto en tema claro como oscuro.
+ *
+ * @param background Fondo del lienzo.
+ * @param copper Relleno del cobre.
+ * @param follow Color de los recorridos.
+ * @param toolpath Color de la previsualización CAM.
+ */
 void Canvas::setColors(const QColor& background, const QColor& copper, const QColor& follow,
                        const QColor& toolpath) {
     background_ = background;
@@ -426,6 +800,15 @@ void Canvas::setColors(const QColor& background, const QColor& copper, const QCo
     update();
 }
 
+/**
+ * @brief Reúne el cobre de todas las capas visibles.
+ *
+ * @return Vector con los sólidos concatenados en orden de dibujo. Lo usan las
+ *         herramientas (aislamiento, NCC, corte) cuando trabajan sobre "lo
+ *         visible" en lugar de un objeto concreto.
+ * @note El resultado puede contener geometrías solapadas: si luego se usa para
+ *       operar, conviene unirlas. Las capas ocultas no aportan nada.
+ */
 std::vector<fc::Geom> Canvas::visibleSolids() const {
     std::vector<fc::Geom> out;
     for (const Layer& layer : layers_) {
@@ -435,6 +818,14 @@ std::vector<fc::Geom> Canvas::visibleSolids() const {
     return out;
 }
 
+/**
+ * @brief Restaura escala y desplazamiento de la vista.
+ *
+ * @param scale Factor de píxeles por unidad de mundo; se ignora si es menor o
+ *        igual a cero.
+ * @param offset Traslación en píxeles hacia el origen de pantalla.
+ * @note Útil para guardar y recuperar marcadores de vista.
+ */
 void Canvas::setView(double scale, const QPointF& offset) {
     if (scale <= 0.0) return;
     scale_ = scale;
@@ -442,16 +833,38 @@ void Canvas::setView(double scale, const QPointF& offset) {
     update();
 }
 
+/**
+ * @brief Centra la vista en un punto de mundo.
+ *
+ * @param x Coordenada X del centro deseado.
+ * @param y Coordenada Y del centro deseado.
+ * @note Mantiene la escala actual e invierte el eje Y al convertir a píxeles.
+ */
 void Canvas::centerOn(double x, double y) {
     offset_ = QPointF(width() / 2.0 - x * scale_, height() / 2.0 + y * scale_);
     update();
 }
 
+/**
+ * @brief Muestra u oculta la rejilla.
+ *
+ * @param visible Estado deseado; persiste entre cargas de archivos.
+ */
 void Canvas::setGridVisible(bool visible) {
     gridVisible_ = visible;
     update();
 }
 
+/**
+ * @brief Ajusta la vista a una caja concreta (zoom a objeto).
+ *
+ * Sustituye los límites usados por fit/exportSvg y marca que hay datos, aunque
+ * la caja corresponda a una sola capa; luego ajusta y repinta.
+ *
+ * @param bounds Caja a encuadrar; si es inválida la llamada no hace nada.
+ * @warning Sobrescribe `bounds_`: tras usarla, un ajuste general (fit) o una
+ *          exportación SVG se limitan a esa caja y no a todo el contenido.
+ */
 void Canvas::fitTo(const fc::BBox& bounds) {
     if (!bounds.valid) return;
     bounds_ = bounds;
@@ -460,10 +873,36 @@ void Canvas::fitTo(const fc::BBox& bounds) {
     update();
 }
 
+/**
+ * @brief Reajusta la vista cuando cambia el tamaño del widget.
+ *
+ * Mantiene el contenido encuadrado tras redimensionar la ventana; no hace nada
+ * si aún no hay datos. El evento de pintado posterior se encarga del repintado.
+ *
+ * @param event Evento de redimensión (no se usa).
+ */
 void Canvas::resizeEvent(QResizeEvent*) {
     if (hasData_) fit();
 }
 
+/**
+ * @brief Dibuja el lienzo completo.
+ *
+ * Orden de pintado: fondo, mensaje de bienvenida si no hay datos, rejilla
+ * adaptativa (paso automático que mantiene entre 40 y 200 px por celda),
+ * ejes en `displayOrigin_`, área de trabajo punteada, capas de abajo hacia
+ * arriba (multicolor por primitiva o cobre uniforme más recorridos),
+ * trayectorias CAM y, ya en coordenadas de dispositivo, el HUD con la posición
+ * del cursor en mm.
+ *
+ * @param event Evento de pintado (no se usa; se repinta todo).
+ * @note La transformación de mundo es `[scale 0 0 -scale ox oy]`, es decir, Y
+ *       crece hacia arriba como en CAM. En modo multicolor se reconstruye la
+ *       ruta de cada sólido en cada repintado: es correcto pero costoso con
+ *       miles de primitivas.
+ * @warning No hay recorte por región visible (sólo el que aplica Qt); con zoom
+ *          extremo el coste de dibujar todas las rutas sigue siendo el mismo.
+ */
 void Canvas::paintEvent(QPaintEvent*) {
     QPainter p(this);
     p.fillRect(rect(), background_);
@@ -542,11 +981,30 @@ void Canvas::paintEvent(QPaintEvent*) {
     }
 }
 
+/**
+ * @brief Reemplaza la previsualización de trayectorias CAM.
+ *
+ * @param paths Recorridos a dibujar en color `toolpathColor_` sobre las capas;
+ *        un vector vacío borra la previsualización.
+ * @note Es una capa aparte, no participa de la selección ni de la exportación,
+ *       y se pierde al recargar geometría con setGeometryData.
+ */
 void Canvas::setToolpaths(const std::vector<fc::Geom>& paths) {
     toolpathPath_ = buildLinePath(paths);
     update();
 }
 
+/**
+ * @brief Aplica zoom manteniendo fijo un punto de pantalla.
+ *
+ * Convierte el ancla a mundo, multiplica la escala y recalcula el
+ * desplazamiento para que ese punto de mundo vuelva a proyectarse sobre el
+ * mismo píxel. La escala se limita inferiormente a 1e-9 para evitar divisiones
+ * por cero; no hay límite superior.
+ *
+ * @param anchor Punto de anclaje en píxeles del widget.
+ * @param factor Multiplicador (>1 acerca, <1 aleja).
+ */
 void Canvas::zoomAt(const QPointF& anchor, double factor) {
     const double wx = (anchor.x() - offset_.x()) / scale_;
     const double wy = -(anchor.y() - offset_.y()) / scale_;
@@ -556,19 +1014,45 @@ void Canvas::zoomAt(const QPointF& anchor, double factor) {
     update();
 }
 
+/**
+ * @brief Acerca la vista un 25 % respecto del centro del widget.
+ */
 void Canvas::zoomIn() {
     zoomAt(QPointF(width() / 2.0, height() / 2.0), 1.25);
 }
 
+/**
+ * @brief Aleja la vista un 20 % respecto del centro del widget.
+ */
 void Canvas::zoomOut() {
     zoomAt(QPointF(width() / 2.0, height() / 2.0), 0.8);
 }
 
+/**
+ * @brief Traduce la rueda del ratón en zoom anclado al cursor.
+ *
+ * Usa un factor fijo de 1.15 (o su inverso) según el signo de
+ * `angleDelta().y()`, sin escalar por la magnitud del giro, de modo que el zoom
+ * sea predecible con trackpads y ruedas de distintos pasos.
+ *
+ * @param event Evento de rueda; su posición se usa como ancla.
+ * @note Se ignora el desplazamiento horizontal y `pixelDelta()`; un delta Y
+ *       nulo (giro puramente horizontal) se interpreta como alejar.
+ */
 void Canvas::wheelEvent(QWheelEvent* event) {
     const double factor = event->angleDelta().y() > 0 ? 1.15 : 1.0 / 1.15;
     zoomAt(event->position(), factor);
 }
 
+/**
+ * @brief Inicia el desplazamiento (pan) con el botón izquierdo.
+ *
+ * Guarda la posición de presión y la última posición, borra la marca de
+ * arrastre y cambia el cursor a mano cerrada.
+ *
+ * @param event Evento de presión; los botones distintos del izquierdo se
+ *        ignoran (no hay menú contextual ni pan con el botón central).
+ */
 void Canvas::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         panning_ = true;
@@ -579,6 +1063,19 @@ void Canvas::mousePressEvent(QMouseEvent* event) {
     }
 }
 
+/**
+ * @brief Actualiza coordenadas del cursor y ejecuta el pan.
+ *
+ * Siempre convierte la posición a mundo, refresca el HUD, emite
+ * `cursorMoved(x, y)` y, si se está arrastrando, suma el delta a `offset_`.
+ * El arrastre se marca como tal cuando el cursor se aleja más de 3 px
+ * (manhattan) del punto de presión, para no confundir un clic con un pan.
+ *
+ * @param event Evento de movimiento del ratón.
+ * @note `position()` (QPointF) se usa para el mundo y `pos()` (QPoint) para el
+ *       delta: mezcla de tipos deliberada para mantener el pan en píxeles
+ *       enteros.
+ */
 void Canvas::mouseMoveEvent(QMouseEvent* event) {
     const double wx = (event->position().x() - offset_.x()) / scale_;
     const double wy = -(event->position().y() - offset_.y()) / scale_;
@@ -595,6 +1092,20 @@ void Canvas::mouseMoveEvent(QMouseEvent* event) {
     update();
 }
 
+/**
+ * @brief Termina el pan y resuelve la selección de capa.
+ *
+ * Si hubo arrastre, sólo cierra el pan. Si fue un clic, convierte la posición a
+ * mundo y recorre las capas de arriba abajo buscando la primera visible que
+ * contenga el punto, ya sea en el relleno (`QPainterPath::contains`) o a menos
+ * de unos 3 px del recorrido (se engrosa la ruta con `QPainterPathStroker` a
+ * 6 px de ancho y se comprueba la contención del trazo). Emite
+ * `layerPicked(id)` o `layerPicked(-1)` si no hay impacto.
+ *
+ * @param event Evento de liberación; se ignora si no es el botón izquierdo.
+ * @note La tolerancia se expresa en mundo (`6/scale_`) con un mínimo de 2
+ *       unidades, así que se mantiene constante en píxeles al hacer zoom.
+ */
 void Canvas::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() != Qt::LeftButton) return;
     panning_ = false;
@@ -620,6 +1131,18 @@ void Canvas::mouseReleaseEvent(QMouseEvent* event) {
     emit layerPicked(-1);
 }
 
+/**
+ * @brief Resuelve el doble clic como activación de capa.
+ *
+ * Repite la prueba de impacto del clic simple (relleno o recorrido engrosado)
+ * y emite `layerActivated(id)` para la primera capa visible alcanzada; el
+ * llamador suele hacer zoom o abrir el editor del objeto.
+ *
+ * @param event Evento de doble clic; se ignora si no es el botón izquierdo.
+ * @note A diferencia de mouseReleaseEvent, no emite ningún valor cuando no hay
+ *       impacto (no existe un "ninguno activado"), así que el llamador no puede
+ *       distinguir "sin objeto" de "evento no procesado".
+ */
 void Canvas::mouseDoubleClickEvent(QMouseEvent* event) {
     if (event->button() != Qt::LeftButton) return;
     const QPointF world((event->position().x() - offset_.x()) / scale_,
@@ -639,8 +1162,18 @@ void Canvas::mouseDoubleClickEvent(QMouseEvent* event) {
             }
         }
     }
+    emit layerActivated(-1);
 }
 
+/**
+ * @brief Notifica que el cursor salió del widget.
+ *
+ * Apaga la bandera de cursor, refresca el HUD y emite `cursorMoved(NaN, NaN)`,
+ * que es la señal convenida con la barra de estado para borrar las coordenadas
+ * en lugar de congelar el último valor.
+ *
+ * @param event Evento de salida (no se usa).
+ */
 void Canvas::leaveEvent(QEvent*) {
     hasCursor_ = false;
     if (hudVisible_) update();

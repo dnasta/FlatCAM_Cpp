@@ -1,0 +1,27 @@
+var structfc_1_1_g_code_options =
+[
+    [ "connectPaths", "structfc_1_1_g_code_options.html#a5c1834860f56d512ccb82fb5b8ef16f1", null ],
+    [ "connectTolerance", "structfc_1_1_g_code_options.html#adf3718a2c5ae66dda76d8aced6f49690", null ],
+    [ "customToolchange", "structfc_1_1_g_code_options.html#ace08148f0468d59bfdc75a2a270ea789", null ],
+    [ "decimals", "structfc_1_1_g_code_options.html#aec7c27d3e32d3b61278569e344497fb8", null ],
+    [ "depthPerPass", "structfc_1_1_g_code_options.html#a7847fed28d6a8d9bc526f850a561c321", null ],
+    [ "dwellTime", "structfc_1_1_g_code_options.html#a2c07cd16e06ba3859c5509448204cf01", null ],
+    [ "endXY", "structfc_1_1_g_code_options.html#a6b637f6f6b2ca5dc81925fea075c5c19", null ],
+    [ "feedDecimals", "structfc_1_1_g_code_options.html#a3bf86965069d8cfc0a4aeadb87641927", null ],
+    [ "feedXY", "structfc_1_1_g_code_options.html#a59efb43280627dc32dbb6817df5cdff9", null ],
+    [ "feedZ", "structfc_1_1_g_code_options.html#a9758c511a269e831f6a746f0a11b3479", null ],
+    [ "flavor", "structfc_1_1_g_code_options.html#a455441d8804debff7394b0d981cdda41", null ],
+    [ "includeToolChange", "structfc_1_1_g_code_options.html#a1c7f6ea7e8e207b6680d679484ad2199", null ],
+    [ "laserPower", "structfc_1_1_g_code_options.html#a6675486e1c35af615d0d69206cd0cd20", null ],
+    [ "spindleCw", "structfc_1_1_g_code_options.html#aaaa67f723c5706806b0e4714f3907a74", null ],
+    [ "spindleSpeed", "structfc_1_1_g_code_options.html#a3701ab5018c4741f52ede134660c27fd", null ],
+    [ "toolchangeXY", "structfc_1_1_g_code_options.html#a9e2e897c91160c7a7bfa68ab5831ffe8", null ],
+    [ "toolDiameter", "structfc_1_1_g_code_options.html#adcd487c2138fda9e44e587fe7adcaacb", null ],
+    [ "units", "structfc_1_1_g_code_options.html#a62b8ce055f30bdc9cd0a92aa30fc220f", null ],
+    [ "zCut", "structfc_1_1_g_code_options.html#a5ecbbafafcce6b457d0fbb5c8f4e48e8", null ],
+    [ "zEnd", "structfc_1_1_g_code_options.html#a64960a538cda8be5b9cc32bb01571858", null ],
+    [ "zFocus", "structfc_1_1_g_code_options.html#a7efa80979ec6b7433244eb5e669ac952", null ],
+    [ "zMove", "structfc_1_1_g_code_options.html#a108096383fe3de2ffef1f485de9b1ff1", null ],
+    [ "zStart", "structfc_1_1_g_code_options.html#ac67d3b6ba90b46954b22978cb3c362a5", null ],
+    [ "zToolchange", "structfc_1_1_g_code_options.html#a3927a9732b87fa46ff8e8ccfa4b1bb05", null ]
+];

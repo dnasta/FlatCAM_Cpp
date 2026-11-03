@@ -1,3 +1,10 @@
+/**
+ * @file test_geometry.cpp
+ * @brief Pruebas del núcleo geométrico GEOS (áreas, buffers, agujeros, transformaciones).
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include <cmath>

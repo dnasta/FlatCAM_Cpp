@@ -1,3 +1,15 @@
+/**
+ * @file importers.cpp
+ * @brief Importadores vectoriales (SVG, DXF, HPGL) y escritores Gerber,
+ *        Excellon y HPGL.
+ *
+ * Los importadores convierten el dibujo a fc::Geom en las unidades del archivo
+ * (mm para SVG y HPGL, unidades DXF tal cual) y aplican las transformaciones de
+ * grupos, bloques o comandos antes de devolver la geometría. Los escritores
+ * generan texto con formato fijo para reabrir el resultado en FlatCAM o en un
+ * visor Gerber/Excellon estándar. La exportación DXF y SVG vive en dxf.cpp y
+ * svg.cpp.
+ */
 #include "flatcam/importers.hpp"
 
 #include "flatcam/excellon.hpp"
@@ -13,6 +25,10 @@
 namespace fc {
 namespace {
 
+/**
+ * @brief Lee un archivo completo en modo binario.
+ * @throw std::runtime_error si no se puede abrir.
+ */
 std::string readFile(const std::string& path) {
     std::ifstream in(path, std::ios::binary);
     if (!in) throw std::runtime_error("cannot open " + path);
@@ -21,6 +37,10 @@ std::string readFile(const std::string& path) {
     return ss.str();
 }
 
+/**
+ * @brief Convierte texto a double con std::stod.
+ * @return El valor, o 0.0 si el texto no es numérico (no lanza).
+ */
 double number(const std::string& text) {
     try {
         return std::stod(text);
@@ -29,6 +49,14 @@ double number(const std::string& text) {
     }
 }
 
+/**
+ * @brief Extrae todos los números de un texto, ignorando separadores.
+ *
+ * Se usa para atributos SVG ("points", "transform") y listas HPGL: cualquier
+ * carácter que no sea dígito, signo o punto separa valores.
+ * @param text Texto de entrada.
+ * @return Valores en orden de aparición.
+ */
 std::vector<double> numbers(const std::string& text) {
     std::vector<double> out;
     std::string current;
@@ -46,6 +74,21 @@ std::vector<double> numbers(const std::string& text) {
 
 // Parses a very small subset of the SVG path grammar (M/L/H/V/Z plus the
 // endpoint of C/Q/A commands).
+/**
+ * @brief Interpreta el atributo "d" de un elemento path de SVG.
+ *
+ * Tokeniza comandos y números, respetando el exponente 'e' de la notación
+ * científica, y soporta M, L, H, V y Z absolutos y relativos, además de C, S,
+ * Q, T y A, que se aplanan a segmentos: las cúbicas con 16 muestras y las
+ * cuadráticas y los arcos con 12. El arco se aproxima con una cuadrática
+ * calculada a partir de la cuerda y la flecha (sagitta), ignorando la rotación
+ * del eje. Al cerrar (Z) se agrega el primer punto y se emite un polígono
+ * reparado; una polilínea abierta se emite como LineString.
+ * @param data Contenido del atributo d.
+ * @param[out] out Geometrías generadas (se agregan, no se reemplazan).
+ * @note La precisión de las curvas es fija y no se usan los radios reales del
+ *       arco: es una aproximación para mecanizado, no un render fiel.
+ */
 void parsePathData(const std::string& data, std::vector<Geom>& out) {
     std::vector<std::string> tokens;
     std::string current;
@@ -68,6 +111,49 @@ void parsePathData(const std::string& data, std::vector<Geom>& out) {
         }
     }
     if (!current.empty()) tokens.push_back(current);
+
+    // SVG allows repeating a command's argument groups without repeating the
+    // letter: "M 0,0 10,0 10,10" means M followed by two implicit L commands.
+    // Expand those groups into explicit command tokens before parsing.
+    auto isCommand = [](const std::string& token) {
+        return token.size() == 1 &&
+               std::isalpha(static_cast<unsigned char>(token[0])) != 0;
+    };
+    auto argCount = [](char command) {
+        switch (std::toupper(static_cast<unsigned char>(command))) {
+            case 'M': case 'L': case 'T': return 2;
+            case 'H': case 'V': return 1;
+            case 'C': return 6;
+            case 'S': case 'Q': return 4;
+            case 'A': return 7;
+            default: return 0;
+        }
+    };
+    std::vector<std::string> expanded;
+    for (std::size_t k = 0; k < tokens.size();) {
+        if (!isCommand(tokens[k])) {
+            expanded.push_back(tokens[k++]);
+            continue;
+        }
+        const char command = tokens[k][0];
+        expanded.push_back(tokens[k++]);
+        const int count = argCount(command);
+        if (count <= 0) continue;
+        int consumed = 0;
+        while (k < tokens.size() && !isCommand(tokens[k])) {
+            expanded.push_back(tokens[k++]);
+            if (++consumed == count) {
+                consumed = 0;
+                if (k < tokens.size() && !isCommand(tokens[k])) {
+                    char repeat = command;
+                    if (std::toupper(static_cast<unsigned char>(command)) == 'M')
+                        repeat = std::islower(static_cast<unsigned char>(command)) ? 'l' : 'L';
+                    expanded.emplace_back(1, repeat);
+                }
+            }
+        }
+    }
+    tokens.swap(expanded);
 
     Ring pts;
     double x = 0.0, y = 0.0;
@@ -209,6 +295,12 @@ void parsePathData(const std::string& data, std::vector<Geom>& out) {
     if (!pts.empty()) flush();
 }
 
+/**
+ * @brief Extrae el valor de un atributo XML entre comillas dobles.
+ * @return El texto del atributo, o cadena vacía si no aparece.
+ * @note La búsqueda es por expresión regular sobre la etiqueta, de modo que
+ *       tolera atributos en cualquier orden pero no comillas simples.
+ */
 std::string attribute(const std::string& tag, const std::string& name) {
     const std::regex re(name + R"re(\s*=\s*"([^"]*)")re");
     std::smatch match;
@@ -216,11 +308,17 @@ std::string attribute(const std::string& tag, const std::string& name) {
     return {};
 }
 
+/**
+ * @brief Matriz afín 2D (a, b, c, d, e, f) al estilo SVG.
+ * @note Use la convención de vector columna: p' = M * p.
+ */
 struct SvgMatrix {
     double a = 1.0, b = 0.0, c = 0.0, d = 1.0, e = 0.0, f = 0.0;
+    /// Transforma un punto: (a*x + c*y + e, b*x + d*y + f).
     Pt apply(const Pt& p) const {
         return {a * p.x + c * p.y + e, b * p.x + d * p.y + f};
     }
+    /// Compone matrices; el resultado aplica @p o antes que esta matriz.
     SvgMatrix operator*(const SvgMatrix& o) const {
         return {a * o.a + c * o.b, b * o.a + d * o.b,
                 a * o.c + c * o.d, b * o.c + d * o.d,
@@ -228,6 +326,15 @@ struct SvgMatrix {
     }
 };
 
+/**
+ * @brief Convierte el atributo "transform" en una matriz afín.
+ *
+ * Reconoce translate, scale, rotate (con centro opcional) y matrix, y las
+ * combina en el orden en que aparecen. Las operaciones no reconocidas, como
+ * skewX y skewY, se ignoran en silencio.
+ * @param text Valor del atributo transform.
+ * @return Matriz acumulada; identidad si no hay operaciones válidas.
+ */
 SvgMatrix parseSvgTransform(const std::string& text) {
     SvgMatrix result;
     const std::regex op(R"((translate|scale|rotate|matrix)\s*\(([^)]*)\))");
@@ -263,6 +370,19 @@ SvgMatrix parseSvgTransform(const std::string& text) {
 
 }  // namespace
 
+/**
+ * @brief Importa un SVG a geometría aplicando la pila de transformaciones.
+ *
+ * Recorre las etiquetas con una expresión regular (no es un parser XML real),
+ * mantiene una pila de matrices para g y svg y aplica a cada figura la matriz
+ * del grupo contenedor y la propia. Soporta path, polygon, polyline, rect,
+ * circle, ellipse y line; cualquier otro elemento (text, image, use) se ignora.
+ * @param path Archivo SVG.
+ * @return Geometrías en coordenadas del documento, sin escalar a mm.
+ * @throw std::runtime_error si el archivo no se puede leer.
+ * @note Sólo se usa la barra inicial de la etiqueta para distinguir apertura de
+ *       cierre; los elementos auto-cerrados se tratan como apertura.
+ */
 std::vector<Geom> importSvg(const std::string& path) {
     const std::string content = readFile(path);
     std::vector<Geom> out;
@@ -333,11 +453,13 @@ std::vector<Geom> importSvg(const std::string& path) {
 
 namespace {
 
+/// Entidad DXF: tipo (LINE, CIRCLE, ...) y pares (código, valor) en orden.
 struct DxfEntity {
     std::string type;
     std::vector<std::pair<int, std::string>> data;
 };
 
+/// Bloque DXF reutilizable: punto base y entidades que lo componen.
 struct DxfBlock {
     double bx = 0.0;
     double by = 0.0;
@@ -345,15 +467,22 @@ struct DxfBlock {
 };
 
 // Affine matrix in column-vector form: p' = M * p.
+/// Matriz afín 2D usada para resolver INSERT.
 struct DxfAffine {
     double a = 1.0, b = 0.0, c = 0.0, d = 1.0, e = 0.0, f = 0.0;
 };
 
+/// Aplica la matriz afín a un punto.
 Pt dxfApply(const DxfAffine& m, Pt p) {
     return {m.a * p.x + m.c * p.y + m.e, m.b * p.x + m.d * p.y + m.f};
 }
 
 // Returns the transform that applies inner first and outer afterwards.
+/**
+ * @brief Compone dos matrices afines.
+ * @param outer Transformación que se aplica al final.
+ * @param inner Transformación que se aplica primero.
+ */
 DxfAffine dxfCompose(const DxfAffine& outer, const DxfAffine& inner) {
     return DxfAffine{
         outer.a * inner.a + outer.c * inner.b,
@@ -364,36 +493,55 @@ DxfAffine dxfCompose(const DxfAffine& outer, const DxfAffine& inner) {
         outer.b * inner.e + outer.d * inner.f + outer.f};
 }
 
+/// Matriz de traslación.
 DxfAffine dxfTranslate(double dx, double dy) {
     return DxfAffine{1.0, 0.0, 0.0, 1.0, dx, dy};
 }
 
+/// Matriz de escala independiente por eje.
 DxfAffine dxfScale(double sx, double sy) {
     return DxfAffine{sx, 0.0, 0.0, sy, 0.0, 0.0};
 }
 
+/// Matriz de rotación en grados, sentido antihorario.
 DxfAffine dxfRotate(double degrees) {
     const double r = degrees * M_PI / 180.0;
     return DxfAffine{std::cos(r), std::sin(r), -std::sin(r), std::cos(r), 0.0, 0.0};
 }
 
+/**
+ * @brief Primer valor de una entidad para un código de grupo.
+ * @return El valor, o @p fallback si el código no está presente.
+ */
 std::string dxfValue(const DxfEntity& entity, int code, const std::string& fallback = {}) {
     for (const auto& [c, value] : entity.data)
         if (c == code) return value;
     return fallback;
 }
 
+/// Valor numérico de un código de grupo, con valor por defecto.
 double dxfNumber(const DxfEntity& entity, int code, double fallback) {
     const std::string value = dxfValue(entity, code);
     return value.empty() ? fallback : number(value);
 }
 
+/// Valor entero de un código de grupo, redondeado desde el numérico.
 int dxfInt(const DxfEntity& entity, int code, int fallback) {
     const double value = dxfNumber(entity, code, static_cast<double>(fallback));
     return static_cast<int>(std::lround(value));
 }
 
 // Extracts %%-style TEXT escape sequences and strips MTEXT formatting codes.
+/**
+ * @brief Limpia el texto de TEXT y MTEXT de DXF.
+ *
+ * Traduce los códigos de escape %% (grado, más/menos, diámetro, porcentaje) a
+ * UTF-8 y, en MTEXT, quita los códigos de formato, las llaves de agrupación y
+ * convierte las secuencias de salto de línea y de espacio duro.
+ * @param text Texto original.
+ * @param mtext true si proviene de una entidad MTEXT.
+ * @return Texto listo para dibujar.
+ */
 std::string dxfCleanText(std::string text, bool mtext) {
     auto replaceAll = [](std::string& s, const std::string& from, const std::string& to) {
         std::size_t pos = 0;
@@ -423,15 +571,20 @@ std::string dxfCleanText(std::string text, bool mtext) {
     return text;
 }
 
+/// Resultado del parseo: geometrías y textos ya transformados.
 struct DxfParseResult {
     std::vector<Geom> geoms;
     std::vector<DxfText> texts;
 };
 
+/// Declaración adelantada: INSERT reingresa por acá para cada entidad del bloque.
 void dxfParseEntity(const DxfEntity& entity, const DxfAffine& transform,
                     const std::map<std::string, DxfBlock>& blocks, int depth,
                     DxfParseResult& result);
 
+/**
+ * @brief Procesa una lista de entidades aplicando la misma transformación.
+ */
 void dxfParseEntities(const std::vector<DxfEntity>& entities, const DxfAffine& transform,
                       const std::map<std::string, DxfBlock>& blocks, int depth,
                       DxfParseResult& result) {
@@ -439,6 +592,23 @@ void dxfParseEntities(const std::vector<DxfEntity>& entities, const DxfAffine& t
         dxfParseEntity(entity, transform, blocks, depth, result);
 }
 
+/**
+ * @brief Convierte una entidad DXF en geometría o en un texto.
+ *
+ * Soporta LINE, CIRCLE, ARC (muestreado cada 5 grados), ELLIPSE (paramétrica,
+ * también cada 5 grados), LWPOLYLINE y SPLINE (polilínea; SPLINE se toma como
+ * secuencia de vértices), INSERT (resuelve el bloque y aplica escala, rotación,
+ * punto base y arrays de columnas y filas) y TEXT/MTEXT (posición, altura,
+ * rotación y alineación ya transformadas). La recursión por INSERT se corta a
+ * los 8 niveles para evitar ciclos entre bloques.
+ * @param entity Entidad a interpretar.
+ * @param transform Transformación acumulada del bloque contenedor.
+ * @param blocks Bloques disponibles para resolver INSERT.
+ * @param depth Profundidad de anidamiento actual.
+ * @param[out] result Acumulador de geometrías y de textos.
+ * @note No soporta HATCH, DIMENSION, SOLID ni la rotación real del eje mayor de
+ *       una ELLIPSE.
+ */
 void dxfParseEntity(const DxfEntity& entity, const DxfAffine& transform,
                     const std::map<std::string, DxfBlock>& blocks, int depth,
                     DxfParseResult& result) {
@@ -576,6 +746,19 @@ void dxfParseEntity(const DxfEntity& entity, const DxfAffine& transform,
     }
 }
 
+/**
+ * @brief Lee un DXF ASCII y separa secciones, bloques y entidades.
+ *
+ * El formato son pares de líneas (código, valor). Recorre SECTION y ENDSEC y
+ * acumula las entidades de BLOCKS (con nombre y punto base) y de ENTITIES,
+ * salteando el resto de las secciones (HEADER, TABLES...). Después procesa las
+ * entidades de ENTITIES con transformación identidad.
+ * @param path Archivo DXF.
+ * @return Geometrías y textos del dibujo.
+ * @throw std::runtime_error si el archivo no se puede abrir.
+ * @note Las líneas cuyo código no es entero se descartan, lo que hace tolerante
+ *       la lectura de archivos con basura o comentarios.
+ */
 DxfParseResult dxfParseFile(const std::string& path) {
     std::ifstream in(path);
     if (!in) throw std::runtime_error("cannot open " + path);
@@ -667,14 +850,30 @@ DxfParseResult dxfParseFile(const std::string& path) {
 
 } // namespace
 
+/// Devuelve sólo la geometría del DXF y descarta los textos.
 std::vector<Geom> importDxf(const std::string& path) {
     return dxfParseFile(path).geoms;
 }
 
+/// Devuelve sólo los TEXT y MTEXT del DXF, ya transformados.
 std::vector<DxfText> importDxfTexts(const std::string& path) {
     return dxfParseFile(path).texts;
 }
 
+/**
+ * @brief Importa un trazado HPGL/HPGL2 como líneas y polígonos.
+ *
+ * Interpreta IN, SC (escala de usuario: el rango X se mapea al ancho A4 por
+ * defecto, 10365 unidades de plotter), PA y PR, PU y PD, CI, AA y AR (arcos con
+ * centro absoluto o relativo al lápiz), EA y ER (rectángulos) y RA y RR
+ * (rectángulos rellenos). La unidad base es 0,025 mm por unidad de plotter y
+ * las coordenadas relativas se convierten a absolutas al vuelo.
+ * @param path Archivo HPGL con comandos separados por punto y coma.
+ * @return Geometrías del dibujo.
+ * @throw std::runtime_error si el archivo no se puede leer.
+ * @note No soporta etiquetas LB, plumas múltiples ni transparencias: todo el
+ *       archivo se toma como un único trazado.
+ */
 std::vector<Geom> importHpgl(const std::string& path) {
     const std::string content = readFile(path);
     std::vector<Geom> out;
@@ -765,10 +964,7 @@ std::vector<Geom> importHpgl(const std::string& path) {
                 const double x = convert(values[i], true, !absolute);
                 const double y = convert(values[i + 1], false, !absolute);
                 pos = {x, y};
-                if (penDown) {
-                    if (current.empty()) current.push_back(pos);
-                    else current.push_back(pos);
-                }
+                if (penDown) current.push_back(pos);
             }
         };
 
@@ -850,11 +1046,29 @@ std::vector<Geom> importHpgl(const std::string& path) {
     return out;
 }
 
+/**
+ * @brief Escribe un Gerber RS-274X con regiones, huecos y recorridos.
+ *
+ * Emite cabecera de formato (FSLAX), unidades (MOMM o MOIN), una apertura D10
+ * de 0,1 mm, modo lineal y polaridad positiva. Cada polígono se dibuja como
+ * región G36/G37 con D02 al primer vértice y D01 al resto; los huecos se emiten
+ * en una segunda pasada con polaridad clara (LPC) y luego se restaura LPD. Los
+ * recorridos abiertos se escriben con D02 y D01, sin región.
+ * @param path Destino.
+ * @param solids Polígonos con huecos.
+ * @param follows Recorridos abiertos.
+ * @param units Unidades de salida: 3.4 en mm y 2.4 en pulgadas.
+ * @throw std::runtime_error si no se puede abrir el archivo.
+ * @note La escala de coordenadas es 1e4 en ambos sistemas: sólo cambia la
+ *       cantidad de dígitos declarada en FS.
+ */
 void writeGerber(const std::string& path, const std::vector<Geom>& solids,
                  const std::vector<Geom>& follows, Units units) {
-    const double scale = units == Units::Inch ? 10000.0 : 10000.0;
+    // El formato Gerber usa 4 decimales por unidad, tanto en mm como en
+    // pulgadas; el factor de escala es el mismo (10^4).
+    const double scale = 10000.0;
     const int intDigits = units == Units::Inch ? 2 : 3;
-    const int fracDigits = units == Units::Inch ? 4 : 4;
+    const int fracDigits = 4;
 
     auto coord = [scale](double v) {
         return static_cast<long long>(std::llround(v * scale));
@@ -909,6 +1123,17 @@ void writeGerber(const std::string& path, const std::vector<Geom>& solids,
     file << out.str();
 }
 
+/**
+ * @brief Exporta sólidos y recorridos a HPGL, con 1 mm = 40 unidades.
+ *
+ * Dibuja el contorno exterior y cada hueco como polilínea cerrada y los
+ * recorridos como polilíneas abiertas; acepta LineString, LinearRing y
+ * colecciones de líneas.
+ * @param path Destino.
+ * @param solids Polígonos a contornear.
+ * @param follows Recorridos a trazar.
+ * @throw std::runtime_error si no se puede escribir.
+ */
 void exportHpgl(const std::string& path, const std::vector<Geom>& solids,
                 const std::vector<Geom>& follows) {
     std::ofstream out(path, std::ios::binary);
@@ -945,6 +1170,19 @@ void exportHpgl(const std::string& path, const std::vector<Geom>& solids,
     out << "PU;SP0;\n";
 }
 
+/**
+ * @brief Escribe un Excellon con herramientas, taladros y ranuras G85.
+ *
+ * Usa METRIC,TZ con formato 3.3 o INCH,LZ con 2.4 según las unidades, declara
+ * cada herramienta con su diámetro y emite las coordenadas con 6 dígitos
+ * rellenados con ceros. Las ranuras se escriben como X/Y G85 X/Y.
+ * @param path Destino.
+ * @param result Resultado del parser con herramientas y taladros.
+ * @param units Unidades de salida.
+ * @throw std::runtime_error si no se puede escribir.
+ * @note Las herramientas sin taladros ni ranuras se omiten del cuerpo pero se
+ *       declaran igual en la cabecera.
+ */
 void writeExcellon(const std::string& path, const ExcellonResult& result, Units units) {
     const bool metric = units == Units::Mm;
     const int intDigits = metric ? 3 : 2;

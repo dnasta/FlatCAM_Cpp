@@ -1,3 +1,14 @@
+/**
+ * @file gcode.cpp
+ * @brief Generación de G-code, preprocesadores y optimización de recorridos.
+ *
+ * Convierte taladros (`DrillJob`) y recorridos (`PathJob`, `PathToolJob`) en
+ * programas para MACH3, GRBL, Marlin, Repetier, ISEL, Roland, HPGL y láser.
+ * Incluye helpers de cabecera y cambio de herramienta, dosificación de pasta,
+ * optimización de orden (TSP exacto, vecino más cercano, 2-opt y Or-opt) y la
+ * construcción de trabajos desde un Excellon parseado.
+ */
+
 #include "flatcam/gcode.hpp"
 
 #include <algorithm>
@@ -11,13 +22,36 @@
 namespace fc {
 namespace {
 
+// Declaración adelantada: `number` se define al final de los helpers y la usan
+// las cabeceras y los comandos de cambio de herramienta.
 std::string number(double value, int decimals);
 
+/**
+ * @brief Indica si el postprocesador corresponde a un modo láser.
+ *
+ * En modo láser no se emiten bajadas de Z: la potencia se controla con comandos
+ * del tipo `M03`/`M106` según el firmware.
+ *
+ * @param flavor Perfil de postprocesador.
+ * @return `true` para `GrblLaser`, `MarlinLaserFan`, `MarlinLaserSpindle` y
+ *         `ZLaser`.
+ */
 bool isLaserFlavor(GCodeFlavor flavor) {
     return flavor == GCodeFlavor::GrblLaser || flavor == GCodeFlavor::MarlinLaserFan ||
            flavor == GCodeFlavor::MarlinLaserSpindle || flavor == GCodeFlavor::ZLaser;
 }
 
+/**
+ * @brief Indica si el perfil emite `M6` (cambio de herramienta real).
+ *
+ * Los perfiles "sin M6" (`Grbl`, `GrblNoM6`, `DefaultNoM6`, etc.) dejan el
+ * cambio de herramienta como un comentario `MSG`, pensado para routers con
+ * cambio manual asistido.
+ *
+ * @param flavor Perfil de postprocesador.
+ * @return `true` para MACH3, Marlin, Repetier, Berta, ISEL, Roland, cambio
+ *         manual y sonda; `false` para GRBL, láser, HPGL y línea XYZ.
+ */
 bool usesM6(GCodeFlavor flavor) {
     switch (flavor) {
         case GCodeFlavor::Default:
@@ -35,6 +69,16 @@ bool usesM6(GCodeFlavor flavor) {
     }
 }
 
+/**
+ * @brief Devuelve el comentario de identificación del preprocesador.
+ *
+ * Reproduce los textos de FlatCAM (incluido el `IMF_PBL flatcam` de ISEL ICP y
+ * el uso de `;` en Repetier/ISEL ICP en lugar de paréntesis). El texto se
+ * escribe al inicio del programa para que el operador identifique el firmware.
+ *
+ * @param flavor Perfil de postprocesador.
+ * @return Línea(s) de comentario terminadas en `\n`.
+ */
 std::string flavorHeader(GCodeFlavor flavor) {
     switch (flavor) {
         case GCodeFlavor::Marlin:
@@ -73,6 +117,14 @@ std::string flavorHeader(GCodeFlavor flavor) {
     }
 }
 
+/**
+ * @brief Construye el comando de encendido del láser con la potencia dada.
+ *
+ * @param flavor Perfil del postprocesador (decide el comando).
+ * @param power Potencia en unidades del firmware (se formatea con 1 decimal).
+ * @return `M106 S<power>` para Marlin con ventilador, `M3 S<power>` para Marlin
+ *         con spindle y `M03 S<power>` en el resto (incluido GRBL láser).
+ */
 std::string laserOnCommand(GCodeFlavor flavor, double power) {
     std::string value = number(power, 1);
     switch (flavor) {
@@ -82,10 +134,25 @@ std::string laserOnCommand(GCodeFlavor flavor, double power) {
     }
 }
 
+/**
+ * @brief Devuelve el comando de apagado del láser.
+ * @param flavor Perfil del postprocesador.
+ * @return `M107` para Marlin con ventilador; `M5` en el resto.
+ */
 std::string laserOffCommand(GCodeFlavor flavor) {
     return flavor == GCodeFlavor::MarlinLaserFan ? "M107" : "M5";
 }
 
+/**
+ * @brief Reemplaza todas las apariciones de `from` por `to` en `text`.
+ *
+ * Sustitución literal (sin expresiones regulares) que avanza `pos` después del
+ * texto insertado, de modo que no se re-procesa lo reemplazado.
+ *
+ * @param text Cadena a modificar in situ.
+ * @param from Texto buscado; si está vacío la función no hace nada.
+ * @param to Texto de reemplazo.
+ */
 void replaceAll(std::string& text, const std::string& from, const std::string& to) {
     if (from.empty()) return;
     std::size_t pos = 0;
@@ -95,6 +162,21 @@ void replaceAll(std::string& text, const std::string& from, const std::string& t
     }
 }
 
+/**
+ * @brief Expande la plantilla de cambio de herramienta personalizada.
+ *
+ * Reemplaza los marcadores `{tool}`, `{diameter}`, `{z}`, `{x}` e `{y}` con los
+ * valores de la herramienta y de las opciones de máquina. Si no hay posición de
+ * cambio definida (`toolchangeXY`), `{x}` e `{y}` se sustituyen por `0`.
+ *
+ * @param opt Opciones que contienen la plantilla y los decimales de formato.
+ * @param tool Número de herramienta.
+ * @param diameter Diámetro de la herramienta.
+ * @return Código resultante, sin salto de línea final.
+ *
+ * @note No valida la plantilla: un marcador mal escrito queda tal cual en el
+ *       G-code y puede provocar un error de sintaxis en el controlador.
+ */
 std::string customToolchangeCode(const GCodeOptions& opt, int tool, double diameter) {
     std::string code = opt.customToolchange;
     replaceAll(code, "{tool}", std::to_string(tool));
@@ -105,24 +187,44 @@ std::string customToolchangeCode(const GCodeOptions& opt, int tool, double diame
     return code;
 }
 
+/// @brief Formatea `value` con `decimals` decimales usando `snprintf`.
 std::string number(double value, int decimals) {
     char buffer[64];
     std::snprintf(buffer, sizeof(buffer), "%.*f", decimals, value);
     return std::string(buffer);
 }
 
+/// @brief Devuelve `X<x> Y<y>` con los decimales configurados.
 std::string xy(const Pt& p, const GCodeOptions& opt) {
     return "X" + number(p.x, opt.decimals) + " Y" + number(p.y, opt.decimals);
 }
 
+/// @brief Z de corte efectiva: override de la herramienta o valor global.
 double toolZCut(const DrillTool& tool, const GCodeOptions& opt) {
     return tool.zCut.value_or(opt.zCut);
 }
 
+/// @brief Avance de penetración efectivo: override de la herramienta o global.
 double toolFeedZ(const DrillTool& tool, const GCodeOptions& opt) {
     return tool.feedZ.value_or(opt.feedZ);
 }
 
+/**
+ * @brief Escribe la cabecera de un programa de taladrado.
+ *
+ * La cabecera documenta el preprocesador, la tabla de herramientas (diámetro,
+ * Z de corte y Z de viaje), los rangos X/Y, las RPM, las unidades (`G20`/`G21`),
+ * el modo absoluto (`G90`) y el avance por minuto (`G94`). Después enciende el
+ * husillo si `spindleSpeed > 0` y eleva a `zStart`.
+ *
+ * @param out Flujo de salida del programa.
+ * @param job Trabajo de taladrado (herramientas y límites).
+ * @param opt Parámetros de máquina y formato.
+ *
+ * @note El `M03`/`M04` inicial respeta `opt.spindleCw`; las herramientas con
+ *       override de RPM vuelven a emitir su propio `M03` en `drillingGCode`.
+ * @note Los comentarios usan paréntesis, válidos tanto en MACH3 como en GRBL.
+ */
 void writeHeader(std::ostringstream& out, const DrillJob& job, const GCodeOptions& opt) {
     out << flavorHeader(opt.flavor);
     out << "(Generated by FlatCAM C++.)\n\n";
@@ -156,6 +258,28 @@ void writeHeader(std::ostringstream& out, const DrillJob& job, const GCodeOption
     out << "G00 Z" << number(opt.zStart, opt.decimals) << "\n";
 }
 
+/**
+ * @brief Emite el cambio de herramienta para una herramienta de taladrado.
+ *
+ * Tres caminos posibles:
+ * - `ToolchangeCustom` con plantilla no vacía: expande la plantilla y baja a
+ *   `zMove`, sin `M6`.
+ * - `includeToolChange` activo: apaga el husillo (`M5`), sube a `zToolchange`,
+ *   viaja a la posición de cambio si está definida, selecciona con `Tn` y, si
+ *   el perfil usa `M6`, emite `M6` + comentario con diámetro y cantidad de
+ *   taladros + `M0` (pausa). Sin `M6` deja sólo el comentario `MSG`.
+ * - En cualquier otro caso no escribe nada (el programa sigue con la
+ *   herramienta anterior).
+ *
+ * @param out Flujo de salida del programa.
+ * @param tool Herramienta que se va a montar.
+ * @param opt Parámetros de máquina y postprocesador.
+ *
+ * @note La cantidad informada en el mensaje suma taladros y ranuras, útil para
+ *       que el operador verifique la herramienta antes de continuar.
+ * @note Termina siempre en `zMove` para que el primer rápido se haga en altura
+ *       segura.
+ */
 void writeToolChange(std::ostringstream& out, const DrillTool& tool, const GCodeOptions& opt) {
     if (opt.flavor == GCodeFlavor::ToolchangeCustom && !opt.customToolchange.empty()) {
         out << customToolchangeCode(opt, tool.number, tool.diameter) << "\n";
@@ -183,10 +307,30 @@ void writeToolChange(std::ostringstream& out, const DrillTool& tool, const GCode
     }
 }
 
+/// @brief Z de viaje efectiva: override de la herramienta o valor global.
 double toolZMove(const DrillTool& tool, const GCodeOptions& opt) {
     return tool.zMove.value_or(opt.zMove);
 }
 
+/**
+ * @brief Escribe el ciclo de un taladro simple (centro + penetración).
+ *
+ * Secuencia: rápido al centro (aplicando `offsetX/offsetY` de la herramienta),
+ * penetración a `zCut` con avance `feedZ` —o varias penetraciones parciales de
+ * `depthPerPass` con retracción a `zMove` entre cada una (peck drilling)—,
+ * pausa `G04` si corresponde y retracción final a `zMove`.
+ *
+ * @param out Flujo de salida del programa.
+ * @param holeIn Centro del taladro en coordenadas originales.
+ * @param tool Herramienta (diámetro, overrides y offsets).
+ * @param opt Parámetros globales (Z, avances, dwell y profundidad por pasada).
+ *
+ * @note El peck drilling sólo se activa si `depthPerPass > 0`, la Z de corte es
+ *       negativa y su magnitud supera la profundidad por pasada.
+ * @note La pausa usa `tool.dwell` si existe; si no, `opt.dwellTime`.
+ * @warning No se emite `G98`/`G99`: el retorno siempre es a `zMove`, no a la
+ *          altura inicial del ciclo.
+ */
 void writeHole(std::ostringstream& out, const Pt& holeIn, const DrillTool& tool, const GCodeOptions& opt) {
     const Pt hole{holeIn.x + tool.offsetX, holeIn.y + tool.offsetY};
     const double zCut = toolZCut(tool, opt);
@@ -214,6 +358,24 @@ void writeHole(std::ostringstream& out, const Pt& holeIn, const DrillTool& tool,
     out << "G00 Z" << number(zMove, opt.decimals) << "\n";
 }
 
+/**
+ * @brief Escribe el fresado de una ranura (de `start` a `stop` en una pasada).
+ *
+ * Repite el esquema de penetración de `writeHole` (con peck opcional) en el
+ * punto inicial y luego avanza en línea recta hasta el extremo con el avance
+ * XY de la herramienta o el global, para terminar retrayendo a `zMove`.
+ *
+ * @param out Flujo de salida del programa.
+ * @param startIn Extremo inicial de la ranura.
+ * @param stopIn Extremo final de la ranura.
+ * @param tool Herramienta (offsets y overrides de avance).
+ * @param opt Parámetros globales.
+ *
+ * @note A diferencia de `writeHole`, no emite `G04`: una pausa en una ranura no
+ *       tiene sentido práctico y se omite para no alargar el ciclo.
+ * @note El peck drilling se aplica sólo en el extremo inicial; la pasada
+ *       lateral se hace a la profundidad final ya alcanzada.
+ */
 void writeSlot(std::ostringstream& out, const Pt& startIn, const Pt& stopIn, const DrillTool& tool,
                const GCodeOptions& opt) {
     const Pt start{startIn.x + tool.offsetX, startIn.y + tool.offsetY};
@@ -245,6 +407,28 @@ void writeSlot(std::ostringstream& out, const Pt& startIn, const Pt& stopIn, con
 
 }  // namespace
 
+/**
+ * @brief Genera el programa G-code completo de un trabajo de taladrado.
+ *
+ * Escribe la cabecera y, por cada herramienta con contenido, el cambio de
+ * herramienta, el override de RPM si corresponde y todos sus taladros y
+ * ranuras. Las ranuras degeneradas (`start == stop`) se emiten como taladro
+ * simple. Al final apaga el husillo, sube a `zEnd` y, si se pidió, se desplaza
+ * a `endXY`.
+ *
+ * @param job Herramientas con taladros y ranuras.
+ * @param opt Parámetros de máquina, unidades y postprocesador.
+ * @return Programa G-code como cadena.
+ *
+ * @note Las herramientas sin taladros ni ranuras se omiten por completo, de
+ *       modo que no se emite un cambio de herramienta inútil.
+ * @note `M05` sólo se emite si la cabecera encendió el husillo
+ *       (`spindleSpeed > 0`), evitando comandos huérfanos en programas sin
+ *       husillo configurado.
+ * @warning Los overrides de RPM por herramienta emiten `M03` sin apagar antes
+ *          el husillo (`M05`); en MACH3 puede ser aceptable, pero no todas las
+ *          controladoras aceptan un cambio de sentido en caliente.
+ */
 std::string drillingGCode(const DrillJob& job, const GCodeOptions& opt) {
     std::ostringstream out;
     writeHeader(out, job, opt);
@@ -274,8 +458,15 @@ std::string drillingGCode(const DrillJob& job, const GCodeOptions& opt) {
 
 namespace {
 
+/// @brief Distancia euclidiana entre dos puntos.
 double dist(const Pt& a, const Pt& b) { return std::hypot(b.x - a.x, b.y - a.y); }
 
+/**
+ * @brief Longitud del recorrido que visita `holes` en orden partiendo de `start`.
+ * @param holes Taladros en su orden actual.
+ * @param start Punto de partida.
+ * @return Distancia acumulada en mm.
+ */
 double holesDistance(const std::vector<Pt>& holes, const Pt& start) {
     double total = 0.0;
     Pt current = start;
@@ -286,6 +477,16 @@ double holesDistance(const std::vector<Pt>& holes, const Pt& start) {
     return total;
 }
 
+/**
+ * @brief Ordena `points` por vecino más cercano partiendo de `start`.
+ *
+ * En cada iteración busca el punto no visitado de menor distancia al actual.
+ * Es O(n²) y se usa como solución inicial de las heurísticas de mejora
+ * (2-opt y Or-opt) cuando hay más taladros que el límite del TSP exacto.
+ *
+ * @param points Puntos a reordenar (se modifican in situ).
+ * @param start Punto de partida.
+ */
 void sortNearest(std::vector<Pt>& points, const Pt& start) {
     std::vector<Pt> remaining = points;
     std::vector<Pt> ordered;
@@ -308,6 +509,23 @@ void sortNearest(std::vector<Pt>& points, const Pt& start) {
     points = std::move(ordered);
 }
 
+/**
+ * @brief Mejora el orden con la heurística 2-opt (intercambio de aristas).
+ *
+ * Para cada par `(i, j)` evalúa el efecto de invertir el subrecorrido
+ * `[i, j]`: compara las aristas afectadas antes y después (incluida la arista
+ * que llega desde `start` cuando `i == 0`) y acepta el cambio si reduce la
+ * longitud en más de 1e-9 mm. Repite hasta que no haya mejoras o hasta 200
+ * rondas.
+ *
+ * @param points Orden de puntos a mejorar (in situ).
+ * @param start Punto de partida, tratado como predecesor de `points[0]`.
+ *
+ * @note El límite de 200 rondas actúa como guarda contra ciclos por errores de
+ *       redondeo en conjuntos muy grandes.
+ * @note El delta ignora la arista de salida cuando `j` es el último punto, que
+ *       es correcto porque no hay arista posterior que invertir.
+ */
 void twoOpt(std::vector<Pt>& points, const Pt& start) {
     if (points.size() < 3) return;
     bool improved = true;
@@ -336,6 +554,12 @@ void twoOpt(std::vector<Pt>& points, const Pt& start) {
     }
 }
 
+/**
+ * @brief Longitud total del recorrido `start → points…` (sin retorno).
+ * @param points Orden de visita.
+ * @param start Punto de partida.
+ * @return Distancia acumulada en mm.
+ */
 double pathLengthWithStart(const std::vector<Pt>& points, const Pt& start) {
     double total = 0.0;
     Pt current = start;
@@ -346,7 +570,23 @@ double pathLengthWithStart(const std::vector<Pt>& points, const Pt& start) {
     return total;
 }
 
-// Exact TSP (Held-Karp) for small hole sets.
+/**
+ * @brief Resuelve el TSP abierto de forma exacta con programación dinámica.
+ *
+ * Implementa Held-Karp sobre subconjuntos: `dp[mask][i]` es el costo mínimo de
+ * visitar `mask` terminando en `i`, partiendo de `start`. Reconstruye el orden
+ * óptimo siguiendo la matriz `parent`.
+ *
+ * @param points Taladros a ordenar.
+ * @param start Punto de partida.
+ * @return Orden óptimo, o `points` sin cambios si hay más de 18 elementos.
+ *
+ * @note El límite de 18 puntos acota la tabla a 2^18 × 18 entradas
+ *       (≈ 4,7 M celdas por matriz); con más puntos se usan las heurísticas.
+ * @note Para `n == 0` devuelve un vector vacío sin tocar las matrices.
+ * @warning Con `n == 18` el consumo de memoria (dos matrices de `double`/`int`)
+ *          ronda las decenas de MB; es el motivo del límite.
+ */
 std::vector<Pt> exactTsp(const std::vector<Pt>& points, const Pt& start) {
     const std::size_t n = points.size();
     if (n > 18) return points;
@@ -398,6 +638,20 @@ std::vector<Pt> exactTsp(const std::vector<Pt>& points, const Pt& start) {
     return ordered;
 }
 
+/**
+ * @brief Reubica puntos uno a uno con la heurística Or-opt.
+ *
+ * Para cada punto prueba a extraerlo e insertarlo en todas las posiciones
+ * posibles, conservando el cambio cuando la longitud total disminuye. Repite
+ * hasta que no haya mejoras o hasta 50 rondas.
+ *
+ * @param points Orden a mejorar (in situ).
+ * @param start Punto de partida para medir la longitud.
+ *
+ * @note Se usa como refinamiento final tras el 2-opt en conjuntos grandes.
+ * @warning La implementación reconstruye el vector completo en cada intento
+ *          (O(n³) por ronda); con miles de taladros puede ser costosa.
+ */
 void orOpt(std::vector<Pt>& points, const Pt& start) {
     if (points.size() < 3) return;
     bool improved = true;
@@ -431,6 +685,21 @@ void orOpt(std::vector<Pt>& points, const Pt& start) {
 
 }  // namespace
 
+/**
+ * @brief Calcula el recorrido XY total de un trabajo de taladrado.
+ *
+ * Suma los viajes entre taladros consecutivos de cada herramienta, el salto
+ * entre herramientas y los desplazamientos de las ranuras (inicio y fin). No
+ * incluye movimientos en Z ni retracciones.
+ *
+ * @param job Trabajo a medir.
+ * @param start Punto de partida (por defecto el origen de máquina).
+ * @return Distancia total en mm.
+ *
+ * @note Se usa para comparar el efecto de las optimizaciones de orden.
+ * @note El punto de continuación tras una herramienta es su último taladro;
+ *       si la herramienta no tiene taladros se mantiene el punto anterior.
+ */
 double drillTravelDistance(const DrillJob& job, const Pt& start) {
     double total = 0.0;
     Pt current = start;
@@ -446,6 +715,30 @@ double drillTravelDistance(const DrillJob& job, const Pt& start) {
     return total;
 }
 
+/**
+ * @brief Reordena taladros y ranuras del trabajo para reducir los rápidos.
+ *
+ * Con `DrillOrder::AsIs` no hace nada. En otro caso, para cada herramienta:
+ * - hasta 18 taladros usa el TSP exacto (Held-Karp);
+ * - con más, aplica vecino más cercano + 2-opt + Or-opt.
+ *
+ * Después ordena las ranuras por cercanía al punto actual y actualiza el punto
+ * de partida con el extremo final de cada elemento para que la herramienta
+ * siguiente continúe cerca.
+ *
+ * @param job Trabajo a modificar in situ.
+ * @param order Estrategia de orden.
+ * @param start Punto de partida (origen o posición real de la máquina).
+ *
+ * @note El orden se optimiza herramienta por herramienta, no globalmente: el
+ *       orden de las herramientas lo define el archivo original.
+ * @note Las ranuras se ordenan con comparador que captura `current` por
+ *       referencia; el valor no cambia durante el `std::sort`, por lo que el
+ *       criterio es estable.
+ * @warning El comparador no es un orden débil estricto ante distancias
+ *          exactamente iguales, aunque al comparar sólo con `<` no dispara la
+ *          mayoría de las aserciones de las bibliotecas estándar.
+ */
 void optimizeDrillOrder(DrillJob& job, DrillOrder order, const Pt& start) {
     if (order == DrillOrder::AsIs) return;
     Pt current = start;
@@ -470,6 +763,21 @@ void optimizeDrillOrder(DrillJob& job, DrillOrder order, const Pt& start) {
     }
 }
 
+/**
+ * @brief Reordena los recorridos de geometría eligiendo el extremo más cercano.
+ *
+ * Greedy por vecino más cercano sobre los extremos: para cada paso compara la
+ * distancia al inicio y al final de cada recorrido pendiente, elige el menor e
+ * invierte el recorrido si conviene empezar por su extremo final. No aplica
+ * 2-opt porque los recorridos no son puntos intercambiables.
+ *
+ * @param job Trabajo a modificar in situ (recorridos de una herramienta).
+ * @param start Punto de partida (normalmente el origen).
+ *
+ * @note Los recorridos con menos de 2 puntos se descartan del resultado, ya que
+ *       no se pueden mecanizar.
+ * @note Es una heurística: no garantiza el mínimo global del recorrido en vacío.
+ */
 void optimizePathOrder(PathJob& job, const Pt& start) {
     if (job.paths.size() < 2) return;
 
@@ -508,6 +816,22 @@ void optimizePathOrder(PathJob& job, const Pt& start) {
 
 namespace {
 
+/**
+ * @brief Genera un programa de geometría en modo láser (sin eje Z).
+ *
+ * Escribe una cabecera específica (foco en Z, potencia, límites), fija
+ * `G21/G90/G17/G94`, posiciona en `zFocus` y recorre los caminos encendiendo el
+ * láser con el comando del firmware.
+ *
+ * @param job Recorridos a mecanizar.
+ * @param opt Parámetros de máquina y postprocesador.
+ * @return Programa G-code en modo láser.
+ *
+ * @note El avance de los rápidos se documenta como 1500 mm/min, pero no se
+ *       emite ningún `G00 F...`: es sólo informativo.
+ * @note El haz se apaga antes de cada rápido y se vuelve a encender al llegar
+ *       al inicio del recorrido, de modo que los `G00` no marcan el material.
+ */
 std::string laserPathsGCode(const PathJob& job, const GCodeOptions& opt) {
     std::ostringstream out;
     out << flavorHeader(opt.flavor);
@@ -529,14 +853,11 @@ std::string laserPathsGCode(const PathJob& job, const GCodeOptions& opt) {
     out << "G01 F" << number(opt.feedXY, opt.feedDecimals) << "\n\n";
     out << laserOffCommand(opt.flavor) << "\n";
 
-    bool laserOn = false;
     for (const std::vector<Pt>& path : job.paths) {
         if (path.size() < 2) continue;
+        out << laserOffCommand(opt.flavor) << "\n";
         out << "G00 " << xy(path.front(), opt) << "\n";
-        if (!laserOn) {
-            out << laserOnCommand(opt.flavor, opt.laserPower) << "\n";
-            laserOn = true;
-        }
+        out << laserOnCommand(opt.flavor, opt.laserPower) << "\n";
         for (std::size_t i = 1; i < path.size(); ++i) {
             out << "G01 " << xy(path[i], opt) << " F" << number(opt.feedXY, opt.feedDecimals) << "\n";
         }
@@ -547,6 +868,31 @@ std::string laserPathsGCode(const PathJob& job, const GCodeOptions& opt) {
 
 }  // namespace
 
+/**
+ * @brief Genera el programa de dosificación de pasta de soldar.
+ *
+ * Cabecera con boquilla por defecto y límites, unidades y modo absoluto; luego,
+ * por cada punto (en orden directo o invertido si `job.reverse`), si hay tabla
+ * de boquillas completa compara el índice con el anterior y, al cambiar, emite
+ * un comentario con el diámetro y —si `includeToolChange`— una pausa `M0` para
+ * el cambio manual. Cada punto se ejecuta como: rápido XY, rápido a `zMove`,
+ * bajada a `zCut` con `feedZ`, pausa `G04` según boquilla y retracción a
+ * `zEnd`. Cierra con `G00 Z zMove`, `M05` y `M02`.
+ *
+ * @param job Puntos, tabla de boquillas, pausas y límites.
+ * @param opt Parámetros de máquina y formato.
+ * @return Programa G-code de dosificación.
+ *
+ * @note Si `nozzles` o `nozzleDwells` no tienen exactamente el mismo tamaño que
+ *       `points` se ignoran y se usa la boquilla/pausa por defecto, de modo que
+ *       un script incompleto no desalinea los datos.
+ * @note El orden invertido se aplica indexando desde el final en lugar de
+ *       invertir el vector, así las tablas paralelas siguen alineadas.
+ * @warning `M05` y `M02` se emiten siempre, incluso si el equipo no tiene
+ *          husillo; algunos firmwares aceptan ambos comandos sin efecto.
+ * @warning `zCut` se usa como altura de dosificación: si viene con el valor por
+ *          defecto de corte (negativo) la boquilla penetrará en la placa.
+ */
 std::string pasteGCode(const PasteJob& job, const GCodeOptions& opt) {
     std::ostringstream out;
     out << "(Solder paste dispensing program generated by FlatCAM C++.)\n";
@@ -592,6 +938,37 @@ std::string pasteGCode(const PasteJob& job, const GCodeOptions& opt) {
     return out.str();
 }
 
+/**
+ * @brief Genera el G-code de una herramienta que sigue una lista de recorridos.
+ *
+ * Despacha según el postprocesador:
+ * - láser → `laserPathsGCode`;
+ * - `Hpgl` → `IN; SP1; PU/PD; PA...` con coordenadas en mm;
+ * - `LineXyz` → `G00/G01` con `X`, `Y` y `Z` explícitos en cada movimiento;
+ * - resto → programa G-code convencional.
+ *
+ * En el camino convencional se escribe cabecera con diámetro, avances, Z y
+ * límites, unidades, `G90/G94`, husillo y cambio de herramienta opcional.
+ * Luego se calculan las profundidades parciales: si `depthPerPass > 0` y
+ * `zCut != 0` se generan escalones desde 0 hasta `zCut`; si no, una sola
+ * profundidad. Cada recorrido se ejecuta completo a cada profundidad, salvo que
+ * `connectPaths` permita enlazarlo con el anterior sin retraer (si el inicio
+ * está a menos de `connectTolerance` del final previo).
+ *
+ * @param job Recorridos, límites y diámetro informativo.
+ * @param opt Parámetros de máquina, unidades y postprocesador.
+ * @return Programa G-code.
+ *
+ * @note Los recorridos con menos de 2 puntos se omiten.
+ * @note `connectPaths` sólo evita la retracción y el reposicionamiento; no
+ *       agrega ningún movimiento de enlace, por lo que el tramo entre el final
+ *       anterior y el inicio actual se mecaniza en línea recta.
+ * @warning Con `depthPerPass > 0` cada nivel repite el recorrido completo,
+ *          incluso los ya cortados, lo que alarga el programa pero mantiene la
+ *          carga de fresado constante (mismo criterio que FlatCAM).
+ * @warning En modo `LineXyz` no se emiten cambios de herramienta ni husillo,
+ *          y se usa `zCut` para todos los movimientos lineales, sin multipasada.
+ */
 std::string pathsGCode(const PathJob& job, const GCodeOptions& opt) {
     if (isLaserFlavor(opt.flavor)) return laserPathsGCode(job, opt);
     if (opt.flavor == GCodeFlavor::Hpgl) {
@@ -717,6 +1094,30 @@ std::string pathsGCode(const PathJob& job, const GCodeOptions& opt) {
     return out.str();
 }
 
+/**
+ * @brief Genera un programa de geometría con varias herramientas.
+ *
+ * Escribe una cabecera común (lista de herramientas y diámetros, unidades,
+ * `G90/G94`, `zStart`) —o la cabecera láser si el postprocesador es láser— y
+ * luego, por cada herramienta, el cambio correspondiente (`ToolchangeCustom`
+ * expandido, o `M5` + `zToolchange` + `Tn` + `M6`/comentario), el husillo si
+ * tiene RPM propias y todos sus recorridos con multipasada. Cierra con `M05`,
+ * `zEnd` y `endXY`.
+ *
+ * @param tools Herramientas en orden de ejecución, cada una con sus propias
+ *              opciones de avance, Z y postprocesador.
+ * @param header Opciones comunes: postprocesador, unidades, decimales, `zEnd`,
+ *               `endXY` y parámetros láser.
+ * @return Programa completo, o cadena vacía si `tools` está vacío.
+ *
+ * @note En modo láser se respeta la potencia de cada herramienta, pero los
+ *       comandos de encendido/apagado se generan con los perfiles de la
+ *       herramienta y de la cabecera respectivamente.
+ * @note La profundidad por pasada se toma de cada herramienta, no de la
+ *       cabecera, igual que los avances y la Z de viaje.
+ * @note En modo láser el haz se apaga antes de cada rápido y se enciende al
+ *       comenzar cada recorrido, igual que en `laserPathsGCode`.
+ */
 std::string pathsGCodeMulti(const std::vector<PathToolJob>& tools, const GCodeOptions& header) {
     std::ostringstream out;
     if (tools.empty()) return {};
@@ -744,13 +1145,11 @@ std::string pathsGCodeMulti(const std::vector<PathToolJob>& tools, const GCodeOp
     for (const PathToolJob& tool : tools) {
         const GCodeOptions& opt = tool.options;
         if (laser) {
-            out << "M5\n";
-            out << "G00 " << (tool.paths.empty() ? "X0 Y0" : xy(tool.paths.front().front(), opt))
-                << "\n";
-            out << laserOnCommand(opt.flavor, opt.laserPower) << "\n";
             for (const auto& path : tool.paths) {
                 if (path.size() < 2) continue;
+                out << laserOffCommand(header.flavor) << "\n";
                 out << "G00 " << xy(path.front(), opt) << "\n";
+                out << laserOnCommand(opt.flavor, opt.laserPower) << "\n";
                 for (std::size_t i = 1; i < path.size(); ++i)
                     out << "G01 " << xy(path[i], opt) << " F"
                         << number(opt.feedXY, opt.feedDecimals) << "\n";
@@ -822,6 +1221,19 @@ std::string pathsGCodeMulti(const std::vector<PathToolJob>& tools, const GCodeOp
     return out.str();
 }
 
+/**
+ * @brief Construye un `DrillJob` a partir del resultado de un Excellon.
+ *
+ * Copia los límites y, por cada herramienta del mapa (`std::map`, por lo que
+ * quedan ordenadas por número), crea una `DrillTool` con número, diámetro,
+ * taladros y ranuras. Las herramientas vacías se descartan.
+ *
+ * @param result Resultado del parser de Excellon en unidades de la aplicación.
+ * @return Trabajo listo para `optimizeDrillOrder` y `drillingGCode`.
+ *
+ * @note No se transfieren overrides de Z/avance/RPM: el llamador debe
+ *       configurarlos si quiere valores por herramienta.
+ */
 DrillJob drillJobFromExcellon(const ExcellonResult& result) {
     DrillJob job;
     job.bounds = result.bounds;

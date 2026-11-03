@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente src/gui/main.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('gui_2main_8cpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">main.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="gui_2main_8cpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file main.cpp</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Punto de entrada de la GUI: tema, filtro de tooltips y opciones CLI.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Configura la aplicación Qt (nombre, icono, tema claro u oscuro persistido en</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * `QSettings`), instala un filtro global que hace que las etiquetas de</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * formulario muestren el tooltip de su campo asociado, crea y muestra</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * `MainWindow`, procesa los argumentos de línea de comandos usados para</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> * automatizar capturas y pruebas y entra en el bucle de eventos. Si se pide una</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment"> * captura, la guarda tras un retardo fijo y cierra la aplicación.</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;QApplication&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;QDebug&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;QSettings&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;QStyleFactory&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;QPalette&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;QFileInfo&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;QHelpEvent&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;QLabel&gt;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;QTimer&gt;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;QToolTip&gt;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &quot;<a class="code" href="_main_window_8h.html">MainWindow.h</a>&quot;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;<a class="code" href="gcode_8hpp.html">flatcam/gcode.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">namespace </span>{</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">// Every form label shows the tooltip of its buddy (the field it describes),</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">// including labels created by QFormLayout without an explicit tooltip.</span><span class="comment"></span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> * @brief Filtro global que propaga el tooltip del campo a su etiqueta.</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> * Instalado sobre la `QApplication`, revisa los eventos de tooltip de todas las</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment"> * etiquetas del programa. Si la etiqueta no tiene tooltip propio pero su</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment"> * *buddy* sí, muestra el del campo: así los textos de ayuda definidos una sola</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment"> * vez (en el control) aparecen también sobre el rótulo, incluso en los</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"> * formularios generados por `QFormLayout`.</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keyword">class </span>LabelTooltipFilter : <span class="keyword">public</span> QObject {</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keyword">using </span>QObject::QObject;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keyword">protected</span>:<span class="comment"></span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment">    /**</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">     * @brief Muestra el tooltip del campo asociado a una etiqueta.</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">     *</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment">     * Intercepta `QEvent::ToolTip` sobre `QLabel`: si la etiqueta no tiene</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment">     * tooltip propio pero sí un *buddy* (el campo que describe) con tooltip, lo</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment">     * muestra en la posición del cursor y consume el evento. Así los formularios</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment">     * creados con `QFormLayout` heredan la ayuda del campo sin duplicar textos.</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment">     *</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment">     * @param obj Objeto que recibe el evento.</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment">     * @param event Evento a filtrar.</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment">     * @return `true` si el evento quedó manejado; en cualquier otro caso delega en</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment">     *         `QObject::eventFilter`.</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keywordtype">bool</span> eventFilter(QObject* obj, QEvent* event)<span class="keyword"> override </span>{</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <span class="keywordflow">if</span> (event-&gt;type() == QEvent::ToolTip) {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>            <span class="keyword">auto</span>* label = qobject_cast&lt;QLabel*&gt;(obj);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>            <span class="keywordflow">if</span> (label &amp;&amp; label-&gt;toolTip().isEmpty() &amp;&amp; label-&gt;buddy()) {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                <span class="keyword">const</span> QString tip = label-&gt;buddy()-&gt;toolTip();</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                <span class="keywordflow">if</span> (!tip.isEmpty()) {</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                    <span class="keyword">auto</span>* help = <span class="keyword">static_cast&lt;</span>QHelpEvent*<span class="keyword">&gt;</span>(event);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                    QToolTip::showText(help-&gt;globalPos(), tip, label);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                }</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>            }</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        }</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        <span class="keywordflow">return</span> QObject::eventFilter(obj, event);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    }</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>};</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>}  <span class="comment">// namespace</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"></span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment"> * @brief Arranca la aplicación de escritorio.</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment"> * Secuencia: crea `QApplication`, fija nombre/organización/icono, instala el</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"> * filtro de tooltips, aplica el tema (hoja de estilo clara o paleta Fusion</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment"> * oscura según `preferences/darkTheme`), construye y muestra `MainWindow` con</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"> * tamaño 1400x900 y luego interpreta los argumentos:</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"> * - `--screenshot &lt;png&gt;`: captura la ventana (o el diálogo activo) y sale.</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> * - `--isolate &lt;Ø&gt;` / `--cutout &lt;Ø&gt;`: aplican aislamiento o corte de demostración.</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> * - `--script &lt;js&gt;`: ejecuta un script de la API.</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> * - `--tool &lt;nombre&gt;`: abre la pestaña de esa herramienta.</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"> * - `--object-panel`, `--3d`, `--excellon-editor`: abren paneles/diálogos.</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"> * - `--tcl &lt;comando&gt;`: ejecuta un comando Tcl e imprime el resultado.</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> * - Cualquier otro argumento sin `--` se trata como archivo a abrir.</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * @param argc Número de argumentos.</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> * @param argv Vector de argumentos del sistema.</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> * @return Código de salida del bucle de eventos de Qt.</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * @note Los valores numéricos inválidos se convierten a 0 y la acción</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> *       correspondiente se omite; las opciones CAM de demostración usan valores</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> *       fijos (1 pasada, margen 0.5, Z −1.8 y 0.6 mm por pasada).</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment"> * @warning La captura se toma con un retardo fijo de 900 ms</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"> *          (main.cpp:188-195): con archivos grandes o el diálogo 3D recién</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment"> *          abierto puede fotografiar antes de que el contenido esté listo. Las</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"> *          opciones desconocidas con valor dejan ese valor como &quot;archivo&quot;.</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00102" data-start="{" data-end="}">
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="gui_2main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627">  102</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="cli_2main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv) {</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    QApplication app(argc, argv);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    QApplication::setApplicationName(<span class="stringliteral">&quot;FlatCAM C++&quot;</span>);</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    app.installEventFilter(<span class="keyword">new</span> LabelTooltipFilter(&amp;app));</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    QApplication::setOrganizationName(<span class="stringliteral">&quot;FlatCAM C++&quot;</span>);</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    QApplication::setWindowIcon(QIcon(<span class="stringliteral">&quot;:/icons/appicon.png&quot;</span>));</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <span class="keyword">const</span> <span class="keywordtype">bool</span> darkTheme = QSettings().value(<span class="stringliteral">&quot;preferences/darkTheme&quot;</span>, <span class="keyword">false</span>).toBool();</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <span class="keywordflow">if</span> (!darkTheme) {</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        app.setStyleSheet(R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="stringliteral">            QWidget { background-color: #f1f1f1; color: #1e1e1e; }</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="stringliteral">            QMenuBar, QToolBar { background-color: #f1f1f1; }</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="stringliteral">            QTabBar::tab { background: #e4e4e4; border: 1px solid #b8b8b8;</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="stringliteral">                           padding: 4px 10px; }</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="stringliteral">            QTabBar::tab:selected { background: #fafafa; }</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="stringliteral">            QTabWidget::pane { border: 1px solid #c0c0c0; }</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="stringliteral">            QPushButton { background: #e9e9e9; border: 1px solid #adadad;</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="stringliteral">                          border-radius: 3px; padding: 4px 8px; }</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="stringliteral">            QPushButton:hover { background: #f3f3f3; }</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="stringliteral">            QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QPlainTextEdit,</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="stringliteral">            QTableWidget, QTreeWidget { background: #ffffff; border: 1px solid #b8b8b8; }</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="stringliteral">            QHeaderView::section { background: #e6e6e6; border: 0px;</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="stringliteral">                                   border-right: 1px solid #c0c0c0;</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="stringliteral">                                   border-bottom: 1px solid #c0c0c0; padding: 3px; }</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="stringliteral">    }</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="stringliteral">    </span><span class="keywordflow">if</span> (darkTheme) {</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        QApplication::setStyle(QStyleFactory::create(<span class="stringliteral">&quot;Fusion&quot;</span>));</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        QPalette palette;</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        palette.setColor(QPalette::Window, QColor(45, 45, 48));</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        palette.setColor(QPalette::WindowText, QColor(230, 230, 230));</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        palette.setColor(QPalette::Base, QColor(30, 30, 32));</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        palette.setColor(QPalette::AlternateBase, QColor(45, 45, 48));</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        palette.setColor(QPalette::Text, QColor(230, 230, 230));</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        palette.setColor(QPalette::Button, QColor(53, 53, 56));</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        palette.setColor(QPalette::ButtonText, QColor(230, 230, 230));</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        palette.setColor(QPalette::Highlight, QColor(42, 130, 218));</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        palette.setColor(QPalette::HighlightedText, Qt::white);</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        palette.setColor(QPalette::ToolTipBase, QColor(60, 60, 64));</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        palette.setColor(QPalette::ToolTipText, QColor(230, 230, 230));</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>        app.setPalette(palette);</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    }</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    <a class="code hl_class" href="class_main_window.html">MainWindow</a> window;</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    window.resize(1400, 900);</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    window.show();</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    QStringList files;</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    QString screenshot;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keywordtype">double</span> isolate = 0.0;</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="keywordtype">double</span> cutout = 0.0;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    QString script;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    QString tool;</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="keywordtype">bool</span> objectPanel = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    <span class="keywordtype">bool</span> view3d = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="keywordtype">bool</span> excellonEditor = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    QString tclCommand;</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="keyword">const</span> QStringList args = QApplication::arguments();</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 1; i &lt; args.size(); ++i) {</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        <span class="keywordflow">if</span> (args[i] == <span class="stringliteral">&quot;--screenshot&quot;</span> &amp;&amp; i + 1 &lt; args.size()) {</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>            screenshot = args[++i];</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (args[i] == <span class="stringliteral">&quot;--isolate&quot;</span> &amp;&amp; i + 1 &lt; args.size()) {</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>            <span class="keywordtype">bool</span> ok = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>            isolate = args[++i].toDouble(&amp;ok);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>            <span class="keywordflow">if</span> (!ok) {</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>                qWarning() &lt;&lt; <span class="stringliteral">&quot;Valor inválido para --isolate:&quot;</span> &lt;&lt; args[i];</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>                <span class="keywordflow">return</span> 2;</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>            }</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (args[i] == <span class="stringliteral">&quot;--cutout&quot;</span> &amp;&amp; i + 1 &lt; args.size()) {</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>            <span class="keywordtype">bool</span> ok = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>            cutout = args[++i].toDouble(&amp;ok);</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>            <span class="keywordflow">if</span> (!ok) {</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>                qWarning() &lt;&lt; <span class="stringliteral">&quot;Valor inválido para --cutout:&quot;</span> &lt;&lt; args[i];</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>                <span class="keywordflow">return</span> 2;</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>            }</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (args[i] == <span class="stringliteral">&quot;--script&quot;</span> &amp;&amp; i + 1 &lt; args.size()) {</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>            script = args[++i];</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (args[i] == <span class="stringliteral">&quot;--tool&quot;</span> &amp;&amp; i + 1 &lt; args.size()) {</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>            tool = args[++i];</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (args[i] == <span class="stringliteral">&quot;--object-panel&quot;</span>) {</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>            objectPanel = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (args[i] == <span class="stringliteral">&quot;--3d&quot;</span>) {</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>            view3d = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (args[i] == <span class="stringliteral">&quot;--excellon-editor&quot;</span>) {</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>            excellonEditor = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (args[i] == <span class="stringliteral">&quot;--tcl&quot;</span> &amp;&amp; i + 1 &lt; args.size()) {</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            tclCommand = args[++i];</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (args[i].startsWith(<span class="stringliteral">&quot;--&quot;</span>)) {</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>            qWarning() &lt;&lt; <span class="stringliteral">&quot;Opción desconocida:&quot;</span> &lt;&lt; args[i];</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>            files &lt;&lt; args[i];</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        }</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    }</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    <span class="keywordflow">if</span> (!files.isEmpty()) window.<a class="code hl_function" href="class_main_window.html#a945bd43b7fee5f476e17e8dfc5fc63d7">openFiles</a>(files);</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    <span class="keywordflow">if</span> (isolate &gt; 0.0) window.<a class="code hl_function" href="class_main_window.html#a817fe48dca96058a2ceab058831feb09">applyIsolation</a>(isolate, 1, 0.0, <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    <span class="keywordflow">if</span> (cutout &gt; 0.0) {</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        <a class="code hl_struct" href="structfc_1_1_g_code_options.html">fc::GCodeOptions</a> opt;</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        opt.<a class="code hl_variable" href="structfc_1_1_g_code_options.html#a5ecbbafafcce6b457d0fbb5c8f4e48e8">zCut</a> = -1.8;</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        opt.<a class="code hl_variable" href="structfc_1_1_g_code_options.html#a7847fed28d6a8d9bc526f850a561c321">depthPerPass</a> = 0.6;</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        window.<a class="code hl_function" href="class_main_window.html#a5cf9155b86fe6305bda961c5b49f7ad5">applyCutout</a>(cutout, 0.5, <span class="keyword">true</span>, opt);</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    }</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <span class="keywordflow">if</span> (!tool.isEmpty()) window.<a class="code hl_function" href="class_main_window.html#a7a32ab033d1c40afe6f9ddfc6dae646b">openToolTab</a>(tool);</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordflow">if</span> (objectPanel) window.<a class="code hl_function" href="class_main_window.html#a5e5b6274f4c44c6a7b7f2e968f1b4991">showObjectTool</a>();</div>
+</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="keywordflow">if</span> (view3d) window.<a class="code hl_function" href="class_main_window.html#adef28a9d6018dd19a837f971b3e60d9a">show3D</a>();</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="keywordflow">if</span> (excellonEditor) QTimer::singleShot(200, &amp;window, [&amp;window] { window.<a class="code hl_function" href="class_main_window.html#a91a895670e5ec52eaba0fea6d47d437a">excellonEditor</a>(); });</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    <span class="keywordflow">if</span> (!tclCommand.isEmpty()) qInfo().noquote() &lt;&lt; window.<a class="code hl_function" href="class_main_window.html#a0e55cd7b54a4cf6af544ddccc9a35324">runTclCommand</a>(tclCommand);</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    <span class="keywordflow">if</span> (!script.isEmpty()) window.<a class="code hl_function" href="class_main_window.html#a71b5f6b2831743fac9e568c822b0ab8b">runScriptFile</a>(script);</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    <span class="keywordflow">if</span> (!screenshot.isEmpty()) {</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        QTimer::singleShot(900, &amp;app, [&amp;window, screenshot, view3d, excellonEditor] {</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>            QWidget* target = (view3d || excellonEditor) ? QApplication::activeWindow() : &amp;window;</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>            <span class="keywordflow">if</span> (!target) target = &amp;window;</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>            <span class="keywordflow">if</span> (!target-&gt;grab().save(screenshot))</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>                qWarning() &lt;&lt; <span class="stringliteral">&quot;No se pudo guardar la captura en&quot;</span> &lt;&lt; screenshot;</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>            QApplication::quit();</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        });</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    }</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    <span class="keywordflow">return</span> app.exec();</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>}</div>
+<div class="ttc" id="a_main_window_8h_html"><div class="ttname"><a href="_main_window_8h.html">MainWindow.h</a></div><div class="ttdoc">Ventana principal de FlatCAM C++.</div></div>
+<div class="ttc" id="aclass_main_window_html"><div class="ttname"><a href="class_main_window.html">MainWindow</a></div><div class="ttdoc">Ventana principal y controlador de la aplicación.</div><div class="ttdef"><b>Definición</b> <a href="_main_window_8h_source.html#l00052">MainWindow.h:52</a></div></div>
+<div class="ttc" id="aclass_main_window_html_a0e55cd7b54a4cf6af544ddccc9a35324"><div class="ttname"><a href="class_main_window.html#a0e55cd7b54a4cf6af544ddccc9a35324">MainWindow::runTclCommand</a></div><div class="ttdeci">QString runTclCommand(const QString &amp;command)</div><div class="ttdoc">Ejecuta un comando Tcl y devuelve el resultado.</div><div class="ttdef"><b>Definición</b> <a href="_main_window_8cpp_source.html#l03520">MainWindow.cpp:3520</a></div></div>
+<div class="ttc" id="aclass_main_window_html_a5cf9155b86fe6305bda961c5b49f7ad5"><div class="ttname"><a href="class_main_window.html#a5cf9155b86fe6305bda961c5b49f7ad5">MainWindow::applyCutout</a></div><div class="ttdeci">bool applyCutout(double toolDiameter, double margin, bool external, const fc::GCodeOptions &amp;gcode={})</div><div class="ttdoc">Aplica corte de contorno.</div><div class="ttdef"><b>Definición</b> <a href="_main_window_8cpp_source.html#l10722">MainWindow.cpp:10722</a></div></div>
+<div class="ttc" id="aclass_main_window_html_a5e5b6274f4c44c6a7b7f2e968f1b4991"><div class="ttname"><a href="class_main_window.html#a5e5b6274f4c44c6a7b7f2e968f1b4991">MainWindow::showObjectTool</a></div><div class="ttdeci">void showObjectTool()</div><div class="ttdoc">Muestra la pestaña Herramienta.</div><div class="ttdef"><b>Definición</b> <a href="_main_window_8cpp_source.html#l05238">MainWindow.cpp:5238</a></div></div>
+<div class="ttc" id="aclass_main_window_html_a71b5f6b2831743fac9e568c822b0ab8b"><div class="ttname"><a href="class_main_window.html#a71b5f6b2831743fac9e568c822b0ab8b">MainWindow::runScriptFile</a></div><div class="ttdeci">bool runScriptFile(const QString &amp;path)</div><div class="ttdoc">Ejecuta un script JavaScript.</div><div class="ttdef"><b>Definición</b> <a href="_main_window_8cpp_source.html#l03076">MainWindow.cpp:3076</a></div></div>
+<div class="ttc" id="aclass_main_window_html_a7a32ab033d1c40afe6f9ddfc6dae646b"><div class="ttname"><a href="class_main_window.html#a7a32ab033d1c40afe6f9ddfc6dae646b">MainWindow::openToolTab</a></div><div class="ttdeci">void openToolTab(const QString &amp;title)</div><div class="ttdoc">Abre una pestaña de herramienta.</div><div class="ttdef"><b>Definición</b> <a href="_main_window_8cpp_source.html#l05220">MainWindow.cpp:5220</a></div></div>
+<div class="ttc" id="aclass_main_window_html_a817fe48dca96058a2ceab058831feb09"><div class="ttname"><a href="class_main_window.html#a817fe48dca96058a2ceab058831feb09">MainWindow::applyIsolation</a></div><div class="ttdeci">bool applyIsolation(double toolDiameter, int passes, double overlapPercent, bool invert, const fc::GCodeOptions &amp;gcode={})</div><div class="ttdoc">Aplica aislamiento y actualiza capas/preview.</div><div class="ttdef"><b>Definición</b> <a href="_main_window_8cpp_source.html#l10613">MainWindow.cpp:10613</a></div></div>
+<div class="ttc" id="aclass_main_window_html_a91a895670e5ec52eaba0fea6d47d437a"><div class="ttname"><a href="class_main_window.html#a91a895670e5ec52eaba0fea6d47d437a">MainWindow::excellonEditor</a></div><div class="ttdeci">void excellonEditor()</div><div class="ttdoc">Abre el editor gráfico de Excellon.</div><div class="ttdef"><b>Definición</b> <a href="_main_window_8cpp_source.html#l05807">MainWindow.cpp:5807</a></div></div>
+<div class="ttc" id="aclass_main_window_html_a945bd43b7fee5f476e17e8dfc5fc63d7"><div class="ttname"><a href="class_main_window.html#a945bd43b7fee5f476e17e8dfc5fc63d7">MainWindow::openFiles</a></div><div class="ttdeci">bool openFiles(const QStringList &amp;paths)</div><div class="ttdoc">Abre varios archivos como capas independientes.</div><div class="ttdef"><b>Definición</b> <a href="_main_window_8cpp_source.html#l02098">MainWindow.cpp:2098</a></div></div>
+<div class="ttc" id="aclass_main_window_html_adef28a9d6018dd19a837f971b3e60d9a"><div class="ttname"><a href="class_main_window.html#adef28a9d6018dd19a837f971b3e60d9a">MainWindow::show3D</a></div><div class="ttdeci">void show3D()</div><div class="ttdoc">Abre la vista 3D del cobre visible.</div><div class="ttdef"><b>Definición</b> <a href="_main_window_8cpp_source.html#l03222">MainWindow.cpp:3222</a></div></div>
+<div class="ttc" id="acli_2main_8cpp_html_a3c04138a5bfe5d72780bb7e82a18e627"><div class="ttname"><a href="cli_2main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a></div><div class="ttdeci">int main(int argc, char **argv)</div><div class="ttdoc">Punto de entrada: interpreta los argumentos y despacha el subcomando.</div><div class="ttdef"><b>Definición</b> <a href="cli_2main_8cpp_source.html#l01362">main.cpp:1362</a></div></div>
+<div class="ttc" id="agcode_8hpp_html"><div class="ttname"><a href="gcode_8hpp.html">gcode.hpp</a></div><div class="ttdoc">Generación de G-code, optimización de recorridos y preprocesadores.</div></div>
+<div class="ttc" id="astructfc_1_1_g_code_options_html"><div class="ttname"><a href="structfc_1_1_g_code_options.html">fc::GCodeOptions</a></div><div class="ttdoc">Parámetros de generación de un programa G-code.</div><div class="ttdef"><b>Definición</b> <a href="gcode_8hpp_source.html#l00055">gcode.hpp:55</a></div></div>
+<div class="ttc" id="astructfc_1_1_g_code_options_html_a5ecbbafafcce6b457d0fbb5c8f4e48e8"><div class="ttname"><a href="structfc_1_1_g_code_options.html#a5ecbbafafcce6b457d0fbb5c8f4e48e8">fc::GCodeOptions::zCut</a></div><div class="ttdeci">double zCut</div><div class="ttdoc">Profundidad final de corte.</div><div class="ttdef"><b>Definición</b> <a href="gcode_8hpp_source.html#l00064">gcode.hpp:64</a></div></div>
+<div class="ttc" id="astructfc_1_1_g_code_options_html_a7847fed28d6a8d9bc526f850a561c321"><div class="ttname"><a href="structfc_1_1_g_code_options.html#a7847fed28d6a8d9bc526f850a561c321">fc::GCodeOptions::depthPerPass</a></div><div class="ttdeci">double depthPerPass</div><div class="ttdoc">Profundidad por pasada; 0 = una sola bajada.</div><div class="ttdef"><b>Definición</b> <a href="gcode_8hpp_source.html#l00067">gcode.hpp:67</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_99d0482cf009f9d97a0877749b817f19.html">gui</a></li><li class="navelem"><a href="gui_2main_8cpp.html">main.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

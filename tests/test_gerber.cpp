@@ -1,3 +1,10 @@
+/**
+ * @file test_gerber.cpp
+ * @brief Pruebas del parser Gerber RS-274X.
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include "flatcam/gerber.hpp"

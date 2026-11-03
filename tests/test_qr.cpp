@@ -1,3 +1,10 @@
+/**
+ * @file test_qr.cpp
+ * @brief Pruebas de generación de códigos QR.
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include "flatcam/qr.hpp"

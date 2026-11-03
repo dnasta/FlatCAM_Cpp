@@ -1,3 +1,18 @@
+/**
+ * @file MainWindow.cpp
+ * @brief Implementación de la ventana principal y sus comandos Tcl.
+ *
+ * Este archivo orquesta:
+ * - la construcción de menús, barra, paneles y consolas;
+ * - la apertura y el guardado de archivos y proyectos;
+ * - el árbol de objetos, las propiedades y las capas del canvas;
+ * - los paneles CAM, las tablas de herramientas y la generación de G-code;
+ * - los editores y las operaciones geométricas;
+ * - el registro de los 71 comandos Tcl.
+ *
+ * La lógica geométrica/CAM vive en `fc`; aquí sólo se compone la interfaz y se
+ * mantiene el estado de la sesión.
+ */
 #include "MainWindow.h"
 
 #include <QAction>
@@ -109,6 +124,10 @@ using namespace fc;
 namespace {
 
 #ifdef FC_HAVE_TCL
+/// @name Adaptadores de comandos Tcl
+/// Cada `tclCmd*` valida argumentos y delega en un método `tcl*`.
+/// @{
+
 int tclCmdExtractDrills(ClientData cd, Tcl_Interp* ip, int objc, Tcl_Obj* const objv[]) {
     auto* w = static_cast<MainWindow*>(cd);
     if (objc < 2 || objc > 2) {
@@ -434,6 +453,7 @@ int tclCmdNRegions(ClientData cd, Tcl_Interp* ip, int objc, Tcl_Obj* const objv[
     return TCL_OK;
 }
 
+/// @brief Convierte una lista de objetos Tcl en doubles a partir de `from`.
 static std::vector<double> tclDoubles(Tcl_Interp* ip, int objc, Tcl_Obj* const objv[], int from) {
     std::vector<double> values;
     for (int i = from; i < objc; ++i) {
@@ -811,8 +831,14 @@ int tclCmdInfo(ClientData cd, Tcl_Interp* ip, int, Tcl_Obj* const[]) {
     Tcl_SetObjResult(ip, Tcl_NewStringObj(w->tclInfo().toUtf8().constData(), -1));
     return TCL_OK;
 }
+/// @}
 #endif
 
+/**
+ * @brief Asigna un tooltip al widget y a su etiqueta de formulario.
+ * @param widget Control.
+ * @param text Texto HTML del globo.
+ */
 void applyTip(QWidget* widget, const QString& text) {
     if (!widget) return;
     widget->setToolTip(text);
@@ -823,6 +849,10 @@ void applyTip(QWidget* widget, const QString& text) {
     }
 }
 
+/**
+ * @brief Dibuja el icono circular de deshacer/rehacer.
+ * @param redo `true` para rehacer (flecha espejada).
+ */
 QIcon historyIcon(bool redo) {
     constexpr int size = 32;
     QPixmap pix(size, size);
@@ -855,6 +885,10 @@ QIcon historyIcon(bool redo) {
     return QIcon(pix.transformed(QTransform().scale(-1, 1)));
 }
 
+/// @name Helpers de postprocesadores y propiedades
+/// @{
+
+/// @return Etiquetas de los 18 postprocesadores, en el orden de la UI.
 QStringList gcodeFlavorLabels() {
     return {QObject::tr("Default (MACH3)"),
             QObject::tr("Default sin M6"),
@@ -877,10 +911,12 @@ QStringList gcodeFlavorLabels() {
             QObject::tr("Personalizado (toolchange)")};
 }
 
+/// @return `true` si el índice de postprocesador corresponde a un láser.
 bool isLaserFlavorIndex(int index) {
     return index == 4 || index == 6 || index == 7 || index == 15;
 }
 
+/// @brief Traduce el índice del combo al enum de postprocesador.
 fc::GCodeFlavor gcodeFlavorFromIndex(int index) {
     switch (index) {
         case 1: return fc::GCodeFlavor::DefaultNoM6;
@@ -905,12 +941,19 @@ fc::GCodeFlavor gcodeFlavorFromIndex(int index) {
     }
 }
 
+/// @return Etiqueta legible de un postprocesador.
 QString gcodeFlavorLabel(fc::GCodeFlavor flavor) {
     const QStringList labels = gcodeFlavorLabels();
     const int index = static_cast<int>(flavor);
     return index >= 0 && index < labels.size() ? labels[index] : QString();
 }
 
+/**
+ * @brief Construye las propiedades visibles de un CNCJob.
+ * @param opt Parámetros de G-code usados.
+ * @param kind Tipo de trabajo ("aislamiento", "taladrado", ...).
+ * @return Mapa clave/valor para el panel de propiedades.
+ */
 std::map<QString, QString> cncProps(const fc::GCodeOptions& opt, const QString& kind) {
     std::map<QString, QString> props;
     props[QObject::tr("Trabajo")] = kind;
@@ -925,10 +968,12 @@ std::map<QString, QString> cncProps(const fc::GCodeOptions& opt, const QString& 
     return props;
 }
 
+/// @brief Carga un icono original de FlatCAM desde el `.qrc`.
 QIcon originalIcon(const QString& name) {
     return QIcon(":/icons/" + name + ".png");
 }
 
+/// @brief Dibuja un icono circular con una letra (fallback).
 QIcon toolIcon(const QString& letter, const QColor& color) {
     QPixmap pix(24, 24);
     pix.fill(Qt::transparent);
@@ -947,12 +992,14 @@ QIcon toolIcon(const QString& letter, const QColor& color) {
     return QIcon(pix);
 }
 
+/// @brief Acorta el título de una herramienta para la pestaña.
 QString shortToolTitle(QString title) {
     title.remove("Herramienta de ");
     title.remove("Herramienta ");
     return title;
 }
 
+/// @brief Devuelve el icono correspondiente a una herramienta.
 QIcon toolIconForTitle(const QString& title) {
     if (title.contains("aislamiento")) return originalIcon("isolate");
     if (title.contains("NCC")) return originalIcon("ncc");
@@ -967,6 +1014,7 @@ QIcon toolIconForTitle(const QString& title) {
     return QIcon();
 }
 
+/// @brief Genera el icono verde/gris de la columna Vis.
 QIcon visibilityIcon(bool visible) {
     static QIcon yes;
     static QIcon no;
@@ -1048,6 +1096,7 @@ private:
     std::function<void()> redo_;
 };
 
+/// @brief Heurística por extensión y cabecera para distinguir Excellon.
 bool looksLikeExcellon(const QString& path) {
     const QString suffix = QFileInfo(path).suffix().toLower();
     if (suffix == "drl" || suffix == "xln" || suffix == "exc" || suffix == "ncd") return true;
@@ -1059,6 +1108,7 @@ bool looksLikeExcellon(const QString& path) {
            head.contains("T01C");
 }
 
+/// @brief Formatea un número sin ceros innecesarios.
 QString formatDouble(double v) {
     std::ostringstream os;
     os.precision(6);
@@ -1067,6 +1117,8 @@ QString formatDouble(double v) {
 }
 
 }  // namespace
+
+/// @}
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     undoStack_ = new QUndoStack(this);
@@ -1082,6 +1134,11 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     statusBar()->showMessage(tr("Listo"));
 }
 
+// ============================================================================
+// Construcción de la interfaz
+// ============================================================================
+
+/// Construye menús, barra, docks, canvas y consola.
 void MainWindow::buildLayout() {
     canvas_ = new Canvas(this);
     canvas_->setToolTip(tr("Visor. Rueda: zoom. Arrastrar: desplazar. Barra inferior: coordenadas."));
@@ -1298,6 +1355,7 @@ void MainWindow::buildLayout() {
     });
 }
 
+/// Construye la barra de menús y sus acciones/atajos.
 void MainWindow::buildMenus() {
     QMenu* file = menuBar()->addMenu(tr("&Archivo"));
     QAction* newProject = file->addAction(tr("&Nuevo proyecto"));
@@ -2012,6 +2070,11 @@ void MainWindow::buildMenus() {
     });
 }
 
+// ============================================================================
+// Archivos y proyectos
+// ============================================================================
+
+/// @brief Abre el diálogo para seleccionar un proyecto `.FlatPrj`.
 void MainWindow::chooseProject() {
     const QString path = QFileDialog::getOpenFileName(
         this, tr("Abrir proyecto"), lastDir_,
@@ -2019,6 +2082,7 @@ void MainWindow::chooseProject() {
     if (!path.isEmpty()) openProject(path);
 }
 
+/// @brief Abre el diálogo de archivos y carga la selección.
 void MainWindow::chooseFile() {
     const QStringList paths = QFileDialog::getOpenFileNames(
         this, tr("Abrir archivos"), lastDir_,
@@ -2027,8 +2091,10 @@ void MainWindow::chooseFile() {
     if (!paths.isEmpty()) openFiles(paths);
 }
 
+/// @brief Abre un archivo individual detectando su tipo.
 bool MainWindow::openPath(const QString& path) { return openFiles(QStringList{path}); }
 
+/// @brief Carga varios archivos como capas y actualiza el árbol.
 bool MainWindow::openFiles(const QStringList& paths) {
     if (paths.isEmpty()) return false;
     lastDir_ = QFileInfo(paths.first()).absolutePath();
@@ -2099,6 +2165,7 @@ bool MainWindow::openFiles(const QStringList& paths) {
     return loaded > 0;
 }
 
+/// @brief Carga un proyecto, sus objetos y sus opciones.
 bool MainWindow::openProject(const QString& path) {
     try {
         projectPath_ = path;
@@ -2181,6 +2248,7 @@ bool MainWindow::openProject(const QString& path) {
     }
 }
 
+/// @brief Muestra la lista de objetos de un proyecto para abrir uno.
 void MainWindow::chooseProjectObject() {
     QString path = projectPath_;
     if (path.isEmpty()) {
@@ -2243,12 +2311,18 @@ void MainWindow::chooseProjectObject() {
     }
 }
 
+/// @brief Reacciona a cambios de nombre o visibilidad en el árbol.
 void MainWindow::objectItemChanged(QTreeWidgetItem* item, int column) {
     if (updatingTree_ || !item) return;
     const int layer = item->data(0, Qt::UserRole).toInt();
     refreshProperties();
 }
 
+// ============================================================================
+// Objetos, propiedades y capas
+// ============================================================================
+
+/// @brief Reconstruye el panel de propiedades del objeto activo.
 void MainWindow::refreshProperties() {
     if (!properties_) return;
     properties_->clear();
@@ -2320,6 +2394,7 @@ void MainWindow::refreshProperties() {
     }
 }
 
+/// @brief Elimina los objetos seleccionados con undo.
 void MainWindow::deleteSelectedObject() {
     const auto selected = objects_->selectedItems();
     if (selected.size() > 1) {
@@ -2391,6 +2466,7 @@ void MainWindow::deleteSelectedObject() {
     undoStack_->push(new LambdaCommand(restore, remove, tr("Eliminar objeto")));
 }
 
+/// @brief Duplica el objeto activo y su geometría.
 void MainWindow::duplicateSelectedObject() {
     QTreeWidgetItem* item = objects_->currentItem();
     if (!item) return;
@@ -2422,6 +2498,11 @@ void MainWindow::duplicateSelectedObject() {
     undoStack_->push(new LambdaCommand(removeCopy, addCopy, tr("Duplicar objeto")));
 }
 
+// ============================================================================
+// Editores y operaciones geométricas
+// ============================================================================
+
+/// @brief Abre el editor de vértices de la geometría activa.
 void MainWindow::editGeometry() {
     auto* item = objects_->currentItem();
     if (!item) {
@@ -2636,6 +2717,7 @@ void MainWindow::editGeometry() {
                                       tr("Editar geometría")));
 }
 
+/// @brief Abre el diálogo de operaciones geométricas (buffer, escalar...).
 void MainWindow::geometryOperations() {
     auto* item = objects_->currentItem();
     if (!item) {
@@ -2788,6 +2870,7 @@ void MainWindow::geometryOperations() {
     statusBar()->showMessage(tr("Geometría transformada"), 4000);
 }
 
+/// @brief Abre el diálogo de unión, diferencia e intersección.
 void MainWindow::booleanDialog() {
     auto* item = objects_->currentItem();
     if (!item) {
@@ -2882,6 +2965,7 @@ void MainWindow::booleanDialog() {
         tr("Operación booleana")));
 }
 
+/// @brief Mueve, rota o escala el objeto activo.
 void MainWindow::transformSelectedObject() {
     QTreeWidgetItem* item = objects_->currentItem();
     if (!item) return;
@@ -2966,6 +3050,7 @@ void MainWindow::transformSelectedObject() {
         tr("Transformar objeto")));
 }
 
+/// @brief Combina las capas visibles en un film.
 void MainWindow::createFilm() {
     const int id = canvas_->mergeVisibleLayers();
     if (id < 0) return;
@@ -2974,6 +3059,7 @@ void MainWindow::createFilm() {
     statusBar()->showMessage(tr("Film creado"), 3000);
 }
 
+/// @brief Exporta las capas visibles a SVG.
 void MainWindow::exportFilm() {
     const QString path = QFileDialog::getSaveFileName(this, tr("Exportar film SVG"),
                                                       QFileInfo(lastDir_).absolutePath() + "/film.svg",
@@ -2986,6 +3072,7 @@ void MainWindow::exportFilm() {
     statusBar()->showMessage(tr("Film exportado: %1").arg(QFileInfo(path).fileName()), 5000);
 }
 
+/// @brief Ejecuta un script JavaScript en el contexto de la aplicación.
 bool MainWindow::runScriptFile(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -3031,14 +3118,17 @@ bool MainWindow::runScriptFile(const QString& path) {
     return true;
 }
 
+/// @brief Crea un objeto Script vacío.
 void MainWindow::newScript() { scriptEditor(QString()); }
 
+/// @brief Abre el editor del script activo.
 void MainWindow::editScript() {
     const QString path = QFileDialog::getOpenFileName(
         this, tr("Editar script"), lastDir_, tr("JavaScript (*.js);;Todos (*)"));
     if (!path.isEmpty()) scriptEditor(path);
 }
 
+/// @brief Editor de texto para scripts, con guardar y ejecutar.
 void MainWindow::scriptEditor(const QString& initialPath) {
     QString path = initialPath;
     QString content;
@@ -3095,12 +3185,14 @@ void MainWindow::scriptEditor(const QString& initialPath) {
     dialog.exec();
 }
 
+/// @brief Ejecuta el script activo.
 void MainWindow::runScript() {
     const QString path = QFileDialog::getOpenFileName(this, tr("Ejecutar script JavaScript"),
                                                       lastDir_, tr("JavaScript (*.js);;Todos (*)"));
     if (!path.isEmpty()) runScriptFile(path);
 }
 
+/// @brief Carga el objeto de proyecto seleccionado.
 void MainWindow::projectObjectSelected() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -3126,6 +3218,7 @@ void MainWindow::projectObjectSelected() {
     refreshProperties();
 }
 
+/// Abre la vista 3D con el cobre visible y los taladros del proyecto.
 void MainWindow::show3D() {
     const std::vector<Geom> solids = canvas_->visibleSolids();
     if (solids.empty()) {
@@ -3145,6 +3238,7 @@ void MainWindow::show3D() {
     dialog->raise();
 }
 
+/// @brief Construye la consola Tcl y registra los 71 comandos.
 void MainWindow::buildTclConsole(QTabWidget* tabs) {
 #ifdef FC_HAVE_TCL
     auto* page = new QWidget(tabs);
@@ -3259,6 +3353,7 @@ void MainWindow::buildTclConsole(QTabWidget* tabs) {
 #endif
 }
 
+/// @brief Adaptador Tcl del comando `open`.
 bool MainWindow::tclOpen(const QString& path, bool excellon) {
     try {
         const bool ok = excellon ? addExcellon(path) : addGerber(path);
@@ -3273,30 +3368,35 @@ bool MainWindow::tclOpen(const QString& path, bool excellon) {
     }
 }
 
+/// @brief Adaptador Tcl del comando `isolate`.
 int MainWindow::tclIsolate(double dia, int passes, double overlap) {
     GCodeOptions opt;
     if (!applyIsolation(dia, passes, overlap, false, opt)) return 0;
     return static_cast<int>(lastIsoMulti_.size());
 }
 
+/// @brief Adaptador Tcl del comando `cutout`.
 int MainWindow::tclCutout(double dia, double margin, int tabs, double width) {
     GCodeOptions opt;
     if (!applyCutout(dia, margin, true, opt)) return 0;
     return static_cast<int>(lastCutMulti_.size());
 }
 
+/// @brief Adaptador Tcl del comando `ncc`.
 int MainWindow::tclNcc(double dia, double overlapPercent) {
     GCodeOptions opt;
     if (!applyNcc(dia, 100.0 - overlapPercent, 0.1, 0.0, 1.0, false, opt)) return 0;
     return static_cast<int>(lastNccMulti_.size());
 }
 
+/// @brief Adaptador Tcl del comando `paint`.
 int MainWindow::tclPaint(double dia, double overlapPercent) {
     GCodeOptions opt;
     if (!applyPaint(dia, 100.0 - overlapPercent, 0.0, opt)) return 0;
     return static_cast<int>(lastPaintMulti_.size());
 }
 
+/// @brief Adaptador Tcl del comando `extractdrills`.
 int MainWindow::tclExtractDrills(double maxDiameter) {
     auto* item = objects_ ? objects_->currentItem() : nullptr;
     int id = item ? item->data(0, Qt::UserRole).toInt() : 0;
@@ -3316,6 +3416,7 @@ int MainWindow::tclExtractDrills(double maxDiameter) {
     return static_cast<int>(drills.drillCount);
 }
 
+/// @brief Adaptador Tcl del comando `punch`.
 int MainWindow::tclPunch(double margin) {
     auto* item = objects_ ? objects_->currentItem() : nullptr;
     const int id = item ? item->data(0, Qt::UserRole).toInt() : 0;
@@ -3331,6 +3432,7 @@ int MainWindow::tclPunch(double margin) {
     return 1;
 }
 
+/// @brief Adaptador Tcl del comando `panelize`.
 int MainWindow::tclPanelize(int rows, int cols, double gapX, double gapY) {
     auto* item = objects_ ? objects_->currentItem() : nullptr;
     if (!item || rows < 1 || cols < 1) return -1;
@@ -3349,6 +3451,7 @@ int MainWindow::tclPanelize(int rows, int cols, double gapX, double gapY) {
     return static_cast<int>(out.size());
 }
 
+/// @brief Adaptador Tcl del comando `qr`.
 int MainWindow::tclQr(const QString& text, double module, int border) {
     const std::vector<Geom> geom = qrCodeGeometry(text.toStdString(), module, border);
     if (geom.empty()) return -1;
@@ -3356,6 +3459,7 @@ int MainWindow::tclQr(const QString& text, double module, int border) {
     return static_cast<int>(geom.size());
 }
 
+/// @brief Adaptador Tcl del comando `corners`.
 int MainWindow::tclCorners(double length, double margin) {
     auto* item = objects_ ? objects_->currentItem() : nullptr;
     if (!item) return -1;
@@ -3367,6 +3471,7 @@ int MainWindow::tclCorners(double length, double margin) {
     return static_cast<int>(marks.size());
 }
 
+/// @brief Adaptador Tcl del comando `optimal`.
 double MainWindow::tclOptimal(double maxDiameter) {
     auto* item = objects_ ? objects_->currentItem() : nullptr;
     const int id = item ? item->data(0, Qt::UserRole).toInt() : 0;
@@ -3379,6 +3484,7 @@ double MainWindow::tclOptimal(double maxDiameter) {
     return opt.valid ? opt.diameter : maxDiameter;
 }
 
+/// @brief Adaptador Tcl del comando `exportgcode`.
 bool MainWindow::tclExportGcode(const QString& path) {
     std::string code;
     if (lastDrillJob_)
@@ -3399,6 +3505,7 @@ bool MainWindow::tclExportGcode(const QString& path) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `exportgerber`.
 bool MainWindow::tclExportGerber(const QString& path) {
     if (!lastGerber_) return false;
     try {
@@ -3409,6 +3516,7 @@ bool MainWindow::tclExportGerber(const QString& path) {
     }
 }
 
+/// @brief Ejecuta una cadena Tcl y devuelve el resultado.
 QString MainWindow::runTclCommand(const QString& command) {
 #ifdef FC_HAVE_TCL
     if (!tclInterp_) return tr("Tcl no inicializado");
@@ -3422,10 +3530,12 @@ QString MainWindow::runTclCommand(const QString& command) {
 #endif
 }
 
+/// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
     return QStringLiteral("FlatCAM C++ 0.1.0");
 }
 
+/// @brief Adaptador Tcl del comando `help`.
 QString MainWindow::tclHelp() const {
     return QStringLiteral(
         "open_gerber path | open_excellon path | open_dxf path | open_svg path | "
@@ -3441,6 +3551,7 @@ QString MainWindow::tclHelp() const {
         "plot_all | set_origin x y | version | info | help");
 }
 
+/// @brief Adaptador Tcl del comando `getnames`.
 QString MainWindow::tclGetNames(const QString& kind) const {
     QStringList names;
     for (QTreeWidgetItem* item : objectItems()) {
@@ -3450,6 +3561,7 @@ QString MainWindow::tclGetNames(const QString& kind) const {
     return names.join('\n');
 }
 
+/// @brief Adaptador Tcl del comando `bbox`.
 QString MainWindow::tclBBox(const QString& name) const {
     QTreeWidgetItem* item = findObjectByName(name);
     if (!item) return {};
@@ -3459,6 +3571,7 @@ QString MainWindow::tclBBox(const QString& name) const {
         .arg(b.xmax, 0, 'f', 6).arg(b.ymax, 0, 'f', 6);
 }
 
+/// @brief Adaptador Tcl del comando `setactive`.
 bool MainWindow::tclSetActive(const QString& name) {
     QTreeWidgetItem* item = findObjectByName(name);
     if (!item) return false;
@@ -3468,6 +3581,7 @@ bool MainWindow::tclSetActive(const QString& name) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `offset`.
 bool MainWindow::tclOffset(const QString& name, double dx, double dy) {
     QTreeWidgetItem* item = findObjectByName(name);
     if (!item) return false;
@@ -3488,6 +3602,7 @@ bool MainWindow::tclOffset(const QString& name, double dx, double dy) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `scale`.
 bool MainWindow::tclScale(const QString& name, double factor) {
     if (factor <= 0.0) return false;
     QTreeWidgetItem* item = findObjectByName(name);
@@ -3512,6 +3627,7 @@ bool MainWindow::tclScale(const QString& name, double factor) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `mirror`.
 bool MainWindow::tclMirror(const QString& name, const QString& axis) {
     QTreeWidgetItem* item = findObjectByName(name);
     if (!item) return false;
@@ -3538,6 +3654,7 @@ bool MainWindow::tclMirror(const QString& name, const QString& axis) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `delete`.
 bool MainWindow::tclDelete(const QString& name) {
     QTreeWidgetItem* item = findObjectByName(name);
     if (!item) return false;
@@ -3552,10 +3669,12 @@ bool MainWindow::tclDelete(const QString& name) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `saveproject`.
 bool MainWindow::tclSaveProject(const QString& path) {
     return saveProjectToPath(path);
 }
 
+/// @brief Adaptador Tcl del comando `exportdxf`.
 bool MainWindow::tclExportDxf(const QString& path) {
     std::vector<Geom> solids;
     std::vector<Geom> follows;
@@ -3577,10 +3696,12 @@ bool MainWindow::tclExportDxf(const QString& path) {
     }
 }
 
+/// @brief Adaptador Tcl del comando `exportsvg`.
 bool MainWindow::tclExportSvg(const QString& path) {
     return canvas_->exportSvg(path);
 }
 
+/// @brief Adaptador Tcl del comando `plotall`.
 void MainWindow::tclPlotAll() {
     for (QTreeWidgetItem* item : objectItems()) {
         updatingTree_ = true;
@@ -3589,6 +3710,7 @@ void MainWindow::tclPlotAll() {
     }
 }
 
+/// @brief Adaptador Tcl del comando `newobject`.
 bool MainWindow::tclNewObject(const QString& name, const QString& kind) {
     if (findObjectByName(name)) return false;
     const int id = canvas_->appendGeometry({}, {}, true);
@@ -3605,6 +3727,7 @@ bool MainWindow::tclNewObject(const QString& name, const QString& kind) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `addcircle`.
 bool MainWindow::tclAddCircle(const QString& name, double cx, double cy, double dia) {
     if (dia <= 0.0) return false;
     QTreeWidgetItem* item = findObjectByName(name);
@@ -3624,6 +3747,7 @@ bool MainWindow::tclAddCircle(const QString& name, double cx, double cy, double 
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `addrectangle`.
 bool MainWindow::tclAddRectangle(const QString& name, double x1, double y1, double x2, double y2) {
     if (x1 == x2 || y1 == y2) return false;
     QTreeWidgetItem* item = findObjectByName(name);
@@ -3644,6 +3768,7 @@ bool MainWindow::tclAddRectangle(const QString& name, double x1, double y1, doub
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `addpolygon`.
 bool MainWindow::tclAddPolygon(const QString& name, const std::vector<double>& coords) {
     if (coords.size() < 6 || coords.size() % 2 != 0) return false;
     QTreeWidgetItem* item = findObjectByName(name);
@@ -3666,6 +3791,7 @@ bool MainWindow::tclAddPolygon(const QString& name, const std::vector<double>& c
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `addpolyline`.
 bool MainWindow::tclAddPolyline(const QString& name, const std::vector<double>& coords) {
     if (coords.size() < 4 || coords.size() % 2 != 0) return false;
     QTreeWidgetItem* item = findObjectByName(name);
@@ -3685,10 +3811,12 @@ bool MainWindow::tclAddPolyline(const QString& name, const std::vector<double>& 
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `new`.
 bool MainWindow::tclNew(const QString& name) {
     return tclNewObject(name, "geometry");
 }
 
+/// @brief Adaptador Tcl del comando `rings`.
 int MainWindow::tclRings(const QString& name, bool holes) {
     QTreeWidgetItem* item = findObjectByName(name);
     if (!item) return -1;
@@ -3711,6 +3839,7 @@ int MainWindow::tclRings(const QString& name, bool holes) {
     return newId > 0 ? static_cast<int>(rings.size()) : -1;
 }
 
+/// @brief Adaptador Tcl del comando `join`.
 bool MainWindow::tclJoin(const QString& a, const QString& b) {
     QTreeWidgetItem* ia = findObjectByName(a);
     QTreeWidgetItem* ib = findObjectByName(b);
@@ -3729,6 +3858,7 @@ bool MainWindow::tclJoin(const QString& a, const QString& b) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `geounion`.
 bool MainWindow::tclGeoUnion(const QString& a, const QString& b) {
     QTreeWidgetItem* ia = findObjectByName(a);
     QTreeWidgetItem* ib = findObjectByName(b);
@@ -3742,6 +3872,7 @@ bool MainWindow::tclGeoUnion(const QString& a, const QString& b) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `exportexcellon`.
 bool MainWindow::tclExportExcellon(const QString& path) {
     auto* item = objects_->currentItem();
     if (!item) return false;
@@ -3757,6 +3888,7 @@ bool MainWindow::tclExportExcellon(const QString& path) {
     }
 }
 
+/// @brief Adaptador Tcl del comando `plotobjects`.
 void MainWindow::tclPlotObjects(const QStringList& names) {
     for (QTreeWidgetItem* item : objectItems()) {
         const bool show = names.contains(item->text(1));
@@ -3766,17 +3898,22 @@ void MainWindow::tclPlotObjects(const QStringList& names) {
     }
 }
 
+/// @brief Adaptador Tcl del comando `getpath`.
 QString MainWindow::tclGetPath() const { return lastDir_; }
+/// @brief Adaptador Tcl del comando `setpath`.
 void MainWindow::tclSetPath(const QString& path) { lastDir_ = path; }
 
+/// @brief Adaptador Tcl del comando `getsys`.
 QString MainWindow::tclGetSys(const QString& key) const {
     return QSettings().value("sys/" + key).toString();
 }
 
+/// @brief Adaptador Tcl del comando `setsys`.
 void MainWindow::tclSetSys(const QString& key, const QString& value) {
     QSettings().setValue("sys/" + key, value);
 }
 
+/// @brief Adaptador Tcl del comando `listsys`.
 QString MainWindow::tclListSys() const {
     QStringList keys;
     for (const QString& key : QSettings().allKeys()) {
@@ -3785,20 +3922,25 @@ QString MainWindow::tclListSys() const {
     return keys.join('\n');
 }
 
+/// @brief Adaptador Tcl del comando `savesys`.
 void MainWindow::tclSaveSys() { QSettings().sync(); }
 
+/// @brief Convierte milímetros a la unidad de visualización.
 double MainWindow::displayLength(double mm) const {
     return displayInch_ ? mm / 25.4 : mm;
 }
 
+/// @brief Convierte un valor de la unidad activa a milímetros.
 double MainWindow::lengthToMm(double value) const {
     return displayInch_ ? value * 25.4 : value;
 }
 
+/// @brief Formatea una longitud con la unidad y decimales activos.
 QString MainWindow::lengthText(double mm, int decimals) const {
     return QString::number(displayLength(mm), 'f', displayInch_ ? decimals + 4 : decimals);
 }
 
+/// @brief Convierte las tablas de herramientas entre mm y pulgadas.
 void MainWindow::convertToolTableUnits(bool toInch) {
     const double factor = toInch ? 1.0 / 25.4 : 25.4;
     const int decimals = toInch ? 7 : 3;
@@ -3819,6 +3961,7 @@ void MainWindow::convertToolTableUnits(bool toInch) {
     }
 }
 
+/// @brief Adaptador Tcl del comando `options`.
 QString MainWindow::tclOptions() const {
     return QString("units=%1 decimals=%2 steps=%3 displayInch=%4 simplify=%5 tolerance=%6")
         .arg(defaultUnits_ == Units::Inch ? "in" : "mm")
@@ -3829,6 +3972,7 @@ QString MainWindow::tclOptions() const {
         .arg(gerberTolerance_, 0, 'f', 4);
 }
 
+/// @brief Adaptador Tcl del comando `nregions`.
 int MainWindow::tclNRegions(const QString& name) {
     QTreeWidgetItem* item = findObjectByName(name);
     if (!item) return -1;
@@ -3840,6 +3984,7 @@ int MainWindow::tclNRegions(const QString& name) {
     return static_cast<int>(solid.polygons().size());
 }
 
+/// @brief Adaptador Tcl del comando `subtractshape`.
 bool MainWindow::tclSubtractShape(const QString& name, const std::vector<double>& coords,
                                   bool rectangle) {
     QTreeWidgetItem* item = findObjectByName(name);
@@ -3865,6 +4010,7 @@ bool MainWindow::tclSubtractShape(const QString& name, const std::vector<double>
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `follow`.
 bool MainWindow::tclFollow(const QString& name, double diameter) {
     QTreeWidgetItem* item = findObjectByName(name);
     if (!item) return false;
@@ -3877,6 +4023,7 @@ bool MainWindow::tclFollow(const QString& name, double diameter) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `aligndrill`.
 bool MainWindow::tclAlignDrill(const QString& name, const QString& reference) {
     QTreeWidgetItem* item = findObjectByName(name);
     if (!item) return false;
@@ -3915,6 +4062,7 @@ bool MainWindow::tclAlignDrill(const QString& name, const QString& reference) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `aligndrillgrid`.
 bool MainWindow::tclAlignDrillGrid(const QString& name, double grid) {
     if (grid <= 0.0) return false;
     QTreeWidgetItem* item = findObjectByName(name);
@@ -3944,6 +4092,7 @@ bool MainWindow::tclAlignDrillGrid(const QString& name, double grid) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `createcncjob`.
 bool MainWindow::tclCreateCncJob(const QString& name, bool drillJob) {
     GCodeOptions opt;
     opt.units = defaultUnits_;
@@ -3966,6 +4115,7 @@ bool MainWindow::tclCreateCncJob(const QString& name, bool drillJob) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `milldrills`.
 bool MainWindow::tclMillDrills(const QString& name, double diameter) {
     if (!lastExcellon_ || diameter <= 0.0) return false;
     PathJob job;
@@ -3994,6 +4144,7 @@ bool MainWindow::tclMillDrills(const QString& name, double diameter) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `millslots`.
 bool MainWindow::tclMillSlots(const QString& name, double diameter) {
     if (!lastExcellon_ || diameter <= 0.0) return false;
     PathJob job;
@@ -4025,10 +4176,12 @@ bool MainWindow::tclMillSlots(const QString& name, double diameter) {
     return true;
 }
 
+/// @brief Adaptador Tcl del comando `setorigin`.
 void MainWindow::tclSetOrigin(double x, double y) {
     canvas_->setDisplayOrigin({x, y});
 }
 
+/// @brief Adaptador Tcl del comando `info`.
 QString MainWindow::tclInfo() const {
     return tr("objetos=%1 gerber=%2 excellon=%3\n")
         .arg(objectItems().size())
@@ -4036,6 +4189,11 @@ QString MainWindow::tclInfo() const {
         .arg(lastExcellon_ ? lastExcellon_->drillCount : 0);
 }
 
+// ============================================================================
+// Preferencias, tema y nivel de interfaz
+// ============================================================================
+
+/// @brief Carga preferencias y aplica unidad, tema y nivel.
 void MainWindow::loadPreferences() {
     QSettings settings;
     decimals_ = settings.value("preferences/decimals", 3).toInt();
@@ -4074,6 +4232,7 @@ void MainWindow::loadPreferences() {
     if (canvas_) canvas_->setColors(background_, copperColor_, followColor_, toolpathColor_);
 }
 
+/// @brief Persiste las preferencias en QSettings.
 void MainWindow::savePreferences() {
     QSettings settings;
     settings.setValue("preferences/decimals", decimals_);
@@ -4130,6 +4289,7 @@ QSqlDatabase toolDatabase() {
 
 }  // namespace
 
+/// @brief Lee la base SQLite de herramientas.
 QJsonArray MainWindow::toolDbEntries() const {
     QJsonArray out;
     QSqlDatabase db = toolDatabase();
@@ -4171,6 +4331,7 @@ QJsonArray MainWindow::toolDbEntries() const {
     return out;
 }
 
+/// @brief Reemplaza la base de herramientas.
 void MainWindow::setToolDbEntries(const QJsonArray& entries) const {
     QSqlDatabase db = toolDatabase();
     if (!db.isOpen()) return;
@@ -4195,6 +4356,7 @@ void MainWindow::setToolDbEntries(const QJsonArray& entries) const {
     db.commit();
 }
 
+/// @brief Abre el editor de la base de herramientas.
 void MainWindow::showToolDb() {
     QDialog dialog(this);
     dialog.setWindowTitle(tr("Base de datos de herramientas"));
@@ -4276,6 +4438,7 @@ void MainWindow::showToolDb() {
     dialog.exec();
 }
 
+/// @brief Agrega una herramienta de la base a una tabla.
 void MainWindow::addToolFromDb(QTableWidget* table) {
     if (!table) return;
     const QJsonArray entries = toolDbEntries();
@@ -4319,12 +4482,14 @@ void MainWindow::addToolFromDb(QTableWidget* table) {
     }
 }
 
+/// @brief Muestra u oculta los controles avanzados.
 void MainWindow::applyUiLevel() {
     for (QWidget* widget : advancedWidgets_) {
         if (widget) widget->setVisible(advancedLevel_);
     }
 }
 
+/// @brief Aplica el tema claro u oscuro.
 void MainWindow::applyTheme(bool dark) {
     const bool changed = darkTheme_ != dark;
     darkTheme_ = dark;
@@ -4336,6 +4501,7 @@ void MainWindow::applyTheme(bool dark) {
     }
 }
 
+/// @brief Agrega un objeto al árbol del proyecto.
 QTreeWidgetItem* MainWindow::addObjectRow(const QString& name, const QString& kind,
                                           const QString& area, int layerId, bool visible,
                                           QTreeWidgetItem* parent) {
@@ -4354,6 +4520,7 @@ QTreeWidgetItem* MainWindow::addObjectRow(const QString& name, const QString& ki
     return item;
 }
 
+/// @brief Agrega una capa generada al grupo Herramientas.
 int MainWindow::addGeneratedLayer(const QString& name, const std::vector<Geom>& paths, int sourceId) {
     if (paths.empty()) return -1;
     const int id = canvas_->appendGeometry({}, paths, true);
@@ -4370,6 +4537,7 @@ int MainWindow::addGeneratedLayer(const QString& name, const std::vector<Geom>& 
     return id;
 }
 
+/// @brief Agrega un sólido generado como capa nueva.
 int MainWindow::addGeneratedSolid(const QString& name, const std::vector<Geom>& solids,
                                  int sourceId, const QString& kind) {
     if (solids.empty()) return -1;
@@ -4389,6 +4557,7 @@ int MainWindow::addGeneratedSolid(const QString& name, const std::vector<Geom>& 
     return id;
 }
 
+/// @brief Reúne la geometría de una capa para exportar o editar.
 std::vector<Geom> MainWindow::layerGeometries(int layerId) const {
     std::vector<Geom> out = canvas_->layerSolids(layerId);
     const std::vector<Geom> follows = canvas_->layerFollows(layerId);
@@ -4396,6 +4565,7 @@ std::vector<Geom> MainWindow::layerGeometries(int layerId) const {
     return out;
 }
 
+/// @brief Agrega un CNCJob al grupo G-code.
 void MainWindow::addGCodeRow(const QString& path) {
     if (!gcodeGroup_) return;
     auto* item = new QTreeWidgetItem(gcodeGroup_);
@@ -4412,6 +4582,7 @@ void MainWindow::addGCodeRow(const QString& path) {
     }
 }
 
+/// @brief Lista los ítems de objeto del árbol.
 std::vector<QTreeWidgetItem*> MainWindow::objectItems() const {
     std::vector<QTreeWidgetItem*> out;
     for (QTreeWidgetItem* group : {filesGroup_, toolsGroup_, gcodeGroup_}) {
@@ -4424,6 +4595,7 @@ std::vector<QTreeWidgetItem*> MainWindow::objectItems() const {
     return out;
 }
 
+/// @brief Busca el ítem del árbol por id de capa.
 QTreeWidgetItem* MainWindow::findObjectItem(int layerId) const {
     for (QTreeWidgetItem* item : objectItems()) {
         if (item->data(0, Qt::UserRole).toInt() == layerId) return item;
@@ -4431,6 +4603,7 @@ QTreeWidgetItem* MainWindow::findObjectItem(int layerId) const {
     return nullptr;
 }
 
+/// @brief Busca un objeto por nombre.
 QTreeWidgetItem* MainWindow::findObjectByName(const QString& name) const {
     for (QTreeWidgetItem* item : objectItems()) {
         if (item->text(1) == name) return item;
@@ -4441,6 +4614,7 @@ QTreeWidgetItem* MainWindow::findObjectByName(const QString& name) const {
     return nullptr;
 }
 
+/// @brief Reinicia los grupos Archivos/Herramientas/G-code.
 void MainWindow::resetObjectGroups() {
     objects_->clear();
     filesGroup_ = new QTreeWidgetItem(objects_);
@@ -4457,6 +4631,7 @@ void MainWindow::resetObjectGroups() {
     refreshSourceCombos();
 }
 
+/// @brief Muestra u oculta un objeto y sus capas derivadas.
 void MainWindow::setObjectVisible(QTreeWidgetItem* item, bool visible) {
     if (!item) return;
     item->setIcon(0, visibilityIcon(visible));
@@ -4474,6 +4649,7 @@ void MainWindow::setObjectVisible(QTreeWidgetItem* item, bool visible) {
     }
 }
 
+/// @brief Construye la consola JavaScript inferior.
 void MainWindow::buildConsole(QTabWidget* tabs) {
     auto* page = new QWidget(tabs);
     auto* layout = new QVBoxLayout(page);
@@ -4538,6 +4714,7 @@ void MainWindow::buildConsole(QTabWidget* tabs) {
     });
 }
 
+/// @brief Paneliza el objeto activo en filas/columnas.
 void MainWindow::panelize() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -4684,6 +4861,7 @@ void MainWindow::panelize() {
     statusBar()->showMessage(tr("Panel generado"), 4000);
 }
 
+/// @brief Agrega cuatro marcas fiduciales en las esquinas.
 void MainWindow::addFiducials() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -4726,6 +4904,7 @@ void MainWindow::addFiducials() {
     statusBar()->showMessage(tr("Fiduciales agregados"), 4000);
 }
 
+/// @brief Abre la calibración de escala por distancia medida/real.
 void MainWindow::calibrate() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -4832,6 +5011,7 @@ void MainWindow::calibrate() {
     statusBar()->showMessage(tr("Escala aplicada: x%1").arg(factor), 4000);
 }
 
+/// @brief Abre el film avanzado con margen, marco y punched.
 void MainWindow::advancedFilm() {
     const std::vector<Geom> solids = canvas_->visibleSolids();
     if (solids.empty()) {
@@ -4921,6 +5101,7 @@ void MainWindow::advancedFilm() {
     statusBar()->showMessage(tr("Film creado"), 4000);
 }
 
+/// @brief Construye la página de calculadoras.
 QWidget* MainWindow::buildCalculatorPage() {
     auto* page = new QWidget(this);
     auto* layout = new QVBoxLayout(page);
@@ -5022,6 +5203,7 @@ QWidget* MainWindow::buildCalculatorPage() {
     return page;
 }
 
+/// @brief Abre el diálogo de calculadoras.
 void MainWindow::showCalculators() {
     QDialog dialog(this);
     dialog.setWindowTitle(tr("Calculadoras"));
@@ -5034,8 +5216,10 @@ void MainWindow::showCalculators() {
     dialog.exec();
 }
 
+/// @brief Abre una pestaña de herramienta.
 void MainWindow::openToolTab(const QString& title) { showToolTab(title); }
 
+/// @brief Muestra o crea la pestaña de una herramienta.
 void MainWindow::showToolTab(const QString& title) {
     if (!leftTabs_) return;
     const auto it = toolTabs_.find(title);
@@ -5050,11 +5234,13 @@ void MainWindow::showToolTab(const QString& title) {
     leftTabs_->setCurrentIndex(index);
 }
 
+/// @brief Muestra la pestaña Herramienta del objeto.
 void MainWindow::showObjectTool() {
     refreshObjectToolPage();
     if (leftTabs_) leftTabs_->setCurrentIndex(2);
 }
 
+/// @brief Reconstruye la página de herramienta del objeto activo.
 void MainWindow::refreshObjectToolPage() {
     if (!objectToolLayout_) return;
     while (QLayoutItem* child = objectToolLayout_->takeAt(0)) {
@@ -5365,6 +5551,7 @@ void MainWindow::refreshObjectToolPage() {
     objectToolLayout_->addStretch();
 }
 
+/// @brief Abre el diálogo de preferencias.
 void MainWindow::showPreferences() {
     QDialog dialog(this);
     dialog.setWindowTitle(tr("Preferencias"));
@@ -5616,6 +5803,7 @@ void MainWindow::showPreferences() {
     statusBar()->showMessage(tr("Preferencias aplicadas y guardadas"), 5000);
 }
 
+/// @brief Abre el editor gráfico de Excellon.
 void MainWindow::excellonEditor() {
     auto* item = objects_->currentItem();
     if (!item) {
@@ -6065,6 +6253,7 @@ void MainWindow::excellonEditor() {
     statusBar()->showMessage(tr("Excellon editado"), 4000);
 }
 
+/// @brief Aplica compensación de grabado (buffer).
 void MainWindow::etchCompensation() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -6115,6 +6304,7 @@ void MainWindow::etchCompensation() {
         tr("Compensación de grabado")));
 }
 
+/// @brief Genera el negativo del cobre en un área.
 void MainWindow::invertGerber() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -6164,6 +6354,7 @@ void MainWindow::invertGerber() {
         tr("Invertir Gerber")));
 }
 
+/// @brief Mide la distancia mínima entre dos objetos.
 void MainWindow::distanceTool() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -6225,6 +6416,7 @@ void MainWindow::distanceTool() {
     dialog.exec();
 }
 
+/// @brief Calcula la fresa máxima que aísla el cobre.
 void MainWindow::optimalTool() {
     auto* item = objects_->currentItem();
     if (!item) {
@@ -6314,6 +6506,7 @@ void MainWindow::optimalTool() {
     openToolTab(tr("Herramienta de aislamiento"));
 }
 
+/// @brief Agrega marcas de esquina en L.
 void MainWindow::addCornerMarks() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -6349,6 +6542,7 @@ void MainWindow::addCornerMarks() {
     statusBar()->showMessage(tr("Marcas de esquina generadas"), 4000);
 }
 
+/// @brief Resta los taladros Excellon al cobre.
 void MainWindow::punchGerberAction() {
     QDialog dialog(this);
     dialog.setWindowTitle(tr("Punch Gerber"));
@@ -6448,6 +6642,7 @@ void MainWindow::punchGerberAction() {
     statusBar()->showMessage(tr("Punch Gerber generado"), 4000);
 }
 
+/// @brief Extrae taladros circulares del Gerber.
 void MainWindow::extractDrillsAction() {
     QDialog dialog(this);
     dialog.setWindowTitle(tr("Extraer taladros"));
@@ -6497,6 +6692,7 @@ void MainWindow::extractDrillsAction() {
                                  .arg(drills.tools.size()), 5000);
 }
 
+/// @brief Abre un archivo G-code como capa de recorridos.
 void MainWindow::openGCodeFile() {
     const QString path = QFileDialog::getOpenFileName(
         this, tr("Abrir G-code"), lastDir_,
@@ -6504,6 +6700,7 @@ void MainWindow::openGCodeFile() {
     if (!path.isEmpty()) addGCodeLayer(path);
 }
 
+/// @brief Agrega un programa G-code al visor.
 bool MainWindow::addGCodeLayer(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -6575,6 +6772,7 @@ bool MainWindow::addGCodeLayer(const QString& path) {
     return true;
 }
 
+/// @brief Asistente de importación Excellon + tabla INF.
 void MainWindow::pcbWizardImport() {
     const QString excellonPath = QFileDialog::getOpenFileName(
         this, tr("PcbWizard: archivo Excellon"), lastDir_,
@@ -6662,6 +6860,7 @@ void MainWindow::pcbWizardImport() {
     }
 }
 
+/// @brief Carga una tabla `.INF` de herramientas.
 void MainWindow::loadInfFile() {
     auto* item = objects_->currentItem();
     if (!item) {
@@ -6751,6 +6950,7 @@ void MainWindow::loadInfFile() {
     statusBar()->showMessage(tr("Tabla INF aplicada: %1 herramientas").arg(applied), 5000);
 }
 
+/// @brief Importa SVG o DXF desde un diálogo.
 void MainWindow::importVector(bool svg) {
     const QString path = QFileDialog::getOpenFileName(
         this, svg ? tr("Importar SVG") : tr("Importar DXF"), lastDir_,
@@ -6758,6 +6958,7 @@ void MainWindow::importVector(bool svg) {
     if (!path.isEmpty() && importVectorPath(path, svg)) recordRecent(path);
 }
 
+/// @brief Importa un SVG/DXF concreto y agrega texto.
 bool MainWindow::importVectorPath(const QString& path, bool svg) {
     try {
         std::vector<Geom> geoms = svg ? importSvg(path.toStdString())
@@ -6773,6 +6974,7 @@ bool MainWindow::importVectorPath(const QString& path, bool svg) {
     return true;
 }
 
+/// @brief Convierte geometría importada en una capa Gerber.
 void MainWindow::addVectorGeometry(const QString& name, const std::vector<Geom>& geoms) {
     if (geoms.empty()) {
         QMessageBox::information(this, tr("Importar"), tr("El archivo no tiene geometría."));
@@ -6804,6 +7006,7 @@ void MainWindow::addVectorGeometry(const QString& name, const std::vector<Geom>&
     statusBar()->showMessage(tr("Importado: %1 objetos").arg(geoms.size()), 5000);
 }
 
+/// @brief Importa un archivo HPGL2.
 void MainWindow::importHpglFile() {
     const QString path = QFileDialog::getOpenFileName(
         this, tr("Importar HPGL2"), lastDir_,
@@ -6817,6 +7020,7 @@ void MainWindow::importHpglFile() {
     }
 }
 
+/// @brief Importa un PDF vectorial o rasterizado.
 bool MainWindow::importPdfPath(const QString& path) {
     try {
         const std::vector<Geom> geoms = fc::importPdfVector(path.toStdString());
@@ -6845,6 +7049,11 @@ bool MainWindow::importPdfPath(const QString& path) {
     return false;
 }
 
+// ============================================================================
+// Importación y exportación
+// ============================================================================
+
+/// @brief Abre el diálogo de importación de PDF.
 void MainWindow::importPdfFile() {
     const QString path = QFileDialog::getOpenFileName(
         this, tr("Importar PDF"), lastDir_, tr("PDF (*.pdf);;Todos (*)"));
@@ -6876,6 +7085,7 @@ void MainWindow::importPdfFile() {
     addImageGeometry(image, QFileInfo(path).baseName(), width, 128, false);
 }
 
+/// @brief Imprime la vista actual con QPrinter.
 void MainWindow::printView() {
     QPrinter printer(QPrinter::HighResolution);
     QPrintDialog dialog(&printer, this);
@@ -6887,6 +7097,7 @@ void MainWindow::printView() {
     statusBar()->showMessage(tr("Vista enviada a la impresora"), 5000);
 }
 
+/// @brief Exporta la vista a HPGL.
 void MainWindow::exportHpglFile() {
     const QString path = QFileDialog::getSaveFileName(
         this, tr("Exportar HPGL"), QFileInfo(lastDir_).absolutePath() + "/flatcam.hpgl",
@@ -6914,6 +7125,7 @@ void MainWindow::exportHpglFile() {
     }
 }
 
+/// @brief Exporta los objetos a DXF.
 void MainWindow::exportDxfFile() {
     const QString path = QFileDialog::getSaveFileName(
         this, tr("Exportar DXF"), QFileInfo(lastDir_).absolutePath() + "/flatcam.dxf",
@@ -6941,6 +7153,7 @@ void MainWindow::exportDxfFile() {
     }
 }
 
+/// @brief Exporta la vista a PNG.
 void MainWindow::exportPng() {
     const QString path = QFileDialog::getSaveFileName(
         this, tr("Exportar PNG"), QFileInfo(lastDir_).absolutePath() + "/flatcam.png",
@@ -6954,6 +7167,7 @@ void MainWindow::exportPng() {
     statusBar()->showMessage(tr("PNG exportado: %1").arg(QFileInfo(path).fileName()), 5000);
 }
 
+/// @brief Importa una imagen y la vectoriza.
 void MainWindow::importImage() {
     const QString path = QFileDialog::getOpenFileName(
         this, tr("Importar imagen"), lastDir_,
@@ -7047,6 +7261,7 @@ void MainWindow::importImage() {
                      maskTolerance->value());
 }
 
+/// @brief Convierte una imagen en capa de cobre.
 void MainWindow::addImageGeometry(const QImage& image, const QString& name, double widthMm,
                                   int threshold, bool invert, bool colorMode,
                                   const QColor& target, int tolerance,
@@ -7115,6 +7330,7 @@ void MainWindow::addImageGeometry(const QImage& image, const QString& name, doub
     statusBar()->showMessage(tr("Imagen importada: %1 polígonos").arg(united.numGeometries()), 5000);
 }
 
+/// @brief Exporta la vista a PDF vectorial.
 void MainWindow::exportPdf() {
     const QString path = QFileDialog::getSaveFileName(
         this, tr("Exportar PDF"), QFileInfo(lastDir_).absolutePath() + "/flatcam.pdf",
@@ -7133,6 +7349,7 @@ void MainWindow::exportPdf() {
     statusBar()->showMessage(tr("PDF exportado: %1").arg(QFileInfo(path).fileName()), 5000);
 }
 
+/// @brief Comprueba reglas de diseño (traza, taladro, anillo...).
 void MainWindow::rulesCheck() {
     QDialog dialog(this);
     dialog.setWindowTitle(tr("Comprobar reglas"));
@@ -7351,6 +7568,7 @@ void MainWindow::rulesCheck() {
     dialog.exec();
 }
 
+/// @brief Guarda la vista actual como marcador.
 void MainWindow::addBookmark() {
     bool ok = false;
     const QString name = QInputDialog::getText(
@@ -7370,6 +7588,7 @@ void MainWindow::addBookmark() {
     statusBar()->showMessage(tr("Marcador guardado: %1").arg(name.trimmed()), 4000);
 }
 
+/// @brief Reconstruye el menú de marcadores.
 void MainWindow::rebuildBookmarksMenu() {
     if (!bookmarksMenu_) return;
     // Keep the first action (Add) and the separator.
@@ -7402,6 +7621,7 @@ void MainWindow::rebuildBookmarksMenu() {
     }
 }
 
+/// @brief Agrega un archivo a la lista de recientes.
 void MainWindow::recordRecent(const QString& path) {
     if (path.isEmpty()) return;
     const QString absolute = QFileInfo(path).absoluteFilePath();
@@ -7415,6 +7635,7 @@ void MainWindow::recordRecent(const QString& path) {
     rebuildRecentMenu();
 }
 
+/// @brief Reconstruye el menú de archivos recientes.
 void MainWindow::rebuildRecentMenu() {
     if (!recentMenu_) return;
     recentMenu_->clear();
@@ -7438,6 +7659,7 @@ void MainWindow::rebuildRecentMenu() {
     });
 }
 
+/// @brief Limpia la sesión para empezar un proyecto nuevo.
 void MainWindow::newProject() {
     lastExcellon_.reset();
     lastGerber_.reset();
@@ -7460,6 +7682,7 @@ void MainWindow::newProject() {
     statusBar()->showMessage(tr("Proyecto nuevo"), 3000);
 }
 
+/// @brief Exporta las preferencias a JSON.
 void MainWindow::saveConfiguration() {
     const QString path = QFileDialog::getSaveFileName(
         this, tr("Guardar configuración"),
@@ -7496,6 +7719,7 @@ void MainWindow::saveConfiguration() {
     statusBar()->showMessage(tr("Configuración guardada: %1").arg(QFileInfo(path).fileName()), 5000);
 }
 
+/// @brief Importa preferencias desde JSON.
 void MainWindow::loadConfiguration() {
     const QString path = QFileDialog::getOpenFileName(
         this, tr("Abrir configuración"), lastDir_, tr("Configuración (*.json)"));
@@ -7532,6 +7756,7 @@ void MainWindow::loadConfiguration() {
     statusBar()->showMessage(tr("Configuración cargada"), 5000);
 }
 
+/// @brief Pide una ruta y guarda el proyecto.
 void MainWindow::saveProjectAs() {
     const QString path = QFileDialog::getSaveFileName(
         this, tr("Guardar proyecto"), QFileInfo(lastDir_).absolutePath() + "/proyecto.FlatPrj",
@@ -7541,6 +7766,7 @@ void MainWindow::saveProjectAs() {
         statusBar()->showMessage(tr("Proyecto guardado: %1").arg(QFileInfo(path).fileName()), 5000);
 }
 
+/// @brief Escribe el proyecto en una ruta concreta.
 bool MainWindow::saveProjectToPath(const QString& path) {
     Project project;
     for (QTreeWidgetItem* item : objectItems()) {
@@ -7577,6 +7803,7 @@ bool MainWindow::saveProjectToPath(const QString& path) {
     }
 }
 
+/// @brief Traslada el objeto activo en X/Y.
 void MainWindow::moveObject() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -7618,14 +7845,17 @@ void MainWindow::moveObject() {
         tr("Mover objeto")));
 }
 
+/// @brief Marca todos los objetos como seleccionados.
 void MainWindow::selectAllObjects() {
     for (QTreeWidgetItem* item : objectItems()) item->setSelected(true);
 }
 
+/// @brief Limpia la selección.
 void MainWindow::deselectAllObjects() {
     for (QTreeWidgetItem* item : objectItems()) item->setSelected(false);
 }
 
+/// @brief Serializa las tablas de herramientas a JSON.
 QString MainWindow::toolTablesJson() const {
     QJsonObject root;
     auto addTable = [&root](const QString& key, QTableWidget* table) {
@@ -7649,6 +7879,7 @@ QString MainWindow::toolTablesJson() const {
     return QString::fromUtf8(QJsonDocument(root).toJson(QJsonDocument::Compact));
 }
 
+/// @brief Restaura las tablas de herramientas desde JSON.
 void MainWindow::loadToolTablesJson(const QString& json) {
     const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
     if (!doc.isObject()) return;
@@ -7675,6 +7906,7 @@ void MainWindow::loadToolTablesJson(const QString& json) {
     applyTable("drill", drillTable_);
 }
 
+/// @brief Redondea un valor al paso de rejilla.
 double MainWindow::snapValue(double value) const {
     if (!snapGrid_) return value;
     double step = canvas_ ? canvas_->gridStep() : 0.0;
@@ -7682,6 +7914,7 @@ double MainWindow::snapValue(double value) const {
     return std::round(value / step) * step;
 }
 
+/// @brief Formatea una longitud según la unidad activa.
 QString MainWindow::formatLength(double mm, int decimals) const {
     if (displayInch_) {
         const int d = decimals >= 0 ? decimals : std::max(2, decimals_ + 1);
@@ -7691,6 +7924,7 @@ QString MainWindow::formatLength(double mm, int decimals) const {
     return QString("%1 mm").arg(mm, 0, 'f', d);
 }
 
+/// @brief Crea un documento o script de texto.
 void MainWindow::createTextObject(const QString& kind) {
     bool ok = false;
     const QString title = kind == "script" ? tr("Nuevo script de proyecto")
@@ -7712,6 +7946,7 @@ void MainWindow::createTextObject(const QString& kind) {
     openTextObject(id);
 }
 
+/// @brief Abre el editor del objeto de texto.
 void MainWindow::openTextObject(int layerId) {
     auto it = objectText_.find(layerId);
     if (it == objectText_.end()) {
@@ -7752,6 +7987,7 @@ void MainWindow::openTextObject(int layerId) {
     dialog.exec();
 }
 
+/// @brief Agrega un CNCJob con su G-code y propiedades.
 void MainWindow::addCncJobObject(const QString& name, const QString& code,
                                  const std::map<QString, QString>& props) {
     const int id = canvas_->appendGeometry({}, {}, true);
@@ -7764,6 +8000,7 @@ void MainWindow::addCncJobObject(const QString& name, const QString& code,
     for (const auto& [key, value] : props) objectProps_[id][key] = value;
 }
 
+/// @brief Define el origen de visualización.
 void MainWindow::setDisplayOrigin() {
     bool ok = false;
     const QString unit = displayInch_ ? "in" : "mm";
@@ -7783,6 +8020,7 @@ void MainWindow::setDisplayOrigin() {
                                  .arg(lengthText(x), lengthText(y)), 4000);
 }
 
+/// @brief Mide distancias entre objetos seleccionados.
 void MainWindow::distanceMeasure() {
     QDialog dialog(this);
     dialog.setWindowTitle(tr("Medir distancia"));
@@ -7820,12 +8058,14 @@ void MainWindow::distanceMeasure() {
     dialog.exec();
 }
 
+/// @brief Cierra una pestaña de herramienta.
 void MainWindow::closeToolTab() {
     if (!leftTabs_) return;
     const int index = leftTabs_->currentIndex();
     if (index >= 3) leftTabs_->removeTab(index);
 }
 
+/// @brief Mueve el objeto al origen.
 void MainWindow::moveToOrigin() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -7853,6 +8093,7 @@ void MainWindow::moveToOrigin() {
     statusBar()->showMessage(tr("Objeto movido al origen"), 4000);
 }
 
+/// @brief Une varios objetos en una capa.
 void MainWindow::joinObjects() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -7892,6 +8133,7 @@ void MainWindow::joinObjects() {
     statusBar()->showMessage(tr("Objetos unidos"), 4000);
 }
 
+/// @brief Separa un objeto en sus componentes.
 void MainWindow::explodeObject() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -7918,6 +8160,7 @@ void MainWindow::explodeObject() {
     statusBar()->showMessage(tr("Objeto explotado en %1 capas").arg(index - 1), 4000);
 }
 
+/// @brief Centra la vista en coordenadas X/Y.
 void MainWindow::jumpToLocation() {
     bool ok = false;
     const QString unit = displayInch_ ? "in" : "mm";
@@ -7936,6 +8179,7 @@ void MainWindow::jumpToLocation() {
     statusBar()->showMessage(tr("Vista centrada en %1, %2").arg(sx).arg(sy), 3000);
 }
 
+/// @brief Alinea objetos contra el origen o entre sí.
 void MainWindow::alignObjects() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -8004,6 +8248,7 @@ void MainWindow::alignObjects() {
         tr("Alinear objeto")));
 }
 
+/// @brief Crea una copia espejada para doble faz.
 void MainWindow::doubleSided() {
     auto* item = objects_->currentItem();
     if (!item) return;
@@ -8056,6 +8301,7 @@ void MainWindow::doubleSided() {
     statusBar()->showMessage(tr("Copia espejada creada"), 4000);
 }
 
+/// @brief Regenera el Gerber con nuevos tamaños de apertura.
 bool MainWindow::applyApertureSizes(int layerId, const std::map<QString, double>& sizes) {
     const auto source = sourcePaths_.find(layerId);
     if (source == sourcePaths_.end()) {
@@ -8112,6 +8358,7 @@ bool MainWindow::applyApertureSizes(int layerId, const std::map<QString, double>
     }
 }
 
+/// @brief Regenera el Gerber con una macro editada.
 bool MainWindow::applyMacroDefinition(int layerId, const QString& name, const QString& raw) {
     const auto source = sourcePaths_.find(layerId);
     if (source == sourcePaths_.end()) {
@@ -8157,6 +8404,7 @@ bool MainWindow::applyMacroDefinition(int layerId, const QString& name, const QS
     }
 }
 
+/// @brief Abre el editor de primitivas Gerber.
 void MainWindow::gerberEditor() {
     auto* item = objects_->currentItem();
     if (!item) {
@@ -8714,6 +8962,7 @@ void MainWindow::gerberEditor() {
     statusBar()->showMessage(tr("Gerber editado"), 4000);
 }
 
+/// @brief Edita el archivo Gerber/Excellon fuente.
 void MainWindow::editSource() {
     auto* item = objects_->currentItem();
     if (!item) {
@@ -8790,6 +9039,7 @@ void MainWindow::editSource() {
     }
 }
 
+/// @brief Construye los paneles de herramientas CAM.
 void MainWindow::buildToolPanel(QTabWidget* tabs) {
     tabs->setToolTip(tr("Herramientas CAM: una pestaña por operación."));
 
@@ -9913,6 +10163,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     applyUiLevel();
 }
 
+/// @brief Aplica NCC (hatch o paint) al objeto activo.
 bool MainWindow::applyNcc(double toolDiameter, double stepOverPercent, double clearance,
                           double angle, double margin, bool paintStrategy,
                           const fc::GCodeOptions& gcode) {
@@ -9951,6 +10202,7 @@ bool MainWindow::applyNcc(double toolDiameter, double stepOverPercent, double cl
     return true;
 }
 
+/// Aplica pintura por contornos paralelos.
 bool MainWindow::applyPaint(double toolDiameter, double stepOverPercent, double margin,
                             const fc::GCodeOptions& gcode) {
     if (!lastGerber_) return false;
@@ -9982,6 +10234,7 @@ bool MainWindow::applyPaint(double toolDiameter, double stepOverPercent, double 
     return true;
 }
 
+/// @brief Aplica taladrado al Excellon activo.
 bool MainWindow::applyDrill(const fc::GCodeOptions& gcode) {
     if (!lastExcellon_) return false;
     lastDrillJob_ = drillJobFromExcellon(*lastExcellon_);
@@ -9992,6 +10245,7 @@ bool MainWindow::applyDrill(const fc::GCodeOptions& gcode) {
     return true;
 }
 
+/// @brief Exporta el G-code de fresado.
 void MainWindow::exportMillGCode() {
     if (!lastMillJob_ || lastMillJob_->paths.empty()) {
         QMessageBox::information(this, tr("Exportar fresado"),
@@ -10015,6 +10269,7 @@ void MainWindow::exportMillGCode() {
     statusBar()->showMessage(tr("G-code de fresado guardado"), 4000);
 }
 
+/// @brief Exporta el G-code de taladrado.
 void MainWindow::exportDrillGCode() {
     if (!lastDrillJob_) {
         QMessageBox::information(this, tr("Exportar taladrado"),
@@ -10038,6 +10293,7 @@ void MainWindow::exportDrillGCode() {
     statusBar()->showMessage(tr("G-code de taladrado guardado"), 4000);
 }
 
+/// @brief Carga un Gerber y crea su capa.
 bool MainWindow::addGerber(const QString& path) {
     fc::GerberOptions opt;
     opt.appUnits = defaultUnits_;
@@ -10065,6 +10321,7 @@ bool MainWindow::addGerber(const QString& path) {
     return true;
 }
 
+/// @brief Devuelve el Gerber asociado a un selector.
 fc::GerberResult* MainWindow::sourceGerber(QComboBox* combo) {
     if (combo) {
         const int id = combo->currentData().toInt();
@@ -10074,6 +10331,7 @@ fc::GerberResult* MainWindow::sourceGerber(QComboBox* combo) {
     return lastGerber_ ? &*lastGerber_ : nullptr;
 }
 
+/// @brief Devuelve el Excellon asociado a un selector.
 fc::ExcellonResult* MainWindow::sourceExcellon(QComboBox* combo) {
     if (combo) {
         const int id = combo->currentData().toInt();
@@ -10083,6 +10341,7 @@ fc::ExcellonResult* MainWindow::sourceExcellon(QComboBox* combo) {
     return lastExcellon_ ? &*lastExcellon_ : nullptr;
 }
 
+/// @brief Actualiza los selectores de objeto de cada herramienta.
 void MainWindow::refreshSourceCombos() {
     auto fill = [this](QComboBox* combo, const QString& kind) {
         if (!combo) return;
@@ -10109,6 +10368,7 @@ void MainWindow::refreshSourceCombos() {
     fill(pasteSource_, "gerber");
 }
 
+/// @brief Llena la tabla de taladrado desde el Excellon.
 void MainWindow::refreshDrillTable() {
     if (!drillTable_) return;
     drillTable_->setRowCount(0);
@@ -10133,6 +10393,7 @@ void MainWindow::refreshDrillTable() {
     }
 }
 
+/// @brief Carga un Excellon y crea su capa.
 bool MainWindow::addExcellon(const QString& path) {
     fc::ExcellonOptions opt;
     opt.appUnits = defaultUnits_;
@@ -10160,6 +10421,7 @@ bool MainWindow::addExcellon(const QString& path) {
     return true;
 }
 
+/// @brief Agrega un Gerber al canvas y al árbol.
 void MainWindow::showGerber(const QString& path) {
     fc::GerberOptions opt;
     opt.appUnits = fc::Units::Mm;
@@ -10229,6 +10491,7 @@ void MainWindow::showGerber(const QString& path) {
     statusBar()->showMessage(tr("Gerber cargado"), 3000);
 }
 
+/// @brief Agrega un Excellon al canvas y al árbol.
 void MainWindow::showExcellon(const QString& path) {
     fc::ExcellonOptions opt;
     opt.appUnits = fc::Units::Mm;
@@ -10274,15 +10537,19 @@ void MainWindow::showExcellon(const QString& path) {
     statusBar()->showMessage(tr("Excellon cargado"), 3000);
 }
 
+/// @brief Escribe texto en el panel de informe.
 void MainWindow::setInfo(const QString& text) { info_->setPlainText(text); }
 
+/// @brief Muestra un error en un cuadro de diálogo.
 void MainWindow::showError(const QString& message) {
     QMessageBox::critical(this, tr("Error"), message);
     statusBar()->showMessage(tr("Error al abrir el archivo"), 5000);
 }
 
+/// @brief Ajusta el canvas a todo el contenido.
 void MainWindow::fitView() { canvas_->fit(); }
 
+/// @brief Abre la herramienta de aislamiento.
 void MainWindow::isolateDialog() {
     if (!lastGerber_) {
         QMessageBox::information(this, tr("Aislar cobre"),
@@ -10330,6 +10597,19 @@ void MainWindow::isolateDialog() {
     applyIsolation(diameter->value(), passes->value(), overlap->value(), invert->isChecked());
 }
 
+// ============================================================================
+// Herramientas CAM
+// ============================================================================
+
+/**
+ * @brief Ejecuta el aislamiento sobre el Gerber activo.
+ * @param toolDiameter Diámetro de fresa.
+ * @param passes Pasadas.
+ * @param overlapPercent Solape en porcentaje.
+ * @param invert Invierte el sentido.
+ * @param gcode Parámetros de G-code opcionales.
+ * @return `true` si se generaron recorridos.
+ */
 bool MainWindow::applyIsolation(double toolDiameter, int passes, double overlapPercent, bool invert,
                                 const fc::GCodeOptions& gcode) {
     if (!lastGerber_) return false;
@@ -10376,6 +10656,7 @@ bool MainWindow::applyIsolation(double toolDiameter, int passes, double overlapP
     return true;
 }
 
+/// @brief Abre la herramienta de corte.
 void MainWindow::cutoutDialog() {
     if (!lastGerber_) {
         QMessageBox::information(this, tr("Cortar contorno"),
@@ -10437,6 +10718,7 @@ void MainWindow::cutoutDialog() {
     applyCutout(diameter->value(), margin->value(), !internal->isChecked(), opt);
 }
 
+/// Aplica corte de contorno con margen y lado externo/interno.
 bool MainWindow::applyCutout(double toolDiameter, double margin, bool external,
                              const fc::GCodeOptions& gcode) {
     if (!lastGerber_) return false;
@@ -10483,6 +10765,7 @@ bool MainWindow::applyCutout(double toolDiameter, double margin, bool external,
     return true;
 }
 
+/// @brief Exporta el último corte a G-code.
 void MainWindow::exportCutoutGCode() {
     if (lastCutMulti_.empty()) {
         QMessageBox::information(this, tr("Exportar G-code de corte"),
@@ -10520,6 +10803,7 @@ void MainWindow::exportCutoutGCode() {
                              5000);
 }
 
+/// @brief Abre la herramienta NCC.
 void MainWindow::nccDialog() {
     if (!lastGerber_) {
         QMessageBox::information(this, tr("NCC"),
@@ -10621,6 +10905,7 @@ void MainWindow::nccDialog() {
     statusBar()->showMessage(tr("NCC generado: %1 recorridos").arg(lastNcc_->paths.size()), 5000);
 }
 
+/// @brief Exporta el último NCC a G-code.
 void MainWindow::exportNccGCode() {
     if (lastNccMulti_.empty()) {
         QMessageBox::information(this, tr("Exportar NCC"),
@@ -10645,6 +10930,7 @@ void MainWindow::exportNccGCode() {
     statusBar()->showMessage(tr("G-code NCC guardado: %1").arg(QFileInfo(path).fileName()), 5000);
 }
 
+/// @brief Abre la herramienta de pintura.
 void MainWindow::paintDialog() {
     if (!lastGerber_) {
         QMessageBox::information(this, tr("Pintar"),
@@ -10710,6 +10996,7 @@ void MainWindow::paintDialog() {
     statusBar()->showMessage(tr("Pintado generado: %1 recorridos").arg(lastPaint_->paths.size()), 5000);
 }
 
+/// @brief Exporta la última pintura a G-code.
 void MainWindow::exportPaintGCode() {
     if (lastPaintMulti_.empty()) {
         QMessageBox::information(this, tr("Exportar pintado"),
@@ -10734,6 +11021,7 @@ void MainWindow::exportPaintGCode() {
     statusBar()->showMessage(tr("G-code de pintado guardado: %1").arg(QFileInfo(path).fileName()), 5000);
 }
 
+/// @brief Exporta el último aislamiento a G-code.
 void MainWindow::exportIsolationGCode() {
     if (lastIsoMulti_.empty()) {
         QMessageBox::information(this, tr("Exportar G-code de aislamiento"),
@@ -10772,6 +11060,7 @@ void MainWindow::exportIsolationGCode() {
                              5000);
 }
 
+/// @brief Exporta el CNCJob activo a G-code.
 void MainWindow::exportGCode() {
     if (!lastExcellon_) {
         QMessageBox::information(this, tr("Exportar G-code"),
@@ -10801,10 +11090,12 @@ void MainWindow::exportGCode() {
     }
 }
 
+/// @brief Acepta arrastrar archivos sobre la ventana.
 void MainWindow::dragEnterEvent(QDragEnterEvent* event) {
     if (event->mimeData()->hasUrls()) event->acceptProposedAction();
 }
 
+/// @brief Abre los archivos arrastrados.
 void MainWindow::dropEvent(QDropEvent* event) {
     const QList<QUrl> urls = event->mimeData()->urls();
     if (urls.isEmpty()) return;

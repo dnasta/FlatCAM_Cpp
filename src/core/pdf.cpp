@@ -1,3 +1,13 @@
+/**
+ * @file pdf.cpp
+ * @brief Importador de PDF vectorial basado en un subconjunto de operadores.
+ *
+ * Busca los streams del archivo, los descomprime si son FlateDecode e
+ * interpreta los operadores de camino y pintado (q/Q, cm, w, m, l, c, v, y,
+ * re, h, S, s, f, F, f*, B, b y n). Los trazos se convierten en polígonos con
+ * bufferStyle y los rellenos se combinan con XOR para conservar huecos. El
+ * texto, las imágenes y el color se ignoran, igual que en FlatCAM.
+ */
 #include "flatcam/pdf.hpp"
 
 #include <zlib.h>
@@ -14,13 +24,21 @@
 namespace fc {
 namespace {
 
+/// Factor de conversión de puntos PostScript (1/72 de pulgada) a milímetros.
 constexpr double kPointsToMm = 25.4 / 72.0;
 
+/// Matriz afín 2D del espacio de usuario PDF.
 struct PdfMatrix {
     double a = 1.0, b = 0.0, c = 0.0, d = 1.0, e = 0.0, f = 0.0;
 };
 
 // Applies `outer` after `inner`.
+/**
+ * @brief Compone dos matrices PDF.
+ * @param outer Transformación aplicada después.
+ * @param inner Transformación aplicada primero.
+ * @return Matriz equivalente a aplicar @p inner y luego @p outer.
+ */
 PdfMatrix concat(const PdfMatrix& outer, const PdfMatrix& inner) {
     return PdfMatrix{
         outer.a * inner.a + outer.c * inner.b,
@@ -31,10 +49,15 @@ PdfMatrix concat(const PdfMatrix& outer, const PdfMatrix& inner) {
         outer.b * inner.e + outer.d * inner.f + outer.f};
 }
 
+/// Aplica la matriz a un punto (x, y).
 Pt transform(const PdfMatrix& m, double x, double y) {
     return {m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f};
 }
 
+/**
+ * @brief Lee el PDF completo en modo binario.
+ * @throw std::runtime_error si no se puede abrir.
+ */
 std::string readFile(const std::string& path) {
     std::ifstream in(path, std::ios::binary);
     if (!in) throw std::runtime_error("cannot open " + path);
@@ -43,6 +66,18 @@ std::string readFile(const std::string& path) {
     return ss.str();
 }
 
+/**
+ * @brief Descomprime un stream zlib o deflate probando ambos formatos.
+ *
+ * Intenta primero con cabecera zlib (windowBits 15) y después con deflate
+ * crudo (-15), que es lo que generan algunas herramientas. Acota la salida a
+ * 64 MiB para no explotar con datos corruptos.
+ * @param input Bytes comprimidos.
+ * @param[out] output Texto descomprimido; se limpia en cada intento.
+ * @return true si se obtuvo algún resultado y el stream no quedó en error.
+ * @note Un stream truncado puede aceptarse como válido, porque sólo se exige
+ *       que el estado final sea Z_OK o Z_STREAM_END.
+ */
 bool inflateData(const std::string& input, std::string& output) {
     for (int windowBits : {15, -15}) {
         z_stream stream{};
@@ -65,6 +100,13 @@ bool inflateData(const std::string& input, std::string& output) {
     return false;
 }
 
+/**
+ * @brief Heurística para decidir si un stream contiene operadores de dibujo.
+ *
+ * Exige que al menos el 90 % de los bytes sea imprimible y que aparezca algún
+ * marcador típico de contenido (" re", " m", " cm", " S", " f"...). Así se
+ * evitan las fuentes y las imágenes embebidas.
+ */
 bool looksLikeContent(const std::string& text) {
     if (text.size() < 4) return false;
     std::size_t printable = 0;
@@ -79,6 +121,17 @@ bool looksLikeContent(const std::string& text) {
     return false;
 }
 
+/**
+ * @brief Extrae los streams de contenido del PDF.
+ *
+ * Localiza cada par stream/endstream, mira el diccionario previo (hasta 2 KiB)
+ * para saber si declara FlateDecode, descomprime cuando corresponde y conserva
+ * sólo los que parecen contenido de página.
+ * @param data Contenido binario del PDF.
+ * @return Lista de streams de contenido legibles, en orden de aparición.
+ * @note Es una búsqueda textual: no siguen el árbol de objetos ni la tabla xref,
+ *       por lo que no maneja streams dentro de objetos comprimidos (PDF 1.5+).
+ */
 std::vector<std::string> pdfContentStreams(const std::string& data) {
     std::vector<std::string> streams;
     std::size_t pos = 0;
@@ -106,21 +159,38 @@ std::vector<std::string> pdfContentStreams(const std::string& data) {
     return streams;
 }
 
+/// Estado gráfico que guardan q y Q: matriz de transformación y ancho de línea.
 struct PdfState {
     PdfMatrix ctm;
     double lineWidth = 1.0;
 };
 
+/// Subcamino en construcción, con su bandera de cierre.
 struct PdfSubpath {
     Ring points;
     bool closed = false;
 };
 
+/**
+ * @brief Intérprete de los operadores de un ContentStream PDF.
+ *
+ * Mantiene la pila de estados (q/Q), los operandos numéricos pendientes y los
+ * subcaminos del camino actual; al recibir un operador de pintado emite la
+ * geometría al vector de salida compartido.
+ */
 class ContentParser {
 public:
     ContentParser(std::vector<Geom>& output, PdfState state)
         : output_(output), state_(std::move(state)) {}
 
+    /**
+     * @brief Recorre el stream separando números, nombres y operadores.
+     *
+     * Saltea comentarios, cadenas literales, cadenas hexadecimales, diccionarios
+     * y arrays (incluidos los de clipping y de texto), acumula números en
+     * operandos_ y delega cada operador encontrado a dispatch.
+     * @param content Texto del ContentStream.
+     */
     void parse(const std::string& content) {
         std::size_t i = 0;
         const std::size_t n = content.size();
@@ -176,12 +246,19 @@ public:
     }
 
 private:
+    /// Carácter que termina un token PDF (espacio, paréntesis, corchetes...).
     static bool isDelimiter(char c) {
         return std::isspace(static_cast<unsigned char>(c)) || c == '(' || c == ')' ||
                c == '<' || c == '>' || c == '[' || c == ']' || c == '{' || c == '}' ||
                c == '/' || c == '%';
     }
 
+    /**
+     * @brief Avanza sobre una cadena literal ( ... ) respetando escapes y
+     * paréntesis anidados.
+     * @param text Stream completo.
+     * @param i Posición de la apertura; queda después del cierre.
+     */
     static void skipLiteralString(const std::string& text, std::size_t& i) {
         int depth = 0;
         while (i < text.size()) {
@@ -201,11 +278,16 @@ private:
         }
     }
 
+    /// Avanza sobre una cadena hexadecimal delimitada por < y >.
     static void skipHexString(const std::string& text, std::size_t& i) {
         while (i < text.size() && text[i] != '>') ++i;
         if (i < text.size()) ++i;
     }
 
+    /**
+     * @brief Avanza sobre un diccionario << ... >> con anidamiento.
+     * @param i Posición de la apertura; queda después del cierre.
+     */
     static void skipDictionary(const std::string& text, std::size_t& i) {
         int depth = 0;
         while (i < text.size()) {
@@ -224,6 +306,10 @@ private:
         }
     }
 
+    /**
+     * @brief Avanza sobre un array [ ... ] con anidamiento y cadenas internas.
+     * @param i Posición de la apertura; queda después del corchete de cierre.
+     */
     static void skipArray(const std::string& text, std::size_t& i) {
         int depth = 0;
         while (i < text.size()) {
@@ -243,6 +329,17 @@ private:
         }
     }
 
+    /**
+     * @brief Ejecuta un operador de dibujo o de estado.
+     *
+     * q y Q guardan y restauran el estado; cm concatena la matriz; w fija el
+     * ancho de línea; m, l, c, v e y construyen el camino, aplanando las
+     * curvas; re agrega un rectángulo; h cierra el subcamino; S y s trazan;
+     * f, F y f* rellenan; B y b rellenan y trazan; n descarta el camino. Los
+     * operadores desconocidos (texto, color, clipping) se ignoran. Al final,
+     * siempre se limpian los operandos.
+     * @param op Nombre del operador tal como aparece en el stream.
+     */
     void dispatch(const std::string& op) {
         if (op == "q") {
             stack_.push_back(state_);
@@ -256,7 +353,10 @@ private:
                 const std::size_t base = operands_.size() - 6;
                 const PdfMatrix m{operands_[base], operands_[base + 1], operands_[base + 2],
                                   operands_[base + 3], operands_[base + 4], operands_[base + 5]};
-                state_.ctm = concat(m, state_.ctm);
+                // PDF concatena la matriz en el espacio de usuario: el nuevo
+                // CTM aplica primero `m` y luego el CTM anterior. Nuestro
+                // `concat(outer, inner)` devuelve `outer ∘ inner`.
+                state_.ctm = concat(state_.ctm, m);
             }
         } else if (op == "w") {
             if (!operands_.empty()) state_.lineWidth = operands_.back();
@@ -312,26 +412,38 @@ private:
         operands_.clear();
     }
 
+    /**
+     * @brief Lleva un punto de usuario a milímetros.
+     *
+     * Aplica la CTM vigente y luego el factor de conversión 25,4/72.
+     */
     Pt mapPoint(double x, double y) const {
         const Pt p = transform(state_.ctm, x, y);
         return {p.x * kPointsToMm, p.y * kPointsToMm};
     }
 
+    /// Último punto del subcamino actual, o (0,0) si no hay ninguno.
     Pt currentPoint() const {
         if (subpaths_.empty() || subpaths_.back().points.empty()) return {0.0, 0.0};
         return subpaths_.back().points.back();
     }
 
+    /// Inicia un subcamino nuevo con un punto.
     void newSubpath(Pt p) {
         subpaths_.push_back(PdfSubpath{});
         subpaths_.back().points.push_back(p);
     }
 
+    /// Agrega un punto al subcamino actual, creándolo si hace falta.
     void addPoint(Pt p) {
         if (subpaths_.empty() || subpaths_.back().points.empty()) newSubpath(p);
         else subpaths_.back().points.push_back(p);
     }
 
+    /**
+     * @brief Cierra el subcamino agregando el primer punto si falta.
+     * @note Un subcamino de menos de 2 puntos se deja como está.
+     */
     void closeSubpath() {
         if (subpaths_.empty() || subpaths_.back().points.size() < 2) return;
         PdfSubpath& path = subpaths_.back();
@@ -341,6 +453,15 @@ private:
         path.closed = true;
     }
 
+    /**
+     * @brief Aplana una curva cúbica en segmentos rectos.
+     *
+     * La cantidad de muestras depende del largo de la poligonal de control, una
+     * por cada 0,5 mm, y se acota entre 4 y 64 para limitar el costo.
+     * @param c1 Primer punto de control.
+     * @param c2 Segundo punto de control.
+     * @param end Punto final; el inicial es el punto actual.
+     */
     void bezier(Pt c1, Pt c2, Pt end) {
         const Pt start = currentPoint();
         const float length = static_cast<float>(std::hypot(start.x - c1.x, start.y - c1.y) +
@@ -358,6 +479,11 @@ private:
         }
     }
 
+    /**
+     * @brief Agrega un rectángulo (operador re) como subcamino cerrado.
+     * @note Los cuatro vértices se mapean con la CTM, de modo que rotaciones y
+     *       escalas no alineadas a los ejes producen el paralelogramo correcto.
+     */
     void rectangle(double x, double y, double w, double h) {
         const Pt p1 = mapPoint(x, y);
         const Pt p2 = mapPoint(x + w, y);
@@ -366,6 +492,14 @@ private:
         subpaths_.push_back(PdfSubpath{{p1, p2, p3, p4, p1}, true});
     }
 
+    /**
+     * @brief Cierra los subcaminos y los combina como relleno par-impar.
+     *
+     * Convierte cada subcamino en un polígono reparado y aplica un XOR sucesivo
+     * (unión menos intersección) para que los contornos internos queden como
+     * huecos, que es el resultado esperado de la regla even-odd.
+     * @note La regla es siempre la misma; el operador f* no cambia el resultado.
+     */
     void fill() {
         std::vector<Geom> parts;
         for (const PdfSubpath& path : subpaths_) {
@@ -380,6 +514,14 @@ private:
         if (filled.valid() && !filled.empty()) output_.push_back(filled);
     }
 
+    /**
+     * @brief Convierte los subcaminos en trazos con ancho.
+     *
+     * Calcula el ancho efectivo multiplicando por la escala de la CTM y, si
+     * supera 0,02 mm, aplica bufferStyle con extremos y uniones planos; con
+     * anchos menores deja la línea como LineString. Los polígonos resultantes
+     * se unen y las líneas se emiten por separado.
+     */
     void stroke() {
         const double scale = std::sqrt(std::fabs(state_.ctm.a * state_.ctm.d -
                                                  state_.ctm.b * state_.ctm.c));
@@ -412,6 +554,7 @@ private:
         output_.insert(output_.end(), lines.begin(), lines.end());
     }
 
+    /// Descarta el camino actual, tras pintar o ante el operador n.
     void clearPath() { subpaths_.clear(); }
 
     std::vector<Geom>& output_;
@@ -423,6 +566,17 @@ private:
 
 }  // namespace
 
+/**
+ * @brief Punto de entrada: extrae la geometría vectorial de un PDF.
+ *
+ * Verifica la firma %PDF-, obtiene los streams de contenido y los interpreta en
+ * orden, con un parser nuevo por stream: el estado gráfico no se hereda entre
+ * streams.
+ * @param path Archivo PDF.
+ * @return Geometrías en mm, listas para usarse como cobre o contorno.
+ * @throw std::runtime_error si el archivo no se puede leer o no es un PDF.
+ * @note No incluye fallback a rasterizado; esa decisión es de la GUI.
+ */
 std::vector<Geom> importPdfVector(const std::string& path) {
     const std::string data = readFile(path);
     if (data.compare(0, 5, "%PDF-") != 0)

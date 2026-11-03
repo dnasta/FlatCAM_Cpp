@@ -1,0 +1,101 @@
+/* FlatCAM C++ — ajustes visuales sobre el tema de Doxygen. */
+:root {
+  --fc-accent: #b4771b;
+  --fc-accent-soft: #f6e7c8;
+  --fc-bg: #f7f8fa;
+  --fc-border: #dde5ee;
+}
+
+html {
+  --side-nav-background: #f8fafc;
+  --side-nav-foreground: #16202b;
+}
+
+#projectname {
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+#projectbrief {
+  color: #5d6b7a;
+}
+
+#projectlogo img {
+  max-height: 48px;
+  width: auto;
+}
+
+#titlearea {
+  border-bottom: 1px solid var(--fc-border);
+  background: #ffffff;
+}
+
+.sm-dox a,
+.tabs a {
+  color: #16202b;
+}
+
+.sm-dox a:hover,
+.tabs a:hover {
+  color: var(--fc-accent);
+}
+
+div.contents {
+  max-width: 980px;
+}
+
+h2.groupheader {
+  border-bottom: 1px solid var(--fc-border);
+  color: #16202b;
+}
+
+.memtitle {
+  background: var(--fc-accent-soft);
+  border-color: #e7d3a7;
+  color: #5b3a08;
+}
+
+.memproto {
+  background: #f8fafc;
+  border-color: var(--fc-border);
+}
+
+.memdoc {
+  background: #ffffff;
+}
+
+a.el {
+  color: #8a5a12;
+}
+
+a.el:hover {
+  color: var(--fc-accent);
+}
+
+.fragment {
+  border-radius: 8px;
+}
+
+div.fragment {
+  background: #101820;
+  border: 1px solid #263241;
+}
+
+.line {
+  color: #dbe7f3;
+}
+
+span.keyword,
+span.keywordtype,
+span.keywordflow {
+  color: #e0a83e;
+}
+
+span.comment {
+  color: #8fa8bd;
+}
+
+span.stringliteral,
+span.charliteral {
+  color: #9bd18b;
+}

@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente src/cam/ncc.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('ncc_8cpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">ncc.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="ncc_8cpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file ncc.cpp</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief NCC (Non-Copper Clear): despeje del cobre sobrante.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Implementa `fc::clearCopper`. Primero calcula el área mecanizable como</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * `área de trabajo − buffer(cobre, radio + clearance)` y después la recorre</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * con una de dos estrategias: líneas paralelas recortadas contra la región</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * (`Hatch`, la implementación propia de este archivo) o contornos paralelos</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> * delegando en `fc::paintArea` (`Paint`).</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="ncc_8hpp.html">flatcam/ncc.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="paint_8hpp.html">flatcam/paint.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;cmath&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacefc.html">fc</a> {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">namespace </span>{</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"></span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * @brief Aplana el resultado de una intersección en una lista de cadenas.</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * GEOS devuelve `LineString`, `MultiLineString`, `GeometryCollection` o incluso</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * `MultiPolygon` según el caso, de modo que la función recorre el árbol y</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> * agrega únicamente las geometrías de tipo línea no vacías.</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment"> * @param geom Geometría a recorrer.</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"> * @param out Lista donde se acumulan las cadenas encontradas.</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keywordtype">void</span> collectLines(<span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; geom, std::vector&lt;Geom&gt;&amp; out) {</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordflow">if</span> (!geom.<a class="code hl_function" href="class_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid</a>() || geom.<a class="code hl_function" href="class_geom.html#aeb91d2056e4ce71e4dba557be1b44f6c">empty</a>()) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> type = geom.<a class="code hl_function" href="class_geom.html#a6f94f675d0d22c03f0e89ae9dd724bfb">typeId</a>();</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordflow">if</span> (type == GEOS_LINESTRING || type == GEOS_LINEARRING) {</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        out.push_back(geom);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    }</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordflow">if</span> (type == GEOS_MULTILINESTRING || type == GEOS_GEOMETRYCOLLECTION ||</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        type == GEOS_MULTIPOLYGON) {</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keyword">const</span> <span class="keywordtype">int</span> n = geom.<a class="code hl_function" href="class_geom.html#aa371ed0e43dd217cddf64915cc216760">numGeometries</a>();</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; n; ++i) collectLines(geom.<a class="code hl_function" href="class_geom.html#a3df5d7bba5a521dde960a11e1fa0d5be">geometryN</a>(i), out);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    }</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>}</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"></span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">/// @brief Acumula `b` dentro de `target`, ignorando cajas inválidas.</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keywordtype">void</span> addBounds(<a class="code hl_struct" href="structfc_1_1_b_box.html">BBox</a>&amp; target, <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_b_box.html">BBox</a>&amp; b) {</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordflow">if</span> (!b.valid) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordflow">if</span> (!target.valid) {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        target = b;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    }</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    target.xmin = std::min(target.xmin, b.xmin);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    target.ymin = std::min(target.ymin, b.ymin);</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    target.xmax = std::max(target.xmax, b.xmax);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    target.ymax = std::max(target.ymax, b.ymax);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>}</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>}  <span class="comment">// namespace</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"></span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"> * @brief Despeja todo el cobre que no pertenece a la geometría de referencia.</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"> * Construye la región mecanizable como `workArea.difference(keepOut)`, donde</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment"> * `keepOut = copper.buffer(radius + clearance)` es el cobre protegido con su</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment"> * distancia de seguridad. Si no se pasa área de trabajo se usa el bounding box</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"> * del cobre expandido por `margin + spacing`.</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment"> * Con `NccStrategy::Paint` delega en `fc::paintArea` sobre esa región. Con</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> * `NccStrategy::Hatch` (predeterminada) genera líneas paralelas separadas</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * `stepOver × diámetro`, las rota `angleDeg` alrededor del centro del área de</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> * trabajo, las extiende ±diagonal y las recorta con `intersection(region)`;</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> * cada fragmento de longitud ≥ 1e-6 mm se convierte en un recorrido</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> * independiente.</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment"> * @param copper Cobre que debe conservarse.</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment"> * @param area Área rectangular de trabajo; si está vacía se deriva del cobre.</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment"> * @param options Estrategia, diámetro, paso, clearance, ángulo, margen y</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"> *                segmentos por cuadrante.</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment"> * @return Recorridos, área despejada, longitud total y límites.</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment"> * @note `clearedArea` se informa también en modo Paint, aunque en ese caso el</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"> *       recorte real lo hace `paintArea` con su propio margen.</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> * @note `spacing` se satura a 0,05 mm como mínimo para evitar bucles infinitos.</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> * @warning En modo Hatch el barrido en Y va desde `bounds.ymin − margin` hasta</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> *          `bounds.ymax + margin`, pero `bounds` ya deriva de un área que</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"> *          incluye `margin + spacing`. Las líneas sobrantes se recortan contra</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"> *          la región, así que el resultado es correcto, aunque se generan y</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> *          recortan segmentos de más (trabajo redundante).</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> * @note El barrido usa offsets perpendiculares a la dirección del hatch, de</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> *       modo que la separación efectiva es `spacing` para cualquier ángulo.</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> * @note `lineCount` se acumula sólo con fines de depuración y luego se</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> *       descarta con `(void)lineCount`; no se informa al llamador.</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00095" data-start="{" data-end="}">
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="namespacefc.html#a6f14eb74d8d286b26fb499d6563ffcf9">   95</a></span><a class="code hl_struct" href="structfc_1_1_ncc_result.html">NccResult</a> <a class="code hl_function" href="namespacefc.html#a6f14eb74d8d286b26fb499d6563ffcf9">clearCopper</a>(<span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; copper, <span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; area, <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_ncc_options.html">NccOptions</a>&amp; options) {</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <a class="code hl_struct" href="structfc_1_1_ncc_result.html">NccResult</a> result;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keywordflow">if</span> (!copper.<a class="code hl_function" href="classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid</a>() || copper.<a class="code hl_function" href="classfc_1_1_geom.html#aeb91d2056e4ce71e4dba557be1b44f6c">empty</a>()) <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> radius = options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#a217ab9f4717e7454d8f7f5be084bc85a">toolDiameter</a> / 2.0;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> clearance = std::max(0.0, options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#af6998fce6203f64208a0e8c7da1ce51e">clearance</a>);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> spacing = std::max(0.05, options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#aad817cb18660c0d6b61cb4d965dc7cb6">stepOver</a> * options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#a217ab9f4717e7454d8f7f5be084bc85a">toolDiameter</a>);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a> workArea = area;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <span class="keywordflow">if</span> (!workArea.<a class="code hl_function" href="classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid</a>() || workArea.<a class="code hl_function" href="classfc_1_1_geom.html#aeb91d2056e4ce71e4dba557be1b44f6c">empty</a>()) {</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_b_box.html">BBox</a> b = copper.<a class="code hl_function" href="classfc_1_1_geom.html#ad4a03d54f6a2b2185359a628af547354">bounds</a>();</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <span class="keywordflow">if</span> (!b.<a class="code hl_variable" href="structfc_1_1_b_box.html#aa01e601be965de7902d629f1137cb914">valid</a>) <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> m = options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#a17081468fabe6a32a0b619d8d65e6cc1">margin</a> + spacing;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        workArea = <a class="code hl_function" href="classfc_1_1_geom.html#a4eebd25faea409eef8635b4643da0edf">Geom::box</a>(b.<a class="code hl_variable" href="structfc_1_1_b_box.html#a32e6c7b1b402701621aae0aca300a11a">xmin</a> - m, b.<a class="code hl_variable" href="structfc_1_1_b_box.html#a4e5d39ce96f218172a5917e52f886461">ymin</a> - m, b.<a class="code hl_variable" href="structfc_1_1_b_box.html#a19c807697cdf8436448ef538057abca2">xmax</a> + m, b.<a class="code hl_variable" href="structfc_1_1_b_box.html#a3fcb5b246dbd0dede37b13c09c5588ac">ymax</a> + m);</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    }</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a> keepOut = copper.<a class="code hl_function" href="classfc_1_1_geom.html#a0d7a2fcd024c7d64fd3c85a485227131">buffer</a>(radius + clearance, std::max(2, options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#ace3d05ac9fe9824a15cf4d9f87cbe966">quadrantSegments</a>));</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a> region = workArea.<a class="code hl_function" href="classfc_1_1_geom.html#ab15fd1d02ef17e9accc0080b8d592268">difference</a>(keepOut);</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    <span class="keywordflow">if</span> (!region.<a class="code hl_function" href="classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid</a>() || region.<a class="code hl_function" href="classfc_1_1_geom.html#aeb91d2056e4ce71e4dba557be1b44f6c">empty</a>()) <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    result.<a class="code hl_variable" href="structfc_1_1_ncc_result.html#ad9acdb6ae0756793335328b62d10fd9b">clearedArea</a> = region;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <span class="keywordflow">if</span> (options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#a80a190a1ca68c97a10e877aeaa3c53c9">strategy</a> == <a class="code hl_enumvalue" href="namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63a4802a5ac6005a6ab9c68a2fb29e30a3e">NccStrategy::Paint</a>) {</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        <a class="code hl_struct" href="structfc_1_1_paint_options.html">PaintOptions</a> paint;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        paint.<a class="code hl_variable" href="structfc_1_1_paint_options.html#a30960a57507311086141ab37d3cdfe6e">toolDiameter</a> = options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#a217ab9f4717e7454d8f7f5be084bc85a">toolDiameter</a>;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        paint.<a class="code hl_variable" href="structfc_1_1_paint_options.html#a9a67244e89b6fd02076824540220be79">stepOver</a> = options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#aad817cb18660c0d6b61cb4d965dc7cb6">stepOver</a>;</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        paint.<a class="code hl_variable" href="structfc_1_1_paint_options.html#a322c3f39739358cce6a693a72afd43fe">quadrantSegments</a> = options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#ace3d05ac9fe9824a15cf4d9f87cbe966">quadrantSegments</a>;</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_paint_result.html">PaintResult</a> painted = <a class="code hl_function" href="namespacefc.html#a9f5d5512a7551db137cb7f638abc364f">paintArea</a>(region, paint);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        result.<a class="code hl_variable" href="structfc_1_1_ncc_result.html#a50ff25e4ac3f376b940f739bea7becee">paths</a> = painted.<a class="code hl_variable" href="structfc_1_1_paint_result.html#a8793708f00564d8ee65dd53233fdf676">paths</a>;</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        result.<a class="code hl_variable" href="structfc_1_1_ncc_result.html#a4cc4098bc093ad4558dd16cf365cfc23">totalLength</a> = painted.<a class="code hl_variable" href="structfc_1_1_paint_result.html#a9ebf031edfb9ba7a799e175776934a09">totalLength</a>;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        result.<a class="code hl_variable" href="structfc_1_1_ncc_result.html#a39823e316ec0f7deb261e1c32f46ca5c">bounds</a> = painted.<a class="code hl_variable" href="structfc_1_1_paint_result.html#a1175fbd74f474ef2485824ed3423f261">bounds</a>;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    }</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_b_box.html">BBox</a> bounds = workArea.<a class="code hl_function" href="classfc_1_1_geom.html#ad4a03d54f6a2b2185359a628af547354">bounds</a>();</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="keywordflow">if</span> (!bounds.<a class="code hl_variable" href="structfc_1_1_b_box.html#aa01e601be965de7902d629f1137cb914">valid</a>) <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> cx = (bounds.<a class="code hl_variable" href="structfc_1_1_b_box.html#a32e6c7b1b402701621aae0aca300a11a">xmin</a> + bounds.<a class="code hl_variable" href="structfc_1_1_b_box.html#a19c807697cdf8436448ef538057abca2">xmax</a>) / 2.0;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> cy = (bounds.<a class="code hl_variable" href="structfc_1_1_b_box.html#a4e5d39ce96f218172a5917e52f886461">ymin</a> + bounds.<a class="code hl_variable" href="structfc_1_1_b_box.html#a3fcb5b246dbd0dede37b13c09c5588ac">ymax</a>) / 2.0;</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> diag = std::hypot(bounds.<a class="code hl_function" href="structfc_1_1_b_box.html#a8d09024c6f764d7056f1ae572ca3f044">width</a>(), bounds.<a class="code hl_function" href="structfc_1_1_b_box.html#a3cb5cc0c1ab69bd0b0bc57838d0f076f">height</a>()) + 4.0 * spacing;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> angle = options.<a class="code hl_variable" href="structfc_1_1_ncc_options.html#aa2f305583316dd235ba1ba1489b138c7">angleDeg</a> * M_PI / 180.0;</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> c = std::cos(angle);</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> s = std::sin(angle);</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <span class="keywordtype">int</span> lineCount = 0;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    <span class="comment">// Barre offsets perpendiculares a la dirección del hatch. Usar el eje Y</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="comment">// sin rotar dejaba separaciones efectivas mayores y esquinas sin cubrir</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    <span class="comment">// con ángulos de 45°.</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> half = diag / 2.0;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> steps = std::max(1, <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(std::ceil((2.0 * half) / spacing)));</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt;= steps; ++k) {</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> offset = -half + k * spacing;</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_pt.html">Pt</a> mid{cx - s * offset, cy + c * offset};</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_pt.html">Pt</a> p0{mid.<a class="code hl_variable" href="structfc_1_1_pt.html#a3607e9a16a379bfb3c3591f9e2a19e06">x</a> - c * half, mid.<a class="code hl_variable" href="structfc_1_1_pt.html#a4ffbc5242fe000a642a3885cafa99483">y</a> - s * half};</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_pt.html">Pt</a> p1{mid.<a class="code hl_variable" href="structfc_1_1_pt.html#a3607e9a16a379bfb3c3591f9e2a19e06">x</a> + c * half, mid.<a class="code hl_variable" href="structfc_1_1_pt.html#a4ffbc5242fe000a642a3885cafa99483">y</a> + s * half};</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a> line = <a class="code hl_function" href="classfc_1_1_geom.html#ace3fa0d648e280ca284383af8cf1c0d7">Geom::line</a>({p0, p1});</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        <span class="keywordflow">if</span> (!line.<a class="code hl_function" href="classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid</a>() || line.<a class="code hl_function" href="classfc_1_1_geom.html#aeb91d2056e4ce71e4dba557be1b44f6c">empty</a>()) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a> clipped = line.<a class="code hl_function" href="classfc_1_1_geom.html#a49e89dca4948b779ffde07afe74e3d32">intersection</a>(region);</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        std::vector&lt;Geom&gt; pieces;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        collectLines(clipped, pieces);</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        <span class="keywordflow">for</span> (<a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; piece : pieces) {</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            <span class="keyword">const</span> <span class="keywordtype">double</span> len = piece.length();</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>            <span class="keywordflow">if</span> (len &lt; 1e-6) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>            result.<a class="code hl_variable" href="structfc_1_1_ncc_result.html#a4cc4098bc093ad4558dd16cf365cfc23">totalLength</a> += len;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>            addBounds(result.<a class="code hl_variable" href="structfc_1_1_ncc_result.html#a39823e316ec0f7deb261e1c32f46ca5c">bounds</a>, piece.bounds());</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>            result.<a class="code hl_variable" href="structfc_1_1_ncc_result.html#a50ff25e4ac3f376b940f739bea7becee">paths</a>.push_back(std::move(piece));</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>            ++lineCount;</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        }</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    }</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    (void)lineCount;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>}</div>
+</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>}  <span class="comment">// namespace fc</span></div>
+<div class="ttc" id="aclass_geom_html_a322d9e9be30a1ca2ad2fa66e2438b8e9"><div class="ttname"><a href="class_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">Geom::valid</a></div><div class="ttdeci">bool valid() const</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00195">geometry.hpp:195</a></div></div>
+<div class="ttc" id="aclass_geom_html_a3df5d7bba5a521dde960a11e1fa0d5be"><div class="ttname"><a href="class_geom.html#a3df5d7bba5a521dde960a11e1fa0d5be">Geom::geometryN</a></div><div class="ttdeci">Geom geometryN(int i) const</div><div class="ttdoc">Accede a una componente de una colección.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00486">geometry.cpp:486</a></div></div>
+<div class="ttc" id="aclass_geom_html_a6f94f675d0d22c03f0e89ae9dd724bfb"><div class="ttname"><a href="class_geom.html#a6f94f675d0d22c03f0e89ae9dd724bfb">Geom::typeId</a></div><div class="ttdeci">int typeId() const</div><div class="ttdoc">Tipo GEOS (GEOS_POLYGON, GEOS_LINESTRING, ...) o -1 si el Geom es nulo.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00474">geometry.cpp:474</a></div></div>
+<div class="ttc" id="aclass_geom_html_aa371ed0e43dd217cddf64915cc216760"><div class="ttname"><a href="class_geom.html#aa371ed0e43dd217cddf64915cc216760">Geom::numGeometries</a></div><div class="ttdeci">int numGeometries() const</div><div class="ttdoc">Cantidad de partes de una colección; 0 si el Geom es nulo.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00477">geometry.cpp:477</a></div></div>
+<div class="ttc" id="aclass_geom_html_aeb91d2056e4ce71e4dba557be1b44f6c"><div class="ttname"><a href="class_geom.html#aeb91d2056e4ce71e4dba557be1b44f6c">Geom::empty</a></div><div class="ttdeci">bool empty() const</div><div class="ttdoc">Indica si el Geom es nulo o si GEOS lo considera vacío.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00426">geometry.cpp:426</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html"><div class="ttname"><a href="classfc_1_1_geom.html">fc::Geom</a></div><div class="ttdoc">Envoltorio inmutable y compartido de una geometría GEOS.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00115">geometry.hpp:115</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a0d7a2fcd024c7d64fd3c85a485227131"><div class="ttname"><a href="classfc_1_1_geom.html#a0d7a2fcd024c7d64fd3c85a485227131">fc::Geom::buffer</a></div><div class="ttdeci">Geom buffer(double distance, int quadSegs=16) const</div><div class="ttdoc">Aplica un buffer (offset) uniforme.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00584">geometry.cpp:584</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a322d9e9be30a1ca2ad2fa66e2438b8e9"><div class="ttname"><a href="classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">fc::Geom::valid</a></div><div class="ttdeci">bool valid() const</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00195">geometry.hpp:195</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a49e89dca4948b779ffde07afe74e3d32"><div class="ttname"><a href="classfc_1_1_geom.html#a49e89dca4948b779ffde07afe74e3d32">fc::Geom::intersection</a></div><div class="ttdeci">Geom intersection(const Geom &amp;other) const</div><div class="ttdoc">Intersección booleana.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00631">geometry.cpp:631</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a4eebd25faea409eef8635b4643da0edf"><div class="ttname"><a href="classfc_1_1_geom.html#a4eebd25faea409eef8635b4643da0edf">fc::Geom::box</a></div><div class="ttdeci">static Geom box(double xmin, double ymin, double xmax, double ymax)</div><div class="ttdoc">Crea un rectángulo alineado a los ejes.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00269">geometry.cpp:269</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_ab15fd1d02ef17e9accc0080b8d592268"><div class="ttname"><a href="classfc_1_1_geom.html#ab15fd1d02ef17e9accc0080b8d592268">fc::Geom::difference</a></div><div class="ttdeci">Geom difference(const Geom &amp;other) const</div><div class="ttdoc">Diferencia booleana (this - other).</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00621">geometry.cpp:621</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_ace3fa0d648e280ca284383af8cf1c0d7"><div class="ttname"><a href="classfc_1_1_geom.html#ace3fa0d648e280ca284383af8cf1c0d7">fc::Geom::line</a></div><div class="ttdeci">static Geom line(const Ring &amp;pts)</div><div class="ttdoc">Crea una polilínea a partir de una secuencia de puntos.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00200">geometry.cpp:200</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_ad4a03d54f6a2b2185359a628af547354"><div class="ttname"><a href="classfc_1_1_geom.html#ad4a03d54f6a2b2185359a628af547354">fc::Geom::bounds</a></div><div class="ttdeci">BBox bounds() const</div><div class="ttdoc">Calcula la caja envolvente.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00456">geometry.cpp:456</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_aeb91d2056e4ce71e4dba557be1b44f6c"><div class="ttname"><a href="classfc_1_1_geom.html#aeb91d2056e4ce71e4dba557be1b44f6c">fc::Geom::empty</a></div><div class="ttdeci">bool empty() const</div><div class="ttdoc">Indica si el Geom es nulo o si GEOS lo considera vacío.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00426">geometry.cpp:426</a></div></div>
+<div class="ttc" id="anamespacefc_html"><div class="ttname"><a href="namespacefc.html">fc</a></div><div class="ttdef"><b>Definición</b> <a href="cutout_8hpp_source.html#l00016">cutout.hpp:16</a></div></div>
+<div class="ttc" id="anamespacefc_html_a6f14eb74d8d286b26fb499d6563ffcf9"><div class="ttname"><a href="namespacefc.html#a6f14eb74d8d286b26fb499d6563ffcf9">fc::clearCopper</a></div><div class="ttdeci">NccResult clearCopper(const Geom &amp;copper, const Geom &amp;area, const NccOptions &amp;options)</div><div class="ttdoc">Despeja el área que no es cobre.</div><div class="ttdef"><b>Definición</b> <a href="#l00095">ncc.cpp:95</a></div></div>
+<div class="ttc" id="anamespacefc_html_a9f5d5512a7551db137cb7f638abc364f"><div class="ttname"><a href="namespacefc.html#a9f5d5512a7551db137cb7f638abc364f">fc::paintArea</a></div><div class="ttdeci">PaintResult paintArea(const Geom &amp;area, const PaintOptions &amp;options)</div><div class="ttdoc">Rellena una región con offsets paralelos al contorno.</div><div class="ttdef"><b>Definición</b> <a href="paint_8cpp_source.html#l00068">paint.cpp:68</a></div></div>
+<div class="ttc" id="anamespacefc_html_aff1595f3d9a92a3c9774a5fd3cf16b63a4802a5ac6005a6ab9c68a2fb29e30a3e"><div class="ttname"><a href="namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63a4802a5ac6005a6ab9c68a2fb29e30a3e">fc::NccStrategy::Paint</a></div><div class="ttdeci">@ Paint</div><div class="ttdoc">Contornos paralelos.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00016">ncc.hpp:16</a></div></div>
+<div class="ttc" id="ancc_8hpp_html"><div class="ttname"><a href="ncc_8hpp.html">ncc.hpp</a></div><div class="ttdoc">NCC (Non-Copper Clear): remoción de cobre sobrante.</div></div>
+<div class="ttc" id="apaint_8hpp_html"><div class="ttname"><a href="paint_8hpp.html">paint.hpp</a></div><div class="ttdoc">Relleno de áreas con recorridos paralelos (pocket/paint).</div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html"><div class="ttname"><a href="structfc_1_1_b_box.html">fc::BBox</a></div><div class="ttdoc">Caja envolvente alineada a los ejes.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00048">geometry.hpp:48</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a19c807697cdf8436448ef538057abca2"><div class="ttname"><a href="structfc_1_1_b_box.html#a19c807697cdf8436448ef538057abca2">fc::BBox::xmax</a></div><div class="ttdeci">double xmax</div><div class="ttdoc">Límite superior en X.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00051">geometry.hpp:51</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a32e6c7b1b402701621aae0aca300a11a"><div class="ttname"><a href="structfc_1_1_b_box.html#a32e6c7b1b402701621aae0aca300a11a">fc::BBox::xmin</a></div><div class="ttdeci">double xmin</div><div class="ttdoc">Límite inferior en X.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00049">geometry.hpp:49</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a3cb5cc0c1ab69bd0b0bc57838d0f076f"><div class="ttname"><a href="structfc_1_1_b_box.html#a3cb5cc0c1ab69bd0b0bc57838d0f076f">fc::BBox::height</a></div><div class="ttdeci">double height() const</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00071">geometry.hpp:71</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a3fcb5b246dbd0dede37b13c09c5588ac"><div class="ttname"><a href="structfc_1_1_b_box.html#a3fcb5b246dbd0dede37b13c09c5588ac">fc::BBox::ymax</a></div><div class="ttdeci">double ymax</div><div class="ttdoc">Límite superior en Y.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00052">geometry.hpp:52</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a4e5d39ce96f218172a5917e52f886461"><div class="ttname"><a href="structfc_1_1_b_box.html#a4e5d39ce96f218172a5917e52f886461">fc::BBox::ymin</a></div><div class="ttdeci">double ymin</div><div class="ttdoc">Límite inferior en Y.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00050">geometry.hpp:50</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a8d09024c6f764d7056f1ae572ca3f044"><div class="ttname"><a href="structfc_1_1_b_box.html#a8d09024c6f764d7056f1ae572ca3f044">fc::BBox::width</a></div><div class="ttdeci">double width() const</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00068">geometry.hpp:68</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_aa01e601be965de7902d629f1137cb914"><div class="ttname"><a href="structfc_1_1_b_box.html#aa01e601be965de7902d629f1137cb914">fc::BBox::valid</a></div><div class="ttdeci">bool valid</div><div class="ttdoc">true si la caja contiene geometría.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00053">geometry.hpp:53</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_options_html"><div class="ttname"><a href="structfc_1_1_ncc_options.html">fc::NccOptions</a></div><div class="ttdoc">Parámetros de NCC.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00022">ncc.hpp:22</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_options_html_a17081468fabe6a32a0b619d8d65e6cc1"><div class="ttname"><a href="structfc_1_1_ncc_options.html#a17081468fabe6a32a0b619d8d65e6cc1">fc::NccOptions::margin</a></div><div class="ttdeci">double margin</div><div class="ttdoc">Expansión del área de trabajo.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00028">ncc.hpp:28</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_options_html_a217ab9f4717e7454d8f7f5be084bc85a"><div class="ttname"><a href="structfc_1_1_ncc_options.html#a217ab9f4717e7454d8f7f5be084bc85a">fc::NccOptions::toolDiameter</a></div><div class="ttdeci">double toolDiameter</div><div class="ttdoc">Diámetro de la fresa.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00024">ncc.hpp:24</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_options_html_a80a190a1ca68c97a10e877aeaa3c53c9"><div class="ttname"><a href="structfc_1_1_ncc_options.html#a80a190a1ca68c97a10e877aeaa3c53c9">fc::NccOptions::strategy</a></div><div class="ttdeci">NccStrategy strategy</div><div class="ttdoc">Hatch o paint.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00023">ncc.hpp:23</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_options_html_aa2f305583316dd235ba1ba1489b138c7"><div class="ttname"><a href="structfc_1_1_ncc_options.html#aa2f305583316dd235ba1ba1489b138c7">fc::NccOptions::angleDeg</a></div><div class="ttdeci">double angleDeg</div><div class="ttdoc">Dirección del hatch.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00027">ncc.hpp:27</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_options_html_aad817cb18660c0d6b61cb4d965dc7cb6"><div class="ttname"><a href="structfc_1_1_ncc_options.html#aad817cb18660c0d6b61cb4d965dc7cb6">fc::NccOptions::stepOver</a></div><div class="ttdeci">double stepOver</div><div class="ttdoc">Paso como fracción del diámetro.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00025">ncc.hpp:25</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_options_html_ace3d05ac9fe9824a15cf4d9f87cbe966"><div class="ttname"><a href="structfc_1_1_ncc_options.html#ace3d05ac9fe9824a15cf4d9f87cbe966">fc::NccOptions::quadrantSegments</a></div><div class="ttdeci">int quadrantSegments</div><div class="ttdoc">Segmentos por cuadrante.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00029">ncc.hpp:29</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_options_html_af6998fce6203f64208a0e8c7da1ce51e"><div class="ttname"><a href="structfc_1_1_ncc_options.html#af6998fce6203f64208a0e8c7da1ce51e">fc::NccOptions::clearance</a></div><div class="ttdeci">double clearance</div><div class="ttdoc">Distancia extra de seguridad al cobre.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00026">ncc.hpp:26</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_result_html"><div class="ttname"><a href="structfc_1_1_ncc_result.html">fc::NccResult</a></div><div class="ttdoc">Resultado de NCC.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00035">ncc.hpp:35</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_result_html_a39823e316ec0f7deb261e1c32f46ca5c"><div class="ttname"><a href="structfc_1_1_ncc_result.html#a39823e316ec0f7deb261e1c32f46ca5c">fc::NccResult::bounds</a></div><div class="ttdeci">BBox bounds</div><div class="ttdoc">Límites.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00039">ncc.hpp:39</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_result_html_a4cc4098bc093ad4558dd16cf365cfc23"><div class="ttname"><a href="structfc_1_1_ncc_result.html#a4cc4098bc093ad4558dd16cf365cfc23">fc::NccResult::totalLength</a></div><div class="ttdeci">double totalLength</div><div class="ttdoc">Longitud total.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00038">ncc.hpp:38</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_result_html_a50ff25e4ac3f376b940f739bea7becee"><div class="ttname"><a href="structfc_1_1_ncc_result.html#a50ff25e4ac3f376b940f739bea7becee">fc::NccResult::paths</a></div><div class="ttdeci">std::vector&lt; Geom &gt; paths</div><div class="ttdoc">Recorridos de despeje.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00036">ncc.hpp:36</a></div></div>
+<div class="ttc" id="astructfc_1_1_ncc_result_html_ad9acdb6ae0756793335328b62d10fd9b"><div class="ttname"><a href="structfc_1_1_ncc_result.html#ad9acdb6ae0756793335328b62d10fd9b">fc::NccResult::clearedArea</a></div><div class="ttdeci">Geom clearedArea</div><div class="ttdoc">Área que se despeja.</div><div class="ttdef"><b>Definición</b> <a href="ncc_8hpp_source.html#l00037">ncc.hpp:37</a></div></div>
+<div class="ttc" id="astructfc_1_1_paint_options_html"><div class="ttname"><a href="structfc_1_1_paint_options.html">fc::PaintOptions</a></div><div class="ttdoc">Parámetros de la pintura.</div><div class="ttdef"><b>Definición</b> <a href="paint_8hpp_source.html#l00016">paint.hpp:16</a></div></div>
+<div class="ttc" id="astructfc_1_1_paint_options_html_a30960a57507311086141ab37d3cdfe6e"><div class="ttname"><a href="structfc_1_1_paint_options.html#a30960a57507311086141ab37d3cdfe6e">fc::PaintOptions::toolDiameter</a></div><div class="ttdeci">double toolDiameter</div><div class="ttdoc">Diámetro de la fresa.</div><div class="ttdef"><b>Definición</b> <a href="paint_8hpp_source.html#l00017">paint.hpp:17</a></div></div>
+<div class="ttc" id="astructfc_1_1_paint_options_html_a322c3f39739358cce6a693a72afd43fe"><div class="ttname"><a href="structfc_1_1_paint_options.html#a322c3f39739358cce6a693a72afd43fe">fc::PaintOptions::quadrantSegments</a></div><div class="ttdeci">int quadrantSegments</div><div class="ttdoc">Segmentos por cuadrante.</div><div class="ttdef"><b>Definición</b> <a href="paint_8hpp_source.html#l00020">paint.hpp:20</a></div></div>
+<div class="ttc" id="astructfc_1_1_paint_options_html_a9a67244e89b6fd02076824540220be79"><div class="ttname"><a href="structfc_1_1_paint_options.html#a9a67244e89b6fd02076824540220be79">fc::PaintOptions::stepOver</a></div><div class="ttdeci">double stepOver</div><div class="ttdoc">Paso como fracción del diámetro.</div><div class="ttdef"><b>Definición</b> <a href="paint_8hpp_source.html#l00018">paint.hpp:18</a></div></div>
+<div class="ttc" id="astructfc_1_1_paint_result_html"><div class="ttname"><a href="structfc_1_1_paint_result.html">fc::PaintResult</a></div><div class="ttdoc">Resultado de la pintura.</div><div class="ttdef"><b>Definición</b> <a href="paint_8hpp_source.html#l00028">paint.hpp:28</a></div></div>
+<div class="ttc" id="astructfc_1_1_paint_result_html_a1175fbd74f474ef2485824ed3423f261"><div class="ttname"><a href="structfc_1_1_paint_result.html#a1175fbd74f474ef2485824ed3423f261">fc::PaintResult::bounds</a></div><div class="ttdeci">BBox bounds</div><div class="ttdoc">Límites.</div><div class="ttdef"><b>Definición</b> <a href="paint_8hpp_source.html#l00031">paint.hpp:31</a></div></div>
+<div class="ttc" id="astructfc_1_1_paint_result_html_a8793708f00564d8ee65dd53233fdf676"><div class="ttname"><a href="structfc_1_1_paint_result.html#a8793708f00564d8ee65dd53233fdf676">fc::PaintResult::paths</a></div><div class="ttdeci">std::vector&lt; Geom &gt; paths</div><div class="ttdoc">Recorridos paralelos al contorno.</div><div class="ttdef"><b>Definición</b> <a href="paint_8hpp_source.html#l00029">paint.hpp:29</a></div></div>
+<div class="ttc" id="astructfc_1_1_paint_result_html_a9ebf031edfb9ba7a799e175776934a09"><div class="ttname"><a href="structfc_1_1_paint_result.html#a9ebf031edfb9ba7a799e175776934a09">fc::PaintResult::totalLength</a></div><div class="ttdeci">double totalLength</div><div class="ttdoc">Longitud total.</div><div class="ttdef"><b>Definición</b> <a href="paint_8hpp_source.html#l00030">paint.hpp:30</a></div></div>
+<div class="ttc" id="astructfc_1_1_pt_html"><div class="ttname"><a href="structfc_1_1_pt.html">fc::Pt</a></div><div class="ttdoc">Punto bidimensional en milímetros.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00034">geometry.hpp:34</a></div></div>
+<div class="ttc" id="astructfc_1_1_pt_html_a3607e9a16a379bfb3c3591f9e2a19e06"><div class="ttname"><a href="structfc_1_1_pt.html#a3607e9a16a379bfb3c3591f9e2a19e06">fc::Pt::x</a></div><div class="ttdeci">double x</div><div class="ttdoc">Coordenada X en milímetros.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00035">geometry.hpp:35</a></div></div>
+<div class="ttc" id="astructfc_1_1_pt_html_a4ffbc5242fe000a642a3885cafa99483"><div class="ttname"><a href="structfc_1_1_pt.html#a4ffbc5242fe000a642a3885cafa99483">fc::Pt::y</a></div><div class="ttdeci">double y</div><div class="ttdoc">Coordenada Y en milímetros.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00036">geometry.hpp:36</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_1116e854259d3d888c8330fb94875287.html">cam</a></li><li class="navelem"><a href="ncc_8cpp.html">ncc.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

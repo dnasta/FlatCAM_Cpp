@@ -1,3 +1,10 @@
+/**
+ * @file test_ncc.cpp
+ * @brief Pruebas de NCC (hatch/paint).
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include <algorithm>

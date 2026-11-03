@@ -1,3 +1,15 @@
+/**
+ * @file tcl.cpp
+ * @brief Shell Tcl mínimo de respaldo cuando no se encontró libtcl.
+ *
+ * Se compila sólo si `FC_HAVE_TCL` no está definido (ver `tcl_embed.cpp`, que
+ * aporta el intérprete real). Implementa un intérprete de línea a línea con un
+ * subconjunto de comandos de FlatCAM: `set`, `puts`, comentarios `#`, variables
+ * `$var`, `open_gerber`, `open_excellon`, `isolate`, `cutout`, `ncc`, `paint`,
+ * `export_gcode`, `info`, `quit`/`exit`. No es un Tcl completo: no hay `proc`,
+ * `if`, listas ni sustitución de comandos.
+ */
+
 #ifndef FC_HAVE_TCL
 #include <cstdlib>
 #include <fstream>
@@ -19,6 +31,7 @@ namespace fc {
 
 namespace {
 
+/// @brief Quita espacios, tabs y saltos de línea de ambos extremos.
 std::string trim(const std::string& s) {
     const std::size_t first = s.find_first_not_of(" \t\r\n");
     if (first == std::string::npos) return {};
@@ -26,6 +39,19 @@ std::string trim(const std::string& s) {
     return s.substr(first, last - first + 1);
 }
 
+/**
+ * @brief Divide una línea en tokens separados por espacios o tabs.
+ *
+ * Las comillas dobles agrupan texto con espacios y se eliminan del resultado;
+ * no se admiten comillas escapadas ni llaves. Un token vacío entre comillas
+ * (`""`) no se agrega a la lista.
+ *
+ * @param line Línea ya recortada.
+ * @return Lista de tokens.
+ *
+ * @note Como las comillas se quitan antes de la sustitución de variables, un
+ *       argumento entre comillas con `$var` se resuelve igual que sin ellas.
+ */
 std::vector<std::string> splitCommand(const std::string& line) {
     std::vector<std::string> out;
     std::string current;
@@ -48,12 +74,35 @@ std::vector<std::string> splitCommand(const std::string& line) {
     return out;
 }
 
+/**
+ * @brief Sustituye un token que empieza con `$` por el valor de la variable.
+ *
+ * @param token Token original.
+ * @param vars Mapa de variables del script.
+ * @return El valor asociado o una cadena vacía.
+ *
+ * @note El nombre de la variable es todo el token sin el `$`; no se admite
+ *       concatenación como `$dir/file.gbr` (se buscaría la variable
+ *       `dir/file.gbr`).
+ * @note Una variable inexistente devuelve vacío y no genera error, a diferencia
+ *       de Tcl real, que abortaría el script.
+ */
 std::string substitute(const std::string& token, const std::map<std::string, std::string>& vars) {
     if (token.empty() || token[0] != '$') return token;
     const auto it = vars.find(token.substr(1));
     return it == vars.end() ? std::string() : it->second;
 }
 
+/**
+ * @brief Convierte el token `index` a número, con valor de reserva.
+ * @param tokens Tokens del comando.
+ * @param index Posición a leer.
+ * @param fallback Valor a devolver si falta el token o no es numérico.
+ * @return Número convertido o `fallback`.
+ *
+ * @note Atrapa cualquier excepción de `std::stod`, por lo que un argumento
+ *       inválido no interrumpe el script.
+ */
 double toNumber(const std::vector<std::string>& tokens, std::size_t index, double fallback) {
     if (index >= tokens.size()) return fallback;
     try {
@@ -63,6 +112,14 @@ double toNumber(const std::vector<std::string>& tokens, std::size_t index, doubl
     }
 }
 
+/**
+ * @brief Estado compartido entre comandos del shell.
+ *
+ * Guarda el último Gerber y Excellon abiertos —con sus banderas de validez— y
+ * el trabajo activo (`PathJob` o `DrillJob`) que consumirá `export_gcode`. Los
+ * dos trabajos son mutuamente excluyentes: abrir un Excellon desactiva el de
+ * recorridos y cualquier operación de geometría desactiva el de taladrado.
+ */
 struct ShellState {
     GerberResult gerber;
     bool hasGerber = false;
@@ -74,6 +131,13 @@ struct ShellState {
     bool hasDrillJob = false;
 };
 
+/**
+ * @brief Construye el texto del comando `info` con el estado actual.
+ * @param state Estado del shell.
+ * @return Resumen multilínea (una línea por objeto/trabajo cargado).
+ *
+ * @note El texto usa español y unidades del archivo, sin conversión.
+ */
 std::string describe(const ShellState& state) {
     std::ostringstream os;
     if (state.hasGerber) {
@@ -89,6 +153,18 @@ std::string describe(const ShellState& state) {
     return os.str();
 }
 
+/**
+ * @brief Reemplaza el trabajo de recorridos del estado con geometría nueva.
+ *
+ * Convierte cada `Geom` a su lista de coordenadas y descarta los recorridos con
+ * menos de 2 puntos. Al fijar un `PathJob` desactiva el trabajo de taladrado
+ * para que `export_gcode` no exporte datos obsoletos.
+ *
+ * @param state Estado a modificar.
+ * @param paths Recorridos producidos por la herramienta.
+ * @param bounds Límites del trabajo.
+ * @param tool Diámetro de herramienta informativo.
+ */
 void setPaths(ShellState& state, const std::vector<Geom>& paths, const BBox& bounds, double tool) {
     state.paths = PathJob{};
     state.paths.bounds = bounds;
@@ -103,6 +179,30 @@ void setPaths(ShellState& state, const std::vector<Geom>& paths, const BBox& bou
 
 }  // namespace
 
+/**
+ * @brief Ejecuta un script Tcl mínimo línea a línea.
+ *
+ * Abre el archivo, recorta cada línea, ignora vacías y las que empiezan con `#`,
+ * tokeniza y despacha el verbo. Los errores de comando se informan por `stderr`
+ * y la ejecución continúa con la línea siguiente, igual que el shell real.
+ *
+ * @param path Ruta del script a ejecutar.
+ * @return 0 al terminar (incluso si hubo errores de comando); 1 si el archivo
+ *         no se puede abrir.
+ *
+ * @note Comandos soportados: `set`, `puts`, `open_gerber`, `open_excellon`,
+ *       `isolate`, `cutout`, `ncc`, `paint`, `export_gcode`, `info`,
+ *       `quit`/`exit`.
+ * @note Los argumentos numéricos de las herramientas son posicionales y
+ *       opcionales (ver `toNumber`): `isolate Ø pasadas superposición%`.
+ * @note Los parsers se construyen con opciones por defecto, de modo que este
+ *       shell no respeta `--units` ni `--flatcam-compat` de la CLI.
+ * @warning Al abrir un Gerber no se desactiva `hasDrillJob`; si antes se abrió
+ *          un Excellon, `export_gcode` seguirá exportando el taladrado viejo
+ *          aunque el estado visible muestre el Gerber recién cargado.
+ * @warning No hay modo interactivo: con `path` vacío `std::ifstream` falla y la
+ *          función devuelve 1. El REPL sólo existe en la variante con libtcl.
+ */
 int runTclScript(const std::string& path) {
     std::ifstream in(path);
     if (!in) {
@@ -143,6 +243,8 @@ int runTclScript(const std::string& path) {
                 const std::string file = substitute(tokens[1], vars);
                 state.gerber = GerberParser().parseFile(file);
                 state.hasGerber = true;
+                state.hasPathJob = false;
+                state.hasDrillJob = false;
                 std::cout << "gerber: " << file << " (" << state.gerber.solid.area() << ")\n";
             } else if (command == "open_excellon") {
                 if (tokens.size() < 2) continue;

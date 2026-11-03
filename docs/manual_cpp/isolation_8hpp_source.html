@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente include/flatcam/isolation.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('isolation_8hpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">isolation.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="isolation_8hpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file isolation.hpp</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Aislamiento de cobre por offsets sucesivos.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Implementa el esquema de FlatCAM: para cada pasada se calcula</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * `offset = Ø * ((2i+1)/2) - i * solape * Ø`, se hace un buffer del cobre y se</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * extraen los contornos exteriores e interiores como recorridos.</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="geometry_8hpp.html">flatcam/geometry.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacefc.html">fc</a> {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment"></span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment"> * @brief Parámetros del aislamiento.</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00020" data-start="{" data-end="};">
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_options.html">   20</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structfc_1_1_isolation_options.html">IsolationOptions</a> {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_options.html#a8f99e8ffb8de50c86d876046941b58e7">   21</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_isolation_options.html#a8f99e8ffb8de50c86d876046941b58e7">toolDiameter</a> = 0.2; <span class="comment">///&lt; Diámetro de la fresa.</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_options.html#a79e2dc26b106679d55c7768f7d56f21e">   22</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfc_1_1_isolation_options.html#a79e2dc26b106679d55c7768f7d56f21e">passes</a> = 1;            <span class="comment">///&lt; Cantidad de pasadas.</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_options.html#aa00dc8c9043a15ee1e14913d1dc2f84e">   23</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_isolation_options.html#aa00dc8c9043a15ee1e14913d1dc2f84e">overlap</a> = 0.0;      <span class="comment">///&lt; Solape como fracción del diámetro (0..0.99).</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_options.html#ad1c73942e017710e8df996ab68559cb8">   24</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfc_1_1_isolation_options.html#ad1c73942e017710e8df996ab68559cb8">quadrantSegments</a> = 16; <span class="comment">///&lt; Segmentos por cuadrante.</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_options.html#ab43eea3b2d404376212ff20ba28a73e8">   25</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structfc_1_1_isolation_options.html#ab43eea3b2d404376212ff20ba28a73e8">invert</a> = <span class="keyword">false</span>;       <span class="comment">///&lt; Invierte el sentido (climb/conventional).</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_options.html#a1ccbf1749e0e97df5c9d04d21f6309a8">   26</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structfc_1_1_isolation_options.html#a1ccbf1749e0e97df5c9d04d21f6309a8">exteriorsOnly</a> = <span class="keyword">false</span>;<span class="comment">///&lt; Sólo contornos exteriores.</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_options.html#a631824dcdfae93bf3b251bee07d16f63">   27</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structfc_1_1_isolation_options.html#a631824dcdfae93bf3b251bee07d16f63">interiorsOnly</a> = <span class="keyword">false</span>;<span class="comment">///&lt; Sólo agujeros/contornos interiores.</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_options.html#a395719d30799bbfa379a77cd01d735ca">   28</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structfc_1_1_isolation_options.html#a395719d30799bbfa379a77cd01d735ca">avoidIntersections</a> = <span class="keyword">false</span>; <span class="comment">///&lt; Omite pasadas que chocan con otro cobre (rest).</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>};</div>
+</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"></span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * @brief Resultado del aislamiento.</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00034" data-start="{" data-end="};">
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_result.html">   34</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structfc_1_1_isolation_result.html">IsolationResult</a> {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_result.html#a7b80c1349b2b32a12406f131beffcc1f">   35</a></span>    std::vector&lt;Geom&gt; <a class="code hl_variable" href="structfc_1_1_isolation_result.html#a7b80c1349b2b32a12406f131beffcc1f">paths</a>;       <span class="comment">///&lt; Recorridos del centro de la fresa.</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_result.html#a288a2dd6201c38ac94f97a2e7a58afdc">   36</a></span>    std::vector&lt;Geom&gt; <a class="code hl_variable" href="structfc_1_1_isolation_result.html#a288a2dd6201c38ac94f97a2e7a58afdc">envelopes</a>;   <span class="comment">///&lt; Cobre dilatado por pasada (preview).</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_result.html#a109487cdec219efe1c19a9f76188bab9">   37</a></span>    std::vector&lt;Geom&gt; <a class="code hl_variable" href="structfc_1_1_isolation_result.html#a109487cdec219efe1c19a9f76188bab9">notIsolated</a>; <span class="comment">///&lt; Polígonos sin pasada válida.</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_result.html#afb696d08e9282261b4b559ff4731a7f2">   38</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_isolation_result.html#afb696d08e9282261b4b559ff4731a7f2">totalLength</a> = 0.0;     <span class="comment">///&lt; Longitud total.</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="structfc_1_1_isolation_result.html#ac380336682f146bdebbbb345413ab65c">   39</a></span>    <a class="code hl_struct" href="structfc_1_1_b_box.html">BBox</a> <a class="code hl_variable" href="structfc_1_1_isolation_result.html#ac380336682f146bdebbbb345413ab65c">bounds</a>;                  <span class="comment">///&lt; Límites.</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>};</div>
+</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"></span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> * @brief Calcula el aislamiento de una geometría de cobre.</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> * @param copper Cobre original.</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> * @param options Pasadas, solape, filtros y sentido.</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> * @return Recorridos, envolventes y longitud.</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><a class="code hl_struct" href="structfc_1_1_isolation_result.html">IsolationResult</a> <a class="code hl_function" href="namespacefc.html#a1c21630b86a92f46fda7684dfab22cd5">isolateCopper</a>(<span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; copper, <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_isolation_options.html">IsolationOptions</a>&amp; options);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"></span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> * @brief Rest machining con una herramienta menor.</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> * Reutiliza el trabajo de una herramienta mayor y aísla sólo las zonas que</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> * ésta no pudo alcanzar.</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * @param copper Cobre original.</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * @param previousToolDiameter Diámetro de la herramienta anterior.</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * @param options Opciones de la herramienta menor.</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><a class="code hl_struct" href="structfc_1_1_isolation_result.html">IsolationResult</a> <a class="code hl_function" href="namespacefc.html#a7f1b64fc9f3514057bc17d9a28f1ccf2">isolateRest</a>(<span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; copper, <span class="keywordtype">double</span> previousToolDiameter,</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                            <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_isolation_options.html">IsolationOptions</a>&amp; options);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>}  <span class="comment">// namespace fc</span></div>
+<div class="ttc" id="aclassfc_1_1_geom_html"><div class="ttname"><a href="classfc_1_1_geom.html">fc::Geom</a></div><div class="ttdoc">Envoltorio inmutable y compartido de una geometría GEOS.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00115">geometry.hpp:115</a></div></div>
+<div class="ttc" id="ageometry_8hpp_html"><div class="ttname"><a href="geometry_8hpp.html">geometry.hpp</a></div><div class="ttdoc">Núcleo geométrico inmutable sobre la API C de GEOS.</div></div>
+<div class="ttc" id="anamespacefc_html"><div class="ttname"><a href="namespacefc.html">fc</a></div><div class="ttdef"><b>Definición</b> <a href="cutout_8hpp_source.html#l00016">cutout.hpp:16</a></div></div>
+<div class="ttc" id="anamespacefc_html_a1c21630b86a92f46fda7684dfab22cd5"><div class="ttname"><a href="namespacefc.html#a1c21630b86a92f46fda7684dfab22cd5">fc::isolateCopper</a></div><div class="ttdeci">IsolationResult isolateCopper(const Geom &amp;copper, const IsolationOptions &amp;options)</div><div class="ttdoc">Calcula el aislamiento de una geometría de cobre.</div><div class="ttdef"><b>Definición</b> <a href="isolation_8cpp_source.html#l00073">isolation.cpp:73</a></div></div>
+<div class="ttc" id="anamespacefc_html_a7f1b64fc9f3514057bc17d9a28f1ccf2"><div class="ttname"><a href="namespacefc.html#a7f1b64fc9f3514057bc17d9a28f1ccf2">fc::isolateRest</a></div><div class="ttdeci">IsolationResult isolateRest(const Geom &amp;copper, double previousToolDiameter, const IsolationOptions &amp;options)</div><div class="ttdoc">Rest machining con una herramienta menor.</div><div class="ttdef"><b>Definición</b> <a href="isolation_8cpp_source.html#l00178">isolation.cpp:178</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html"><div class="ttname"><a href="structfc_1_1_b_box.html">fc::BBox</a></div><div class="ttdoc">Caja envolvente alineada a los ejes.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00048">geometry.hpp:48</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_options_html"><div class="ttname"><a href="structfc_1_1_isolation_options.html">fc::IsolationOptions</a></div><div class="ttdoc">Parámetros del aislamiento.</div><div class="ttdef"><b>Definición</b> <a href="#l00020">isolation.hpp:20</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_options_html_a1ccbf1749e0e97df5c9d04d21f6309a8"><div class="ttname"><a href="structfc_1_1_isolation_options.html#a1ccbf1749e0e97df5c9d04d21f6309a8">fc::IsolationOptions::exteriorsOnly</a></div><div class="ttdeci">bool exteriorsOnly</div><div class="ttdoc">Sólo contornos exteriores.</div><div class="ttdef"><b>Definición</b> <a href="#l00026">isolation.hpp:26</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_options_html_a395719d30799bbfa379a77cd01d735ca"><div class="ttname"><a href="structfc_1_1_isolation_options.html#a395719d30799bbfa379a77cd01d735ca">fc::IsolationOptions::avoidIntersections</a></div><div class="ttdeci">bool avoidIntersections</div><div class="ttdoc">Omite pasadas que chocan con otro cobre (rest).</div><div class="ttdef"><b>Definición</b> <a href="#l00028">isolation.hpp:28</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_options_html_a631824dcdfae93bf3b251bee07d16f63"><div class="ttname"><a href="structfc_1_1_isolation_options.html#a631824dcdfae93bf3b251bee07d16f63">fc::IsolationOptions::interiorsOnly</a></div><div class="ttdeci">bool interiorsOnly</div><div class="ttdoc">Sólo agujeros/contornos interiores.</div><div class="ttdef"><b>Definición</b> <a href="#l00027">isolation.hpp:27</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_options_html_a79e2dc26b106679d55c7768f7d56f21e"><div class="ttname"><a href="structfc_1_1_isolation_options.html#a79e2dc26b106679d55c7768f7d56f21e">fc::IsolationOptions::passes</a></div><div class="ttdeci">int passes</div><div class="ttdoc">Cantidad de pasadas.</div><div class="ttdef"><b>Definición</b> <a href="#l00022">isolation.hpp:22</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_options_html_a8f99e8ffb8de50c86d876046941b58e7"><div class="ttname"><a href="structfc_1_1_isolation_options.html#a8f99e8ffb8de50c86d876046941b58e7">fc::IsolationOptions::toolDiameter</a></div><div class="ttdeci">double toolDiameter</div><div class="ttdoc">Diámetro de la fresa.</div><div class="ttdef"><b>Definición</b> <a href="#l00021">isolation.hpp:21</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_options_html_aa00dc8c9043a15ee1e14913d1dc2f84e"><div class="ttname"><a href="structfc_1_1_isolation_options.html#aa00dc8c9043a15ee1e14913d1dc2f84e">fc::IsolationOptions::overlap</a></div><div class="ttdeci">double overlap</div><div class="ttdoc">Solape como fracción del diámetro (0..0.99).</div><div class="ttdef"><b>Definición</b> <a href="#l00023">isolation.hpp:23</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_options_html_ab43eea3b2d404376212ff20ba28a73e8"><div class="ttname"><a href="structfc_1_1_isolation_options.html#ab43eea3b2d404376212ff20ba28a73e8">fc::IsolationOptions::invert</a></div><div class="ttdeci">bool invert</div><div class="ttdoc">Invierte el sentido (climb/conventional).</div><div class="ttdef"><b>Definición</b> <a href="#l00025">isolation.hpp:25</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_options_html_ad1c73942e017710e8df996ab68559cb8"><div class="ttname"><a href="structfc_1_1_isolation_options.html#ad1c73942e017710e8df996ab68559cb8">fc::IsolationOptions::quadrantSegments</a></div><div class="ttdeci">int quadrantSegments</div><div class="ttdoc">Segmentos por cuadrante.</div><div class="ttdef"><b>Definición</b> <a href="#l00024">isolation.hpp:24</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_result_html"><div class="ttname"><a href="structfc_1_1_isolation_result.html">fc::IsolationResult</a></div><div class="ttdoc">Resultado del aislamiento.</div><div class="ttdef"><b>Definición</b> <a href="#l00034">isolation.hpp:34</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_result_html_a109487cdec219efe1c19a9f76188bab9"><div class="ttname"><a href="structfc_1_1_isolation_result.html#a109487cdec219efe1c19a9f76188bab9">fc::IsolationResult::notIsolated</a></div><div class="ttdeci">std::vector&lt; Geom &gt; notIsolated</div><div class="ttdoc">Polígonos sin pasada válida.</div><div class="ttdef"><b>Definición</b> <a href="#l00037">isolation.hpp:37</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_result_html_a288a2dd6201c38ac94f97a2e7a58afdc"><div class="ttname"><a href="structfc_1_1_isolation_result.html#a288a2dd6201c38ac94f97a2e7a58afdc">fc::IsolationResult::envelopes</a></div><div class="ttdeci">std::vector&lt; Geom &gt; envelopes</div><div class="ttdoc">Cobre dilatado por pasada (preview).</div><div class="ttdef"><b>Definición</b> <a href="#l00036">isolation.hpp:36</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_result_html_a7b80c1349b2b32a12406f131beffcc1f"><div class="ttname"><a href="structfc_1_1_isolation_result.html#a7b80c1349b2b32a12406f131beffcc1f">fc::IsolationResult::paths</a></div><div class="ttdeci">std::vector&lt; Geom &gt; paths</div><div class="ttdoc">Recorridos del centro de la fresa.</div><div class="ttdef"><b>Definición</b> <a href="#l00035">isolation.hpp:35</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_result_html_ac380336682f146bdebbbb345413ab65c"><div class="ttname"><a href="structfc_1_1_isolation_result.html#ac380336682f146bdebbbb345413ab65c">fc::IsolationResult::bounds</a></div><div class="ttdeci">BBox bounds</div><div class="ttdoc">Límites.</div><div class="ttdef"><b>Definición</b> <a href="#l00039">isolation.hpp:39</a></div></div>
+<div class="ttc" id="astructfc_1_1_isolation_result_html_afb696d08e9282261b4b559ff4731a7f2"><div class="ttname"><a href="structfc_1_1_isolation_result.html#afb696d08e9282261b4b559ff4731a7f2">fc::IsolationResult::totalLength</a></div><div class="ttdeci">double totalLength</div><div class="ttdoc">Longitud total.</div><div class="ttdef"><b>Definición</b> <a href="#l00038">isolation.hpp:38</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a href="dir_a1a815e8788d98990c3f3cc2cf9418f5.html">flatcam</a></li><li class="navelem"><a href="isolation_8hpp.html">isolation.hpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

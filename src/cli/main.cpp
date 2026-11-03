@@ -1,3 +1,16 @@
+/**
+ * @file main.cpp
+ * @brief Punto de entrada de `flatcam-cli`: despacho de subcomandos CAM.
+ *
+ * La CLI interpreta un primer argumento (`gerber`, `excellon`, `gcode`,
+ * `isolate`, `cutout`, `ncc`, `paint`, `mill`, `svg`, `dxf`, `film`,
+ * `import-svg`, `import-dxf`, `thieving`, `project`, `tcl`) y ejecuta el parser
+ * o la herramienta correspondiente. Las opciones se comparten entre comandos
+ * mediante una única estructura `Args` y cada ejecución termina en una función
+ * `runXxx` que imprime estadísticas en texto o JSON o escribe el archivo de
+ * salida pedido.
+ */
+
 #include <array>
 #include <cmath>
 #include <filesystem>
@@ -22,16 +35,22 @@
 #include "flatcam/project.hpp"
 
 namespace fc {
+/// @brief Ejecuta un script Tcl (implementado en `tcl.cpp` o `tcl_embed.cpp`).
 int runTclScript(const std::string& path);
 }
 
 namespace {
 
+/// @brief Imprime `v` con 12 cifras y normaliza los valores casi nulos a 0.
 void printNumber(double v) {
     if (std::fabs(v) < 1e-12) v = 0.0;
     std::cout << std::setprecision(12) << v;
 }
 
+/**
+ * @brief Escribe una caja en formato JSON (`null` si es inválida).
+ * @param b Caja a serializar.
+ */
 void printBBox(const fc::BBox& b) {
     if (!b.valid) {
         std::cout << "null";
@@ -48,6 +67,17 @@ void printBBox(const fc::BBox& b) {
     std::cout << "}";
 }
 
+/**
+ * @brief Imprime la ayuda de uso y devuelve el código de salida 2.
+ *
+ * La ayuda cubre los subcomandos principales y sus opciones habituales.
+ *
+ * @return Siempre 2 (error de uso), para que `main` lo propague.
+ *
+ * @note La lista no está completa: `--z-toolchange`, `--dwell`, `--power`,
+ *       `--z-focus`, `--strategy`, `--previous-tool-dia` y `--extract` se
+ *       aceptan pero no se documentan aquí.
+ */
 int usage() {
     std::cerr << "usage:\n"
                  "  flatcam-cli gerber <file> [--units mm|in] [--json] [--flatcam-compat]\n"
@@ -81,6 +111,19 @@ int usage() {
     return 2;
 }
 
+/**
+ * @brief Decide si una ruta corresponde a un archivo de taladrado Excellon.
+ *
+ * Compara la extensión en minúsculas contra `drl`, `xln`, `exc` y `ncd`. Se
+ * usa para separar Gerber de Excellon en `film`, `project --create` y `gcode`.
+ *
+ * @param path Ruta a evaluar.
+ * @return `true` si la extensión es una de las reconocidas.
+ *
+ * @note Una ruta sin punto se considera Gerber.
+ * @note Depende de `std::tolower` sin incluir `<cctype>`; hoy funciona por
+ *       inclusión transitiva de la biblioteca estándar.
+ */
 bool isExcellonPath(const std::string& path) {
     const std::size_t dot = path.find_last_of('.');
     if (dot == std::string::npos) return false;
@@ -89,6 +132,18 @@ bool isExcellonPath(const std::string& path) {
     return ext == "drl" || ext == "xln" || ext == "exc" || ext == "ncd";
 }
 
+/**
+ * @brief Opciones acumuladas de la línea de comandos.
+ *
+ * Estructura única compartida por todos los subcomandos: contiene el tipo de
+ * comando, los archivos de entrada, la unidad de trabajo y una instancia de las
+ * opciones de cada herramienta (`GCodeOptions`, `IsolationOptions`,
+ * `CutoutOptions`, `NccOptions`, `PaintOptions`, `ThievingOptions`).
+ *
+ * Como las banderas tienen un único nombre, algunas afectan a varias
+ * herramientas a la vez (por ejemplo `--margin` escribe el margen de corte,
+ * NCC, pintura y thieving).
+ */
 struct Args {
     std::string kind;
     std::string file;
@@ -118,6 +173,43 @@ struct Args {
     double previousToolDia = 0.0;
 };
 
+/**
+ * @brief Interpreta los argumentos de la línea de comandos.
+ *
+ * El primer argumento es el subcomando y el resto son opciones. Acepta tanto
+ * `--opcion valor` como `--opcion=valor`. Los argumentos que no empiezan con
+ * `-` se acumulan como entradas (`inputs`); el primero queda además como
+ * `file` para los comandos de archivo único (isolate, cutout, ncc, ...).
+ *
+ * Tras el bucle se fija la unidad de los programas G-code y se traduce el nombre
+ * del preprocesador a `GCodeFlavor`, con estos alias:
+ * - `grbl` / `grbl_11` → `Grbl`;
+ * - `grbl_no_m6` / `grbl_11_no_m6` → `Grbl` (sin `M6`, por la tabla de perfiles);
+ * - `grbl_laser` → `GrblLaser`;
+ * - `marlin` / `marlin_laser` → `Marlin`;
+ * - cualquier otro → `Default`.
+ *
+ * @param argc Cantidad de argumentos.
+ * @param argv Vector de argumentos del sistema.
+ * @param args Estructura a completar.
+ * @return `true` si la línea es válida; `false` si falta el subcomando, una
+ *         opción es desconocida o el comando no es `tcl` y no hay entradas.
+ *
+ * @note Los porcentajes se convierten a fracción en el acto: `--overlap 20`
+ *       produce `0.2` y `--superposition 80` produce `0.2` de paso.
+ * @note `--power` copia el valor también a `spindleSpeed`, porque el láser usa
+ *       ese campo como potencia en los perfiles láser.
+ * @note `--area` se guarda en `cutout.area`, pero `runNcc` también lo lee.
+ * @warning `--area` exige exactamente cuatro números separados por comas; una
+ *          cantidad distinta hace que `std::stod` lance `invalid_argument`, que
+ *          sólo se captura en `main` y termina con un mensaje genérico.
+ * @warning Las opciones numéricas usan `std::stod`/`std::stoi` sin validar el
+ *          texto; un valor no numérico también aborta con el mensaje genérico.
+ * @warning Los alias `grbl_no_m6` y `grbl_11_no_m6` se traducen al mismo
+ *          `Grbl` que `grbl`, de modo que son redundantes: el perfil GRBL nunca
+ *          emite `M6` (ver `usesM6` en `gcode.cpp`), por lo que la variante "sin
+ *          M6" no cambia el programa generado.
+ */
 bool parseArgs(int argc, char** argv, Args& args) {
     if (argc < 2) return false;
     args.kind = argv[1];
@@ -288,13 +380,27 @@ bool parseArgs(int argc, char** argv, Args& args) {
     } else if (args.preprocessor == "marlin" || args.preprocessor == "marlin_laser") {
         args.gcode.flavor = fc::GCodeFlavor::Marlin;
     } else if (args.preprocessor == "grbl_no_m6" || args.preprocessor == "grbl_11_no_m6") {
-        args.gcode.flavor = fc::GCodeFlavor::Grbl;
+        args.gcode.flavor = fc::GCodeFlavor::GrblNoM6;
     } else {
         args.gcode.flavor = fc::GCodeFlavor::Default;
     }
     return true;
 }
 
+/**
+ * @brief Parsea un Gerber e informa aperturas, flashes, segmentos y área.
+ *
+ * Con `--json` emite un objeto JSON de una línea; sin ella imprime un informe
+ * legible con unidades del archivo, conteos, área y límites, y lista cada aviso
+ * del parser.
+ *
+ * @param args Opciones ya interpretadas (`file`, `units`, `json`, `compat`).
+ * @return 0 si el parseo se completa (aunque haya avisos); propaga la excepción
+ *         del parser en caso de archivo ilegible.
+ *
+ * @note `--flatcam-compat` activa `legacyRectStroke`, que reproduce el trazo
+ *       rectangular del FlatCAM original en lugar de la suma de Minkowski.
+ */
 int runGerber(const Args& args) {
     fc::GerberOptions opt;
     opt.appUnits = args.units;
@@ -328,6 +434,19 @@ int runGerber(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Parsea un Excellon y resume herramientas, taladros, ranuras y área.
+ *
+ * Igual que `runGerber`, soporta salida legible o `--json`. El área y los
+ * límites corresponden a la geometría sólida generada (círculos de taladro y
+ * ranuras redondeadas).
+ *
+ * @param args Opciones ya interpretadas.
+ * @return 0 si el parseo termina correctamente.
+ *
+ * @note El conteo de taladros y ranuras viene del parser; no se recalcula a
+ *       partir de la geometría.
+ */
 int runExcellon(const Args& args) {
     fc::ExcellonOptions opt;
     opt.appUnits = args.units;
@@ -359,6 +478,35 @@ int runExcellon(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Lee, inspecciona, crea o exporta proyectos `.FlatPrj`.
+ *
+ * El comportamiento depende de las banderas y sigue este orden de prioridad:
+ *
+ * 1. `--create`: el primer `input` es el archivo de salida y el resto son
+ *    Gerber/Excellon que se parsean y empaquetan en un proyecto nuevo.
+ * 2. `--summarize` o `--export-all DIR`: recorrido en streaming
+ *    (`forEachProjectObject`) que informa un resumen por objeto y, si se pidió,
+ *    escribe un `.wkt` por objeto con sus sólidos y recorridos.
+ * 3. `--object N`: carga sólo ese objeto del proyecto (sin materializar el
+ *    resto), informa su área y límites y, si se pide, exporta el WKT.
+ * 4. `--info`: lee únicamente los metadatos con `inspectProject`, apto para
+ *    proyectos comprimidos de varios cientos de MB.
+ * 5. Sin banderas: carga completa con `loadProject` e informa cada objeto;
+ *    `--extract DIR` escribe además un `.wkt` por sólido.
+ *
+ * @param args Opciones ya interpretadas.
+ * @return 0 en éxito; 1 si no se puede escribir un archivo pedido; 2 si
+ *         `--create` recibe menos de dos entradas.
+ *
+ * @note Todos los modos aceptan `--json`, salvo `--create` (que sólo escribe
+ *       un mensaje de progreso por `stderr`).
+ * @warning La carga completa del modo 5 puede consumir mucha memoria en
+ *          proyectos reales; el módulo de proyecto limita el tamaño y sugiere
+ *          `--info` en ese caso.
+ * @warning `--extract` sólo se aplica al modo 5; combinado con `--object` se
+ *          ignora silenciosamente.
+ */
 int runProject(const Args& args) {
     if (args.create) {
         if (args.inputs.size() < 2) {
@@ -550,6 +698,26 @@ int runProject(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Calcula el aislamiento de una capa de cobre y exporta su G-code.
+ *
+ * Parsea el Gerber y llama a `isolateRest` si se pidió `--rest` con un diámetro
+ * previo positivo; en caso contrario a `isolateCopper`. Sin `-o` imprime
+ * estadísticas; con `-o` convierte cada recorrido en una polilínea, aplica
+ * opcionalmente `optimizePathOrder` y escribe el programa con `pathsGCode`.
+ *
+ * @param args Opciones de aislamiento, G-code y salida.
+ * @return 0 en éxito; 1 si no puede escribir el archivo de salida.
+ *
+ * @note Los recorridos se obtienen con `Geom::coords()`; los que tienen menos
+ *       de 2 puntos se descartan antes de generar el programa.
+ * @note El JSON informa también `not_isolated`, útil para diagnosticar rest
+ *       machining.
+ * @warning Las unidades del G-code dependen de `--units`, pero la geometría ya
+ *       viene escalada por el parser, así que no hay conversión adicional al
+ *       escribir: si el Gerber está en pulgadas y se pide `--units mm`, el
+ *       programa queda en mm.
+ */
 int runIsolate(const Args& args) {
     fc::GerberOptions gopt;
     gopt.appUnits = args.units;
@@ -616,6 +784,19 @@ int runIsolate(const Args& args) {
 
 namespace {
 
+/**
+ * @brief Aplana geometría de líneas en una lista de polilíneas.
+ *
+ * Acepta `LineString`/`LinearRing` directamente y recurre sobre
+ * `MultiLineString` y `GeometryCollection`. Es el equivalente local del helper
+ * de `ncc.cpp`, usado aquí para los recorridos "follow" del Gerber.
+ *
+ * @param geom Geometría a recorrer.
+ * @param out Lista de polilíneas de salida.
+ *
+ * @note Se ignoran las geometrías vacías, inválidas y los tipos que no son de
+ *       línea (los polígonos no se convierten a su contorno).
+ */
 void collectLineStrings(const fc::Geom& geom, std::vector<std::vector<fc::Pt>>& out) {
     if (!geom.valid() || geom.empty()) return;
     const int type = geom.typeId();
@@ -632,6 +813,21 @@ void collectLineStrings(const fc::Geom& geom, std::vector<std::vector<fc::Pt>>& 
 
 }  // namespace
 
+/**
+ * @brief Genera G-code de fresado siguiendo los recorridos del Gerber.
+ *
+ * Extrae las polilíneas de `gerber.follows` con `collectLineStrings` y, si se
+ * pidió salida, las mecaniza con `pathsGCode` (optimizando el orden antes si
+ * corresponde). Sin `-o` sólo informa cuántos recorridos hay.
+ *
+ * @param args Opciones de G-code y salida.
+ * @return 0 en éxito; 1 si no puede escribir el archivo.
+ *
+ * @note `job.bounds` usa los límites del Gerber completo, incluidos los
+ *       sólidos, no sólo los recorridos.
+ * @note El diámetro de herramienta se toma de `--tool-dia`, compartido con el
+ *       aislamiento; sólo afecta a los comentarios del programa.
+ */
 int runMill(const Args& args) {
     fc::GerberOptions gopt;
     gopt.appUnits = args.units;
@@ -668,6 +864,14 @@ int runMill(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Exporta un Gerber a DXF mediante `fc::exportDxf`.
+ * @param args Debe incluir `file` y `-o out.dxf`.
+ * @return 0 en éxito; 2 si falta la salida.
+ *
+ * @note A diferencia de `runSvg`, no admite escribir en la salida estándar:
+ *       `exportDxf` necesita una ruta de archivo.
+ */
 int runDxf(const Args& args) {
     fc::GerberOptions gopt;
     gopt.appUnits = args.units;
@@ -681,6 +885,18 @@ int runDxf(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Importa un SVG o DXF y lo convierte a Gerber.
+ *
+ * @param args `file` y `-o out.gbr`.
+ * @param svg `true` para SVG, `false` para DXF.
+ * @return 0 en éxito; 1 si el importador lanza una excepción; 2 si falta `-o`.
+ *
+ * @note El texto de la excepción se imprime tal cual por `stderr`, sin prefijo,
+ *       para no ocultar el diagnóstico del parser.
+ * @note La geometría se escribe con `writeGerber` sin recorridos "follow": el
+ *       resultado es sólo cobre sólido.
+ */
 int runImport(const Args& args, bool svg) {
     if (args.output.empty()) {
         std::cerr << "import: -o out.gbr is required\n";
@@ -698,6 +914,26 @@ int runImport(const Args& args, bool svg) {
     return 0;
 }
 
+/**
+ * @brief Compone varias capas en un SVG tipo "film" con marco opcional.
+ *
+ * Parsea cada entrada como Gerber o Excellon (según la extensión), une todos los
+ * sólidos, calcula un marco expandido por el margen y exporta el SVG. Con
+ * `--negative` el contenido es `marco − cobre` (película negativa); sin esa
+ * bandera se dibujan el cobre unido y el rectángulo del marco.
+ *
+ * @param args Entradas, `--margin`, `--negative` y `-o out.svg`.
+ * @return 0 en éxito; 1 si la geometría resultante está vacía; 2 si faltan
+ *         entradas o la salida.
+ *
+ * @note Si el margen es 0 se usa 2 mm por defecto para que el marco no quede
+ *       pegado al cobre.
+ * @note Los recorridos "follow" se acumulan y se pasan a `exportSvg` aparte de
+ *       los sólidos.
+ * @warning En modo negativo los recorridos "follow" se siguen dibujando, de
+ *          modo que pueden aparecer trazos sobre la zona que debería quedar
+ *          transparente.
+ */
 int runFilm(const Args& args) {
     if (args.inputs.empty()) {
         std::cerr << "film: at least one input is required\n";
@@ -750,6 +986,14 @@ int runFilm(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Exporta un único Gerber a SVG con sus sólidos y recorridos.
+ * @param args `file` y `-o out.svg`.
+ * @return 0 en éxito; 2 si falta la salida.
+ *
+ * @note Usa `gerber.bounds` como viewBox, por lo que los trazos que sobresalgan
+ *       del bounding box calculado por el parser quedarían recortados.
+ */
 int runSvg(const Args& args) {
     fc::GerberOptions gopt;
     gopt.appUnits = args.units;
@@ -763,6 +1007,27 @@ int runSvg(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Genera una grilla de puntos de cobre (thieving) y la exporta.
+ *
+ * Calcula los centros con `thievingPoints` sobre el bounding box del cobre y,
+ * si se pidió salida, escribe un Gerber mínimo con un único flash `D03` por
+ * punto usando la apertura `D10` de diámetro `--tool-dia`.
+ *
+ * @param args `file`, `--tool-dia`, `--spacing`, `--clearance`, `--margin`,
+ *             `--json` y `-o out.gbr`.
+ * @return 0 en éxito; 1 si no puede escribir la salida.
+ *
+ * @note Sin `-o` y sin `--json` sólo informa la cantidad de puntos.
+ * @note Los puntos se emiten con formato fijo `%FSLAX34Y34*%` (4 decimales) y
+ *       se redondean a 1/10000 mm con `std::llround`.
+ * @warning El encabezado declara siempre `%MOMM*%` y multiplica por 10000, sin
+ *          mirar `--units`: con `--units in` las coordenadas siguen escritas
+ *          como si fueran milímetros.
+ * @warning El área de siembra es exactamente `gerber.bounds`; el margen de
+ *          `ThievingOptions` se aplica hacia dentro, por lo que no se agregan
+ *          puntos fuera del cobre.
+ */
 int runThieving(const Args& args) {
     fc::GerberOptions gopt;
     gopt.appUnits = args.units;
@@ -801,6 +1066,21 @@ int runThieving(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Genera el relleno por contornos paralelos de una capa de cobre.
+ *
+ * Llama a `paintArea` y, si hay salida, arma un `PathJob`, ejecuta
+ * opcionalmente la optimización de orden y escribe el G-code.
+ *
+ * @param args `file`, `--tool-dia`, `--step-over`/`--superposition`, `--margin`,
+ *             `--preprocessor`, `--json` y `-o out.nc`.
+ * @return 0 en éxito; 1 si no puede escribir la salida.
+ *
+ * @note La impresión de estadísticas muestra `stepOver` como porcentaje.
+ * @warning La optimización de orden se invoca dos veces seguidas (bloque
+ *          duplicado en la implementación): el segundo recorrido no aporta
+ *          mejoras y cuesta O(n²) adicional sobre todos los recorridos.
+ */
 int runPaint(const Args& args) {
     fc::GerberOptions gopt;
     gopt.appUnits = args.units;
@@ -839,8 +1119,6 @@ int runPaint(const Args& args) {
         job.paths.emplace_back(ring.begin(), ring.end());
     }
     if (args.optimize) fc::optimizePathOrder(job);
-
-    if (args.optimize) fc::optimizePathOrder(job);
     const std::string code = fc::pathsGCode(job, args.gcode);
     std::ofstream out(args.output, std::ios::binary);
     if (!out) {
@@ -852,6 +1130,22 @@ int runPaint(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Calcula el despeje de cobre (NCC) y exporta su G-code.
+ *
+ * Construye el área de trabajo desde `--area` (guardada en `cutout.area`) si
+ * existe; si no, `clearCopper` la deriva del bounding box del cobre. Con `-o`
+ * convierte los recorridos a polilíneas, optimiza opcionalmente y escribe el
+ * programa.
+ *
+ * @param args Opciones de NCC, G-code y salida.
+ * @return 0 en éxito; 1 si no puede escribir la salida.
+ *
+ * @note `--strategy paint` delega en el relleno por contornos; `hatch` usa la
+ *       implementación de líneas paralelas.
+ * @note La superposición de FlatCAM se traduce a paso con
+ *       `--superposition`: `paso = (100 − superposición) / 100`.
+ */
 int runNcc(const Args& args) {
     fc::GerberOptions gopt;
     gopt.appUnits = args.units;
@@ -912,6 +1206,21 @@ int runNcc(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Calcula el corte de contorno con puentes y exporta su G-code.
+ *
+ * Llama a `cutoutGeometry` con las opciones de corte (herramienta, margen,
+ * interno/externo, puentes, área) y, si hay salida, escribe el programa con
+ * multipasada según `--depth-per-pass`.
+ *
+ * @param args Opciones de corte, G-code y salida.
+ * @return 0 en éxito; 1 si no puede escribir la salida.
+ *
+ * @note `--internal` invierte el lado del corte; el valor por defecto es
+ *       externo.
+ * @note El informe de texto incluye el tipo de corte elegido y la longitud
+ *       total de los tramos (sin contar los rápidos).
+ */
 int runCutout(const Args& args) {
     fc::GerberOptions gopt;
     gopt.appUnits = args.units;
@@ -967,6 +1276,25 @@ int runCutout(const Args& args) {
     return 0;
 }
 
+/**
+ * @brief Convierte un Excellon en un programa de taladrado.
+ *
+ * Verifica que la entrada sea Excellon (por extensión), la parsea, construye el
+ * `DrillJob` y valida el límite del TSP exacto cuando se pide `--tsp-exact`
+ * (18 taladros por herramienta como máximo). Luego optimiza el orden si
+ * corresponde y escribe el G-code en el archivo o en la salida estándar.
+ *
+ * @param args `file`, opciones de G-code, `--optimize`/`--tsp-exact` y `-o`.
+ * @return 0 en éxito; 1 si no hay taladros/ranuras o falla la escritura; 2 si
+ *         la extensión no es de Excellon o se supera el límite del TSP exacto.
+ *
+ * @note Sin `-o` (o con `-o -`) el programa se imprime por `stdout`, lo que
+ *       permite encadenarlo con otras herramientas.
+ * @note El mensaje final por `stderr` incluye herramientas, taladros y ranuras.
+ * @warning `--tsp-exact` sólo valida el límite; no fuerza un solver distinto,
+ *          porque `optimizeDrillOrder` ya usa Held-Karp hasta 18 puntos y
+ *          heurísticas por encima.
+ */
 int runGCode(const Args& args) {
     if (!isExcellonPath(args.file)) {
         std::cerr << "gcode: this milestone only converts Excellon drilling files "
@@ -1013,6 +1341,24 @@ int runGCode(const Args& args) {
 
 }  // namespace
 
+/**
+ * @brief Punto de entrada: interpreta los argumentos y despacha el subcomando.
+ *
+ * Envuelve `parseArgs` y el despacho en un `try/catch` que convierte cualquier
+ * excepción de la biblioteca estándar o del parser en un mensaje `error: ...`
+ * con código de salida 1.
+ *
+ * @param argc Cantidad de argumentos.
+ * @param argv Vector de argumentos.
+ * @return 0 en éxito; 1 si una excepción interrumpe la ejecución; 2 si la línea
+ *         de comandos es inválida o el subcomando es desconocido.
+ *
+ * @note El subcomando `tcl` se delega en `fc::runTclScript`, cuya
+ *       implementación depende de si el build encontró libtcl.
+ * @note Cada `runXxx` recibe la estructura completa de opciones; no hay
+ *       validación cruzada entre el subcomando y las banderas, de modo que
+ *       opciones irrelevantes se aceptan y se ignoran.
+ */
 int main(int argc, char** argv) {
     Args args;
     if (!parseArgs(argc, argv, args)) return usage();

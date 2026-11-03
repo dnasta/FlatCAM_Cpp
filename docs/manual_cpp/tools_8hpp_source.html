@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente include/flatcam/tools.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('tools_8hpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">tools.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="tools_8hpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file tools.hpp</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Utilidades CAM: distancia, herramienta óptima, taladros y reglas.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Reúne funciones auxiliares usadas por las herramientas &quot;extra&quot; de FlatCAM:</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * medición entre capas, cálculo del diámetro máximo de aislamiento, extracción</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * de taladros desde un Gerber, punch, edición de aperturas, marcas de esquina</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * y comprobación de reglas.</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="excellon_8hpp.html">flatcam/excellon.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="geometry_8hpp.html">flatcam/geometry.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;<a class="code" href="gerber_8hpp.html">flatcam/gerber.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;<a class="code" href="units_8hpp.html">flatcam/units.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacefc.html">fc</a> {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">// Small utilities shared by the &quot;extra&quot; CAM tools (distance, optimal tool,</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">// drill extraction, corner marks, punch, rules check).</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"></span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * @brief Resultado del cálculo de la herramienta óptima.</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00027" data-start="{" data-end="};">
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="structfc_1_1_optimal_tool.html">   27</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structfc_1_1_optimal_tool.html">OptimalTool</a> {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="structfc_1_1_optimal_tool.html#a095f3ebd64f00d7f203084156d41a041">   28</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_optimal_tool.html#a095f3ebd64f00d7f203084156d41a041">diameter</a> = 0.0; <span class="comment">///&lt; Mayor fresa que aún aísla el cobre.</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="structfc_1_1_optimal_tool.html#a201b0d6404dd88ea40ba5708829f272a">   29</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_optimal_tool.html#a201b0d6404dd88ea40ba5708829f272a">gap</a> = 0.0;      <span class="comment">///&lt; Separación que limita el diámetro.</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structfc_1_1_optimal_tool.html#ab08a252cb8d4109cd35329405d658f5d">   30</a></span>    <a class="code hl_struct" href="structfc_1_1_pt.html">Pt</a> <a class="code hl_variable" href="structfc_1_1_optimal_tool.html#ab08a252cb8d4109cd35329405d658f5d">pointA</a>;             <span class="comment">///&lt; Punto del primer elemento del par limitante.</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="structfc_1_1_optimal_tool.html#a0c32f196355f9cac2e5ad740695c7af6">   31</a></span>    <a class="code hl_struct" href="structfc_1_1_pt.html">Pt</a> <a class="code hl_variable" href="structfc_1_1_optimal_tool.html#a0c32f196355f9cac2e5ad740695c7af6">pointB</a>;             <span class="comment">///&lt; Punto del segundo elemento.</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="structfc_1_1_optimal_tool.html#a15ea89c27b0fc73c756ff7a4a32f2be0">   32</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structfc_1_1_optimal_tool.html#a15ea89c27b0fc73c756ff7a4a32f2be0">valid</a> = <span class="keyword">false</span>;    <span class="comment">///&lt; `true` si se encontró un límite.</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>};</div>
+</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment"></span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment"> * @brief Calcula la separación mínima cobre-cobre y la fresa máxima.</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"> * @param copper Geometría de cobre.</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment"> * @param maxDiameter Tope superior de búsqueda.</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment"> * @return Diámetro, separación y puntos limitantes.</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><a class="code hl_struct" href="structfc_1_1_optimal_tool.html">OptimalTool</a> <a class="code hl_function" href="namespacefc.html#a381eb3995917759527aaef8775f097dc">optimalIsolationDiameter</a>(<span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; copper, <span class="keywordtype">double</span> maxDiameter = 10.0);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"></span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> * @brief Lista los pares de separación menores que `maxDiameter`.</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> * @param copper Geometría de cobre.</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> * @param maxDiameter Separación máxima a listar.</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> * @param limit Cantidad máxima de pares.</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * @param minSeparation Separación mínima a considerar.</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * @return Pares ordenados de menor a mayor separación.</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>std::vector&lt;OptimalTool&gt; <a class="code hl_function" href="namespacefc.html#a92676f7daad16aedd3eba66628221ac7">optimalIsolationGaps</a>(<span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; copper, <span class="keywordtype">double</span> maxDiameter = 10.0,</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                                              std::size_t limit = 20,</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                                              <span class="keywordtype">double</span> minSeparation = 0.0);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"></span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * @brief Distancia mínima entre dos colecciones de geometría.</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * @param a Primera colección.</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * @param b Segunda colección.</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> * @param nearestA Si no es nulo, recibe el punto más cercano de `a`.</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"> * @param nearestB Si no es nulo, recibe el punto más cercano de `b`.</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"> * @return Distancia en mm.</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="keywordtype">double</span> <a class="code hl_function" href="namespacefc.html#a378e0e36ef2b069c766397a45dadde46">layersDistance</a>(<span class="keyword">const</span> std::vector&lt;Geom&gt;&amp; a, <span class="keyword">const</span> std::vector&lt;Geom&gt;&amp; b,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                      <a class="code hl_struct" href="structfc_1_1_pt.html">Pt</a>* nearestA = <span class="keyword">nullptr</span>, <a class="code hl_struct" href="structfc_1_1_pt.html">Pt</a>* nearestB = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment"></span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"> * @brief Extrae taladros circulares de un Gerber.</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment"> * Detecta flashes circulares y arma un `ExcellonResult` con una herramienta</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> * por diámetro distinto.</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> * @param gerber Gerber parseado.</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> * @param maxDiameter Diámetro máximo a considerar taladro.</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> * @param appUnits Unidad de salida.</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment"> * @param stepsPerCircle Segmentos por círculo.</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><a class="code hl_struct" href="structfc_1_1_excellon_result.html">ExcellonResult</a> <a class="code hl_function" href="namespacefc.html#a8c6b39e8499050c7a832f1f3f19c444d">extractDrills</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_gerber_result.html">GerberResult</a>&amp; gerber, <span class="keywordtype">double</span> maxDiameter = 3.0,</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                             <a class="code hl_enumeration" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00">Units</a> appUnits = <a class="code hl_enumvalue" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00a07f07b623b4a00b57dc150ff2e59cb92">Units::Mm</a>, <span class="keywordtype">int</span> stepsPerCircle = 32);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"></span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"> * @brief Resta los taladros de un Excellon al cobre de un Gerber.</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment"> * @param gerber Cobre original.</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"> * @param drills Taladros a restar.</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> * @param margin Holgura adicional alrededor del taladro.</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> * @return Cobre con los taladros despejados.</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><a class="code hl_class" href="classfc_1_1_geom.html">Geom</a> <a class="code hl_function" href="namespacefc.html#afb6f6c1199fac310f83f668ca3a75f5a">punchGerber</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_gerber_result.html">GerberResult</a>&amp; gerber, <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_excellon_result.html">ExcellonResult</a>&amp; drills,</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                 <span class="keywordtype">double</span> margin = 0.0);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"></span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * @brief Cambia el diámetro de una apertura circular en el texto Gerber.</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> * @param gerber Texto original.</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> * @param code Código de apertura (`D10`, `10`, etc.).</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * @param diameter Nuevo diámetro.</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> * @param decimals Decimales a escribir.</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> * @param changed Recibe la cantidad de reemplazos.</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment"> * @return Texto modificado.</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>std::string <a class="code hl_function" href="namespacefc.html#a361f7e94c425618a5fb20c134525d07f">editCircleAperture</a>(std::string gerber, <span class="keyword">const</span> std::string&amp; code, <span class="keywordtype">double</span> diameter,</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>                               <span class="keywordtype">int</span> decimals, <span class="keywordtype">int</span>* changed = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"></span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment"> * @brief Ajusta una apertura para que su dimensión mayor sea `size`.</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment"> * Rectángulos y obrounds conservan su relación de aspecto; polígonos y</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment"> * círculos usan el diámetro.</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment"> * @param gerber Texto original.</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment"> * @param code Código de apertura.</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment"> * @param size Nueva dimensión mayor.</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment"> * @param decimals Decimales.</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment"> * @param changed Recibe la cantidad de reemplazos.</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>std::string <a class="code hl_function" href="namespacefc.html#ae690955e1a92c5a2df5e3252fbaf3108">editApertureSize</a>(std::string gerber, <span class="keyword">const</span> std::string&amp; code, <span class="keywordtype">double</span> size,</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>                             <span class="keywordtype">int</span> decimals, <span class="keywordtype">int</span>* changed = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment"></span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment"> * @brief Genera marcas de esquina en L.</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment"> * @param bounds Caja de referencia.</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment"> * @param length Longitud de cada brazo.</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment"> * @param margin Separación al borde.</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment"> * @param outside `true` para dibujarlas por fuera.</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>std::vector&lt;Geom&gt; <a class="code hl_function" href="namespacefc.html#affdd014a6a1fb81d0f73ac02ce73b06a">cornerMarks</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_b_box.html">BBox</a>&amp; bounds, <span class="keywordtype">double</span> length = 3.0,</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>                              <span class="keywordtype">double</span> margin = 0.0, <span class="keywordtype">bool</span> outside = <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>}  <span class="comment">// namespace fc</span></div>
+<div class="ttc" id="aclassfc_1_1_geom_html"><div class="ttname"><a href="classfc_1_1_geom.html">fc::Geom</a></div><div class="ttdoc">Envoltorio inmutable y compartido de una geometría GEOS.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00115">geometry.hpp:115</a></div></div>
+<div class="ttc" id="aexcellon_8hpp_html"><div class="ttname"><a href="excellon_8hpp.html">excellon.hpp</a></div><div class="ttdoc">Parser de archivos Excellon (taladros y ranuras de PCB).</div></div>
+<div class="ttc" id="ageometry_8hpp_html"><div class="ttname"><a href="geometry_8hpp.html">geometry.hpp</a></div><div class="ttdoc">Núcleo geométrico inmutable sobre la API C de GEOS.</div></div>
+<div class="ttc" id="agerber_8hpp_html"><div class="ttname"><a href="gerber_8hpp.html">gerber.hpp</a></div><div class="ttdoc">Parser de Gerber RS-274X (capas de PCB).</div></div>
+<div class="ttc" id="anamespacefc_html"><div class="ttname"><a href="namespacefc.html">fc</a></div><div class="ttdef"><b>Definición</b> <a href="cutout_8hpp_source.html#l00016">cutout.hpp:16</a></div></div>
+<div class="ttc" id="anamespacefc_html_a361f7e94c425618a5fb20c134525d07f"><div class="ttname"><a href="namespacefc.html#a361f7e94c425618a5fb20c134525d07f">fc::editCircleAperture</a></div><div class="ttdeci">std::string editCircleAperture(std::string gerber, const std::string &amp;code, double diameter, int decimals, int *changed=nullptr)</div><div class="ttdoc">Cambia el diámetro de una apertura circular en el texto Gerber.</div><div class="ttdef"><b>Definición</b> <a href="tools_8cpp_source.html#l00330">tools.cpp:330</a></div></div>
+<div class="ttc" id="anamespacefc_html_a378e0e36ef2b069c766397a45dadde46"><div class="ttname"><a href="namespacefc.html#a378e0e36ef2b069c766397a45dadde46">fc::layersDistance</a></div><div class="ttdeci">double layersDistance(const std::vector&lt; Geom &gt; &amp;a, const std::vector&lt; Geom &gt; &amp;b, Pt *nearestA=nullptr, Pt *nearestB=nullptr)</div><div class="ttdoc">Distancia mínima entre dos colecciones de geometría.</div><div class="ttdef"><b>Definición</b> <a href="tools_8cpp_source.html#l00191">tools.cpp:191</a></div></div>
+<div class="ttc" id="anamespacefc_html_a381eb3995917759527aaef8775f097dc"><div class="ttname"><a href="namespacefc.html#a381eb3995917759527aaef8775f097dc">fc::optimalIsolationDiameter</a></div><div class="ttdeci">OptimalTool optimalIsolationDiameter(const Geom &amp;copper, double maxDiameter=10.0)</div><div class="ttdoc">Calcula la separación mínima cobre-cobre y la fresa máxima.</div><div class="ttdef"><b>Definición</b> <a href="tools_8cpp_source.html#l00056">tools.cpp:56</a></div></div>
+<div class="ttc" id="anamespacefc_html_a8c6b39e8499050c7a832f1f3f19c444d"><div class="ttname"><a href="namespacefc.html#a8c6b39e8499050c7a832f1f3f19c444d">fc::extractDrills</a></div><div class="ttdeci">ExcellonResult extractDrills(const GerberResult &amp;gerber, double maxDiameter=3.0, Units appUnits=Units::Mm, int stepsPerCircle=32)</div><div class="ttdoc">Extrae taladros circulares de un Gerber.</div><div class="ttdef"><b>Definición</b> <a href="tools_8cpp_source.html#l00220">tools.cpp:220</a></div></div>
+<div class="ttc" id="anamespacefc_html_a92676f7daad16aedd3eba66628221ac7"><div class="ttname"><a href="namespacefc.html#a92676f7daad16aedd3eba66628221ac7">fc::optimalIsolationGaps</a></div><div class="ttdeci">std::vector&lt; OptimalTool &gt; optimalIsolationGaps(const Geom &amp;copper, double maxDiameter=10.0, std::size_t limit=20, double minSeparation=0.0)</div><div class="ttdoc">Lista los pares de separación menores que maxDiameter.</div><div class="ttdef"><b>Definición</b> <a href="tools_8cpp_source.html#l00121">tools.cpp:121</a></div></div>
+<div class="ttc" id="anamespacefc_html_acb79184d1e00b1635d60b5596d70db00"><div class="ttname"><a href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00">fc::Units</a></div><div class="ttdeci">Units</div><div class="ttdoc">Unidad de trabajo de un archivo o de la aplicación.</div><div class="ttdef"><b>Definición</b> <a href="units_8hpp_source.html#l00017">units.hpp:17</a></div></div>
+<div class="ttc" id="anamespacefc_html_acb79184d1e00b1635d60b5596d70db00a07f07b623b4a00b57dc150ff2e59cb92"><div class="ttname"><a href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00a07f07b623b4a00b57dc150ff2e59cb92">fc::Units::Mm</a></div><div class="ttdeci">@ Mm</div><div class="ttdoc">Milímetros.</div><div class="ttdef"><b>Definición</b> <a href="units_8hpp_source.html#l00018">units.hpp:18</a></div></div>
+<div class="ttc" id="anamespacefc_html_ae690955e1a92c5a2df5e3252fbaf3108"><div class="ttname"><a href="namespacefc.html#ae690955e1a92c5a2df5e3252fbaf3108">fc::editApertureSize</a></div><div class="ttdeci">std::string editApertureSize(std::string gerber, const std::string &amp;code, double size, int decimals, int *changed=nullptr)</div><div class="ttdoc">Ajusta una apertura para que su dimensión mayor sea size.</div><div class="ttdef"><b>Definición</b> <a href="tools_8cpp_source.html#l00369">tools.cpp:369</a></div></div>
+<div class="ttc" id="anamespacefc_html_afb6f6c1199fac310f83f668ca3a75f5a"><div class="ttname"><a href="namespacefc.html#afb6f6c1199fac310f83f668ca3a75f5a">fc::punchGerber</a></div><div class="ttdeci">Geom punchGerber(const GerberResult &amp;gerber, const ExcellonResult &amp;drills, double margin=0.0)</div><div class="ttdoc">Resta los taladros de un Excellon al cobre de un Gerber.</div><div class="ttdef"><b>Definición</b> <a href="tools_8cpp_source.html#l00310">tools.cpp:310</a></div></div>
+<div class="ttc" id="anamespacefc_html_affdd014a6a1fb81d0f73ac02ce73b06a"><div class="ttname"><a href="namespacefc.html#affdd014a6a1fb81d0f73ac02ce73b06a">fc::cornerMarks</a></div><div class="ttdeci">std::vector&lt; Geom &gt; cornerMarks(const BBox &amp;bounds, double length=3.0, double margin=0.0, bool outside=false)</div><div class="ttdoc">Genera marcas de esquina en L.</div><div class="ttdef"><b>Definición</b> <a href="tools_8cpp_source.html#l00436">tools.cpp:436</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html"><div class="ttname"><a href="structfc_1_1_b_box.html">fc::BBox</a></div><div class="ttdoc">Caja envolvente alineada a los ejes.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00048">geometry.hpp:48</a></div></div>
+<div class="ttc" id="astructfc_1_1_excellon_result_html"><div class="ttname"><a href="structfc_1_1_excellon_result.html">fc::ExcellonResult</a></div><div class="ttdoc">Resultado completo de parsear un Excellon.</div><div class="ttdef"><b>Definición</b> <a href="excellon_8hpp_source.html#l00049">excellon.hpp:49</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html"><div class="ttname"><a href="structfc_1_1_gerber_result.html">fc::GerberResult</a></div><div class="ttdoc">Resultado completo de parsear un Gerber.</div><div class="ttdef"><b>Definición</b> <a href="gerber_8hpp_source.html#l00086">gerber.hpp:86</a></div></div>
+<div class="ttc" id="astructfc_1_1_optimal_tool_html"><div class="ttname"><a href="structfc_1_1_optimal_tool.html">fc::OptimalTool</a></div><div class="ttdoc">Resultado del cálculo de la herramienta óptima.</div><div class="ttdef"><b>Definición</b> <a href="#l00027">tools.hpp:27</a></div></div>
+<div class="ttc" id="astructfc_1_1_optimal_tool_html_a095f3ebd64f00d7f203084156d41a041"><div class="ttname"><a href="structfc_1_1_optimal_tool.html#a095f3ebd64f00d7f203084156d41a041">fc::OptimalTool::diameter</a></div><div class="ttdeci">double diameter</div><div class="ttdoc">Mayor fresa que aún aísla el cobre.</div><div class="ttdef"><b>Definición</b> <a href="#l00028">tools.hpp:28</a></div></div>
+<div class="ttc" id="astructfc_1_1_optimal_tool_html_a0c32f196355f9cac2e5ad740695c7af6"><div class="ttname"><a href="structfc_1_1_optimal_tool.html#a0c32f196355f9cac2e5ad740695c7af6">fc::OptimalTool::pointB</a></div><div class="ttdeci">Pt pointB</div><div class="ttdoc">Punto del segundo elemento.</div><div class="ttdef"><b>Definición</b> <a href="#l00031">tools.hpp:31</a></div></div>
+<div class="ttc" id="astructfc_1_1_optimal_tool_html_a15ea89c27b0fc73c756ff7a4a32f2be0"><div class="ttname"><a href="structfc_1_1_optimal_tool.html#a15ea89c27b0fc73c756ff7a4a32f2be0">fc::OptimalTool::valid</a></div><div class="ttdeci">bool valid</div><div class="ttdoc">true si se encontró un límite.</div><div class="ttdef"><b>Definición</b> <a href="#l00032">tools.hpp:32</a></div></div>
+<div class="ttc" id="astructfc_1_1_optimal_tool_html_a201b0d6404dd88ea40ba5708829f272a"><div class="ttname"><a href="structfc_1_1_optimal_tool.html#a201b0d6404dd88ea40ba5708829f272a">fc::OptimalTool::gap</a></div><div class="ttdeci">double gap</div><div class="ttdoc">Separación que limita el diámetro.</div><div class="ttdef"><b>Definición</b> <a href="#l00029">tools.hpp:29</a></div></div>
+<div class="ttc" id="astructfc_1_1_optimal_tool_html_ab08a252cb8d4109cd35329405d658f5d"><div class="ttname"><a href="structfc_1_1_optimal_tool.html#ab08a252cb8d4109cd35329405d658f5d">fc::OptimalTool::pointA</a></div><div class="ttdeci">Pt pointA</div><div class="ttdoc">Punto del primer elemento del par limitante.</div><div class="ttdef"><b>Definición</b> <a href="#l00030">tools.hpp:30</a></div></div>
+<div class="ttc" id="astructfc_1_1_pt_html"><div class="ttname"><a href="structfc_1_1_pt.html">fc::Pt</a></div><div class="ttdoc">Punto bidimensional en milímetros.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00034">geometry.hpp:34</a></div></div>
+<div class="ttc" id="aunits_8hpp_html"><div class="ttname"><a href="units_8hpp.html">units.hpp</a></div><div class="ttdoc">Unidades, conversiones y lectura de coordenadas Gerber.</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a href="dir_a1a815e8788d98990c3f3cc2cf9418f5.html">flatcam</a></li><li class="navelem"><a href="tools_8hpp.html">tools.hpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

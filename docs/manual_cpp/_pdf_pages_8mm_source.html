@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente src/gui/PdfPages.mm</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('_pdf_pages_8mm_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">PdfPages.mm</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_pdf_pages_8mm.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file PdfPages.mm</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Rasterizado multipágina de PDF con PDFKit (macOS).</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Renderiza cada página del documento con Core Graphics sobre un búfer</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * `QImage` ARGB32 premultiplicado, aplicando la escala DPI/72 y una</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * transformación que invierte el eje Y para pasar del sistema de coordenadas de</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * PDF (origen abajo) al de Qt (origen arriba). Opcionalmente devuelve el tamaño</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> * de cada página en milímetros, que la importación usa para escalar el</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment"> * resultado al tamaño real en la placa. En otras plataformas la función es un</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment"> * stub que devuelve un vector vacío.</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="_pdf_pages_8h.html">PdfPages.h</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#ifdef __APPLE__</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#import &lt;PDFKit/PDFKit.h&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#import &lt;AppKit/AppKit.h&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;CoreGraphics/CoreGraphics.h&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"></span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * @brief Renderiza todas las páginas de un PDF a imágenes Qt.</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * Abre el documento con `PDFDocument`, calcula la escala `dpi/72` y, por cada</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * página, deriva el tamaño en píxeles del `MediaBox`, crea la imagen, obtiene un</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * `CGContext` sobre sus bits (`kCGImageAlphaPremultipliedFirst` con orden de</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * bytes little-endian, equivalente a `QImage::Format_ARGB32_Premultiplied`),</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> * pinta el fondo blanco, aplica `scale·translate(0, alto)·scale(1,-1)` y dibuja</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> * la página con `drawWithBox:`. Al finalizar libera contexto y espacio de color.</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"> * @param path Ruta del archivo PDF.</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> * @param dpi Resolución de rasterizado; 200 ppp es el valor usado por la</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> *        importación.</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> * @param pageSizesMm Si no es nulo, recibe el tamaño de cada página en mm</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment"> *        (`puntos · 25.4 / 72`) en el mismo orden que las imágenes.</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment"> * @return Imágenes de las páginas en orden; vector vacío si el documento no se</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment"> *         puede abrir o no tiene páginas.</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"> * @note El tamaño de píxeles se fuerza a un mínimo de 1 para no crear imágenes</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment"> *       inválidas con páginas de área cero.</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment"> * @note Usa `CropBox` (con fallback lógico a `MediaBox`) y valida `dpi &gt; 0`.</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment"> *       Bajo MRC el `PDFDocument` se libera explícitamente al terminar.</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>QVector&lt;QImage&gt; <a class="code hl_function" href="_pdf_pages_8h.html#a2e320d4eacdf8ae88991b2568a194c25">renderPdfPages</a>(<span class="keyword">const</span> QString&amp; path, <span class="keywordtype">int</span> dpi, QVector&lt;QSizeF&gt;* pageSizesMm) {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    QVector&lt;QImage&gt; pages;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordflow">if</span> (dpi &lt;= 0) <span class="keywordflow">return</span> pages;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    @autoreleasepool {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        NSString* nsPath = [NSString stringWithUTF8String:path.toUtf8().constData()];</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        NSURL* url = [NSURL fileURLWithPath:nsPath];</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        PDFDocument* document = [[PDFDocument alloc] initWithURL:url];</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keywordflow">if</span> (!document) <span class="keywordflow">return</span> pages;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keyword">const</span> <span class="keywordtype">int</span> count = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>([document pageCount]);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> scale = dpi / 72.0;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; count; ++i) {</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            PDFPage* page = [document pageAtIndex:i];</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>            <span class="keywordflow">if</span> (!page) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            NSRect box = [page boundsForBox:kPDFDisplayBoxCropBox];</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <span class="keywordflow">if</span> (box.size.width &lt;= 0.0 || box.size.height &lt;= 0.0)</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                box = [page boundsForBox:kPDFDisplayBoxMediaBox];</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            <span class="keyword">const</span> <span class="keywordtype">int</span> width = qMax(1, <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(std::lround(box.size.width * scale)));</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>            <span class="keyword">const</span> <span class="keywordtype">int</span> height = qMax(1, <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(std::lround(box.size.height * scale)));</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>            QImage image(width, height, QImage::Format_ARGB32_Premultiplied);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            image.fill(Qt::white);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>            CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>            CGContextRef context = CGBitmapContextCreate(</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                image.bits(), width, height, 8, image.bytesPerLine(), colorSpace,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>            <span class="keywordflow">if</span> (!context) {</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                CGColorSpaceRelease(colorSpace);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            }</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>            CGContextSetRGBFillColor(context, 1, 1, 1, 1);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            CGContextFillRect(context, CGRectMake(0, 0, width, height));</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            CGContextScaleCTM(context, scale, scale);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>            CGContextTranslateCTM(context, 0, box.size.height);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            CGContextScaleCTM(context, 1, -1);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            [page drawWithBox:kPDFDisplayBoxCropBox toContext:context];</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>            CGContextRelease(context);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            CGColorSpaceRelease(colorSpace);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            pages.push_back(image);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>            <span class="keywordflow">if</span> (pageSizesMm)</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                pageSizesMm-&gt;push_back(QSizeF(box.size.width * 25.4 / 72.0,</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                                              box.size.height * 25.4 / 72.0));</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        }</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        [document release];</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    }</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="keywordflow">return</span> pages;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>}</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="preprocessor">#else</span><span class="comment"></span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> * @brief Implementación vacía para plataformas sin PDFKit.</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * @return Siempre un vector vacío, de modo que el llamador caiga al método</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> *         alternativo de rasterizado (por ejemplo `sips` o un importador</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> *         externo).</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * @note Mantiene la firma de PdfPages.h para que la GUI compile igual en</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> *       Windows y Linux.</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="_pdf_pages_8h.html#a2e320d4eacdf8ae88991b2568a194c25">   97</a></span>QVector&lt;QImage&gt; <a class="code hl_function" href="_pdf_pages_8h.html#a2e320d4eacdf8ae88991b2568a194c25">renderPdfPages</a>(<span class="keyword">const</span> QString&amp;, <span class="keywordtype">int</span>, QVector&lt;QSizeF&gt;*) { <span class="keywordflow">return</span> {}; }</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="a_pdf_pages_8h_html"><div class="ttname"><a href="_pdf_pages_8h.html">PdfPages.h</a></div><div class="ttdoc">Rasterizado multipágina de PDF con PDFKit (macOS).</div></div>
+<div class="ttc" id="a_pdf_pages_8h_html_a2e320d4eacdf8ae88991b2568a194c25"><div class="ttname"><a href="_pdf_pages_8h.html#a2e320d4eacdf8ae88991b2568a194c25">renderPdfPages</a></div><div class="ttdeci">QVector&lt; QImage &gt; renderPdfPages(const QString &amp;path, int dpi, QVector&lt; QSizeF &gt; *pageSizesMm=nullptr)</div><div class="ttdoc">Renderiza todas las páginas de un PDF a imágenes.</div><div class="ttdef"><b>Definición</b> <a href="#l00097">PdfPages.mm:97</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_99d0482cf009f9d97a0877749b817f19.html">gui</a></li><li class="navelem"><a href="_pdf_pages_8mm.html">PdfPages.mm</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

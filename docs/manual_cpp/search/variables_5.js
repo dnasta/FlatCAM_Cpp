@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['feeddecimals_0',['feedDecimals',['../structfc_1_1_g_code_options.html#a3bf86965069d8cfc0a4aeadb87641927',1,'fc::GCodeOptions']]],
+  ['feedxy_1',['feedXY',['../structfc_1_1_g_code_options.html#a59efb43280627dc32dbb6817df5cdff9',1,'fc::GCodeOptions::feedXY'],['../structfc_1_1_drill_tool.html#a5c7e23601edef30fcd4a4834573ad7a0',1,'fc::DrillTool::feedXY']]],
+  ['feedz_2',['feedZ',['../structfc_1_1_g_code_options.html#a9758c511a269e831f6a746f0a11b3479',1,'fc::GCodeOptions::feedZ'],['../structfc_1_1_drill_tool.html#a17e3c9397700073ba9e8af4fbddaac0e',1,'fc::DrillTool::feedZ']]],
+  ['filesgroup_5f_3',['filesGroup_',['../class_main_window.html#a8028ea99fb0772dc490e1da9589648d2',1,'MainWindow']]],
+  ['fileunits_4',['fileUnits',['../structfc_1_1_excellon_result.html#afd46897bafc87c5c2f8bdbe0f1881a7e',1,'fc::ExcellonResult::fileUnits'],['../structfc_1_1_gerber_result.html#aab25d3dcaaaa91a4abc5ca6100bfb583',1,'fc::GerberResult::fileUnits']]],
+  ['filled_5',['filled',['../struct_canvas_1_1_layer.html#af5148c5407cb7b7c8e12c9fa0e40b320',1,'Canvas::Layer']]],
+  ['flashes_6',['flashes',['../structfc_1_1_gerber_result.html#a5360a6f6ca9473ccba6df0e35c4d175e',1,'fc::GerberResult']]],
+  ['flavor_7',['flavor',['../structfc_1_1_g_code_options.html#a455441d8804debff7394b0d981cdda41',1,'fc::GCodeOptions']]],
+  ['follow_8',['follow',['../struct_canvas_1_1_layer_snapshot.html#abdcde85aa14fcacb67ed0fa30546172c',1,'Canvas::LayerSnapshot::follow'],['../struct_canvas_1_1_layer.html#a751025a6782497809fc1e2b2bff55e20',1,'Canvas::Layer::follow']]],
+  ['followcolor_5f_9',['followColor_',['../class_canvas.html#a3a041d0a16a7d0a039250b79dac588bb',1,'Canvas::followColor_'],['../class_main_window.html#aab002e81e5d5fcccba5aa6f81db4f072',1,'MainWindow::followColor_']]],
+  ['follows_10',['follows',['../structfc_1_1_gerber_result.html#aff1cae0108bbada993ca4c05ac502738',1,'fc::GerberResult::follows'],['../structfc_1_1_project_object.html#a3b4f32390c06b6920959b7ed05594c5f',1,'fc::ProjectObject::follows'],['../structfc_1_1_project_object_summary.html#a11498d0ca1fd1010a48e2a906d4b3183',1,'fc::ProjectObjectSummary::follows'],['../structfc_1_1_all_objects_sax.html#a7a288ab987f92349d1db6a39902796ae',1,'fc::AllObjectsSax::follows'],['../struct_canvas_1_1_layer_snapshot.html#a10a59ef437d644d8ecda5bf547145baf',1,'Canvas::LayerSnapshot::follows'],['../struct_canvas_1_1_layer.html#a26d7e34b44ea97eec1d97ab0465369a1',1,'Canvas::Layer::follows']]],
+  ['formatlowerin_11',['formatLowerIn',['../structfc_1_1_excellon_result.html#abff98f8b28d63b8b4f8dc5b0b75e62b9',1,'fc::ExcellonResult']]],
+  ['formatlowermm_12',['formatLowerMm',['../structfc_1_1_excellon_result.html#a1289b540ff1a34a23ab33dd214c42c61',1,'fc::ExcellonResult']]],
+  ['formatupperin_13',['formatUpperIn',['../structfc_1_1_excellon_result.html#a892a761185dce1397d0acea121996fe3',1,'fc::ExcellonResult']]],
+  ['formatuppermm_14',['formatUpperMm',['../structfc_1_1_excellon_result.html#a084ce3048f09902285ec1f1d4fd9b62b',1,'fc::ExcellonResult']]],
+  ['fracdigits_15',['fracDigits',['../structfc_1_1_gerber_result.html#a8b4fdb77f8cf45f4d983f4ed3a75f754',1,'fc::GerberResult']]]
+];

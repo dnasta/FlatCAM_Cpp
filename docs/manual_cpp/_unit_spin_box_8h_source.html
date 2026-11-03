@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente src/gui/UnitSpinBox.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('_unit_spin_box_8h_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">UnitSpinBox.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_unit_spin_box_8h.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file UnitSpinBox.h</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief QDoubleSpinBox que guarda longitudes en mm y las muestra en mm/in.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;QDoubleSpinBox&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;QString&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"></span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment"> * @brief Campo numérico con unidad de longitud conmutable.</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment"> * Internamente guarda el valor en milímetros. Cuando el sufijo es exactamente</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment"> * `&quot; mm&quot;` muestra el valor en la unidad activa (mm o pulgadas) y convierte los</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment"> * límites, el paso y los decimales. Ángulos, RPM, avances y porcentajes se</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> * comportan como un `QDoubleSpinBox` normal.</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * Un registro estático permite actualizar todos los campos abiertos al cambiar</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * de unidad sin reiniciar la aplicación.</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00024" data-start="{" data-end="};">
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html">   24</a></span><span class="keyword">class </span><a class="code hl_function" href="class_unit_spin_box.html#a84d10aa7460804c283da9fb72194a057">UnitSpinBox</a> : <span class="keyword">public</span> QDoubleSpinBox {</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">public</span>:<span class="comment"></span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">    /// @brief Crea el campo y lo registra para el cambio de unidad.</span></div>
+<div class="foldopen" id="foldopen00027" data-start="{" data-end="}">
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a84d10aa7460804c283da9fb72194a057">   27</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="class_unit_spin_box.html#a84d10aa7460804c283da9fb72194a057">UnitSpinBox</a>(QWidget* parent = <span class="keyword">nullptr</span>) : QDoubleSpinBox(parent) {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <a class="code hl_function" href="class_unit_spin_box.html#aae73d9deef8fbadc4b07d842a28ed4d6">instances</a>().push_back(<span class="keyword">this</span>);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <a class="code hl_function" href="class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded">applyConversion</a>();</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    }</div>
+</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"></span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">    /// @brief Quita el campo del registro.</span></div>
+<div class="foldopen" id="foldopen00033" data-start="{" data-end="}">
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a6b3739c4e39177c9c3c36e74be1aefb2">   33</a></span>    <a class="code hl_function" href="class_unit_spin_box.html#a6b3739c4e39177c9c3c36e74be1aefb2">~UnitSpinBox</a>()<span class="keyword"> override </span>{</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="keyword">auto</span>&amp; list = <a class="code hl_function" href="class_unit_spin_box.html#aae73d9deef8fbadc4b07d842a28ed4d6">instances</a>();</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        list.erase(std::remove(list.begin(), list.end(), <span class="keyword">this</span>), list.end());</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    }</div>
+</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"></span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment">    /// @brief Fija el rango en milímetros.</span></div>
+<div class="foldopen" id="foldopen00039" data-start="{" data-end="}">
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a36241af247867fd2e8df2db43c556930">   39</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_unit_spin_box.html#a36241af247867fd2e8df2db43c556930">setRange</a>(<span class="keywordtype">double</span> minimum, <span class="keywordtype">double</span> maximum) {</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <a class="code hl_variable" href="class_unit_spin_box.html#a5280d6bd4af35b7d760154ca8c1385c2">rawMin_</a> = minimum;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <a class="code hl_variable" href="class_unit_spin_box.html#a5620bdd59b17a37fdedaf50f6b12137b">rawMax_</a> = maximum;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <a class="code hl_function" href="class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded">applyConversion</a>();</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    }</div>
+</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"></span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">    /// @brief Fija el valor en milímetros.</span></div>
+<div class="foldopen" id="foldopen00046" data-start="{" data-end="}">
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a4c369b7f7c3753a89a2cd9ac6df1cc65">   46</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_unit_spin_box.html#a4c369b7f7c3753a89a2cd9ac6df1cc65">setValue</a>(<span class="keywordtype">double</span> <a class="code hl_function" href="class_unit_spin_box.html#aed1e76da29da302738059263c27284ce">value</a>) {</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <a class="code hl_variable" href="class_unit_spin_box.html#a92c60e67a9fca34e5bc2a8b3c99d7f6f">rawValue_</a> = <a class="code hl_function" href="class_unit_spin_box.html#aed1e76da29da302738059263c27284ce">value</a>;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <a class="code hl_function" href="class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded">applyConversion</a>();</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    }</div>
+</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"></span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment">    /// @return Valor en milímetros (aunque se muestre en pulgadas).</span></div>
+<div class="foldopen" id="foldopen00052" data-start="{" data-end="}">
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#aed1e76da29da302738059263c27284ce">   52</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="class_unit_spin_box.html#aed1e76da29da302738059263c27284ce">value</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="class_unit_spin_box.html#ab877bc4f815150020bb487ef1a6ec237">length_</a> ? <a class="code hl_variable" href="class_unit_spin_box.html#a92c60e67a9fca34e5bc2a8b3c99d7f6f">rawValue_</a> : QDoubleSpinBox::value();</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    }</div>
+</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"></span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment">    /// @brief Fija el incremento en milímetros.</span></div>
+<div class="foldopen" id="foldopen00057" data-start="{" data-end="}">
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a90ceb18a9a19082d2e93cca1d1d4153c">   57</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_unit_spin_box.html#a90ceb18a9a19082d2e93cca1d1d4153c">setSingleStep</a>(<span class="keywordtype">double</span> step) {</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <a class="code hl_variable" href="class_unit_spin_box.html#a59e3ab71413923feb2470fdb078e88d3">rawStep_</a> = step;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <a class="code hl_function" href="class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded">applyConversion</a>();</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    }</div>
+</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"></span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment">    /// @brief Fija los decimales en milímetros.</span></div>
+<div class="foldopen" id="foldopen00063" data-start="{" data-end="}">
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#aba11b75abd1e8312f268a882ea5fae0a">   63</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_unit_spin_box.html#aba11b75abd1e8312f268a882ea5fae0a">setDecimals</a>(<span class="keywordtype">int</span> decimals) {</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <a class="code hl_variable" href="class_unit_spin_box.html#a434d101b1d8d2853dbe7bb429827ef18">rawDecimals_</a> = decimals;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <a class="code hl_function" href="class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded">applyConversion</a>();</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    }</div>
+</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"></span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">    /// @brief Define el sufijo; `&quot; mm&quot;` activa la conversión.</span></div>
+<div class="foldopen" id="foldopen00069" data-start="{" data-end="}">
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a2913ef2017ec11806b4467453c90fc13">   69</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_unit_spin_box.html#a2913ef2017ec11806b4467453c90fc13">setSuffix</a>(<span class="keyword">const</span> QString&amp; suffix) {</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <a class="code hl_variable" href="class_unit_spin_box.html#ab7fa55aab522dffa4372505189667a30">rawSuffix_</a> = suffix;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <a class="code hl_variable" href="class_unit_spin_box.html#ab877bc4f815150020bb487ef1a6ec237">length_</a> = suffix.trimmed().compare(<span class="stringliteral">&quot;mm&quot;</span>, Qt::CaseInsensitive) == 0;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <a class="code hl_function" href="class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded">applyConversion</a>();</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    }</div>
+</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"></span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">    /// @brief Cambia la unidad de todos los campos registrados.</span></div>
+<div class="foldopen" id="foldopen00076" data-start="{" data-end="}">
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#aedf450d74a26f50b154baba8a9007492">   76</a></span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_unit_spin_box.html#aedf450d74a26f50b154baba8a9007492">setDisplayInch</a>(<span class="keywordtype">bool</span> inch) {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <a class="code hl_variable" href="class_unit_spin_box.html#a33ecaa2f4602a44b5f0313671da52777">displayInch_</a> = inch;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <span class="keywordflow">for</span> (<a class="code hl_function" href="class_unit_spin_box.html#a84d10aa7460804c283da9fb72194a057">UnitSpinBox</a>* spin : <a class="code hl_function" href="class_unit_spin_box.html#aae73d9deef8fbadc4b07d842a28ed4d6">instances</a>()) spin-&gt;applyConversion();</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    }<span class="comment"></span></div>
+</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment">    /// @return `true` si la unidad activa es pulgadas.</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#ac17899a5e76f401654411e3f7d604404">   81</a></span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="class_unit_spin_box.html#ac17899a5e76f401654411e3f7d604404">displayInch</a>() { <span class="keywordflow">return</span> <a class="code hl_variable" href="class_unit_spin_box.html#a33ecaa2f4602a44b5f0313671da52777">displayInch_</a>; }</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="keyword">private</span>:<span class="comment"></span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">    /// Lista de campos vivos para actualizar la unidad en caliente.</span></div>
+<div class="foldopen" id="foldopen00085" data-start="{" data-end="}">
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#aae73d9deef8fbadc4b07d842a28ed4d6">   85</a></span>    <span class="keyword">static</span> std::vector&lt;UnitSpinBox*&gt;&amp; <a class="code hl_function" href="class_unit_spin_box.html#aae73d9deef8fbadc4b07d842a28ed4d6">instances</a>() {</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keyword">static</span> std::vector&lt;UnitSpinBox*&gt; list;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordflow">return</span> list;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    }</div>
+</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"></span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">    /// Aplica la unidad activa a los valores crudos en mm.</span></div>
+<div class="foldopen" id="foldopen00091" data-start="{" data-end="}">
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded">   91</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded">applyConversion</a>() {</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        <span class="keywordflow">if</span> (!<a class="code hl_variable" href="class_unit_spin_box.html#ab877bc4f815150020bb487ef1a6ec237">length_</a>) {</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>            QDoubleSpinBox::setDecimals(<a class="code hl_variable" href="class_unit_spin_box.html#a434d101b1d8d2853dbe7bb429827ef18">rawDecimals_</a>);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>            QDoubleSpinBox::setRange(<a class="code hl_variable" href="class_unit_spin_box.html#a5280d6bd4af35b7d760154ca8c1385c2">rawMin_</a>, <a class="code hl_variable" href="class_unit_spin_box.html#a5620bdd59b17a37fdedaf50f6b12137b">rawMax_</a>);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>            QDoubleSpinBox::setSingleStep(<a class="code hl_variable" href="class_unit_spin_box.html#a59e3ab71413923feb2470fdb078e88d3">rawStep_</a>);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            QDoubleSpinBox::setValue(<a class="code hl_variable" href="class_unit_spin_box.html#a92c60e67a9fca34e5bc2a8b3c99d7f6f">rawValue_</a>);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            QDoubleSpinBox::setSuffix(<a class="code hl_variable" href="class_unit_spin_box.html#ab7fa55aab522dffa4372505189667a30">rawSuffix_</a>);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        }</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> factor = <a class="code hl_variable" href="class_unit_spin_box.html#a33ecaa2f4602a44b5f0313671da52777">displayInch_</a> ? 25.4 : 1.0;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        QDoubleSpinBox::setDecimals(<a class="code hl_variable" href="class_unit_spin_box.html#a33ecaa2f4602a44b5f0313671da52777">displayInch_</a> ? <a class="code hl_variable" href="class_unit_spin_box.html#a434d101b1d8d2853dbe7bb429827ef18">rawDecimals_</a> + 4 : <a class="code hl_variable" href="class_unit_spin_box.html#a434d101b1d8d2853dbe7bb429827ef18">rawDecimals_</a>);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        QDoubleSpinBox::setRange(<a class="code hl_variable" href="class_unit_spin_box.html#a5280d6bd4af35b7d760154ca8c1385c2">rawMin_</a> / factor, <a class="code hl_variable" href="class_unit_spin_box.html#a5620bdd59b17a37fdedaf50f6b12137b">rawMax_</a> / factor);</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        QDoubleSpinBox::setSingleStep(<a class="code hl_variable" href="class_unit_spin_box.html#a59e3ab71413923feb2470fdb078e88d3">rawStep_</a> / factor);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        QDoubleSpinBox::setValue(<a class="code hl_variable" href="class_unit_spin_box.html#a92c60e67a9fca34e5bc2a8b3c99d7f6f">rawValue_</a> / factor);</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        QDoubleSpinBox::setSuffix(<a class="code hl_variable" href="class_unit_spin_box.html#a33ecaa2f4602a44b5f0313671da52777">displayInch_</a> ? <span class="stringliteral">&quot; in&quot;</span> : <span class="stringliteral">&quot; mm&quot;</span>);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    }</div>
+</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a5280d6bd4af35b7d760154ca8c1385c2">  108</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_unit_spin_box.html#a5280d6bd4af35b7d760154ca8c1385c2">rawMin_</a> = 0.0;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a5620bdd59b17a37fdedaf50f6b12137b">  109</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_unit_spin_box.html#a5620bdd59b17a37fdedaf50f6b12137b">rawMax_</a> = 99.99;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a92c60e67a9fca34e5bc2a8b3c99d7f6f">  110</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_unit_spin_box.html#a92c60e67a9fca34e5bc2a8b3c99d7f6f">rawValue_</a> = 0.0;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a59e3ab71413923feb2470fdb078e88d3">  111</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_unit_spin_box.html#a59e3ab71413923feb2470fdb078e88d3">rawStep_</a> = 1.0;</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a434d101b1d8d2853dbe7bb429827ef18">  112</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="class_unit_spin_box.html#a434d101b1d8d2853dbe7bb429827ef18">rawDecimals_</a> = 2;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#ab7fa55aab522dffa4372505189667a30">  113</a></span>    QString <a class="code hl_variable" href="class_unit_spin_box.html#ab7fa55aab522dffa4372505189667a30">rawSuffix_</a>;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#ab877bc4f815150020bb487ef1a6ec237">  114</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="class_unit_spin_box.html#ab877bc4f815150020bb487ef1a6ec237">length_</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno"><a class="line" href="class_unit_spin_box.html#a33ecaa2f4602a44b5f0313671da52777">  115</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code hl_variable" href="class_unit_spin_box.html#a33ecaa2f4602a44b5f0313671da52777">displayInch_</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>};</div>
+</div>
+<div class="ttc" id="aclass_unit_spin_box_html_a0e601e38eedaab5fccbe16b088270ded"><div class="ttname"><a href="class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded">UnitSpinBox::applyConversion</a></div><div class="ttdeci">void applyConversion()</div><div class="ttdoc">Aplica la unidad activa a los valores crudos en mm.</div><div class="ttdef"><b>Definición</b> <a href="#l00091">UnitSpinBox.h:91</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a2913ef2017ec11806b4467453c90fc13"><div class="ttname"><a href="class_unit_spin_box.html#a2913ef2017ec11806b4467453c90fc13">UnitSpinBox::setSuffix</a></div><div class="ttdeci">void setSuffix(const QString &amp;suffix)</div><div class="ttdoc">Define el sufijo; &quot; mm&quot; activa la conversión.</div><div class="ttdef"><b>Definición</b> <a href="#l00069">UnitSpinBox.h:69</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a33ecaa2f4602a44b5f0313671da52777"><div class="ttname"><a href="class_unit_spin_box.html#a33ecaa2f4602a44b5f0313671da52777">UnitSpinBox::displayInch_</a></div><div class="ttdeci">static bool displayInch_</div><div class="ttdef"><b>Definición</b> <a href="#l00115">UnitSpinBox.h:115</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a36241af247867fd2e8df2db43c556930"><div class="ttname"><a href="class_unit_spin_box.html#a36241af247867fd2e8df2db43c556930">UnitSpinBox::setRange</a></div><div class="ttdeci">void setRange(double minimum, double maximum)</div><div class="ttdoc">Fija el rango en milímetros.</div><div class="ttdef"><b>Definición</b> <a href="#l00039">UnitSpinBox.h:39</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a434d101b1d8d2853dbe7bb429827ef18"><div class="ttname"><a href="class_unit_spin_box.html#a434d101b1d8d2853dbe7bb429827ef18">UnitSpinBox::rawDecimals_</a></div><div class="ttdeci">int rawDecimals_</div><div class="ttdef"><b>Definición</b> <a href="#l00112">UnitSpinBox.h:112</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a4c369b7f7c3753a89a2cd9ac6df1cc65"><div class="ttname"><a href="class_unit_spin_box.html#a4c369b7f7c3753a89a2cd9ac6df1cc65">UnitSpinBox::setValue</a></div><div class="ttdeci">void setValue(double value)</div><div class="ttdoc">Fija el valor en milímetros.</div><div class="ttdef"><b>Definición</b> <a href="#l00046">UnitSpinBox.h:46</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a5280d6bd4af35b7d760154ca8c1385c2"><div class="ttname"><a href="class_unit_spin_box.html#a5280d6bd4af35b7d760154ca8c1385c2">UnitSpinBox::rawMin_</a></div><div class="ttdeci">double rawMin_</div><div class="ttdef"><b>Definición</b> <a href="#l00108">UnitSpinBox.h:108</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a5620bdd59b17a37fdedaf50f6b12137b"><div class="ttname"><a href="class_unit_spin_box.html#a5620bdd59b17a37fdedaf50f6b12137b">UnitSpinBox::rawMax_</a></div><div class="ttdeci">double rawMax_</div><div class="ttdef"><b>Definición</b> <a href="#l00109">UnitSpinBox.h:109</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a59e3ab71413923feb2470fdb078e88d3"><div class="ttname"><a href="class_unit_spin_box.html#a59e3ab71413923feb2470fdb078e88d3">UnitSpinBox::rawStep_</a></div><div class="ttdeci">double rawStep_</div><div class="ttdef"><b>Definición</b> <a href="#l00111">UnitSpinBox.h:111</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a6b3739c4e39177c9c3c36e74be1aefb2"><div class="ttname"><a href="class_unit_spin_box.html#a6b3739c4e39177c9c3c36e74be1aefb2">UnitSpinBox::~UnitSpinBox</a></div><div class="ttdeci">~UnitSpinBox() override</div><div class="ttdoc">Quita el campo del registro.</div><div class="ttdef"><b>Definición</b> <a href="#l00033">UnitSpinBox.h:33</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a84d10aa7460804c283da9fb72194a057"><div class="ttname"><a href="class_unit_spin_box.html#a84d10aa7460804c283da9fb72194a057">UnitSpinBox::UnitSpinBox</a></div><div class="ttdeci">UnitSpinBox(QWidget *parent=nullptr)</div><div class="ttdoc">Crea el campo y lo registra para el cambio de unidad.</div><div class="ttdef"><b>Definición</b> <a href="#l00027">UnitSpinBox.h:27</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a90ceb18a9a19082d2e93cca1d1d4153c"><div class="ttname"><a href="class_unit_spin_box.html#a90ceb18a9a19082d2e93cca1d1d4153c">UnitSpinBox::setSingleStep</a></div><div class="ttdeci">void setSingleStep(double step)</div><div class="ttdoc">Fija el incremento en milímetros.</div><div class="ttdef"><b>Definición</b> <a href="#l00057">UnitSpinBox.h:57</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_a92c60e67a9fca34e5bc2a8b3c99d7f6f"><div class="ttname"><a href="class_unit_spin_box.html#a92c60e67a9fca34e5bc2a8b3c99d7f6f">UnitSpinBox::rawValue_</a></div><div class="ttdeci">double rawValue_</div><div class="ttdef"><b>Definición</b> <a href="#l00110">UnitSpinBox.h:110</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_aae73d9deef8fbadc4b07d842a28ed4d6"><div class="ttname"><a href="class_unit_spin_box.html#aae73d9deef8fbadc4b07d842a28ed4d6">UnitSpinBox::instances</a></div><div class="ttdeci">static std::vector&lt; UnitSpinBox * &gt; &amp; instances()</div><div class="ttdoc">Lista de campos vivos para actualizar la unidad en caliente.</div><div class="ttdef"><b>Definición</b> <a href="#l00085">UnitSpinBox.h:85</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_ab7fa55aab522dffa4372505189667a30"><div class="ttname"><a href="class_unit_spin_box.html#ab7fa55aab522dffa4372505189667a30">UnitSpinBox::rawSuffix_</a></div><div class="ttdeci">QString rawSuffix_</div><div class="ttdef"><b>Definición</b> <a href="#l00113">UnitSpinBox.h:113</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_ab877bc4f815150020bb487ef1a6ec237"><div class="ttname"><a href="class_unit_spin_box.html#ab877bc4f815150020bb487ef1a6ec237">UnitSpinBox::length_</a></div><div class="ttdeci">bool length_</div><div class="ttdef"><b>Definición</b> <a href="#l00114">UnitSpinBox.h:114</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_aba11b75abd1e8312f268a882ea5fae0a"><div class="ttname"><a href="class_unit_spin_box.html#aba11b75abd1e8312f268a882ea5fae0a">UnitSpinBox::setDecimals</a></div><div class="ttdeci">void setDecimals(int decimals)</div><div class="ttdoc">Fija los decimales en milímetros.</div><div class="ttdef"><b>Definición</b> <a href="#l00063">UnitSpinBox.h:63</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_ac17899a5e76f401654411e3f7d604404"><div class="ttname"><a href="class_unit_spin_box.html#ac17899a5e76f401654411e3f7d604404">UnitSpinBox::displayInch</a></div><div class="ttdeci">static bool displayInch()</div><div class="ttdef"><b>Definición</b> <a href="#l00081">UnitSpinBox.h:81</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_aed1e76da29da302738059263c27284ce"><div class="ttname"><a href="class_unit_spin_box.html#aed1e76da29da302738059263c27284ce">UnitSpinBox::value</a></div><div class="ttdeci">double value() const</div><div class="ttdef"><b>Definición</b> <a href="#l00052">UnitSpinBox.h:52</a></div></div>
+<div class="ttc" id="aclass_unit_spin_box_html_aedf450d74a26f50b154baba8a9007492"><div class="ttname"><a href="class_unit_spin_box.html#aedf450d74a26f50b154baba8a9007492">UnitSpinBox::setDisplayInch</a></div><div class="ttdeci">static void setDisplayInch(bool inch)</div><div class="ttdoc">Cambia la unidad de todos los campos registrados.</div><div class="ttdef"><b>Definición</b> <a href="#l00076">UnitSpinBox.h:76</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_99d0482cf009f9d97a0877749b817f19.html">gui</a></li><li class="navelem"><a href="_unit_spin_box_8h.html">UnitSpinBox.h</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

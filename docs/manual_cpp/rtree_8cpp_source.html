@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente src/core/rtree.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('rtree_8cpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">rtree.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="rtree_8cpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file rtree.cpp</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Índice espacial de geometrías sobre GEOSSTRtree.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Mantiene copias de las geometrías insertadas (el árbol no puede apuntar a</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * objetos temporales) y devuelve los identificadores numéricos asociados en</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * las consultas por caja. La construcción del árbol es perezosa: ocurre en la</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * primera consulta o cuando se llama a build().</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="geometry_8hpp.html">flatcam/geometry.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacefc.html">fc</a> {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span>{</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment"></span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">/// Contexto compartido entre GEOSSTRtree_query y el callback C.</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">struct </span>QueryContext {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    std::vector&lt;std::uint32_t&gt;* out;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>};</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"></span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * @brief Callback C invocado por GEOS por cada elemento que cae en la ventana.</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * GEOS devuelve el puntero tal como se insertó; como en la inserción se guardó</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * el id casteado a puntero, acá se reconstruye vía intptr_t antes de añadirlo</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> * a la lista de resultados.</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> * @param item Puntero opaco registrado en la inserción (el id).</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment"> * @param userdata Puntero a QueryContext con el vector de salida.</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keywordtype">void</span> queryCallback(<span class="keywordtype">void</span>* item, <span class="keywordtype">void</span>* userdata) {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keyword">auto</span>* ctx = <span class="keyword">static_cast&lt;</span>QueryContext*<span class="keyword">&gt;</span>(userdata);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    ctx-&gt;out-&gt;push_back(<span class="keyword">static_cast&lt;</span>std::uint32_t<span class="keyword">&gt;</span>(<span class="keyword">reinterpret_cast&lt;</span>std::intptr_t<span class="keyword">&gt;</span>(item)));</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>}</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>}  <span class="comment">// namespace</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"></span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment"> * @brief Crea el árbol R con capacidad de nodo 10.</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment"> * @throw std::runtime_error si GEOS no puede crear el árbol.</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"> * @note Llama antes a initGeosRuntime() porque la API clásica de GEOS aborta</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"> *       si no fue inicializada.</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00044" data-start="{" data-end="}">
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="classfc_1_1_spatial_index.html#abdf8e08fc621ab95fc937b7434c5c9fa">   44</a></span><a class="code hl_function" href="classfc_1_1_spatial_index.html#abdf8e08fc621ab95fc937b7434c5c9fa">SpatialIndex::SpatialIndex</a>() {</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <a class="code hl_function" href="namespacefc.html#a19e9194ea470d5408c87bdecd25c3f13">initGeosRuntime</a>();</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <a class="code hl_variable" href="classfc_1_1_spatial_index.html#aaafc1390fb4d2b8b7291c1eaeed58990">tree_</a> = GEOSSTRtree_create(10);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">if</span> (!<a class="code hl_variable" href="classfc_1_1_spatial_index.html#aaafc1390fb4d2b8b7291c1eaeed58990">tree_</a>) <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;GEOSSTRtree_create failed&quot;</span>);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>}</div>
+</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"></span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment">/// Destruye el árbol GEOS si llegó a crearse.</span></div>
+<div class="foldopen" id="foldopen00051" data-start="{" data-end="}">
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="classfc_1_1_spatial_index.html#ad2ec27c91324aa8acbb5ce44ee2cf516">   51</a></span><a class="code hl_function" href="classfc_1_1_spatial_index.html#ad2ec27c91324aa8acbb5ce44ee2cf516">SpatialIndex::~SpatialIndex</a>() {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="classfc_1_1_spatial_index.html#aaafc1390fb4d2b8b7291c1eaeed58990">tree_</a>) GEOSSTRtree_destroy(<a class="code hl_variable" href="classfc_1_1_spatial_index.html#aaafc1390fb4d2b8b7291c1eaeed58990">tree_</a>);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>}</div>
+</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"></span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * @brief Inserta una geometría asociándole un identificador.</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * Guarda una copia en keep_ (dueña de la memoria), registra el id y entrega a</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> * GEOS el puntero crudo junto con el id casteado a void*. Las geometrías</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"> * inválidas se ignoran en silencio.</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"> * @param g Geometría a indexar.</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"> * @param id Identificador que devolverá query().</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment"> * @note El patrón previsto es insertar todo y recién entonces consultar:</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"> *       insertar después de build() exige reconstruir el árbol.</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00066" data-start="{" data-end="}">
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="classfc_1_1_spatial_index.html#a29db49cdc0ef9a5ac4792fb3d4b10f64">   66</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classfc_1_1_spatial_index.html#a29db49cdc0ef9a5ac4792fb3d4b10f64">SpatialIndex::insert</a>(<span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; g, std::uint32_t <span class="keywordtype">id</span>) {</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordflow">if</span> (!g.<a class="code hl_function" href="classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid</a>()) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <a class="code hl_variable" href="classfc_1_1_spatial_index.html#ad7c555680528f39b120250b8ed77fab3">keep_</a>.push_back(g);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <a class="code hl_variable" href="classfc_1_1_spatial_index.html#a459bc53e1e864339a6d9b0b8895f9dc0">ids_</a>.push_back(<span class="keywordtype">id</span>);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    GEOSSTRtree_insert(<a class="code hl_variable" href="classfc_1_1_spatial_index.html#aaafc1390fb4d2b8b7291c1eaeed58990">tree_</a>, g.<a class="code hl_function" href="classfc_1_1_geom.html#a220dd7efed8701cc568649240259f9e6">raw</a>(), <span class="keyword">reinterpret_cast&lt;</span><span class="keywordtype">void</span>*<span class="keyword">&gt;</span>(<span class="keyword">static_cast&lt;</span>std::intptr_t<span class="keyword">&gt;</span>(<span class="keywordtype">id</span>)));</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>}</div>
+</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"></span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> * @brief Construye el árbol una única vez (idempotente).</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment"> * @note Construir dos veces es un error de GEOS, por eso se protege con built_.</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00077" data-start="{" data-end="}">
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="classfc_1_1_spatial_index.html#a18eea28b5578514b436da9dffe2f7b04">   77</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classfc_1_1_spatial_index.html#a18eea28b5578514b436da9dffe2f7b04">SpatialIndex::build</a>() {</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordflow">if</span> (!<a class="code hl_variable" href="classfc_1_1_spatial_index.html#a10aaf4ccc3bfef0df219ba5649ea46af">built_</a>) {</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        GEOSSTRtree_build(<a class="code hl_variable" href="classfc_1_1_spatial_index.html#aaafc1390fb4d2b8b7291c1eaeed58990">tree_</a>);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <a class="code hl_variable" href="classfc_1_1_spatial_index.html#a10aaf4ccc3bfef0df219ba5649ea46af">built_</a> = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    }</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>}</div>
+</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"></span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> * @brief Devuelve los ids cuyas geometrías intersectan la caja dada.</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"> * Fuerza build() si aún no se hizo, crea un rectángulo GEOS con la ventana y</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"> * delega en GEOSSTRtree_query. La comparación es sólo de envolventes: si se</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> * necesita intersección exacta, el llamador debe verificarla después.</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> * @param box Ventana de búsqueda; si no es válida devuelve lista vacía.</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * @return Ids en el orden en que GEOS los recorre (sin orden garantizado).</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00093" data-start="{" data-end="}">
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="classfc_1_1_spatial_index.html#a1288b13e88b6a6a33253e8614f0fa3ca">   93</a></span>std::vector&lt;std::uint32_t&gt; <a class="code hl_function" href="classfc_1_1_spatial_index.html#a1288b13e88b6a6a33253e8614f0fa3ca">SpatialIndex::query</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_b_box.html">BBox</a>&amp; box)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    std::vector&lt;std::uint32_t&gt; out;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keywordflow">if</span> (!box.<a class="code hl_variable" href="structfc_1_1_b_box.html#aa01e601be965de7902d629f1137cb914">valid</a>) <span class="keywordflow">return</span> out;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keywordflow">if</span> (!<a class="code hl_variable" href="classfc_1_1_spatial_index.html#a10aaf4ccc3bfef0df219ba5649ea46af">built_</a>) <span class="keyword">const_cast&lt;</span><a class="code hl_function" href="classfc_1_1_spatial_index.html#abdf8e08fc621ab95fc937b7434c5c9fa">SpatialIndex</a>*<span class="keyword">&gt;</span>(<span class="keyword">this</span>)-&gt;<a class="code hl_function" href="classfc_1_1_spatial_index.html#a18eea28b5578514b436da9dffe2f7b04">build</a>();</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    GEOSGeometry* envelope = GEOSGeom_createRectangle(box.<a class="code hl_variable" href="structfc_1_1_b_box.html#a32e6c7b1b402701621aae0aca300a11a">xmin</a>, box.<a class="code hl_variable" href="structfc_1_1_b_box.html#a4e5d39ce96f218172a5917e52f886461">ymin</a>, box.<a class="code hl_variable" href="structfc_1_1_b_box.html#a19c807697cdf8436448ef538057abca2">xmax</a>, box.<a class="code hl_variable" href="structfc_1_1_b_box.html#a3fcb5b246dbd0dede37b13c09c5588ac">ymax</a>);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keywordflow">if</span> (!envelope) <span class="keywordflow">return</span> out;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    QueryContext ctx{&amp;out};</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    GEOSSTRtree_query(<a class="code hl_variable" href="classfc_1_1_spatial_index.html#aaafc1390fb4d2b8b7291c1eaeed58990">tree_</a>, envelope, queryCallback, &amp;ctx);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    GEOSGeom_destroy(envelope);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keywordflow">return</span> out;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>}</div>
+</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>}  <span class="comment">// namespace fc</span></div>
+<div class="ttc" id="aclassfc_1_1_geom_html"><div class="ttname"><a href="classfc_1_1_geom.html">fc::Geom</a></div><div class="ttdoc">Envoltorio inmutable y compartido de una geometría GEOS.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00115">geometry.hpp:115</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a220dd7efed8701cc568649240259f9e6"><div class="ttname"><a href="classfc_1_1_geom.html#a220dd7efed8701cc568649240259f9e6">fc::Geom::raw</a></div><div class="ttdeci">GEOSGeometry * raw() const</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00313">geometry.hpp:313</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a322d9e9be30a1ca2ad2fa66e2438b8e9"><div class="ttname"><a href="classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">fc::Geom::valid</a></div><div class="ttdeci">bool valid() const</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00195">geometry.hpp:195</a></div></div>
+<div class="ttc" id="aclassfc_1_1_spatial_index_html_a10aaf4ccc3bfef0df219ba5649ea46af"><div class="ttname"><a href="classfc_1_1_spatial_index.html#a10aaf4ccc3bfef0df219ba5649ea46af">fc::SpatialIndex::built_</a></div><div class="ttdeci">bool built_</div><div class="ttdoc">Evita reconstruir o consultar antes de tiempo.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00363">geometry.hpp:363</a></div></div>
+<div class="ttc" id="aclassfc_1_1_spatial_index_html_a1288b13e88b6a6a33253e8614f0fa3ca"><div class="ttname"><a href="classfc_1_1_spatial_index.html#a1288b13e88b6a6a33253e8614f0fa3ca">fc::SpatialIndex::query</a></div><div class="ttdeci">std::vector&lt; std::uint32_t &gt; query(const BBox &amp;box) const</div><div class="ttdoc">Consulta los identificadores que intersectan una caja.</div><div class="ttdef"><b>Definición</b> <a href="#l00093">rtree.cpp:93</a></div></div>
+<div class="ttc" id="aclassfc_1_1_spatial_index_html_a18eea28b5578514b436da9dffe2f7b04"><div class="ttname"><a href="classfc_1_1_spatial_index.html#a18eea28b5578514b436da9dffe2f7b04">fc::SpatialIndex::build</a></div><div class="ttdeci">void build()</div><div class="ttdoc">Construye el árbol; obligatorio antes de query().</div><div class="ttdef"><b>Definición</b> <a href="#l00077">rtree.cpp:77</a></div></div>
+<div class="ttc" id="aclassfc_1_1_spatial_index_html_a29db49cdc0ef9a5ac4792fb3d4b10f64"><div class="ttname"><a href="classfc_1_1_spatial_index.html#a29db49cdc0ef9a5ac4792fb3d4b10f64">fc::SpatialIndex::insert</a></div><div class="ttdeci">void insert(const Geom &amp;g, std::uint32_t id)</div><div class="ttdoc">Inserta una geometría con un identificador.</div><div class="ttdef"><b>Definición</b> <a href="#l00066">rtree.cpp:66</a></div></div>
+<div class="ttc" id="aclassfc_1_1_spatial_index_html_a459bc53e1e864339a6d9b0b8895f9dc0"><div class="ttname"><a href="classfc_1_1_spatial_index.html#a459bc53e1e864339a6d9b0b8895f9dc0">fc::SpatialIndex::ids_</a></div><div class="ttdeci">std::vector&lt; std::uint32_t &gt; ids_</div><div class="ttdoc">Identificadores paralelos a keep_.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00362">geometry.hpp:362</a></div></div>
+<div class="ttc" id="aclassfc_1_1_spatial_index_html_aaafc1390fb4d2b8b7291c1eaeed58990"><div class="ttname"><a href="classfc_1_1_spatial_index.html#aaafc1390fb4d2b8b7291c1eaeed58990">fc::SpatialIndex::tree_</a></div><div class="ttdeci">GEOSSTRtree * tree_</div><div class="ttdoc">Árbol propiedad de esta clase.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00360">geometry.hpp:360</a></div></div>
+<div class="ttc" id="aclassfc_1_1_spatial_index_html_abdf8e08fc621ab95fc937b7434c5c9fa"><div class="ttname"><a href="classfc_1_1_spatial_index.html#abdf8e08fc621ab95fc937b7434c5c9fa">fc::SpatialIndex::SpatialIndex</a></div><div class="ttdeci">SpatialIndex()</div><div class="ttdoc">Crea un índice vacío.</div><div class="ttdef"><b>Definición</b> <a href="#l00044">rtree.cpp:44</a></div></div>
+<div class="ttc" id="aclassfc_1_1_spatial_index_html_ad2ec27c91324aa8acbb5ce44ee2cf516"><div class="ttname"><a href="classfc_1_1_spatial_index.html#ad2ec27c91324aa8acbb5ce44ee2cf516">fc::SpatialIndex::~SpatialIndex</a></div><div class="ttdeci">~SpatialIndex()</div><div class="ttdoc">Libera el STRtree de GEOS.</div><div class="ttdef"><b>Definición</b> <a href="#l00051">rtree.cpp:51</a></div></div>
+<div class="ttc" id="aclassfc_1_1_spatial_index_html_ad7c555680528f39b120250b8ed77fab3"><div class="ttname"><a href="classfc_1_1_spatial_index.html#ad7c555680528f39b120250b8ed77fab3">fc::SpatialIndex::keep_</a></div><div class="ttdeci">std::vector&lt; Geom &gt; keep_</div><div class="ttdoc">Mantiene vivas las geometrías indexadas.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00361">geometry.hpp:361</a></div></div>
+<div class="ttc" id="ageometry_8hpp_html"><div class="ttname"><a href="geometry_8hpp.html">geometry.hpp</a></div><div class="ttdoc">Núcleo geométrico inmutable sobre la API C de GEOS.</div></div>
+<div class="ttc" id="anamespacefc_html"><div class="ttname"><a href="namespacefc.html">fc</a></div><div class="ttdef"><b>Definición</b> <a href="cutout_8hpp_source.html#l00016">cutout.hpp:16</a></div></div>
+<div class="ttc" id="anamespacefc_html_a19e9194ea470d5408c87bdecd25c3f13"><div class="ttname"><a href="namespacefc.html#a19e9194ea470d5408c87bdecd25c3f13">fc::initGeosRuntime</a></div><div class="ttdeci">void initGeosRuntime()</div><div class="ttdoc">Inicializa el runtime global de GEOS.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00141">geometry.cpp:141</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html"><div class="ttname"><a href="structfc_1_1_b_box.html">fc::BBox</a></div><div class="ttdoc">Caja envolvente alineada a los ejes.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00048">geometry.hpp:48</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a19c807697cdf8436448ef538057abca2"><div class="ttname"><a href="structfc_1_1_b_box.html#a19c807697cdf8436448ef538057abca2">fc::BBox::xmax</a></div><div class="ttdeci">double xmax</div><div class="ttdoc">Límite superior en X.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00051">geometry.hpp:51</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a32e6c7b1b402701621aae0aca300a11a"><div class="ttname"><a href="structfc_1_1_b_box.html#a32e6c7b1b402701621aae0aca300a11a">fc::BBox::xmin</a></div><div class="ttdeci">double xmin</div><div class="ttdoc">Límite inferior en X.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00049">geometry.hpp:49</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a3fcb5b246dbd0dede37b13c09c5588ac"><div class="ttname"><a href="structfc_1_1_b_box.html#a3fcb5b246dbd0dede37b13c09c5588ac">fc::BBox::ymax</a></div><div class="ttdeci">double ymax</div><div class="ttdoc">Límite superior en Y.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00052">geometry.hpp:52</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a4e5d39ce96f218172a5917e52f886461"><div class="ttname"><a href="structfc_1_1_b_box.html#a4e5d39ce96f218172a5917e52f886461">fc::BBox::ymin</a></div><div class="ttdeci">double ymin</div><div class="ttdoc">Límite inferior en Y.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00050">geometry.hpp:50</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_aa01e601be965de7902d629f1137cb914"><div class="ttname"><a href="structfc_1_1_b_box.html#aa01e601be965de7902d629f1137cb914">fc::BBox::valid</a></div><div class="ttdeci">bool valid</div><div class="ttdoc">true si la caja contiene geometría.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00053">geometry.hpp:53</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_aebb8dcc11953d78e620bbef0b9e2183.html">core</a></li><li class="navelem"><a href="rtree_8cpp.html">rtree.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

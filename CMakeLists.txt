@@ -188,13 +188,15 @@ if(FC_BUILD_TESTS)
         FC_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/data")
     add_test(NAME flatcam_tests COMMAND flatcam_tests)
 
-    add_executable(flatcam_gui_tests
-        tests/test_svgtext.cpp
-        src/gui/TextGeometry.cpp
-        src/gui/TextGeometry.h
-    )
-    target_link_libraries(flatcam_gui_tests PRIVATE flatcam_core Qt6::Gui Qt6::Widgets GTest::gtest)
-    target_include_directories(flatcam_gui_tests PRIVATE src/gui)
-    add_test(NAME flatcam_gui_tests COMMAND flatcam_gui_tests)
-    set_tests_properties(flatcam_gui_tests PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    if(FC_BUILD_GUI AND TARGET Qt6::Widgets)
+        add_executable(flatcam_gui_tests
+            tests/test_svgtext.cpp
+            src/gui/TextGeometry.cpp
+            src/gui/TextGeometry.h
+        )
+        target_link_libraries(flatcam_gui_tests PRIVATE flatcam_core Qt6::Gui Qt6::Widgets GTest::gtest)
+        target_include_directories(flatcam_gui_tests PRIVATE src/gui)
+        add_test(NAME flatcam_gui_tests COMMAND flatcam_gui_tests)
+        set_tests_properties(flatcam_gui_tests PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    endif()
 endif()

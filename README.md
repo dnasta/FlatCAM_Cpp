@@ -1,3 +1,5 @@
+<p align="right"><a href="README_US.md">🇬🇧 English</a> | <a href="README.md">🇪🇸 Español</a></p>
+
 <p align="center">
   <img src="assets/logo.png" width="210" alt="FlatCAM C++">
 </p>
@@ -17,9 +19,10 @@
 </p>
 
 <p align="center">
-  <a href="https://dnasta.github.io/FlatCAM_Cpp/"><strong>📖 Manual de usuario</strong></a> ·
-  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01"><strong>⬇ Descargar v0.01</strong></a> ·
-  <a href="docs/manual_html/index.html">Manual en el repositorio</a>
+  <a href="README_US.md">🇬🇧 English</a> ·
+  <a href="https://dnasta.github.io/FlatCAM_Cpp/manual_html/index.html"><strong>📖 Manual de usuario</strong></a> ·
+  <a href="https://dnasta.github.io/FlatCAM_Cpp/manual_cpp/index.html"><strong>🛠 Manual del código</strong></a> ·
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.01"><strong>⬇ Descargar v0.01</strong></a>
 </p>
 
 ---
@@ -39,7 +42,9 @@
 - [Tests y verificación](#tests-y-verificación)
 - [Estructura del proyecto](#estructura-del-proyecto)
 - [Manual de usuario](#manual-de-usuario)
+- [Manual del código](#manual-del-código)
 - [Licencia](#licencia)
+- [Autoría y linaje](#autoría-y-linaje)
 - [Créditos](#créditos)
 
 ---
@@ -341,7 +346,7 @@ El código es portable y CMake detecta GEOS por pkg-config o por configuración.
 ## Tests y verificación
 
 ```bash
-./build/flatcam_tests        # 83 tests de núcleo
+./build/flatcam_tests        # 88 tests de núcleo
 ./build/flatcam_gui_tests    # 7 tests de GUI
 ```
 
@@ -397,9 +402,26 @@ El manual cubre en detalle:
 - Automatización con Tcl/JS/CLI.
 - Atajos, diagnóstico y glosario.
 
-**Online:** <https://dnasta.github.io/FlatCAM_Cpp/>
+**Online:** <https://dnasta.github.io/FlatCAM_Cpp/manual_html/index.html>
 
 **En el repositorio:** [`docs/manual_html/index.html`](docs/manual_html/index.html)
+
+---
+
+## Manual del código
+
+Documentación Doxygen de clases, módulos y API interna:
+
+**Online:** <https://dnasta.github.io/FlatCAM_Cpp/manual_cpp/index.html>
+
+**En el repositorio:** [`docs/manual_cpp/index.html`](docs/manual_cpp/index.html)
+
+**Generar localmente:**
+
+```bash
+doxygen Doxyfile
+open docs/manual_cpp/index.html
+```
 
 ---
 
@@ -411,9 +433,27 @@ Es un port de **FlatCAM 2024.4**, publicado originalmente bajo GPLv3 por Juan Pa
 
 ---
 
+## Autoría y linaje
+
+Este proyecto es un port en C++ de una cadena de versiones de FlatCAM:
+
+1. **FlatCAM original** — creado por **Juan Pablo Caram**.
+   Copyright 2014–2019, Juan Pablo Caram.
+   <https://bitbucket.org/jpcgt/flatcam/src/master/>
+2. **FlatCAM BETA** — (c) 2019 by **Marius Stanciu**.
+   <https://github.com/MariusAdrian88/FlatCAM_Evo>
+3. **FlatCAM β 2024.4** — (c) 2024, proyecto de **vika-sonne**.
+   <https://github.com/vika-sonne/FlatCAM/>
+4. **FlatCAM C++** — port nativo de la versión 2024.4 a C++20 con Qt 6 y GEOS.
+
+Se conserva la licencia **GPLv3** y el reconocimiento a todos los autores de la
+cadena original.
+
 ## Créditos
 
 - **FlatCAM original:** Juan Pablo Caram y colaboradores.
+- **FlatCAM BETA:** Marius Stanciu.
+- **FlatCAM β 2024.4:** vika-sonne y colaboradores.
 - **GEOS:** OSGeo.
 - **Qt:** The Qt Company.
 - **nlohmann/json:** Niels Lohmann.

@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia de la estructura fc::GerberAperture</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('structfc_1_1_gerber_aperture.html','','structfc_1_1_gerber_aperture-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia de la estructura fc::GerberAperture</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Definición de una apertura Gerber y las primitivas dibujadas con ella.  
+ <a href="#details">Más...</a></p>
+
+<p><code>#include &lt;<a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Tipos públicos</h2></td></tr>
+<tr class="memitem:a22b1a3c2f2d417ceed311f795a49adc2" id="r_a22b1a3c2f2d417ceed311f795a49adc2"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2">Kind</a> { <br />
+&#160;&#160;<a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2a30954d90085f6eaaf5817917fc5fecb3">Circle</a>
+, <br />
+&#160;&#160;<a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2ace9291906a4c3b042650b70d7f3b152e">Rectangle</a>
+, <br />
+&#160;&#160;<a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2af2fd9f6ab2d56e0db8b503c69c03e44d">Obround</a>
+, <br />
+&#160;&#160;<a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2a4c0a11247d92f73fb84baa51e37a3263">Polygon</a>
+, <br />
+&#160;&#160;<a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2a4374cf34c5d58482ffae982196bd2114">Macro</a>
+, <br />
+&#160;&#160;<a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2af447ac856e7e72435904956e3b15f433">Region</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a22b1a3c2f2d417ceed311f795a49adc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tipo de apertura.  <a href="#a22b1a3c2f2d417ceed311f795a49adc2">Más...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Atributos públicos</h2></td></tr>
+<tr class="memitem:affc727ef990518f52e0b2161f6ca9a83" id="r_affc727ef990518f52e0b2161f6ca9a83"><td class="memItemLeft"><a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2">Kind</a>&#160;</td><td class="memItemRight"><a class="el" href="#affc727ef990518f52e0b2161f6ca9a83">kind</a> = <a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2a30954d90085f6eaaf5817917fc5fecb3">Kind::Circle</a></td></tr>
+<tr class="memdesc:affc727ef990518f52e0b2161f6ca9a83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tipo.  <br /></td></tr>
+<tr class="memitem:a2caf56a4c7b151dcf9acf73a026c12a6" id="r_a2caf56a4c7b151dcf9acf73a026c12a6"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a2caf56a4c7b151dcf9acf73a026c12a6">size</a> = 0.0</td></tr>
+<tr class="memdesc:a2caf56a4c7b151dcf9acf73a026c12a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tamaño principal (diámetro o lado).  <br /></td></tr>
+<tr class="memitem:a9f3e5d994b6715da24afa863a5e5e912" id="r_a9f3e5d994b6715da24afa863a5e5e912"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a9f3e5d994b6715da24afa863a5e5e912">width</a> = 0.0</td></tr>
+<tr class="memdesc:a9f3e5d994b6715da24afa863a5e5e912"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ancho para rectángulos/obrounds.  <br /></td></tr>
+<tr class="memitem:a7672dbc19d58fd200e1fdf3b0463b2ee" id="r_a7672dbc19d58fd200e1fdf3b0463b2ee"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a7672dbc19d58fd200e1fdf3b0463b2ee">height</a> = 0.0</td></tr>
+<tr class="memdesc:a7672dbc19d58fd200e1fdf3b0463b2ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alto para rectángulos/obrounds.  <br /></td></tr>
+<tr class="memitem:ac56df81780a4441dc1d29a4831dede58" id="r_ac56df81780a4441dc1d29a4831dede58"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ac56df81780a4441dc1d29a4831dede58">diameter</a> = 0.0</td></tr>
+<tr class="memdesc:ac56df81780a4441dc1d29a4831dede58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Diámetro para círculos/polígonos.  <br /></td></tr>
+<tr class="memitem:aa8981947dd7c52ecca2cbbc817a9cf0f" id="r_aa8981947dd7c52ecca2cbbc817a9cf0f"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#aa8981947dd7c52ecca2cbbc817a9cf0f">vertices</a> = 0</td></tr>
+<tr class="memdesc:aa8981947dd7c52ecca2cbbc817a9cf0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vértices para polígonos.  <br /></td></tr>
+<tr class="memitem:aa053bce1a7d2d6b2ea2d181d86bf2357" id="r_aa053bce1a7d2d6b2ea2d181d86bf2357"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#aa053bce1a7d2d6b2ea2d181d86bf2357">rotation</a> = 0.0</td></tr>
+<tr class="memdesc:aa053bce1a7d2d6b2ea2d181d86bf2357"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotación en grados.  <br /></td></tr>
+<tr class="memitem:a4e0b7447ced30bae21abe64213667bce" id="r_a4e0b7447ced30bae21abe64213667bce"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a4e0b7447ced30bae21abe64213667bce">hasRotation</a> = false</td></tr>
+<tr class="memdesc:a4e0b7447ced30bae21abe64213667bce"><td class="mdescLeft">&#160;</td><td class="mdescRight"><span class="tt">true</span> si el archivo especificó rotación.  <br /></td></tr>
+<tr class="memitem:ac3523ac47fa1db0a8848226310bcc12b" id="r_ac3523ac47fa1db0a8848226310bcc12b"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#ac3523ac47fa1db0a8848226310bcc12b">macroName</a></td></tr>
+<tr class="memdesc:ac3523ac47fa1db0a8848226310bcc12b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nombre de la macro (si es <span class="tt">Macro</span>).  <br /></td></tr>
+<tr class="memitem:a9d7d15a718c2d42c2420dee11f688595" id="r_a9d7d15a718c2d42c2420dee11f688595"><td class="memItemLeft">std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a9d7d15a718c2d42c2420dee11f688595">modifiers</a></td></tr>
+<tr class="memdesc:a9d7d15a718c2d42c2420dee11f688595"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parámetros de la apertura/macro.  <br /></td></tr>
+<tr class="memitem:acf18848777fbb8481d165f999b57d51e" id="r_acf18848777fbb8481d165f999b57d51e"><td class="memItemLeft">std::vector&lt; <a class="el" href="class_geom.html">Geom</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#acf18848777fbb8481d165f999b57d51e">geometry</a></td></tr>
+<tr class="memdesc:acf18848777fbb8481d165f999b57d51e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Primitivas dibujadas con esta apertura (unidades del archivo).  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Definición de una apertura Gerber y las primitivas dibujadas con ella. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00048">48</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+</div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Documentación de las enumeraciones miembro de la clase</h2>
+<a id="a22b1a3c2f2d417ceed311f795a49adc2" name="a22b1a3c2f2d417ceed311f795a49adc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22b1a3c2f2d417ceed311f795a49adc2">&#9670;&#160;</a></span>Kind</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2">fc::GerberAperture::Kind</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tipo de apertura. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Valores de enumeraciones</th></tr><tr><td class="fieldname"><a id="a22b1a3c2f2d417ceed311f795a49adc2a30954d90085f6eaaf5817917fc5fecb3" name="a22b1a3c2f2d417ceed311f795a49adc2a30954d90085f6eaaf5817917fc5fecb3"></a>Circle&#160;</td><td class="fielddoc"><p>Círculo (<span class="tt">C</span>). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a22b1a3c2f2d417ceed311f795a49adc2ace9291906a4c3b042650b70d7f3b152e" name="a22b1a3c2f2d417ceed311f795a49adc2ace9291906a4c3b042650b70d7f3b152e"></a>Rectangle&#160;</td><td class="fielddoc"><p>Rectángulo (<span class="tt">R</span>). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a22b1a3c2f2d417ceed311f795a49adc2af2fd9f6ab2d56e0db8b503c69c03e44d" name="a22b1a3c2f2d417ceed311f795a49adc2af2fd9f6ab2d56e0db8b503c69c03e44d"></a>Obround&#160;</td><td class="fielddoc"><p>Óvalo (<span class="tt">O</span>). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a22b1a3c2f2d417ceed311f795a49adc2a4c0a11247d92f73fb84baa51e37a3263" name="a22b1a3c2f2d417ceed311f795a49adc2a4c0a11247d92f73fb84baa51e37a3263"></a>Polygon&#160;</td><td class="fielddoc"><p>Polígono regular (<span class="tt">P</span>). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a22b1a3c2f2d417ceed311f795a49adc2a4374cf34c5d58482ffae982196bd2114" name="a22b1a3c2f2d417ceed311f795a49adc2a4374cf34c5d58482ffae982196bd2114"></a>Macro&#160;</td><td class="fielddoc"><p>Macro de apertura (<span class="tt">AM</span>). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a22b1a3c2f2d417ceed311f795a49adc2af447ac856e7e72435904956e3b15f433" name="a22b1a3c2f2d417ceed311f795a49adc2af447ac856e7e72435904956e3b15f433"></a>Region&#160;</td><td class="fielddoc"><p>Región <span class="tt">G36/G37</span> sin apertura explícita. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00050">50</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Documentación de datos miembro</h2>
+<a id="ac56df81780a4441dc1d29a4831dede58" name="ac56df81780a4441dc1d29a4831dede58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac56df81780a4441dc1d29a4831dede58">&#9670;&#160;</a></span>diameter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GerberAperture::diameter = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Diámetro para círculos/polígonos. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00063">63</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acf18848777fbb8481d165f999b57d51e" name="acf18848777fbb8481d165f999b57d51e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf18848777fbb8481d165f999b57d51e">&#9670;&#160;</a></span>geometry</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="class_geom.html">Geom</a>&gt; fc::GerberAperture::geometry</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Primitivas dibujadas con esta apertura (unidades del archivo). </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00069">69</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4e0b7447ced30bae21abe64213667bce" name="a4e0b7447ced30bae21abe64213667bce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e0b7447ced30bae21abe64213667bce">&#9670;&#160;</a></span>hasRotation</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::GerberAperture::hasRotation = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><span class="tt">true</span> si el archivo especificó rotación. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00066">66</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7672dbc19d58fd200e1fdf3b0463b2ee" name="a7672dbc19d58fd200e1fdf3b0463b2ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7672dbc19d58fd200e1fdf3b0463b2ee">&#9670;&#160;</a></span>height</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GerberAperture::height = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Alto para rectángulos/obrounds. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00062">62</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a id="affc727ef990518f52e0b2161f6ca9a83" name="affc727ef990518f52e0b2161f6ca9a83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affc727ef990518f52e0b2161f6ca9a83">&#9670;&#160;</a></span>kind</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2">Kind</a> fc::GerberAperture::kind = <a class="el" href="#a22b1a3c2f2d417ceed311f795a49adc2a30954d90085f6eaaf5817917fc5fecb3">Kind::Circle</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tipo. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00059">59</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac3523ac47fa1db0a8848226310bcc12b" name="ac3523ac47fa1db0a8848226310bcc12b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3523ac47fa1db0a8848226310bcc12b">&#9670;&#160;</a></span>macroName</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string fc::GerberAperture::macroName</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Nombre de la macro (si es <span class="tt">Macro</span>). </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00067">67</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9d7d15a718c2d42c2420dee11f688595" name="a9d7d15a718c2d42c2420dee11f688595"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d7d15a718c2d42c2420dee11f688595">&#9670;&#160;</a></span>modifiers</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; fc::GerberAperture::modifiers</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parámetros de la apertura/macro. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00068">68</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa053bce1a7d2d6b2ea2d181d86bf2357" name="aa053bce1a7d2d6b2ea2d181d86bf2357"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa053bce1a7d2d6b2ea2d181d86bf2357">&#9670;&#160;</a></span>rotation</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GerberAperture::rotation = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Rotación en grados. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00065">65</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2caf56a4c7b151dcf9acf73a026c12a6" name="a2caf56a4c7b151dcf9acf73a026c12a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2caf56a4c7b151dcf9acf73a026c12a6">&#9670;&#160;</a></span>size</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GerberAperture::size = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tamaño principal (diámetro o lado). </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00060">60</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa8981947dd7c52ecca2cbbc817a9cf0f" name="aa8981947dd7c52ecca2cbbc817a9cf0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8981947dd7c52ecca2cbbc817a9cf0f">&#9670;&#160;</a></span>vertices</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fc::GerberAperture::vertices = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Vértices para polígonos. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00064">64</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9f3e5d994b6715da24afa863a5e5e912" name="a9f3e5d994b6715da24afa863a5e5e912"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f3e5d994b6715da24afa863a5e5e912">&#9670;&#160;</a></span>width</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::GerberAperture::width = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ancho para rectángulos/obrounds. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gerber_8hpp_source.html#l00061">61</a> del archivo <a class="el" href="gerber_8hpp_source.html">gerber.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>La documentación de esta estructura está generada del siguiente archivo:<ul>
+<li>include/flatcam/<a class="el" href="gerber_8hpp_source.html">gerber.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacefc.html">fc</a></li><li class="navelem"><a href="structfc_1_1_gerber_aperture.html">GerberAperture</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

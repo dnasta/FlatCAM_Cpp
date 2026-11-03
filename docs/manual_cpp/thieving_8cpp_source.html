@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente src/cam/thieving.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('thieving_8cpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">thieving.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="thieving_8cpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file thieving.cpp</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Grilla de puntos de cobre para copper thieving.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Implementa `fc::thievingPoints`: recorre el área de trabajo con una malla</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * regular de paso `spacing`, desplazada media separación para que los puntos</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * queden centrados, y descarta los que caen dentro del cobre dilatado por</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * `radio del punto + clearance`. El módulo no genera geometría ni G-code:</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> * sólo devuelve los centros, y el llamador decide cómo dibujarlos o</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment"> * exportarlos (por ejemplo como flashes Gerber).</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="thieving_8hpp.html">flatcam/thieving.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;cmath&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacefc.html">fc</a> {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"></span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * @brief Calcula los centros de una malla de puntos que no invade el cobre.</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * El algoritmo es puramente raster: recorre `area` de izquierda a derecha y de</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * abajo hacia arriba con paso `spacing` (mínimo 0,1 mm), empezando en</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * `ymin/xmin + margin + spacing/2` para que el primer punto quede a media</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * separación del borde útil. Para cada candidato construye un círculo de</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> * `dotDiameter/2` y lo descarta si intersecta el &quot;keep-out&quot;, que es el cobre</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> * original dilatado por `dotDiameter/2 + clearance` con 8 segmentos por</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment"> * cuadrante.</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> * @param copper Cobre existente que debe evitarse (puede ser inválido).</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * @param area Rectángulo donde se siembra la grilla.</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> * @param options Diámetro del punto, separación, distancia de seguridad y</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment"> *                margen interior.</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment"> * @return Centros `Pt` válidos, en orden de barrido (fila por fila).</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"> * @note Si `area` no es válida devuelve un vector vacío; si `copper` no es</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment"> *       válido no hay keep-out y se devuelven todos los puntos de la malla.</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment"> * @note La separación se satura a 0,1 mm para evitar bucles infinitos con</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment"> *       valores nulos o negativos.</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"> * @warning El costo es O(filas × columnas) con una intersección GEOS por punto;</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"> *          no se usa índice espacial, por lo que áreas grandes con muchos</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> *          puntos pueden ser lentas.</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> * @warning Si `margin` supera la mitad del ancho o alto del área, los bucles</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> *          no se ejecutan y el resultado queda vacío sin aviso.</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00047" data-start="{" data-end="}">
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="namespacefc.html#a01f76cea7ae4ad96c57e12e9cd03ee0e">   47</a></span>std::vector&lt;Pt&gt; <a class="code hl_function" href="namespacefc.html#a01f76cea7ae4ad96c57e12e9cd03ee0e">thievingPoints</a>(<span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; copper, <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_b_box.html">BBox</a>&amp; area,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                               <span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_thieving_options.html">ThievingOptions</a>&amp; options) {</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    std::vector&lt;Pt&gt; points;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordflow">if</span> (!area.<a class="code hl_variable" href="structfc_1_1_b_box.html#aa01e601be965de7902d629f1137cb914">valid</a>) <span class="keywordflow">return</span> points;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> radius = options.<a class="code hl_variable" href="structfc_1_1_thieving_options.html#a0693bf8cb10ad1c34a2b839e66589455">dotDiameter</a> / 2.0;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> spacing = std::max(0.1, options.<a class="code hl_variable" href="structfc_1_1_thieving_options.html#af81f2b5b840d261e1dd2bdcfbf4f6690">spacing</a>);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a> keepOut = copper.<a class="code hl_function" href="classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid</a>() ? copper.<a class="code hl_function" href="classfc_1_1_geom.html#a0d7a2fcd024c7d64fd3c85a485227131">buffer</a>(radius + options.<a class="code hl_variable" href="structfc_1_1_thieving_options.html#ad4329e65fd4d37cc1341f00fa0903687">clearance</a>, 8) : <a class="code hl_function" href="classfc_1_1_geom.html#a8ea201105d0cfc439579429bb09a60d1">Geom</a>();</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> margin = options.<a class="code hl_variable" href="structfc_1_1_thieving_options.html#a1c9c9caf31eeb4110f30f593adfb8769">margin</a>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keywordflow">for</span> (<span class="keywordtype">double</span> y = area.<a class="code hl_variable" href="structfc_1_1_b_box.html#a4e5d39ce96f218172a5917e52f886461">ymin</a> + margin + spacing / 2.0; y &lt;= area.<a class="code hl_variable" href="structfc_1_1_b_box.html#a3fcb5b246dbd0dede37b13c09c5588ac">ymax</a> - margin; y += spacing) {</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <span class="keywordflow">for</span> (<span class="keywordtype">double</span> x = area.<a class="code hl_variable" href="structfc_1_1_b_box.html#a32e6c7b1b402701621aae0aca300a11a">xmin</a> + margin + spacing / 2.0; x &lt;= area.<a class="code hl_variable" href="structfc_1_1_b_box.html#a19c807697cdf8436448ef538057abca2">xmax</a> - margin; x += spacing) {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>            <span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a> dot = <a class="code hl_function" href="classfc_1_1_geom.html#a89b3a3b7bc9484683c6faa96e958adb0">Geom::circle</a>({x, y}, radius, 8);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>            <span class="keywordflow">if</span> (keepOut.<a class="code hl_function" href="classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">valid</a>() &amp;&amp; keepOut.<a class="code hl_function" href="classfc_1_1_geom.html#adee9c964dabff6c6b6ac0ea258e6a03f">intersects</a>(dot)) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            points.push_back({x, y});</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        }</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    }</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordflow">return</span> points;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>}</div>
+</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>}  <span class="comment">// namespace fc</span></div>
+<div class="ttc" id="aclassfc_1_1_geom_html"><div class="ttname"><a href="classfc_1_1_geom.html">fc::Geom</a></div><div class="ttdoc">Envoltorio inmutable y compartido de una geometría GEOS.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00115">geometry.hpp:115</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a0d7a2fcd024c7d64fd3c85a485227131"><div class="ttname"><a href="classfc_1_1_geom.html#a0d7a2fcd024c7d64fd3c85a485227131">fc::Geom::buffer</a></div><div class="ttdeci">Geom buffer(double distance, int quadSegs=16) const</div><div class="ttdoc">Aplica un buffer (offset) uniforme.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00584">geometry.cpp:584</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a322d9e9be30a1ca2ad2fa66e2438b8e9"><div class="ttname"><a href="classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9">fc::Geom::valid</a></div><div class="ttdeci">bool valid() const</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00195">geometry.hpp:195</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a89b3a3b7bc9484683c6faa96e958adb0"><div class="ttname"><a href="classfc_1_1_geom.html#a89b3a3b7bc9484683c6faa96e958adb0">fc::Geom::circle</a></div><div class="ttdeci">static Geom circle(const Pt &amp;center, double radius, int quadSegs=16)</div><div class="ttdoc">Crea un círculo aproximado por segmentos.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00280">geometry.cpp:280</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a8ea201105d0cfc439579429bb09a60d1"><div class="ttname"><a href="classfc_1_1_geom.html#a8ea201105d0cfc439579429bb09a60d1">fc::Geom::Geom</a></div><div class="ttdeci">Geom()=default</div><div class="ttdoc">Construye una geometría vacía (sin handle).</div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_adee9c964dabff6c6b6ac0ea258e6a03f"><div class="ttname"><a href="classfc_1_1_geom.html#adee9c964dabff6c6b6ac0ea258e6a03f">fc::Geom::intersects</a></div><div class="ttdeci">bool intersects(const Geom &amp;other) const</div><div class="ttdoc">Verdadero si las coberturas se tocan o se cruzan.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00671">geometry.cpp:671</a></div></div>
+<div class="ttc" id="anamespacefc_html"><div class="ttname"><a href="namespacefc.html">fc</a></div><div class="ttdef"><b>Definición</b> <a href="cutout_8hpp_source.html#l00016">cutout.hpp:16</a></div></div>
+<div class="ttc" id="anamespacefc_html_a01f76cea7ae4ad96c57e12e9cd03ee0e"><div class="ttname"><a href="namespacefc.html#a01f76cea7ae4ad96c57e12e9cd03ee0e">fc::thievingPoints</a></div><div class="ttdeci">std::vector&lt; Pt &gt; thievingPoints(const Geom &amp;copper, const BBox &amp;area, const ThievingOptions &amp;options)</div><div class="ttdoc">Calcula los centros de una grilla de puntos de cobre.</div><div class="ttdef"><b>Definición</b> <a href="#l00047">thieving.cpp:47</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html"><div class="ttname"><a href="structfc_1_1_b_box.html">fc::BBox</a></div><div class="ttdoc">Caja envolvente alineada a los ejes.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00048">geometry.hpp:48</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a19c807697cdf8436448ef538057abca2"><div class="ttname"><a href="structfc_1_1_b_box.html#a19c807697cdf8436448ef538057abca2">fc::BBox::xmax</a></div><div class="ttdeci">double xmax</div><div class="ttdoc">Límite superior en X.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00051">geometry.hpp:51</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a32e6c7b1b402701621aae0aca300a11a"><div class="ttname"><a href="structfc_1_1_b_box.html#a32e6c7b1b402701621aae0aca300a11a">fc::BBox::xmin</a></div><div class="ttdeci">double xmin</div><div class="ttdoc">Límite inferior en X.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00049">geometry.hpp:49</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a3fcb5b246dbd0dede37b13c09c5588ac"><div class="ttname"><a href="structfc_1_1_b_box.html#a3fcb5b246dbd0dede37b13c09c5588ac">fc::BBox::ymax</a></div><div class="ttdeci">double ymax</div><div class="ttdoc">Límite superior en Y.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00052">geometry.hpp:52</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_a4e5d39ce96f218172a5917e52f886461"><div class="ttname"><a href="structfc_1_1_b_box.html#a4e5d39ce96f218172a5917e52f886461">fc::BBox::ymin</a></div><div class="ttdeci">double ymin</div><div class="ttdoc">Límite inferior en Y.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00050">geometry.hpp:50</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html_aa01e601be965de7902d629f1137cb914"><div class="ttname"><a href="structfc_1_1_b_box.html#aa01e601be965de7902d629f1137cb914">fc::BBox::valid</a></div><div class="ttdeci">bool valid</div><div class="ttdoc">true si la caja contiene geometría.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00053">geometry.hpp:53</a></div></div>
+<div class="ttc" id="astructfc_1_1_thieving_options_html"><div class="ttname"><a href="structfc_1_1_thieving_options.html">fc::ThievingOptions</a></div><div class="ttdoc">Parámetros de la grilla de thieving.</div><div class="ttdef"><b>Definición</b> <a href="thieving_8hpp_source.html#l00016">thieving.hpp:16</a></div></div>
+<div class="ttc" id="astructfc_1_1_thieving_options_html_a0693bf8cb10ad1c34a2b839e66589455"><div class="ttname"><a href="structfc_1_1_thieving_options.html#a0693bf8cb10ad1c34a2b839e66589455">fc::ThievingOptions::dotDiameter</a></div><div class="ttdeci">double dotDiameter</div><div class="ttdoc">Diámetro de cada punto.</div><div class="ttdef"><b>Definición</b> <a href="thieving_8hpp_source.html#l00017">thieving.hpp:17</a></div></div>
+<div class="ttc" id="astructfc_1_1_thieving_options_html_a1c9c9caf31eeb4110f30f593adfb8769"><div class="ttname"><a href="structfc_1_1_thieving_options.html#a1c9c9caf31eeb4110f30f593adfb8769">fc::ThievingOptions::margin</a></div><div class="ttdeci">double margin</div><div class="ttdoc">Margen del área de trabajo.</div><div class="ttdef"><b>Definición</b> <a href="thieving_8hpp_source.html#l00020">thieving.hpp:20</a></div></div>
+<div class="ttc" id="astructfc_1_1_thieving_options_html_ad4329e65fd4d37cc1341f00fa0903687"><div class="ttname"><a href="structfc_1_1_thieving_options.html#ad4329e65fd4d37cc1341f00fa0903687">fc::ThievingOptions::clearance</a></div><div class="ttdeci">double clearance</div><div class="ttdoc">Distancia mínima al cobre existente.</div><div class="ttdef"><b>Definición</b> <a href="thieving_8hpp_source.html#l00019">thieving.hpp:19</a></div></div>
+<div class="ttc" id="astructfc_1_1_thieving_options_html_af81f2b5b840d261e1dd2bdcfbf4f6690"><div class="ttname"><a href="structfc_1_1_thieving_options.html#af81f2b5b840d261e1dd2bdcfbf4f6690">fc::ThievingOptions::spacing</a></div><div class="ttdeci">double spacing</div><div class="ttdoc">Separación entre puntos.</div><div class="ttdef"><b>Definición</b> <a href="thieving_8hpp_source.html#l00018">thieving.hpp:18</a></div></div>
+<div class="ttc" id="athieving_8hpp_html"><div class="ttname"><a href="thieving_8hpp.html">thieving.hpp</a></div><div class="ttdoc">Copper thieving: grilla de puntos de cobre.</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_1116e854259d3d888c8330fb94875287.html">cam</a></li><li class="navelem"><a href="thieving_8cpp.html">thieving.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

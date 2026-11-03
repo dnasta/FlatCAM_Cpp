@@ -1,3 +1,10 @@
+/**
+ * @file test_gcode.cpp
+ * @brief Pruebas de generación de G-code, preprocesadores y multiherramienta.
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include <string>
@@ -321,4 +328,44 @@ TEST(GCode, DrillPerToolSpindleAndFeed) {
     const std::string code = drillingGCode(job, GCodeOptions{});
     EXPECT_NE(code.find("M03 S12000"), std::string::npos);
     EXPECT_NE(code.find("M03 S8000"), std::string::npos);
+}
+
+TEST(GCode, LaserTurnsOffDuringRapids) {
+    PathJob job;
+    job.paths = {{Pt{0, 0}, Pt{10, 0}}, {Pt{20, 10}, Pt{30, 10}}};
+    job.bounds = BBox{0, 0, 30, 10};
+    GCodeOptions opt;
+    opt.flavor = GCodeFlavor::GrblLaser;
+    opt.laserPower = 250.0;
+    const std::string code = pathsGCode(job, opt);
+
+    // Each path must be preceded by a laser-off and a rapid; the beam is only
+    // enabled after positioning at the path start.
+    const std::size_t firstM5 = code.find("M5");
+    const std::size_t firstG00 = code.find("G00 X");
+    const std::size_t firstM3 = code.find("M03");
+    ASSERT_NE(firstM5, std::string::npos);
+    ASSERT_NE(firstG00, std::string::npos);
+    ASSERT_NE(firstM3, std::string::npos);
+    EXPECT_LT(firstM5, firstG00);
+    EXPECT_LT(firstG00, firstM3);
+
+    const std::size_t secondG00 = code.find("G00 X", firstM3);
+    ASSERT_NE(secondG00, std::string::npos);
+    const std::size_t secondM5 = code.rfind("M5", secondG00);
+    ASSERT_NE(secondM5, std::string::npos);
+    EXPECT_LT(secondM5, secondG00);
+}
+
+TEST(GCode, LaserMultiToolSkipsEmptyPathsSafely) {
+    PathToolJob tool;
+    tool.number = 1;
+    tool.diameter = 0.2;
+    tool.options.flavor = GCodeFlavor::GrblLaser;
+    tool.paths = {{}, {Pt{1, 1}, Pt{2, 2}}};
+    const std::string code = pathsGCodeMulti({tool}, tool.options);
+    EXPECT_NE(code.find("M03"), std::string::npos);
+    EXPECT_NE(code.find("M5"), std::string::npos);
+    // The empty first path must not produce a rapid to an invalid point.
+    EXPECT_EQ(code.find("G00 XY"), std::string::npos);
 }

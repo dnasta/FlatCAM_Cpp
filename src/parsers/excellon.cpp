@@ -1,3 +1,13 @@
+/**
+ * @file excellon.cpp
+ * @brief Parser de taladrado Excellon, con cabecera M48 o sin ella.
+ *
+ * Lee línea por línea, distinguiendo cabecera y cuerpo: unidades y formato
+ * (METRIC o INCH, TZ o LZ, decimal explícito), definiciones de herramienta,
+ * G90/G91, taladros, ranuras G85, ruteo M15/M16 con G01/G00 y repetición R. Al
+ * final construye la geometría (círculos y cápsulas), la une y la convierte a
+ * las unidades de la aplicación.
+ */
 #include "flatcam/excellon.hpp"
 
 #include <algorithm>
@@ -12,22 +22,26 @@
 namespace fc {
 namespace {
 
+/// Prefijo barato sobre string_view.
 bool startsWith(std::string_view s, std::string_view p) {
     return s.size() >= p.size() && s.compare(0, p.size(), p) == 0;
 }
 
+/// Copia en mayúsculas; el parser compara sin distinguir caja.
 std::string upper(std::string_view s) {
     std::string out(s);
     for (char& c : out) c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
     return out;
 }
 
+/// Recorta espacios en ambos extremos.
 std::string_view trim(std::string_view s) {
     while (!s.empty() && std::isspace(static_cast<unsigned char>(s.front()))) s.remove_prefix(1);
     while (!s.empty() && std::isspace(static_cast<unsigned char>(s.back()))) s.remove_suffix(1);
     return s;
 }
 
+/// Quita los '%' externos y recorta espacios.
 std::string_view inner(std::string_view s) {
     s = trim(s);
     if (!s.empty() && s.front() == '%') s.remove_prefix(1);
@@ -35,6 +49,9 @@ std::string_view inner(std::string_view s) {
     return trim(s);
 }
 
+/**
+ * @brief Estado de parseo: cabecera, herramienta activa, posición y repetición.
+ */
 struct Ctx {
     const ExcellonOptions& opt;
     ExcellonResult& res;
@@ -55,6 +72,7 @@ struct Ctx {
     Ctx(const ExcellonOptions& o, ExcellonResult& r) : opt(o), res(r) {}
 };
 
+/// Cuenta dígitos en un campo, para aplicar la regla de ceros.
 int countDigits(std::string_view s) {
     int n = 0;
     for (char c : s) {
@@ -63,6 +81,18 @@ int countDigits(std::string_view s) {
     return n;
 }
 
+/**
+ * @brief Convierte un campo de coordenada Excellon a unidades del archivo.
+ *
+ * Si el texto trae punto se usa directo. Si no, separa el signo y aplica la
+ * regla del modo de ceros: con 'T' divide por 10^fracDigits; en los demás casos
+ * divide por 10^(dígitos presentes - enteros declarados).
+ * @param ctx Contexto con unidades y formato vigentes.
+ * @param text Campo sin el eje, por ejemplo "0123".
+ * @return Valor con signo en las unidades del archivo.
+ * @note El formato depende de si el archivo es métrico o en pulgadas, porque
+ *       cada uno guarda sus propios dígitos enteros y fraccionarios.
+ */
 double parseCoordinate(const Ctx& ctx, std::string_view text) {
     std::string t(text);
     if (t.empty()) return 0.0;
@@ -71,21 +101,26 @@ double parseCoordinate(const Ctx& ctx, std::string_view text) {
     const bool negative = t.front() == '-';
     if (!t.empty() && (t.front() == '+' || t.front() == '-')) t.erase(t.begin());
     const long long raw = std::llabs(std::strtoll(t.c_str(), nullptr, 10));
-    const int len = countDigits(t);
 
     const bool inch = ctx.res.fileUnits == Units::Inch;
-    const int intDigits = inch ? ctx.res.formatUpperIn : ctx.res.formatUpperMm;
     const int fracDigits = inch ? ctx.res.formatLowerIn : ctx.res.formatLowerMm;
 
     double v = 0.0;
-    if (ctx.res.zeros == 'T') {
-        v = static_cast<double>(raw) / std::pow(10.0, fracDigits);
-    } else {
-        v = static_cast<double>(raw) / std::pow(10.0, std::max(0, len - intDigits));
-    }
+    // Con supresión de ceros (LZ o TZ) el valor siempre se escala por los
+    // dígitos fraccionarios declarados. En LZ el texto es el sufijo derecho
+    // del campo, así que usar `len - intDigits` daría un valor 10^fracDigits
+    // veces mayor (por ejemplo "500" en 3.3 sería 500 en vez de 0,5 mm).
+    v = static_cast<double>(raw) / std::pow(10.0, fracDigits);
     return negative ? -v : v;
 }
 
+/**
+ * @brief Devuelve la herramienta, creándola con diámetro ficticio si falta.
+ *
+ * Reproduce el criterio de FlatCAM: cuando el archivo no define diámetro se
+ * asigna 1 + (n-1)/100 mm y se avisa, para que la geometría siga siendo
+ * dibujable.
+ */
 ExcellonTool& toolFor(Ctx& ctx, int number) {
     auto it = ctx.res.tools.find(number);
     if (it == ctx.res.tools.end()) {
@@ -100,6 +135,13 @@ ExcellonTool& toolFor(Ctx& ctx, int number) {
     return it->second;
 }
 
+/**
+ * @brief Interpreta una línea de unidades y formato.
+ *
+ * Reconoce METRIC o M71 e INCH o M72, fija 3.3 o 2.4 por defecto, lee TZ o LZ
+ * para el modo de ceros y, si el especificador trae un punto (por ejemplo
+ * "000.0000"), toma de ahí los dígitos enteros y fraccionarios.
+ */
 void parseUnits(Ctx& ctx, std::string_view line) {
     const std::string u = upper(inner(line));
     if (startsWith(u, "METRIC") || startsWith(u, "M71")) {
@@ -146,6 +188,12 @@ void parseUnits(Ctx& ctx, std::string_view line) {
 }
 
 // T1C0.8 / T01C0.800 / T1
+/**
+ * @brief Parsea una definición o selección de herramienta (TnCn o Tn).
+ *
+ * Con diámetro válido actualiza la herramienta y la deja activa; sin diámetro
+ * sólo la selecciona, creándola como desconocida.
+ */
 void parseToolLine(Ctx& ctx, std::string_view line) {
     std::size_t i = 1;
     const std::size_t start = i;
@@ -174,10 +222,17 @@ void parseToolLine(Ctx& ctx, std::string_view line) {
     ctx.tool = number;
 }
 
+/// Coordenadas X e Y opcionales leídas de una línea.
 struct Coords {
     std::optional<std::string> x, y;
 };
 
+/**
+ * @brief Extrae los campos X e Y de una línea.
+ *
+ * Acepta signo y punto decimal e ignora el resto de los caracteres (G, M, R...).
+ * @return Campos presentes; cada uno queda como texto sin interpretar.
+ */
 Coords readCoords(std::string_view s) {
     Coords c;
     std::size_t i = 0;
@@ -199,6 +254,10 @@ Coords readCoords(std::string_view s) {
     return c;
 }
 
+/**
+ * @brief Agrega un taladro a la herramienta activa.
+ * @note Sin herramienta seleccionada avisa y descarta el punto.
+ */
 void addDrill(Ctx& ctx, double x, double y) {
     if (ctx.tool == 0) {
         ctx.res.warnings.push_back("drill before tool selection");
@@ -209,6 +268,7 @@ void addDrill(Ctx& ctx, double x, double y) {
     ++ctx.res.drillCount;
 }
 
+/// Agrega una ranura (segmento) a la herramienta activa.
 void addSlot(Ctx& ctx, const Pt& a, const Pt& b) {
     if (ctx.tool == 0) {
         ctx.res.warnings.push_back("slot before tool selection");
@@ -219,6 +279,14 @@ void addSlot(Ctx& ctx, const Pt& a, const Pt& b) {
     ++ctx.res.slotCount;
 }
 
+/**
+ * @brief Procesa una línea del archivo Excellon.
+ *
+ * Cubre M48 y M95, el fin de programa, M71 y M72, G90 y G91, METRIC e INCH, la
+ * definición y selección de herramientas, el ruteo M15/M16/M17 con G00 y G01, el
+ * prefijo de repetición R, las ranuras G85 y, por defecto, los taladros con
+ * coordenadas.
+ */
 void handleBodyLine(Ctx& ctx, std::string_view line) {
     const std::string u = upper(trim(line));
     if (u.empty()) return;
@@ -335,6 +403,14 @@ void handleBodyLine(Ctx& ctx, std::string_view line) {
     ctx.y = y;
 }
 
+/**
+ * @brief Construye la geometría y aplica la conversión de unidades.
+ *
+ * Por cada herramienta crea un círculo por taladro y una cápsula, o un círculo
+ * si la ranura es degenerada, por segmento; une todo en un sólido, calcula los
+ * límites, convierte a las unidades de la aplicación y reescala diámetros y
+ * geometrías por herramienta.
+ */
 void finalize(Ctx& ctx) {
     const double factor = conversionFactor(ctx.res.fileUnits, ctx.opt.appUnits);
     const int quad = std::max(2, ctx.opt.stepsPerCircle / 4);
@@ -384,8 +460,16 @@ void finalize(Ctx& ctx) {
 
 }  // namespace
 
+/// Guarda las opciones de parseo.
 ExcellonParser::ExcellonParser(ExcellonOptions options) : opt_(options) {}
 
+/**
+ * @brief Parsea un Excellon que ya está en memoria.
+ * @param source Texto completo del archivo.
+ * @return Resultado con herramientas, taladros, ranuras, geometría y avisos.
+ * @note Si el archivo no declara unidades se usan las de la aplicación y el
+ *       modo de ceros por defecto de las opciones.
+ */
 ExcellonResult ExcellonParser::parseString(std::string_view source) const {
     ExcellonResult result;
     result.zeros = opt_.defaultZeros;
@@ -406,6 +490,10 @@ ExcellonResult ExcellonParser::parseString(std::string_view source) const {
     return result;
 }
 
+/**
+ * @brief Lee y parsea un archivo Excellon.
+ * @throw std::runtime_error si no se puede abrir.
+ */
 ExcellonResult ExcellonParser::parseFile(const std::string& path) const {
     std::ifstream in(path, std::ios::binary);
     if (!in) throw std::runtime_error("cannot open Excellon file: " + path);

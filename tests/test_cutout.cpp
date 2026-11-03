@@ -1,3 +1,10 @@
+/**
+ * @file test_cutout.cpp
+ * @brief Pruebas de corte de contorno, puentes y multipasada.
+ *
+ * Cada `TEST()` describe un caso verificable; los nombres siguen el formato
+ * `Suite.Caso` para filtrar con `--gtest_filter`.
+ */
 #include <gtest/gtest.h>
 
 #include <cmath>

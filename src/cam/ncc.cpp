@@ -1,3 +1,14 @@
+/**
+ * @file ncc.cpp
+ * @brief NCC (Non-Copper Clear): despeje del cobre sobrante.
+ *
+ * Implementa `fc::clearCopper`. Primero calcula el área mecanizable como
+ * `área de trabajo − buffer(cobre, radio + clearance)` y después la recorre
+ * con una de dos estrategias: líneas paralelas recortadas contra la región
+ * (`Hatch`, la implementación propia de este archivo) o contornos paralelos
+ * delegando en `fc::paintArea` (`Paint`).
+ */
+
 #include "flatcam/ncc.hpp"
 
 #include "flatcam/paint.hpp"
@@ -8,6 +19,16 @@
 namespace fc {
 namespace {
 
+/**
+ * @brief Aplana el resultado de una intersección en una lista de cadenas.
+ *
+ * GEOS devuelve `LineString`, `MultiLineString`, `GeometryCollection` o incluso
+ * `MultiPolygon` según el caso, de modo que la función recorre el árbol y
+ * agrega únicamente las geometrías de tipo línea no vacías.
+ *
+ * @param geom Geometría a recorrer.
+ * @param out Lista donde se acumulan las cadenas encontradas.
+ */
 void collectLines(const Geom& geom, std::vector<Geom>& out) {
     if (!geom.valid() || geom.empty()) return;
     const int type = geom.typeId();
@@ -22,6 +43,7 @@ void collectLines(const Geom& geom, std::vector<Geom>& out) {
     }
 }
 
+/// @brief Acumula `b` dentro de `target`, ignorando cajas inválidas.
 void addBounds(BBox& target, const BBox& b) {
     if (!b.valid) return;
     if (!target.valid) {
@@ -36,6 +58,40 @@ void addBounds(BBox& target, const BBox& b) {
 
 }  // namespace
 
+/**
+ * @brief Despeja todo el cobre que no pertenece a la geometría de referencia.
+ *
+ * Construye la región mecanizable como `workArea.difference(keepOut)`, donde
+ * `keepOut = copper.buffer(radius + clearance)` es el cobre protegido con su
+ * distancia de seguridad. Si no se pasa área de trabajo se usa el bounding box
+ * del cobre expandido por `margin + spacing`.
+ *
+ * Con `NccStrategy::Paint` delega en `fc::paintArea` sobre esa región. Con
+ * `NccStrategy::Hatch` (predeterminada) genera líneas paralelas separadas
+ * `stepOver × diámetro`, las rota `angleDeg` alrededor del centro del área de
+ * trabajo, las extiende ±diagonal y las recorta con `intersection(region)`;
+ * cada fragmento de longitud ≥ 1e-6 mm se convierte en un recorrido
+ * independiente.
+ *
+ * @param copper Cobre que debe conservarse.
+ * @param area Área rectangular de trabajo; si está vacía se deriva del cobre.
+ * @param options Estrategia, diámetro, paso, clearance, ángulo, margen y
+ *                segmentos por cuadrante.
+ * @return Recorridos, área despejada, longitud total y límites.
+ *
+ * @note `clearedArea` se informa también en modo Paint, aunque en ese caso el
+ *       recorte real lo hace `paintArea` con su propio margen.
+ * @note `spacing` se satura a 0,05 mm como mínimo para evitar bucles infinitos.
+ * @warning En modo Hatch el barrido en Y va desde `bounds.ymin − margin` hasta
+ *          `bounds.ymax + margin`, pero `bounds` ya deriva de un área que
+ *          incluye `margin + spacing`. Las líneas sobrantes se recortan contra
+ *          la región, así que el resultado es correcto, aunque se generan y
+ *          recortan segmentos de más (trabajo redundante).
+ * @note El barrido usa offsets perpendiculares a la dirección del hatch, de
+ *       modo que la separación efectiva es `spacing` para cualquier ángulo.
+ * @note `lineCount` se acumula sólo con fines de depuración y luego se
+ *       descarta con `(void)lineCount`; no se informa al llamador.
+ */
 NccResult clearCopper(const Geom& copper, const Geom& area, const NccOptions& options) {
     NccResult result;
     if (!copper.valid() || copper.empty()) return result;
@@ -81,14 +137,16 @@ NccResult clearCopper(const Geom& copper, const Geom& area, const NccOptions& op
     const double s = std::sin(angle);
 
     int lineCount = 0;
-    for (double y = bounds.ymin - options.margin; y <= bounds.ymax + options.margin + 1e-9;
-         y += spacing) {
-        const double localY = y - cy;
-        const double x0 = -diag;
-        const double x1 = diag;
-        // Rotate the line around the centre of the work area.
-        const Pt p0{cx + (x0 * c - localY * s), cy + (x0 * s + localY * c)};
-        const Pt p1{cx + (x1 * c - localY * s), cy + (x1 * s + localY * c)};
+    // Barre offsets perpendiculares a la dirección del hatch. Usar el eje Y
+    // sin rotar dejaba separaciones efectivas mayores y esquinas sin cubrir
+    // con ángulos de 45°.
+    const double half = diag / 2.0;
+    const int steps = std::max(1, static_cast<int>(std::ceil((2.0 * half) / spacing)));
+    for (int k = 0; k <= steps; ++k) {
+        const double offset = -half + k * spacing;
+        const Pt mid{cx - s * offset, cy + c * offset};
+        const Pt p0{mid.x - c * half, mid.y - s * half};
+        const Pt p1{mid.x + c * half, mid.y + s * half};
 
         Geom line = Geom::line({p0, p1});
         if (!line.valid() || line.empty()) continue;

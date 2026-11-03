@@ -1,0 +1,517 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia de la clase fc::SpatialIndex</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('classfc_1_1_spatial_index.html','','classfc_1_1_spatial_index-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia de la clase fc::SpatialIndex</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Índice espacial envolvente de <span class="tt">GEOSSTRtree</span>.  
+ <a href="#details">Más...</a></p>
+
+<p><code>#include &lt;<a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Métodos públicos</h2></td></tr>
+<tr class="memitem:abdf8e08fc621ab95fc937b7434c5c9fa" id="r_abdf8e08fc621ab95fc937b7434c5c9fa"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#abdf8e08fc621ab95fc937b7434c5c9fa">SpatialIndex</a> ()</td></tr>
+<tr class="memdesc:abdf8e08fc621ab95fc937b7434c5c9fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crea un índice vacío.  <br /></td></tr>
+<tr class="memitem:ad2ec27c91324aa8acbb5ce44ee2cf516" id="r_ad2ec27c91324aa8acbb5ce44ee2cf516"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ad2ec27c91324aa8acbb5ce44ee2cf516">~SpatialIndex</a> ()</td></tr>
+<tr class="memdesc:ad2ec27c91324aa8acbb5ce44ee2cf516"><td class="mdescLeft">&#160;</td><td class="mdescRight">Libera el STRtree de GEOS.  <br /></td></tr>
+<tr class="memitem:aeeb1e96cd948b08c83d7de3f64a1c294" id="r_aeeb1e96cd948b08c83d7de3f64a1c294"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aeeb1e96cd948b08c83d7de3f64a1c294">SpatialIndex</a> (const SpatialIndex &amp;)=delete</td></tr>
+<tr class="memitem:a3bbf41db140bfde375ff5ad54b4392bd" id="r_a3bbf41db140bfde375ff5ad54b4392bd"><td class="memItemLeft"><a class="el" href="#abdf8e08fc621ab95fc937b7434c5c9fa">SpatialIndex</a> &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a3bbf41db140bfde375ff5ad54b4392bd">operator=</a> (const <a class="el" href="#abdf8e08fc621ab95fc937b7434c5c9fa">SpatialIndex</a> &amp;)=delete</td></tr>
+<tr class="memitem:a29db49cdc0ef9a5ac4792fb3d4b10f64" id="r_a29db49cdc0ef9a5ac4792fb3d4b10f64"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a29db49cdc0ef9a5ac4792fb3d4b10f64">insert</a> (const <a class="el" href="class_geom.html">Geom</a> &amp;g, std::uint32_t id)</td></tr>
+<tr class="memdesc:a29db49cdc0ef9a5ac4792fb3d4b10f64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserta una geometría con un identificador.  <br /></td></tr>
+<tr class="memitem:a18eea28b5578514b436da9dffe2f7b04" id="r_a18eea28b5578514b436da9dffe2f7b04"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a18eea28b5578514b436da9dffe2f7b04">build</a> ()</td></tr>
+<tr class="memdesc:a18eea28b5578514b436da9dffe2f7b04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construye el árbol; obligatorio antes de <span class="tt"><a class="el" href="#a1288b13e88b6a6a33253e8614f0fa3ca" title="Consulta los identificadores que intersectan una caja.">query()</a></span>.  <br /></td></tr>
+<tr class="memitem:a1288b13e88b6a6a33253e8614f0fa3ca" id="r_a1288b13e88b6a6a33253e8614f0fa3ca"><td class="memItemLeft">std::vector&lt; std::uint32_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a1288b13e88b6a6a33253e8614f0fa3ca">query</a> (const <a class="el" href="structfc_1_1_b_box.html">BBox</a> &amp;box) const</td></tr>
+<tr class="memdesc:a1288b13e88b6a6a33253e8614f0fa3ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Consulta los identificadores que intersectan una caja.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Atributos privados</h2></td></tr>
+<tr class="memitem:aaafc1390fb4d2b8b7291c1eaeed58990" id="r_aaafc1390fb4d2b8b7291c1eaeed58990"><td class="memItemLeft">GEOSSTRtree *&#160;</td><td class="memItemRight"><a class="el" href="#aaafc1390fb4d2b8b7291c1eaeed58990">tree_</a> = nullptr</td></tr>
+<tr class="memdesc:aaafc1390fb4d2b8b7291c1eaeed58990"><td class="mdescLeft">&#160;</td><td class="mdescRight">Árbol propiedad de esta clase.  <br /></td></tr>
+<tr class="memitem:ad7c555680528f39b120250b8ed77fab3" id="r_ad7c555680528f39b120250b8ed77fab3"><td class="memItemLeft">std::vector&lt; <a class="el" href="class_geom.html">Geom</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ad7c555680528f39b120250b8ed77fab3">keep_</a></td></tr>
+<tr class="memdesc:ad7c555680528f39b120250b8ed77fab3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mantiene vivas las geometrías indexadas.  <br /></td></tr>
+<tr class="memitem:a459bc53e1e864339a6d9b0b8895f9dc0" id="r_a459bc53e1e864339a6d9b0b8895f9dc0"><td class="memItemLeft">std::vector&lt; std::uint32_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a459bc53e1e864339a6d9b0b8895f9dc0">ids_</a></td></tr>
+<tr class="memdesc:a459bc53e1e864339a6d9b0b8895f9dc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identificadores paralelos a <span class="tt"><a class="el" href="#ad7c555680528f39b120250b8ed77fab3" title="Mantiene vivas las geometrías indexadas.">keep_</a></span>.  <br /></td></tr>
+<tr class="memitem:a10aaf4ccc3bfef0df219ba5649ea46af" id="r_a10aaf4ccc3bfef0df219ba5649ea46af"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a10aaf4ccc3bfef0df219ba5649ea46af">built_</a> = false</td></tr>
+<tr class="memdesc:a10aaf4ccc3bfef0df219ba5649ea46af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evita reconstruir o consultar antes de tiempo.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Índice espacial envolvente de <span class="tt">GEOSSTRtree</span>. </p>
+<p>Inserta geometrías con un identificador entero y permite consultar qué identificadores intersectan una caja. Es útil para acelerar la detección de colisiones y la selección de objetos.</p>
+<p>El índice no es copiable y debe construirse (<span class="tt"><a class="el" href="#a18eea28b5578514b436da9dffe2f7b04" title="Construye el árbol; obligatorio antes de query().">build()</a></span>) antes de consultar. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00331">331</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Documentación de constructores y destructores</h2>
+<a id="abdf8e08fc621ab95fc937b7434c5c9fa" name="abdf8e08fc621ab95fc937b7434c5c9fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdf8e08fc621ab95fc937b7434c5c9fa">&#9670;&#160;</a></span>SpatialIndex() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">fc::SpatialIndex::SpatialIndex </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Crea un índice vacío. </p>
+<p>Crea el árbol R con capacidad de nodo 10.</p>
+<dl class="exception"><dt>Excepciones</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>si GEOS no puede crear el árbol. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Nota</dt><dd>Llama antes a <a class="el" href="namespacefc.html#a19e9194ea470d5408c87bdecd25c3f13" title="Inicializa el runtime global de GEOS.">initGeosRuntime()</a> porque la API clásica de GEOS aborta si no fue inicializada. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="rtree_8cpp_source.html#l00044">44</a> del archivo <a class="el" href="rtree_8cpp_source.html">rtree.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00141">fc::initGeosRuntime()</a> y <a class="el" href="geometry_8hpp_source.html#l00360">tree_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="#a3bbf41db140bfde375ff5ad54b4392bd">operator=()</a>, <a class="el" href="rtree_8cpp_source.html#l00093">query()</a> y <a class="el" href="#aeeb1e96cd948b08c83d7de3f64a1c294">SpatialIndex()</a>.</p>
+
+</div>
+</div>
+<a id="ad2ec27c91324aa8acbb5ce44ee2cf516" name="ad2ec27c91324aa8acbb5ce44ee2cf516"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2ec27c91324aa8acbb5ce44ee2cf516">&#9670;&#160;</a></span>~SpatialIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">fc::SpatialIndex::~SpatialIndex </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Libera el STRtree de GEOS. </p>
+<p>Destruye el árbol GEOS si llegó a crearse. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="rtree_8cpp_source.html#l00051">51</a> del archivo <a class="el" href="rtree_8cpp_source.html">rtree.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00360">tree_</a>.</p>
+
+</div>
+</div>
+<a id="aeeb1e96cd948b08c83d7de3f64a1c294" name="aeeb1e96cd948b08c83d7de3f64a1c294"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeeb1e96cd948b08c83d7de3f64a1c294">&#9670;&#160;</a></span>SpatialIndex() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">fc::SpatialIndex::SpatialIndex </td>
+          <td>(</td>
+          <td class="paramtype">const SpatialIndex &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel delete">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Hace referencia a <a class="el" href="rtree_8cpp_source.html#l00044">SpatialIndex()</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones miembro</h2>
+<a id="a18eea28b5578514b436da9dffe2f7b04" name="a18eea28b5578514b436da9dffe2f7b04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18eea28b5578514b436da9dffe2f7b04">&#9670;&#160;</a></span>build()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fc::SpatialIndex::build </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construye el árbol; obligatorio antes de <span class="tt"><a class="el" href="#a1288b13e88b6a6a33253e8614f0fa3ca" title="Consulta los identificadores que intersectan una caja.">query()</a></span>. </p>
+<p>Construye el árbol una única vez (idempotente).</p>
+<dl class="section note"><dt>Nota</dt><dd>Construir dos veces es un error de GEOS, por eso se protege con built_. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="rtree_8cpp_source.html#l00077">77</a> del archivo <a class="el" href="rtree_8cpp_source.html">rtree.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00363">built_</a> y <a class="el" href="geometry_8hpp_source.html#l00360">tree_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="#a3bbf41db140bfde375ff5ad54b4392bd">operator=()</a> y <a class="el" href="rtree_8cpp_source.html#l00093">query()</a>.</p>
+
+</div>
+</div>
+<a id="a29db49cdc0ef9a5ac4792fb3d4b10f64" name="a29db49cdc0ef9a5ac4792fb3d4b10f64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29db49cdc0ef9a5ac4792fb3d4b10f64">&#9670;&#160;</a></span>insert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fc::SpatialIndex::insert </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_geom.html">Geom</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>g</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::uint32_t</td>          <td class="paramname"><span class="paramname"><em>id</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserta una geometría con un identificador. </p>
+<p>Inserta una geometría asociándole un identificador.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>Geometría a indexar (se conserva una copia compartida). </td></tr>
+    <tr><td class="paramname">id</td><td>Identificador devuelto en las consultas.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Guarda una copia en keep_ (dueña de la memoria), registra el id y entrega a GEOS el puntero crudo junto con el id casteado a void*. Las geometrías inválidas se ignoran en silencio. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>Geometría a indexar. </td></tr>
+    <tr><td class="paramname">id</td><td>Identificador que devolverá <a class="el" href="#a1288b13e88b6a6a33253e8614f0fa3ca" title="Consulta los identificadores que intersectan una caja.">query()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Nota</dt><dd>El patrón previsto es insertar todo y recién entonces consultar: insertar después de <a class="el" href="#a18eea28b5578514b436da9dffe2f7b04" title="Construye el árbol; obligatorio antes de query().">build()</a> exige reconstruir el árbol. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="rtree_8cpp_source.html#l00066">66</a> del archivo <a class="el" href="rtree_8cpp_source.html">rtree.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00362">ids_</a>, <a class="el" href="geometry_8hpp_source.html#l00361">keep_</a>, <a class="el" href="geometry_8hpp_source.html#l00313">fc::Geom::raw()</a>, <a class="el" href="geometry_8hpp_source.html#l00360">tree_</a> y <a class="el" href="geometry_8hpp_source.html#l00195">fc::Geom::valid()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="#a3bbf41db140bfde375ff5ad54b4392bd">operator=()</a>.</p>
+
+</div>
+</div>
+<a id="a3bbf41db140bfde375ff5ad54b4392bd" name="a3bbf41db140bfde375ff5ad54b4392bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bbf41db140bfde375ff5ad54b4392bd">&#9670;&#160;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#abdf8e08fc621ab95fc937b7434c5c9fa">SpatialIndex</a> &amp; fc::SpatialIndex::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#abdf8e08fc621ab95fc937b7434c5c9fa">SpatialIndex</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel delete">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Hace referencia a <a class="el" href="rtree_8cpp_source.html#l00077">build()</a>, <a class="el" href="rtree_8cpp_source.html#l00066">insert()</a>, <a class="el" href="rtree_8cpp_source.html#l00093">query()</a> y <a class="el" href="rtree_8cpp_source.html#l00044">SpatialIndex()</a>.</p>
+
+</div>
+</div>
+<a id="a1288b13e88b6a6a33253e8614f0fa3ca" name="a1288b13e88b6a6a33253e8614f0fa3ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1288b13e88b6a6a33253e8614f0fa3ca">&#9670;&#160;</a></span>query()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::uint32_t &gt; fc::SpatialIndex::query </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structfc_1_1_b_box.html">BBox</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>box</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Consulta los identificadores que intersectan una caja. </p>
+<p>Devuelve los ids cuyas geometrías intersectan la caja dada.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">box</td><td>Caja de búsqueda. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Identificadores en orden no especificado.</dd></dl>
+<p>Fuerza <a class="el" href="#a18eea28b5578514b436da9dffe2f7b04" title="Construye el árbol; obligatorio antes de query().">build()</a> si aún no se hizo, crea un rectángulo GEOS con la ventana y delega en GEOSSTRtree_query. La comparación es sólo de envolventes: si se necesita intersección exacta, el llamador debe verificarla después. </p><dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">box</td><td>Ventana de búsqueda; si no es válida devuelve lista vacía. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Ids en el orden en que GEOS los recorre (sin orden garantizado). </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="rtree_8cpp_source.html#l00093">93</a> del archivo <a class="el" href="rtree_8cpp_source.html">rtree.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="rtree_8cpp_source.html#l00077">build()</a>, <a class="el" href="geometry_8hpp_source.html#l00363">built_</a>, <a class="el" href="rtree_8cpp_source.html#l00044">SpatialIndex()</a>, <a class="el" href="geometry_8hpp_source.html#l00360">tree_</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="#a3bbf41db140bfde375ff5ad54b4392bd">operator=()</a>.</p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Documentación de datos miembro</h2>
+<a id="a10aaf4ccc3bfef0df219ba5649ea46af" name="a10aaf4ccc3bfef0df219ba5649ea46af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10aaf4ccc3bfef0df219ba5649ea46af">&#9670;&#160;</a></span>built_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::SpatialIndex::built_ = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Evita reconstruir o consultar antes de tiempo. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00363">363</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="rtree_8cpp_source.html#l00077">build()</a> y <a class="el" href="rtree_8cpp_source.html#l00093">query()</a>.</p>
+
+</div>
+</div>
+<a id="a459bc53e1e864339a6d9b0b8895f9dc0" name="a459bc53e1e864339a6d9b0b8895f9dc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a459bc53e1e864339a6d9b0b8895f9dc0">&#9670;&#160;</a></span>ids_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::uint32_t&gt; fc::SpatialIndex::ids_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Identificadores paralelos a <span class="tt"><a class="el" href="#ad7c555680528f39b120250b8ed77fab3" title="Mantiene vivas las geometrías indexadas.">keep_</a></span>. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00362">362</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="rtree_8cpp_source.html#l00066">insert()</a>.</p>
+
+</div>
+</div>
+<a id="ad7c555680528f39b120250b8ed77fab3" name="ad7c555680528f39b120250b8ed77fab3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7c555680528f39b120250b8ed77fab3">&#9670;&#160;</a></span>keep_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="class_geom.html">Geom</a>&gt; fc::SpatialIndex::keep_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Mantiene vivas las geometrías indexadas. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00361">361</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="rtree_8cpp_source.html#l00066">insert()</a>.</p>
+
+</div>
+</div>
+<a id="aaafc1390fb4d2b8b7291c1eaeed58990" name="aaafc1390fb4d2b8b7291c1eaeed58990"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaafc1390fb4d2b8b7291c1eaeed58990">&#9670;&#160;</a></span>tree_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GEOSSTRtree* fc::SpatialIndex::tree_ = nullptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Árbol propiedad de esta clase. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00360">360</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="rtree_8cpp_source.html#l00077">build()</a>, <a class="el" href="rtree_8cpp_source.html#l00066">insert()</a>, <a class="el" href="rtree_8cpp_source.html#l00093">query()</a>, <a class="el" href="rtree_8cpp_source.html#l00044">SpatialIndex()</a> y <a class="el" href="rtree_8cpp_source.html#l00051">~SpatialIndex()</a>.</p>
+
+</div>
+</div>
+<hr/>La documentación de esta clase está generada de los siguientes archivos:<ul>
+<li>include/flatcam/<a class="el" href="geometry_8hpp_source.html">geometry.hpp</a></li>
+<li>src/core/<a class="el" href="rtree_8cpp_source.html">rtree.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacefc.html">fc</a></li><li class="navelem"><a href="classfc_1_1_spatial_index.html">SpatialIndex</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,3 +1,12 @@
+/**
+ * @file svg.cpp
+ * @brief Exportador SVG de la vista de un objeto (cobre y recorridos).
+ *
+ * Genera un documento autónomo con el viewBox tomado de los límites, un grupo
+ * invertido en Y para que se vea como en pantalla CAD, relleno even-odd para
+ * conservar los huecos y polilíneas para los contornos abiertos. La lectura de
+ * SVG no está acá: vive en importers.cpp.
+ */
 #include "flatcam/svg.hpp"
 
 #include <algorithm>
@@ -7,6 +16,21 @@
 
 namespace fc {
 
+/**
+ * @brief Escribe un SVG con los sólidos rellenos y los recorridos como líneas.
+ *
+ * Si @p bounds no es válido, calcula la unión de las cajas de los sólidos; si
+ * tampoco así hay caja, no escribe nada. Ancho y alto se acotan a 1e-6 para
+ * evitar un viewBox degenerado. Los contornos con menos de 3 puntos se
+ * descartan y los huecos se emiten como subcaminos del mismo path con
+ * fill-rule="evenodd". El grupo exterior aplica translate(0, ymin+ymax) y
+ * scale(1,-1) para pasar de Y hacia arriba a Y hacia abajo.
+ * @param path Archivo de destino.
+ * @param solids Polígonos rellenos (cobre).
+ * @param follows Recorridos abiertos; se usa g.coords() de cada uno.
+ * @param bounds Caja a usar como viewBox; se calcula si no es válida.
+ * @throw std::runtime_error si no se puede abrir el archivo.
+ */
 void exportSvg(const std::string& path, const std::vector<Geom>& solids,
                const std::vector<Geom>& follows, const BBox& bounds) {
     BBox b = bounds;

@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente src/core/dxf.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('dxf_8cpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">dxf.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="dxf_8cpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file dxf.cpp</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Exportador DXF R2000 (AC1015) de la geometría de un objeto.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * Convierte los polígonos de cobre y los recorridos abiertos a entidades</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * LWPOLYLINE en milímetros (INSUNITS = 4). El módulo es sólo de escritura: la</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * importación de DXF vive en importers.cpp.</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> * @note Los huecos se emiten como polilíneas cerradas independientes, sin</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> *       jerarquía de contorno, igual que hace FlatCAM.</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="dxf_8hpp.html">flatcam/dxf.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;sstream&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacefc.html">fc</a> {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span>{</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment"></span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> * @brief Escribe una polilínea DXF (LWPOLYLINE) en el buffer de salida.</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * Emite los pares grupo mínimos: código 8 (capa &quot;0&quot;), 90 (cantidad de</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * vértices), 70 (bandera de cierre) y los pares 10/20 por cada vértice.</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * @param out Flujo de texto donde se acumula el documento DXF.</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * @param pts Vértices en milímetros; con menos de 2 no se escribe nada.</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * @param closed true para marcar la polilínea como cerrada (código 70 = 1).</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keywordtype">void</span> writePolyline(std::ostringstream&amp; out, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">Ring</a>&amp; pts, <span class="keywordtype">bool</span> closed) {</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordflow">if</span> (pts.size() &lt; 2) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    out &lt;&lt; <span class="stringliteral">&quot;0\nLWPOLYLINE\n8\n0\n90\n&quot;</span> &lt;&lt; pts.size() &lt;&lt; <span class="stringliteral">&quot;\n70\n&quot;</span> &lt;&lt; (closed ? 1 : 0) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_pt.html">Pt</a>&amp; p : pts) {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        out &lt;&lt; <span class="stringliteral">&quot;10\n&quot;</span> &lt;&lt; p.x &lt;&lt; <span class="stringliteral">&quot;\n20\n&quot;</span> &lt;&lt; p.y &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    }</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>}</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>}  <span class="comment">// namespace</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"></span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment"> * @brief Exporta sólidos y recorridos a un archivo DXF completo.</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"> * Arma en memoria las secciones HEADER ($ACADVER = AC1015, $INSUNITS = 4) y</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"> * ENTITIES. Los sólidos se escriben como polilíneas cerradas (el contorno de</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> * cada polígono y uno por hueco); los recorridos se escriben abiertos,</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> * aceptando LineString/LinearRing simples o colecciones, de las que se toman</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> * sólo las partes lineales.</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> * @param path Ruta de destino; se sobrescribe si ya existe.</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> * @param solids Polígonos de cobre (con huecos) a exportar.</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * @param follows Contornos abiertos (aislamiento, fresado) a exportar.</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * @throw std::runtime_error si el archivo no se puede abrir para escritura.</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00051" data-start="{" data-end="}">
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="namespacefc.html#a56032eb975b8b8550ad8430fea01fa2f">   51</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacefc.html#a56032eb975b8b8550ad8430fea01fa2f">exportDxf</a>(<span class="keyword">const</span> std::string&amp; path, <span class="keyword">const</span> std::vector&lt;Geom&gt;&amp; solids,</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>               <span class="keyword">const</span> std::vector&lt;Geom&gt;&amp; follows) {</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    std::ostringstream out;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    out &lt;&lt; <span class="stringliteral">&quot;0\nSECTION\n2\nHEADER\n&quot;</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    out &lt;&lt; <span class="stringliteral">&quot;9\n$ACADVER\n1\nAC1015\n&quot;</span>;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    out &lt;&lt; <span class="stringliteral">&quot;9\n$INSUNITS\n70\n4\n&quot;</span>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    out &lt;&lt; <span class="stringliteral">&quot;0\nENDSEC\n&quot;</span>;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    out &lt;&lt; <span class="stringliteral">&quot;0\nSECTION\n2\nENTITIES\n&quot;</span>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; g : solids) {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <a class="code hl_struct" href="structfc_1_1_polygon_contours.html">PolygonContours</a>&amp; pc : g.polygons()) {</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>            writePolyline(out, pc.outer, <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>            <span class="keywordflow">for</span> (<span class="keyword">const</span> <a class="code hl_typedef" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">Ring</a>&amp; hole : pc.holes) writePolyline(out, hole, <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        }</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    }</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a>&amp; g : follows) {</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordflow">if</span> (!g.valid() || g.empty()) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keywordflow">if</span> (g.typeId() == GEOS_LINESTRING || g.typeId() == GEOS_LINEARRING) {</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            writePolyline(out, g.coords(), <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; g.numGeometries(); ++i) {</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                <span class="keyword">const</span> <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a> part = g.<a class="code hl_function" href="classfc_1_1_geom.html#a3df5d7bba5a521dde960a11e1fa0d5be">geometryN</a>(i);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                <span class="keywordflow">if</span> (part.<a class="code hl_function" href="classfc_1_1_geom.html#a6f94f675d0d22c03f0e89ae9dd724bfb">typeId</a>() == GEOS_LINESTRING || part.<a class="code hl_function" href="classfc_1_1_geom.html#a6f94f675d0d22c03f0e89ae9dd724bfb">typeId</a>() == GEOS_LINEARRING)</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                    writePolyline(out, part.<a class="code hl_function" href="classfc_1_1_geom.html#a074ca16d120b12b3fb9accc98ecbf4ee">coords</a>(), <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            }</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        }</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    }</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    out &lt;&lt; <span class="stringliteral">&quot;0\nENDSEC\n0\nEOF\n&quot;</span>;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    std::ofstream file(path, std::ios::binary);</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordflow">if</span> (!file) <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;cannot write DXF: &quot;</span> + path);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    file &lt;&lt; out.str();</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>}</div>
+</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>}  <span class="comment">// namespace fc</span></div>
+<div class="ttc" id="aclassfc_1_1_geom_html"><div class="ttname"><a href="classfc_1_1_geom.html">fc::Geom</a></div><div class="ttdoc">Envoltorio inmutable y compartido de una geometría GEOS.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00115">geometry.hpp:115</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a074ca16d120b12b3fb9accc98ecbf4ee"><div class="ttname"><a href="classfc_1_1_geom.html#a074ca16d120b12b3fb9accc98ecbf4ee">fc::Geom::coords</a></div><div class="ttdeci">Ring coords() const</div><div class="ttdoc">Vértices del contorno principal como Ring.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00519">geometry.cpp:519</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a3df5d7bba5a521dde960a11e1fa0d5be"><div class="ttname"><a href="classfc_1_1_geom.html#a3df5d7bba5a521dde960a11e1fa0d5be">fc::Geom::geometryN</a></div><div class="ttdeci">Geom geometryN(int i) const</div><div class="ttdoc">Accede a una componente de una colección.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00486">geometry.cpp:486</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_a6f94f675d0d22c03f0e89ae9dd724bfb"><div class="ttname"><a href="classfc_1_1_geom.html#a6f94f675d0d22c03f0e89ae9dd724bfb">fc::Geom::typeId</a></div><div class="ttdeci">int typeId() const</div><div class="ttdoc">Tipo GEOS (GEOS_POLYGON, GEOS_LINESTRING, ...) o -1 si el Geom es nulo.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00474">geometry.cpp:474</a></div></div>
+<div class="ttc" id="adxf_8hpp_html"><div class="ttname"><a href="dxf_8hpp.html">dxf.hpp</a></div><div class="ttdoc">Exportador DXF mínimo (AC1015).</div></div>
+<div class="ttc" id="anamespacefc_html"><div class="ttname"><a href="namespacefc.html">fc</a></div><div class="ttdef"><b>Definición</b> <a href="cutout_8hpp_source.html#l00016">cutout.hpp:16</a></div></div>
+<div class="ttc" id="anamespacefc_html_a56032eb975b8b8550ad8430fea01fa2f"><div class="ttname"><a href="namespacefc.html#a56032eb975b8b8550ad8430fea01fa2f">fc::exportDxf</a></div><div class="ttdeci">void exportDxf(const std::string &amp;path, const std::vector&lt; Geom &gt; &amp;solids, const std::vector&lt; Geom &gt; &amp;follows)</div><div class="ttdoc">Exporta geometría a DXF AC1015.</div><div class="ttdef"><b>Definición</b> <a href="#l00051">dxf.cpp:51</a></div></div>
+<div class="ttc" id="anamespacefc_html_ae032096a10f53abdf5406d8309aa62ff"><div class="ttname"><a href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">fc::Ring</a></div><div class="ttdeci">std::vector&lt; Pt &gt; Ring</div><div class="ttdoc">Secuencia de puntos que describe un anillo, una polilínea o un contorno.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00040">geometry.hpp:40</a></div></div>
+<div class="ttc" id="astructfc_1_1_polygon_contours_html"><div class="ttname"><a href="structfc_1_1_polygon_contours.html">fc::PolygonContours</a></div><div class="ttdoc">Contorno exterior con sus agujeros.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00099">geometry.hpp:99</a></div></div>
+<div class="ttc" id="astructfc_1_1_pt_html"><div class="ttname"><a href="structfc_1_1_pt.html">fc::Pt</a></div><div class="ttdoc">Punto bidimensional en milímetros.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00034">geometry.hpp:34</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_aebb8dcc11953d78e620bbef0b9e2183.html">core</a></li><li class="navelem"><a href="dxf_8cpp.html">dxf.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

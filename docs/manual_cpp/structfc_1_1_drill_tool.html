@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia de la estructura fc::DrillTool</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('structfc_1_1_drill_tool.html','','structfc_1_1_drill_tool-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia de la estructura fc::DrillTool</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Una herramienta de taladrado con sus agujeros y overrides.  
+ <a href="#details">Más...</a></p>
+
+<p><code>#include &lt;<a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Atributos públicos</h2></td></tr>
+<tr class="memitem:a0ff1d368e1ba5a06d35979756e7b1d29" id="r_a0ff1d368e1ba5a06d35979756e7b1d29"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a0ff1d368e1ba5a06d35979756e7b1d29">number</a> = 1</td></tr>
+<tr class="memdesc:a0ff1d368e1ba5a06d35979756e7b1d29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Número de herramienta.  <br /></td></tr>
+<tr class="memitem:a9b35320adbe4ff463ee9fb6a7ecb6904" id="r_a9b35320adbe4ff463ee9fb6a7ecb6904"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a9b35320adbe4ff463ee9fb6a7ecb6904">diameter</a> = 0.8</td></tr>
+<tr class="memdesc:a9b35320adbe4ff463ee9fb6a7ecb6904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Diámetro de la broca.  <br /></td></tr>
+<tr class="memitem:a4b0c459b49cdb8a80e4e9a2ab5dce807" id="r_a4b0c459b49cdb8a80e4e9a2ab5dce807"><td class="memItemLeft">std::vector&lt; <a class="el" href="structfc_1_1_pt.html">Pt</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a4b0c459b49cdb8a80e4e9a2ab5dce807">holes</a></td></tr>
+<tr class="memdesc:a4b0c459b49cdb8a80e4e9a2ab5dce807"><td class="mdescLeft">&#160;</td><td class="mdescRight">Centros de taladros.  <br /></td></tr>
+<tr class="memitem:abaf00f762739acb87c3fcfda73a45526" id="r_abaf00f762739acb87c3fcfda73a45526"><td class="memItemLeft">std::vector&lt; std::pair&lt; <a class="el" href="structfc_1_1_pt.html">Pt</a>, <a class="el" href="structfc_1_1_pt.html">Pt</a> &gt; &gt;&#160;</td><td class="memItemRight"><a class="el" href="#abaf00f762739acb87c3fcfda73a45526">slotSegments</a></td></tr>
+<tr class="memdesc:abaf00f762739acb87c3fcfda73a45526"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ranuras.  <br /></td></tr>
+<tr class="memitem:a4c89088c146c48b33b4ccb9f5f99595e" id="r_a4c89088c146c48b33b4ccb9f5f99595e"><td class="memItemLeft">std::optional&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a4c89088c146c48b33b4ccb9f5f99595e">zCut</a></td></tr>
+<tr class="memdesc:a4c89088c146c48b33b4ccb9f5f99595e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override de Z de corte.  <br /></td></tr>
+<tr class="memitem:a17e3c9397700073ba9e8af4fbddaac0e" id="r_a17e3c9397700073ba9e8af4fbddaac0e"><td class="memItemLeft">std::optional&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a17e3c9397700073ba9e8af4fbddaac0e">feedZ</a></td></tr>
+<tr class="memdesc:a17e3c9397700073ba9e8af4fbddaac0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override de avance Z.  <br /></td></tr>
+<tr class="memitem:a5c7e23601edef30fcd4a4834573ad7a0" id="r_a5c7e23601edef30fcd4a4834573ad7a0"><td class="memItemLeft">std::optional&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a5c7e23601edef30fcd4a4834573ad7a0">feedXY</a></td></tr>
+<tr class="memdesc:a5c7e23601edef30fcd4a4834573ad7a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override de avance XY (ranuras).  <br /></td></tr>
+<tr class="memitem:a1665161df0b06431237e98473041d9c2" id="r_a1665161df0b06431237e98473041d9c2"><td class="memItemLeft">std::optional&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a1665161df0b06431237e98473041d9c2">spindleSpeed</a></td></tr>
+<tr class="memdesc:a1665161df0b06431237e98473041d9c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override de RPM.  <br /></td></tr>
+<tr class="memitem:aa13c92dbf4761c01e00940e7b8936196" id="r_aa13c92dbf4761c01e00940e7b8936196"><td class="memItemLeft">std::optional&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aa13c92dbf4761c01e00940e7b8936196">zMove</a></td></tr>
+<tr class="memdesc:aa13c92dbf4761c01e00940e7b8936196"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override de Z de viaje.  <br /></td></tr>
+<tr class="memitem:a5e7b8fd929a82c409d444d545cc18420" id="r_a5e7b8fd929a82c409d444d545cc18420"><td class="memItemLeft">std::optional&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a5e7b8fd929a82c409d444d545cc18420">dwell</a></td></tr>
+<tr class="memdesc:a5e7b8fd929a82c409d444d545cc18420"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override de pausa.  <br /></td></tr>
+<tr class="memitem:aca8d6982332fa0e442ca1b428256c09a" id="r_aca8d6982332fa0e442ca1b428256c09a"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#aca8d6982332fa0e442ca1b428256c09a">offsetX</a> = 0.0</td></tr>
+<tr class="memdesc:aca8d6982332fa0e442ca1b428256c09a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Desplazamiento X de todos los taladros.  <br /></td></tr>
+<tr class="memitem:a69d9bf2e682f0cd436ed1c0bd95ffb0c" id="r_a69d9bf2e682f0cd436ed1c0bd95ffb0c"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a69d9bf2e682f0cd436ed1c0bd95ffb0c">offsetY</a> = 0.0</td></tr>
+<tr class="memdesc:a69d9bf2e682f0cd436ed1c0bd95ffb0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Desplazamiento Y de todos los taladros.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Una herramienta de taladrado con sus agujeros y overrides. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00091">91</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Documentación de datos miembro</h2>
+<a id="a9b35320adbe4ff463ee9fb6a7ecb6904" name="a9b35320adbe4ff463ee9fb6a7ecb6904"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b35320adbe4ff463ee9fb6a7ecb6904">&#9670;&#160;</a></span>diameter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::DrillTool::diameter = 0.8</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Diámetro de la broca. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00093">93</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l01237">fc::drillJobFromExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l10372">MainWindow::refreshDrillTable()</a> y <a class="el" href="_main_window_8cpp_source.html#l10495">MainWindow::showExcellon()</a>.</p>
+
+</div>
+</div>
+<a id="a5e7b8fd929a82c409d444d545cc18420" name="a5e7b8fd929a82c409d444d545cc18420"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e7b8fd929a82c409d444d545cc18420">&#9670;&#160;</a></span>dwell</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;double&gt; fc::DrillTool::dwell</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Override de pausa. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00101">101</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5c7e23601edef30fcd4a4834573ad7a0" name="a5c7e23601edef30fcd4a4834573ad7a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c7e23601edef30fcd4a4834573ad7a0">&#9670;&#160;</a></span>feedXY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;double&gt; fc::DrillTool::feedXY</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Override de avance XY (ranuras). </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00098">98</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a17e3c9397700073ba9e8af4fbddaac0e" name="a17e3c9397700073ba9e8af4fbddaac0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17e3c9397700073ba9e8af4fbddaac0e">&#9670;&#160;</a></span>feedZ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;double&gt; fc::DrillTool::feedZ</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Override de avance Z. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00097">97</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4b0c459b49cdb8a80e4e9a2ab5dce807" name="a4b0c459b49cdb8a80e4e9a2ab5dce807"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b0c459b49cdb8a80e4e9a2ab5dce807">&#9670;&#160;</a></span>holes</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structfc_1_1_pt.html">Pt</a>&gt; fc::DrillTool::holes</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Centros de taladros. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00094">94</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00432">fc::drillingGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l01237">fc::drillJobFromExcellon()</a>, <a class="el" href="gcode_8cpp_source.html#l00703">fc::drillTravelDistance()</a> y <a class="el" href="gcode_8cpp_source.html#l00742">fc::optimizeDrillOrder()</a>.</p>
+
+</div>
+</div>
+<a id="a0ff1d368e1ba5a06d35979756e7b1d29" name="a0ff1d368e1ba5a06d35979756e7b1d29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ff1d368e1ba5a06d35979756e7b1d29">&#9670;&#160;</a></span>number</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fc::DrillTool::number = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Número de herramienta. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00092">92</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l01237">fc::drillJobFromExcellon()</a>.</p>
+
+</div>
+</div>
+<a id="aca8d6982332fa0e442ca1b428256c09a" name="aca8d6982332fa0e442ca1b428256c09a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca8d6982332fa0e442ca1b428256c09a">&#9670;&#160;</a></span>offsetX</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::DrillTool::offsetX = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Desplazamiento X de todos los taladros. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00102">102</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a69d9bf2e682f0cd436ed1c0bd95ffb0c" name="a69d9bf2e682f0cd436ed1c0bd95ffb0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69d9bf2e682f0cd436ed1c0bd95ffb0c">&#9670;&#160;</a></span>offsetY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::DrillTool::offsetY = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Desplazamiento Y de todos los taladros. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00103">103</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abaf00f762739acb87c3fcfda73a45526" name="abaf00f762739acb87c3fcfda73a45526"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abaf00f762739acb87c3fcfda73a45526">&#9670;&#160;</a></span>slotSegments</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::pair&lt;<a class="el" href="structfc_1_1_pt.html">Pt</a>, <a class="el" href="structfc_1_1_pt.html">Pt</a>&gt; &gt; fc::DrillTool::slotSegments</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ranuras. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00095">95</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00432">fc::drillingGCode()</a>, <a class="el" href="gcode_8cpp_source.html#l01237">fc::drillJobFromExcellon()</a>, <a class="el" href="gcode_8cpp_source.html#l00703">fc::drillTravelDistance()</a>, <a class="el" href="gcode_8cpp_source.html#l00742">fc::optimizeDrillOrder()</a>, <a class="el" href="_main_window_8cpp_source.html#l10372">MainWindow::refreshDrillTable()</a> y <a class="el" href="_main_window_8cpp_source.html#l10495">MainWindow::showExcellon()</a>.</p>
+
+</div>
+</div>
+<a id="a1665161df0b06431237e98473041d9c2" name="a1665161df0b06431237e98473041d9c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1665161df0b06431237e98473041d9c2">&#9670;&#160;</a></span>spindleSpeed</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;double&gt; fc::DrillTool::spindleSpeed</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Override de RPM. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00099">99</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="gcode_8cpp_source.html#l00432">fc::drillingGCode()</a>.</p>
+
+</div>
+</div>
+<a id="a4c89088c146c48b33b4ccb9f5f99595e" name="a4c89088c146c48b33b4ccb9f5f99595e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c89088c146c48b33b4ccb9f5f99595e">&#9670;&#160;</a></span>zCut</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;double&gt; fc::DrillTool::zCut</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Override de Z de corte. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00096">96</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa13c92dbf4761c01e00940e7b8936196" name="aa13c92dbf4761c01e00940e7b8936196"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa13c92dbf4761c01e00940e7b8936196">&#9670;&#160;</a></span>zMove</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;double&gt; fc::DrillTool::zMove</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Override de Z de viaje. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="gcode_8hpp_source.html#l00100">100</a> del archivo <a class="el" href="gcode_8hpp_source.html">gcode.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>La documentación de esta estructura está generada del siguiente archivo:<ul>
+<li>include/flatcam/<a class="el" href="gcode_8hpp_source.html">gcode.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacefc.html">fc</a></li><li class="navelem"><a href="structfc_1_1_drill_tool.html">DrillTool</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

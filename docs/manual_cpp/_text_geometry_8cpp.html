@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Referencia del archivo src/gui/TextGeometry.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('_text_geometry_8cpp.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Referencia del archivo TextGeometry.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Texto vectorial SVG/DXF convertido a polígonos con la fuente del sistema.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="_text_geometry_8h_source.html">TextGeometry.h</a>&quot;</code><br />
+<code>#include &lt;QFile&gt;</code><br />
+<code>#include &lt;QFont&gt;</code><br />
+<code>#include &lt;QFontMetricsF&gt;</code><br />
+<code>#include &lt;QPainterPath&gt;</code><br />
+<code>#include &lt;QPolygonF&gt;</code><br />
+<code>#include &lt;QRegularExpression&gt;</code><br />
+<code>#include &lt;QXmlStreamReader&gt;</code><br />
+<code>#include &quot;<a class="el" href="importers_8hpp_source.html">flatcam/importers.hpp</a>&quot;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+</div>
+<p><a href="_text_geometry_8cpp_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Clases</h2></td></tr>
+<tr class="memitem:Geom" id="r_Geom"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_geom.html">Geom</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Envoltorio inmutable y compartido de una geometría GEOS.  <a href="class_geom.html#details">Más...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+typedefs</h2></td></tr>
+<tr class="memitem:ae032096a10f53abdf5406d8309aa62ff" id="r_ae032096a10f53abdf5406d8309aa62ff"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#ae032096a10f53abdf5406d8309aa62ff">Ring</a></td></tr>
+<tr class="memdesc:ae032096a10f53abdf5406d8309aa62ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Secuencia de puntos que describe un anillo, una polilínea o un contorno.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a81b562bc0072173c7b74ff3795ef1282" id="r_a81b562bc0072173c7b74ff3795ef1282"><td class="memItemLeft">QTransform&#160;</td><td class="memItemRight"><a class="el" href="#a81b562bc0072173c7b74ff3795ef1282">parseSvgTransformQt</a> (const QString &amp;text)</td></tr>
+<tr class="memdesc:a81b562bc0072173c7b74ff3795ef1282"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interpreta una lista de transformaciones SVG como un <span class="tt">QTransform</span>.  <br /></td></tr>
+<tr class="memitem:ad5c18599037e7d2e77c7ef0dc4ccd49d" id="r_ad5c18599037e7d2e77c7ef0dc4ccd49d"><td class="memItemLeft">static double&#160;</td><td class="memItemRight"><a class="el" href="#ad5c18599037e7d2e77c7ef0dc4ccd49d">svgNumber</a> (const QString &amp;value, double fallback)</td></tr>
+<tr class="memdesc:ad5c18599037e7d2e77c7ef0dc4ccd49d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extrae el primer número de un atributo SVG.  <br /></td></tr>
+<tr class="memitem:ae2995974b5caee748c92d30842d4f7cd" id="r_ae2995974b5caee748c92d30842d4f7cd"><td class="memItemLeft">std::vector&lt; <a class="el" href="classfc_1_1_geom.html">fc::Geom</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ae2995974b5caee748c92d30842d4f7cd">svgTextGeometry</a> (const QString &amp;path)</td></tr>
+<tr class="memdesc:ae2995974b5caee748c92d30842d4f7cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convierte todos los <span class="tt">&lt;text&gt;</span> de un SVG en polígonos rellenos.  <br /></td></tr>
+<tr class="memitem:a04bffa55ce5f8b901e229c122be04b5b" id="r_a04bffa55ce5f8b901e229c122be04b5b"><td class="memItemLeft">std::vector&lt; <a class="el" href="classfc_1_1_geom.html">fc::Geom</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a04bffa55ce5f8b901e229c122be04b5b">dxfTextGeometry</a> (const QString &amp;path)</td></tr>
+<tr class="memdesc:a04bffa55ce5f8b901e229c122be04b5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convierte los TEXT/MTEXT de un DXF en polígonos rellenos.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Texto vectorial SVG/DXF convertido a polígonos con la fuente del sistema. </p>
+<p>Interpreta las transformaciones de SVG (<span class="tt">translate</span>, <span class="tt">scale</span>, <span class="tt">rotate</span>, <span class="tt">matrix</span>, <span class="tt">skewX</span>, <span class="tt">skewY</span>), compone la matriz del elemento de texto con la pila de grupos y <span class="tt">&lt;svg&gt;</span> contenedores, y convierte los glifos de <span class="tt">QPainterPath</span> en geometría GEOS. Los contadores de las letras (A, O, R…) se conservan como agujeros aplicando una XOR sucesiva de subcaminos. Para DXF se reutiliza el mismo enfoque con los datos ya transformados por el parser (posición, altura, rotación y alineación). </p>
+
+<p class="definition">Definición en el archivo <a class="el" href="_text_geometry_8cpp_source.html">TextGeometry.cpp</a>.</p>
+</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Documentación de «typedef»</h2>
+<a id="ae032096a10f53abdf5406d8309aa62ff" name="ae032096a10f53abdf5406d8309aa62ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae032096a10f53abdf5406d8309aa62ff">&#9670;&#160;</a></span>Ring</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacefc.html#ae032096a10f53abdf5406d8309aa62ff">fc::Ring</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Secuencia de puntos que describe un anillo, una polilínea o un contorno. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="geometry_8hpp_source.html#l00040">40</a> del archivo <a class="el" href="geometry_8hpp_source.html">geometry.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
+<a id="a04bffa55ce5f8b901e229c122be04b5b" name="a04bffa55ce5f8b901e229c122be04b5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04bffa55ce5f8b901e229c122be04b5b">&#9670;&#160;</a></span>dxfTextGeometry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classfc_1_1_geom.html">fc::Geom</a> &gt; dxfTextGeometry </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>path</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convierte los TEXT/MTEXT de un DXF en polígonos rellenos. </p>
+<p>Convierte TEXT/MTEXT de un DXF en geometría rellena.</p>
+<p>El parser DXF entrega <span class="tt"><a class="el" href="structfc_1_1_dxf_text.html" title="Entidad TEXT/MTEXT resuelta a su posición final.">fc::DxfText</a></span> con posición, altura, rotación y alineación ya transformadas (incluidos INSERT y bloques). Para cada texto se separa el contenido por saltos de línea, se mide la altura de mayúscula con <span class="tt">QFontMetricsF</span> para derivar la escala (<span class="tt">altura / capHeight</span>, con 72 px como respaldo) y se avanza 1.4 veces la altura entre líneas. La alineación horizontal (0 izquierda, 1 centro, 2 derecha) y la vertical (0 línea base, 1 abajo, 2 medio, 3 arriba) se traducen en desplazamientos previos a la rotación y la traslación final.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Ruta del archivo DXF. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Un polígono por línea de texto no vacía; vector vacío si la lectura falla o no hay textos. </dd></dl>
+<dl class="section note"><dt>Nota</dt><dd>Siempre usa Helvetica: el DXF no siempre trae una fuente disponible y el original de FlatCAM tampoco la respeta. Si la altura es 0 se usa una escala de 0.01 para no degenerar. </dd></dl>
+<dl class="section warning"><dt>Atención</dt><dd>Un fallo del parser se traga con <span class="tt">catch (const std::exception&amp;)</span> y se informa como "sin textos", sin mensaje al usuario.</dd></dl>
+<p>Convierte los TEXT/MTEXT de un DXF en polígonos rellenos.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Archivo DXF. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Polígonos de texto, con alineación y transformaciones resueltas. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="_text_geometry_8cpp_source.html#l00273">273</a> del archivo <a class="el" href="_text_geometry_8cpp_source.html">TextGeometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_text_geometry_8cpp_source.html#l00273">dxfTextGeometry()</a> y <a class="el" href="importers_8cpp_source.html#l00859">fc::importDxfTexts()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_text_geometry_8cpp_source.html#l00273">dxfTextGeometry()</a> y <a class="el" href="_main_window_8cpp_source.html#l06962">MainWindow::importVectorPath()</a>.</p>
+
+</div>
+</div>
+<a id="a81b562bc0072173c7b74ff3795ef1282" name="a81b562bc0072173c7b74ff3795ef1282"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81b562bc0072173c7b74ff3795ef1282">&#9670;&#160;</a></span>parseSvgTransformQt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTransform parseSvgTransformQt </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>text</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Interpreta una lista de transformaciones SVG como un <span class="tt">QTransform</span>. </p>
+<p>Interpreta transformaciones SVG.</p>
+<p>Extrae cada <span class="tt">nombre(args)</span> con una expresión regular, convierte los argumentos a números (separados por comas o espacios, ignorando los tramos no numéricos) y compone cada matriz por la izquierda, que es la semántica de SVG: en <span class="tt">translate(10,0) scale(2)</span> primero se escala y luego se traslada.</p>
+<p>Se soportan <span class="tt">translate(tx[,ty])</span>, <span class="tt">scale(sx[,sy])</span>, <span class="tt">rotate(a[,cx,cy])</span> (rotación alrededor de un centro si se dan 3 argumentos), <span class="tt">matrix(a,b,c,d,e,f)</span> y <span class="tt">skewX</span>/<span class="tt">skewY</span> en grados (convertidos con <span class="tt">tan</span>).</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">text</td><td>Valor del atributo <span class="tt">transform</span>; puede estar vacío. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Transformación equivalente; la identidad si no hay funciones reconocibles o los argumentos son insuficientes. </dd></dl>
+<dl class="section note"><dt>Nota</dt><dd>Las funciones desconocidas se ignoran silenciosamente y el orden de composición asume la convención de vectores fila de Qt.</dd></dl>
+<p>Interpreta una lista de transformaciones SVG como un <span class="tt">QTransform</span>.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">text</td><td>Cadena <span class="tt">translate(...) scale(...) ...</span>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Transformación Qt equivalente. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="_text_geometry_8cpp_source.html#l00052">52</a> del archivo <a class="el" href="_text_geometry_8cpp_source.html">TextGeometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_text_geometry_8cpp_source.html#l00052">parseSvgTransformQt()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_text_geometry_8cpp_source.html#l00052">parseSvgTransformQt()</a> y <a class="el" href="_text_geometry_8cpp_source.html#l00137">svgTextGeometry()</a>.</p>
+
+</div>
+</div>
+<a id="ad5c18599037e7d2e77c7ef0dc4ccd49d" name="ad5c18599037e7d2e77c7ef0dc4ccd49d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5c18599037e7d2e77c7ef0dc4ccd49d">&#9670;&#160;</a></span>svgNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double svgNumber </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>value</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>fallback</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Extrae el primer número de un atributo SVG. </p>
+<p>Acepta el formato de la especificación (signo, parte entera y/o decimal, exponente) y descarta unidades y texto adicional, de modo que <span class="tt">"12.5mm"</span>, <span class="tt">"10"</span> o <span class="tt">" 3e-2 px"</span> producen valores utilizables.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Cadena del atributo. </td></tr>
+    <tr><td class="paramname">fallback</td><td>Valor a devolver si la cadena está vacía o no contiene ningún número. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Número detectado o <span class="tt">fallback</span>. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="_text_geometry_8cpp_source.html#l00105">105</a> del archivo <a class="el" href="_text_geometry_8cpp_source.html">TextGeometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_text_geometry_8cpp_source.html#l00105">svgNumber()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_text_geometry_8cpp_source.html#l00105">svgNumber()</a> y <a class="el" href="_text_geometry_8cpp_source.html#l00137">svgTextGeometry()</a>.</p>
+
+</div>
+</div>
+<a id="ae2995974b5caee748c92d30842d4f7cd" name="ae2995974b5caee748c92d30842d4f7cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2995974b5caee748c92d30842d4f7cd">&#9670;&#160;</a></span>svgTextGeometry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classfc_1_1_geom.html">fc::Geom</a> &gt; svgTextGeometry </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>path</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convierte todos los <span class="tt">&lt;text&gt;</span> de un SVG en polígonos rellenos. </p>
+<p>Convierte los <span class="tt">&lt;text&gt;</span> de un SVG en geometría rellena.</p>
+<p>Lee el archivo en streaming con <span class="tt">QXmlStreamReader</span>, manteniendo una pila de transformaciones: al entrar en <span class="tt">&lt;svg&gt;</span> o <span class="tt">&lt;g&gt;</span> apila su <span class="tt">transform</span> compuesta con la del padre y al salir la descarta. Para cada <span class="tt">&lt;text&gt;</span> toma el contenido (incluidos <span class="tt">tspan</span>), arma la fuente con familia (<span class="tt">Helvetica</span> por defecto), peso negrita y un tamaño de referencia de 100 px, y genera el contorno con <span class="tt">QPainterPath::addText</span>. Luego aplica: desplazamiento por <span class="tt">text-anchor</span> (start/middle/end, midiendo con <span class="tt">QFontMetricsF</span>), traslación a <span class="tt">(x, y)</span>, escala <span class="tt">fontSize/100</span> con inversión de Y (SVG crece hacia abajo), la transformación propia del elemento y la heredada de los grupos.</p>
+<p>Los subcaminos resultantes se convierten en polígonos GEOS reparados y se combinan con XOR sucesiva (<span class="tt">A ∪ B − A ∩ B</span>) para que los contadores queden huecos en lugar de rellenos.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Ruta del archivo SVG. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Un polígono por elemento de texto no vacío; vector vacío si el archivo no se puede abrir, no es XML válido o no tiene texto. </dd></dl>
+<dl class="section note"><dt>Nota</dt><dd>El <span class="tt">font-size</span> se interpreta en unidades de usuario del SVG, sin resolver <span class="tt">em</span>, <span class="tt">%</span> ni hojas de estilo CSS. El tamaño de 100 px sólo es un pivote de escala para conservar precisión.</dd></dl>
+<p>Convierte todos los <span class="tt">&lt;text&gt;</span> de un SVG en polígonos rellenos.</p>
+<p>Usa la fuente del sistema, respeta transformaciones de grupos y del propio elemento, tamaño, familia, peso y anclaje. Los contadores de las letras se conservan como huecos.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Archivo SVG. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Polígonos de texto (uno por elemento). </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="_text_geometry_8cpp_source.html#l00137">137</a> del archivo <a class="el" href="_text_geometry_8cpp_source.html">TextGeometry.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="geometry_8cpp_source.html#l00621">fc::Geom::difference()</a>, <a class="el" href="geometry_8cpp_source.html#l00426">fc::Geom::empty()</a>, <a class="el" href="geometry_8cpp_source.html#l00165">Geom::emptyPolygon()</a>, <a class="el" href="geometry_8cpp_source.html#l00709">fc::Geom::fixed()</a>, <a class="el" href="geometry_8cpp_source.html#l00631">fc::Geom::intersection()</a>, <a class="el" href="_text_geometry_8cpp_source.html#l00052">parseSvgTransformQt()</a>, <a class="el" href="geometry_8cpp_source.html#l00234">Geom::polygon()</a>, <a class="el" href="_text_geometry_8cpp_source.html#l00105">svgNumber()</a>, <a class="el" href="_text_geometry_8cpp_source.html#l00137">svgTextGeometry()</a>, <a class="el" href="geometry_8cpp_source.html#l00611">fc::Geom::unite()</a> y <a class="el" href="geometry_8hpp_source.html#l00195">fc::Geom::valid()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l06962">MainWindow::importVectorPath()</a> y <a class="el" href="_text_geometry_8cpp_source.html#l00137">svgTextGeometry()</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="dir_99d0482cf009f9d97a0877749b817f19.html">gui</a></li><li class="navelem"><a href="_text_geometry_8cpp.html">TextGeometry.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

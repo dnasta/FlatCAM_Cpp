@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.18.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FlatCAM C++: Archivo de código fuente include/flatcam/gerber.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="codefolding.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.01</span>
+   </div>
+   <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.18.0 -->
+<script type="text/javascript">
+let searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', codefold.init);
+</script>
+<script type="application/json" id="doxygen-config">
+{
+  "relPath": "",
+  "generateTreeView": true,
+  "searchEngine": true,
+  "serverBasedSearch": false,
+  "disableIndex": false,
+  "dynamicMenus": true,
+  "fullSidebar": false
+}
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<div id="main-nav-mobile">
+<div class="sm sm-dox"><input id="main-menu-state" type="checkbox"/>
+<label class="main-menu-btn" for="main-menu-state">
+<span class="main-menu-btn-icon"></span> Toggle main menu visibility</label>
+<span id="searchBoxPos1"></span>
+</div>
+</div><!-- main-nav-mobile -->
+<div id="main-nav">
+  <ul class="sm sm-dox" id="main-menu">
+    <li id="searchBoxPos2">
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect" class="search-icon"><span class="search-icon-dropdown"></span></span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><div id="MSearchCloseImg" class="close-icon"></div></a>
+          </span>
+        </div>
+    </li>
+  </ul>
+</div><!-- main-nav -->
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded',() => { initNavTree('gerber_8hpp_source.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">gerber.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="gerber_8hpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file gerber.hpp</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief Parser de Gerber RS-274X (capas de PCB).</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * El parser lee el archivo completo o una cadena, interpreta el formato</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> * (`FS`), las unidades (`MO`/`G70`/`G71`), aperturas estándar y macros,</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> * trazos, arcos, regiones, polaridad y step &amp; repeat. La salida contiene:</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> * - sólidos (polígonos rellenados, ya en unidades de la aplicación),</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment"> * - recorridos (trazos y puntos),</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment"> * - aperturas y macros para el editor,</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"> * - avisos de elementos no soportados.</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment"> * La geometría se construye con `fc::Geom` (GEOS) y se mantiene en milímetros,</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment"> * salvo la copia por apertura que se guarda en unidades del archivo para</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment"> * editarla.</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;cstddef&gt;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &lt;string_view&gt;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;<a class="code" href="geometry_8hpp.html">flatcam/geometry.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &quot;<a class="code" href="units_8hpp.html">flatcam/units.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacefc.html">fc</a> {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"></span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * @brief Opciones de importación de Gerber.</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00034" data-start="{" data-end="};">
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_options.html">   34</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structfc_1_1_gerber_options.html">GerberOptions</a> {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_options.html#a1bea2c469f394df1772c1a80359a8076">   35</a></span>    <a class="code hl_enumeration" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00">Units</a> <a class="code hl_variable" href="structfc_1_1_gerber_options.html#a1bea2c469f394df1772c1a80359a8076">appUnits</a> = <a class="code hl_enumvalue" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00a07f07b623b4a00b57dc150ff2e59cb92">Units::Mm</a>;          <span class="comment">///&lt; Unidad de salida de la geometría.</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_options.html#af6a56d2c456663b88e43929580ba4a9d">   36</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfc_1_1_gerber_options.html#af6a56d2c456663b88e43929580ba4a9d">stepsPerCircle</a> = 64;             <span class="comment">///&lt; Segmentos por círculo (FlatCAM: `gerber_circle_steps`).</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_options.html#ac9ee09d033a36319ea527446a5d1b769">   37</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structfc_1_1_gerber_options.html#ac9ee09d033a36319ea527446a5d1b769">simplification</a> = <span class="keyword">false</span>;         <span class="comment">///&lt; Simplifica la geometría al terminar.</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_options.html#a01cfd4b7e2732d44d1fea4a7af9f5954">   38</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_gerber_options.html#a01cfd4b7e2732d44d1fea4a7af9f5954">simplifyTolerance</a> = 0.005;    <span class="comment">///&lt; Tolerancia de simplificación en mm.</span><span class="comment"></span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment">    /// Reproduce el bug de FlatCAM 2024.4 al trazar con apertura rectangular:</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment">    /// usa una caja entre los dos primeros puntos en vez de un barrido</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">    /// Minkowski. Se activa sólo para comparar geometría con el original.</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_options.html#adeecf14be117be26f91cb8f0591338e8">   42</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structfc_1_1_gerber_options.html#adeecf14be117be26f91cb8f0591338e8">legacyRectStroke</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>};</div>
+</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"></span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> * @brief Definición de una apertura Gerber y las primitivas dibujadas con ella.</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00048" data-start="{" data-end="};">
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html">   48</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structfc_1_1_gerber_aperture.html">GerberAperture</a> {<span class="comment"></span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment">    /// Tipo de apertura.</span></div>
+<div class="foldopen" id="foldopen00050" data-start="{" data-end="};">
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2">   50</a></span>    <span class="keyword">enum class</span> <a class="code hl_enumeration" href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2">Kind</a> {</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2a30954d90085f6eaaf5817917fc5fecb3">   51</a></span>        Circle,    <span class="comment">///&lt; Círculo (`C`).</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2ace9291906a4c3b042650b70d7f3b152e">   52</a></span>        Rectangle, <span class="comment">///&lt; Rectángulo (`R`).</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2af2fd9f6ab2d56e0db8b503c69c03e44d">   53</a></span>        Obround,   <span class="comment">///&lt; Óvalo (`O`).</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2a4c0a11247d92f73fb84baa51e37a3263">   54</a></span>        Polygon,   <span class="comment">///&lt; Polígono regular (`P`).</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2a4374cf34c5d58482ffae982196bd2114">   55</a></span>        Macro,     <span class="comment">///&lt; Macro de apertura (`AM`).</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2af447ac856e7e72435904956e3b15f433">   56</a></span>        Region     <span class="comment">///&lt; Región `G36/G37` sin apertura explícita.</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    };</div>
+</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#affc727ef990518f52e0b2161f6ca9a83">   59</a></span>    <a class="code hl_enumeration" href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2">Kind</a> <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#affc727ef990518f52e0b2161f6ca9a83">kind</a> = <a class="code hl_enumvalue" href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2a30954d90085f6eaaf5817917fc5fecb3">Kind::Circle</a>;        <span class="comment">///&lt; Tipo.</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a2caf56a4c7b151dcf9acf73a026c12a6">   60</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#a2caf56a4c7b151dcf9acf73a026c12a6">size</a> = 0.0;               <span class="comment">///&lt; Tamaño principal (diámetro o lado).</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a9f3e5d994b6715da24afa863a5e5e912">   61</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#a9f3e5d994b6715da24afa863a5e5e912">width</a> = 0.0;              <span class="comment">///&lt; Ancho para rectángulos/obrounds.</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a7672dbc19d58fd200e1fdf3b0463b2ee">   62</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#a7672dbc19d58fd200e1fdf3b0463b2ee">height</a> = 0.0;             <span class="comment">///&lt; Alto para rectángulos/obrounds.</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#ac56df81780a4441dc1d29a4831dede58">   63</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#ac56df81780a4441dc1d29a4831dede58">diameter</a> = 0.0;           <span class="comment">///&lt; Diámetro para círculos/polígonos.</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#aa8981947dd7c52ecca2cbbc817a9cf0f">   64</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#aa8981947dd7c52ecca2cbbc817a9cf0f">vertices</a> = 0;                <span class="comment">///&lt; Vértices para polígonos.</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#aa053bce1a7d2d6b2ea2d181d86bf2357">   65</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#aa053bce1a7d2d6b2ea2d181d86bf2357">rotation</a> = 0.0;           <span class="comment">///&lt; Rotación en grados.</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a4e0b7447ced30bae21abe64213667bce">   66</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#a4e0b7447ced30bae21abe64213667bce">hasRotation</a> = <span class="keyword">false</span>;        <span class="comment">///&lt; `true` si el archivo especificó rotación.</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#ac3523ac47fa1db0a8848226310bcc12b">   67</a></span>    std::string <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#ac3523ac47fa1db0a8848226310bcc12b">macroName</a>;           <span class="comment">///&lt; Nombre de la macro (si es `Macro`).</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#a9d7d15a718c2d42c2420dee11f688595">   68</a></span>    std::vector&lt;double&gt; <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#a9d7d15a718c2d42c2420dee11f688595">modifiers</a>;   <span class="comment">///&lt; Parámetros de la apertura/macro.</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_aperture.html#acf18848777fbb8481d165f999b57d51e">   69</a></span>    std::vector&lt;Geom&gt; <a class="code hl_variable" href="structfc_1_1_gerber_aperture.html#acf18848777fbb8481d165f999b57d51e">geometry</a>;      <span class="comment">///&lt; Primitivas dibujadas con esta apertura (unidades del archivo).</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>};</div>
+</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"></span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> * @brief Macro de apertura (`AM`) tal como aparece en el archivo.</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00075" data-start="{" data-end="};">
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_macro.html">   75</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structfc_1_1_gerber_macro.html">GerberMacro</a> {</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_macro.html#a2649a81129d49bbfe73af8ee2e5f459e">   76</a></span>    std::string <a class="code hl_variable" href="structfc_1_1_gerber_macro.html#a2649a81129d49bbfe73af8ee2e5f459e">name</a>; <span class="comment">///&lt; Nombre de la macro.</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_macro.html#a28e8cf1d9dbd95b108ae710f82676741">   77</a></span>    std::string <a class="code hl_variable" href="structfc_1_1_gerber_macro.html#a28e8cf1d9dbd95b108ae710f82676741">raw</a>;  <span class="comment">///&lt; Cuerpo completo original, para editarlo.</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>};</div>
+</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"></span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"> * @brief Resultado completo de parsear un Gerber.</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"> * `solids` y `follows` están en unidades de la aplicación (mm). El campo</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> * `solid` es la unión de todos los sólidos y se usa para área y límites.</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00086" data-start="{" data-end="};">
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html">   86</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structfc_1_1_gerber_result.html">GerberResult</a> {</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#aab25d3dcaaaa91a4abc5ca6100bfb583">   87</a></span>    <a class="code hl_enumeration" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00">Units</a> <a class="code hl_variable" href="structfc_1_1_gerber_result.html#aab25d3dcaaaa91a4abc5ca6100bfb583">fileUnits</a> = <a class="code hl_enumvalue" href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00abee12d309ba5730e1e121733b7b67956">Units::Inch</a>; <span class="comment">///&lt; Unidades declaradas por el archivo.</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#aff207af522b76fada12cc417f30578b6">   88</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfc_1_1_gerber_result.html#aff207af522b76fada12cc417f30578b6">intDigits</a> = 3;             <span class="comment">///&lt; Dígitos enteros del formato `FS`.</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#a8b4fdb77f8cf45f4d983f4ed3a75f754">   89</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfc_1_1_gerber_result.html#a8b4fdb77f8cf45f4d983f4ed3a75f754">fracDigits</a> = 4;            <span class="comment">///&lt; Dígitos fraccionarios del formato `FS`.</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#a00cfcf650fee3eb7af43d0f96048ca8a">   90</a></span>    <span class="keywordtype">char</span> <a class="code hl_variable" href="structfc_1_1_gerber_result.html#a00cfcf650fee3eb7af43d0f96048ca8a">zeros</a> = <span class="charliteral">&#39;L&#39;</span>;              <span class="comment">///&lt; Supresión de ceros (`L`, `T`, `D`).</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#aed9a317a833ac85750c2c22c106c0f6f">   91</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structfc_1_1_gerber_result.html#aed9a317a833ac85750c2c22c106c0f6f">incremental</a> = <span class="keyword">false</span>;      <span class="comment">///&lt; `true` si el archivo usa coordenadas incrementales.</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#aa5659cc3c5cae9b394deba8fb517b3f4">   93</a></span>    std::map&lt;std::string, GerberAperture&gt; <a class="code hl_variable" href="structfc_1_1_gerber_result.html#aa5659cc3c5cae9b394deba8fb517b3f4">apertures</a>; <span class="comment">///&lt; Aperturas por código `Dnn`.</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#a52ef8b5a53b46f0f773ad22e23b887ae">   94</a></span>    std::map&lt;std::string, GerberMacro&gt; <a class="code hl_variable" href="structfc_1_1_gerber_result.html#a52ef8b5a53b46f0f773ad22e23b887ae">macros</a>;       <span class="comment">///&lt; Macros `AM` por nombre.</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#a3b3ec8e28f115ed2b5dcc2aef28b9300">   96</a></span>    std::vector&lt;Geom&gt; <a class="code hl_variable" href="structfc_1_1_gerber_result.html#a3b3ec8e28f115ed2b5dcc2aef28b9300">solids</a>;   <span class="comment">///&lt; Polígonos oscuros, en unidades de la app.</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#aff1cae0108bbada993ca4c05ac502738">   97</a></span>    std::vector&lt;Geom&gt; <a class="code hl_variable" href="structfc_1_1_gerber_result.html#aff1cae0108bbada993ca4c05ac502738">follows</a>;  <span class="comment">///&lt; Trazos y puntos, en unidades de la app.</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#a58703ea47c0feecc5e290ec3f06f1a00">   98</a></span>    <a class="code hl_class" href="classfc_1_1_geom.html">Geom</a> <a class="code hl_variable" href="structfc_1_1_gerber_result.html#a58703ea47c0feecc5e290ec3f06f1a00">solid</a>;                 <span class="comment">///&lt; Unión de todos los sólidos (cobre).</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#a93d637e63767889f781b7a4da513bae6">   99</a></span>    <a class="code hl_struct" href="structfc_1_1_b_box.html">BBox</a> <a class="code hl_variable" href="structfc_1_1_gerber_result.html#a93d637e63767889f781b7a4da513bae6">bounds</a>;                <span class="comment">///&lt; Límites de la geometría.</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#a5360a6f6ca9473ccba6df0e35c4d175e">  101</a></span>    std::size_t <a class="code hl_variable" href="structfc_1_1_gerber_result.html#a5360a6f6ca9473ccba6df0e35c4d175e">flashes</a> = 0;    <span class="comment">///&lt; Cantidad de flashes `D03`.</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#a67663ce372120615df2bf552564cf305">  102</a></span>    std::size_t <a class="code hl_variable" href="structfc_1_1_gerber_result.html#a67663ce372120615df2bf552564cf305">segments</a> = 0;   <span class="comment">///&lt; Cantidad de trazos.</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#ab31fb9d00cbaed54a168c9aec2bd5a27">  103</a></span>    std::size_t <a class="code hl_variable" href="structfc_1_1_gerber_result.html#ab31fb9d00cbaed54a168c9aec2bd5a27">regions</a> = 0;    <span class="comment">///&lt; Cantidad de regiones `G36/G37`.</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#ab04e5d6d559c32af758f111f8611d9ed">  104</a></span>    std::vector&lt;std::string&gt; <a class="code hl_variable" href="structfc_1_1_gerber_result.html#ab04e5d6d559c32af758f111f8611d9ed">warnings</a>; <span class="comment">///&lt; Avisos no fatales.</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment"></span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">    /// @return `true` si no se generó cobre.</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="structfc_1_1_gerber_result.html#a202c91484fe026d7749b4b3022313db6">  107</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="structfc_1_1_gerber_result.html#a202c91484fe026d7749b4b3022313db6">empty</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="structfc_1_1_gerber_result.html#a58703ea47c0feecc5e290ec3f06f1a00">solid</a>.<a class="code hl_function" href="classfc_1_1_geom.html#aeb91d2056e4ce71e4dba557be1b44f6c">empty</a>(); }</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>};</div>
+</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment"></span> </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment"> * @brief Parser de archivos Gerber RS-274X.</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment"> * Es reutilizable: se construye con las opciones y se pueden parsear varios</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment"> * archivos con la misma instancia. No guarda estado entre llamadas.</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00116" data-start="{" data-end="};">
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="classfc_1_1_gerber_parser.html">  116</a></span><span class="keyword">class </span><a class="code hl_function" href="classfc_1_1_gerber_parser.html#a16dad8243ea10e8e9b7a76194b6542db">GerberParser</a> {</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="keyword">public</span>:<span class="comment"></span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">    /**</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">     * @brief Crea un parser con las opciones indicadas.</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment">     * @param options Unidades de salida, pasos por círculo y simplificación.</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classfc_1_1_gerber_parser.html#a16dad8243ea10e8e9b7a76194b6542db">GerberParser</a>(<a class="code hl_struct" href="structfc_1_1_gerber_options.html">GerberOptions</a> options = {});</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment"></span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">    /**</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">     * @brief Parsea un archivo Gerber.</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment">     * @param path Ruta del archivo.</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">     * @return Resultado con geometría, aperturas y avisos.</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment">     * @throw std::runtime_error si el archivo no se puede abrir o el formato</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">     *        es irrecuperable.</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <a class="code hl_struct" href="structfc_1_1_gerber_result.html">GerberResult</a> <a class="code hl_function" href="classfc_1_1_gerber_parser.html#ae677851258a2edcd2852fab2be3240a4">parseFile</a>(<span class="keyword">const</span> std::string&amp; path) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment"></span> </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment">    /**</span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="comment">     * @brief Parsea Gerber desde memoria.</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment">     * @param source Contenido completo del archivo.</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="comment">     * @return Resultado del parseo.</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment">     * @throw std::runtime_error en errores irrecuperables.</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <a class="code hl_struct" href="structfc_1_1_gerber_result.html">GerberResult</a> <a class="code hl_function" href="classfc_1_1_gerber_parser.html#a7c6954f9c6cbaf24bf80480c6f824212">parseString</a>(std::string_view source) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="classfc_1_1_gerber_parser.html#a7761d40ff6590e91e19b4b5c12d87f50">  142</a></span>    <a class="code hl_struct" href="structfc_1_1_gerber_options.html">GerberOptions</a> <a class="code hl_variable" href="classfc_1_1_gerber_parser.html#a7761d40ff6590e91e19b4b5c12d87f50">opt_</a>; <span class="comment">///&lt; Opciones de importación.</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>};</div>
+</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>}  <span class="comment">// namespace fc</span></div>
+<div class="ttc" id="aclassfc_1_1_geom_html"><div class="ttname"><a href="classfc_1_1_geom.html">fc::Geom</a></div><div class="ttdoc">Envoltorio inmutable y compartido de una geometría GEOS.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00115">geometry.hpp:115</a></div></div>
+<div class="ttc" id="aclassfc_1_1_geom_html_aeb91d2056e4ce71e4dba557be1b44f6c"><div class="ttname"><a href="classfc_1_1_geom.html#aeb91d2056e4ce71e4dba557be1b44f6c">fc::Geom::empty</a></div><div class="ttdeci">bool empty() const</div><div class="ttdoc">Indica si el Geom es nulo o si GEOS lo considera vacío.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00426">geometry.cpp:426</a></div></div>
+<div class="ttc" id="aclassfc_1_1_gerber_parser_html_a16dad8243ea10e8e9b7a76194b6542db"><div class="ttname"><a href="classfc_1_1_gerber_parser.html#a16dad8243ea10e8e9b7a76194b6542db">fc::GerberParser::GerberParser</a></div><div class="ttdeci">GerberParser(GerberOptions options={})</div><div class="ttdoc">Crea un parser con las opciones indicadas.</div><div class="ttdef"><b>Definición</b> <a href="gerber_8cpp_source.html#l01295">gerber.cpp:1295</a></div></div>
+<div class="ttc" id="aclassfc_1_1_gerber_parser_html_a7761d40ff6590e91e19b4b5c12d87f50"><div class="ttname"><a href="classfc_1_1_gerber_parser.html#a7761d40ff6590e91e19b4b5c12d87f50">fc::GerberParser::opt_</a></div><div class="ttdeci">GerberOptions opt_</div><div class="ttdoc">Opciones de importación.</div><div class="ttdef"><b>Definición</b> <a href="#l00142">gerber.hpp:142</a></div></div>
+<div class="ttc" id="aclassfc_1_1_gerber_parser_html_a7c6954f9c6cbaf24bf80480c6f824212"><div class="ttname"><a href="classfc_1_1_gerber_parser.html#a7c6954f9c6cbaf24bf80480c6f824212">fc::GerberParser::parseString</a></div><div class="ttdeci">GerberResult parseString(std::string_view source) const</div><div class="ttdoc">Parsea Gerber desde memoria.</div><div class="ttdef"><b>Definición</b> <a href="gerber_8cpp_source.html#l01304">gerber.cpp:1304</a></div></div>
+<div class="ttc" id="aclassfc_1_1_gerber_parser_html_ae677851258a2edcd2852fab2be3240a4"><div class="ttname"><a href="classfc_1_1_gerber_parser.html#ae677851258a2edcd2852fab2be3240a4">fc::GerberParser::parseFile</a></div><div class="ttdeci">GerberResult parseFile(const std::string &amp;path) const</div><div class="ttdoc">Parsea un archivo Gerber.</div><div class="ttdef"><b>Definición</b> <a href="gerber_8cpp_source.html#l01317">gerber.cpp:1317</a></div></div>
+<div class="ttc" id="ageometry_8hpp_html"><div class="ttname"><a href="geometry_8hpp.html">geometry.hpp</a></div><div class="ttdoc">Núcleo geométrico inmutable sobre la API C de GEOS.</div></div>
+<div class="ttc" id="anamespacefc_html"><div class="ttname"><a href="namespacefc.html">fc</a></div><div class="ttdef"><b>Definición</b> <a href="cutout_8hpp_source.html#l00016">cutout.hpp:16</a></div></div>
+<div class="ttc" id="anamespacefc_html_acb79184d1e00b1635d60b5596d70db00"><div class="ttname"><a href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00">fc::Units</a></div><div class="ttdeci">Units</div><div class="ttdoc">Unidad de trabajo de un archivo o de la aplicación.</div><div class="ttdef"><b>Definición</b> <a href="units_8hpp_source.html#l00017">units.hpp:17</a></div></div>
+<div class="ttc" id="anamespacefc_html_acb79184d1e00b1635d60b5596d70db00a07f07b623b4a00b57dc150ff2e59cb92"><div class="ttname"><a href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00a07f07b623b4a00b57dc150ff2e59cb92">fc::Units::Mm</a></div><div class="ttdeci">@ Mm</div><div class="ttdoc">Milímetros.</div><div class="ttdef"><b>Definición</b> <a href="units_8hpp_source.html#l00018">units.hpp:18</a></div></div>
+<div class="ttc" id="anamespacefc_html_acb79184d1e00b1635d60b5596d70db00abee12d309ba5730e1e121733b7b67956"><div class="ttname"><a href="namespacefc.html#acb79184d1e00b1635d60b5596d70db00abee12d309ba5730e1e121733b7b67956">fc::Units::Inch</a></div><div class="ttdeci">@ Inch</div><div class="ttdoc">Pulgadas.</div><div class="ttdef"><b>Definición</b> <a href="units_8hpp_source.html#l00019">units.hpp:19</a></div></div>
+<div class="ttc" id="astructfc_1_1_b_box_html"><div class="ttname"><a href="structfc_1_1_b_box.html">fc::BBox</a></div><div class="ttdoc">Caja envolvente alineada a los ejes.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8hpp_source.html#l00048">geometry.hpp:48</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html">fc::GerberAperture</a></div><div class="ttdoc">Definición de una apertura Gerber y las primitivas dibujadas con ella.</div><div class="ttdef"><b>Definición</b> <a href="#l00048">gerber.hpp:48</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_a22b1a3c2f2d417ceed311f795a49adc2"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2">fc::GerberAperture::Kind</a></div><div class="ttdeci">Kind</div><div class="ttdoc">Tipo de apertura.</div><div class="ttdef"><b>Definición</b> <a href="#l00050">gerber.hpp:50</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_a22b1a3c2f2d417ceed311f795a49adc2a30954d90085f6eaaf5817917fc5fecb3"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#a22b1a3c2f2d417ceed311f795a49adc2a30954d90085f6eaaf5817917fc5fecb3">fc::GerberAperture::Kind::Circle</a></div><div class="ttdeci">@ Circle</div><div class="ttdoc">Círculo (C).</div><div class="ttdef"><b>Definición</b> <a href="#l00051">gerber.hpp:51</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_a2caf56a4c7b151dcf9acf73a026c12a6"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#a2caf56a4c7b151dcf9acf73a026c12a6">fc::GerberAperture::size</a></div><div class="ttdeci">double size</div><div class="ttdoc">Tamaño principal (diámetro o lado).</div><div class="ttdef"><b>Definición</b> <a href="#l00060">gerber.hpp:60</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_a4e0b7447ced30bae21abe64213667bce"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#a4e0b7447ced30bae21abe64213667bce">fc::GerberAperture::hasRotation</a></div><div class="ttdeci">bool hasRotation</div><div class="ttdoc">true si el archivo especificó rotación.</div><div class="ttdef"><b>Definición</b> <a href="#l00066">gerber.hpp:66</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_a7672dbc19d58fd200e1fdf3b0463b2ee"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#a7672dbc19d58fd200e1fdf3b0463b2ee">fc::GerberAperture::height</a></div><div class="ttdeci">double height</div><div class="ttdoc">Alto para rectángulos/obrounds.</div><div class="ttdef"><b>Definición</b> <a href="#l00062">gerber.hpp:62</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_a9d7d15a718c2d42c2420dee11f688595"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#a9d7d15a718c2d42c2420dee11f688595">fc::GerberAperture::modifiers</a></div><div class="ttdeci">std::vector&lt; double &gt; modifiers</div><div class="ttdoc">Parámetros de la apertura/macro.</div><div class="ttdef"><b>Definición</b> <a href="#l00068">gerber.hpp:68</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_a9f3e5d994b6715da24afa863a5e5e912"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#a9f3e5d994b6715da24afa863a5e5e912">fc::GerberAperture::width</a></div><div class="ttdeci">double width</div><div class="ttdoc">Ancho para rectángulos/obrounds.</div><div class="ttdef"><b>Definición</b> <a href="#l00061">gerber.hpp:61</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_aa053bce1a7d2d6b2ea2d181d86bf2357"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#aa053bce1a7d2d6b2ea2d181d86bf2357">fc::GerberAperture::rotation</a></div><div class="ttdeci">double rotation</div><div class="ttdoc">Rotación en grados.</div><div class="ttdef"><b>Definición</b> <a href="#l00065">gerber.hpp:65</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_aa8981947dd7c52ecca2cbbc817a9cf0f"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#aa8981947dd7c52ecca2cbbc817a9cf0f">fc::GerberAperture::vertices</a></div><div class="ttdeci">int vertices</div><div class="ttdoc">Vértices para polígonos.</div><div class="ttdef"><b>Definición</b> <a href="#l00064">gerber.hpp:64</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_ac3523ac47fa1db0a8848226310bcc12b"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#ac3523ac47fa1db0a8848226310bcc12b">fc::GerberAperture::macroName</a></div><div class="ttdeci">std::string macroName</div><div class="ttdoc">Nombre de la macro (si es Macro).</div><div class="ttdef"><b>Definición</b> <a href="#l00067">gerber.hpp:67</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_ac56df81780a4441dc1d29a4831dede58"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#ac56df81780a4441dc1d29a4831dede58">fc::GerberAperture::diameter</a></div><div class="ttdeci">double diameter</div><div class="ttdoc">Diámetro para círculos/polígonos.</div><div class="ttdef"><b>Definición</b> <a href="#l00063">gerber.hpp:63</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_acf18848777fbb8481d165f999b57d51e"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#acf18848777fbb8481d165f999b57d51e">fc::GerberAperture::geometry</a></div><div class="ttdeci">std::vector&lt; Geom &gt; geometry</div><div class="ttdoc">Primitivas dibujadas con esta apertura (unidades del archivo).</div><div class="ttdef"><b>Definición</b> <a href="#l00069">gerber.hpp:69</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_aperture_html_affc727ef990518f52e0b2161f6ca9a83"><div class="ttname"><a href="structfc_1_1_gerber_aperture.html#affc727ef990518f52e0b2161f6ca9a83">fc::GerberAperture::kind</a></div><div class="ttdeci">Kind kind</div><div class="ttdoc">Tipo.</div><div class="ttdef"><b>Definición</b> <a href="#l00059">gerber.hpp:59</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_macro_html"><div class="ttname"><a href="structfc_1_1_gerber_macro.html">fc::GerberMacro</a></div><div class="ttdoc">Macro de apertura (AM) tal como aparece en el archivo.</div><div class="ttdef"><b>Definición</b> <a href="#l00075">gerber.hpp:75</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_macro_html_a2649a81129d49bbfe73af8ee2e5f459e"><div class="ttname"><a href="structfc_1_1_gerber_macro.html#a2649a81129d49bbfe73af8ee2e5f459e">fc::GerberMacro::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">Nombre de la macro.</div><div class="ttdef"><b>Definición</b> <a href="#l00076">gerber.hpp:76</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_macro_html_a28e8cf1d9dbd95b108ae710f82676741"><div class="ttname"><a href="structfc_1_1_gerber_macro.html#a28e8cf1d9dbd95b108ae710f82676741">fc::GerberMacro::raw</a></div><div class="ttdeci">std::string raw</div><div class="ttdoc">Cuerpo completo original, para editarlo.</div><div class="ttdef"><b>Definición</b> <a href="#l00077">gerber.hpp:77</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_options_html"><div class="ttname"><a href="structfc_1_1_gerber_options.html">fc::GerberOptions</a></div><div class="ttdoc">Opciones de importación de Gerber.</div><div class="ttdef"><b>Definición</b> <a href="#l00034">gerber.hpp:34</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_options_html_a01cfd4b7e2732d44d1fea4a7af9f5954"><div class="ttname"><a href="structfc_1_1_gerber_options.html#a01cfd4b7e2732d44d1fea4a7af9f5954">fc::GerberOptions::simplifyTolerance</a></div><div class="ttdeci">double simplifyTolerance</div><div class="ttdoc">Tolerancia de simplificación en mm.</div><div class="ttdef"><b>Definición</b> <a href="#l00038">gerber.hpp:38</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_options_html_a1bea2c469f394df1772c1a80359a8076"><div class="ttname"><a href="structfc_1_1_gerber_options.html#a1bea2c469f394df1772c1a80359a8076">fc::GerberOptions::appUnits</a></div><div class="ttdeci">Units appUnits</div><div class="ttdoc">Unidad de salida de la geometría.</div><div class="ttdef"><b>Definición</b> <a href="#l00035">gerber.hpp:35</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_options_html_ac9ee09d033a36319ea527446a5d1b769"><div class="ttname"><a href="structfc_1_1_gerber_options.html#ac9ee09d033a36319ea527446a5d1b769">fc::GerberOptions::simplification</a></div><div class="ttdeci">bool simplification</div><div class="ttdoc">Simplifica la geometría al terminar.</div><div class="ttdef"><b>Definición</b> <a href="#l00037">gerber.hpp:37</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_options_html_adeecf14be117be26f91cb8f0591338e8"><div class="ttname"><a href="structfc_1_1_gerber_options.html#adeecf14be117be26f91cb8f0591338e8">fc::GerberOptions::legacyRectStroke</a></div><div class="ttdeci">bool legacyRectStroke</div><div class="ttdoc">Reproduce el bug de FlatCAM 2024.4 al trazar con apertura rectangular: usa una caja entre los dos pri...</div><div class="ttdef"><b>Definición</b> <a href="#l00042">gerber.hpp:42</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_options_html_af6a56d2c456663b88e43929580ba4a9d"><div class="ttname"><a href="structfc_1_1_gerber_options.html#af6a56d2c456663b88e43929580ba4a9d">fc::GerberOptions::stepsPerCircle</a></div><div class="ttdeci">int stepsPerCircle</div><div class="ttdoc">Segmentos por círculo (FlatCAM: gerber_circle_steps).</div><div class="ttdef"><b>Definición</b> <a href="#l00036">gerber.hpp:36</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html"><div class="ttname"><a href="structfc_1_1_gerber_result.html">fc::GerberResult</a></div><div class="ttdoc">Resultado completo de parsear un Gerber.</div><div class="ttdef"><b>Definición</b> <a href="#l00086">gerber.hpp:86</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_a00cfcf650fee3eb7af43d0f96048ca8a"><div class="ttname"><a href="structfc_1_1_gerber_result.html#a00cfcf650fee3eb7af43d0f96048ca8a">fc::GerberResult::zeros</a></div><div class="ttdeci">char zeros</div><div class="ttdoc">Supresión de ceros (L, T, D).</div><div class="ttdef"><b>Definición</b> <a href="#l00090">gerber.hpp:90</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_a202c91484fe026d7749b4b3022313db6"><div class="ttname"><a href="structfc_1_1_gerber_result.html#a202c91484fe026d7749b4b3022313db6">fc::GerberResult::empty</a></div><div class="ttdeci">bool empty() const</div><div class="ttdef"><b>Definición</b> <a href="#l00107">gerber.hpp:107</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_a3b3ec8e28f115ed2b5dcc2aef28b9300"><div class="ttname"><a href="structfc_1_1_gerber_result.html#a3b3ec8e28f115ed2b5dcc2aef28b9300">fc::GerberResult::solids</a></div><div class="ttdeci">std::vector&lt; Geom &gt; solids</div><div class="ttdoc">Polígonos oscuros, en unidades de la app.</div><div class="ttdef"><b>Definición</b> <a href="#l00096">gerber.hpp:96</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_a52ef8b5a53b46f0f773ad22e23b887ae"><div class="ttname"><a href="structfc_1_1_gerber_result.html#a52ef8b5a53b46f0f773ad22e23b887ae">fc::GerberResult::macros</a></div><div class="ttdeci">std::map&lt; std::string, GerberMacro &gt; macros</div><div class="ttdoc">Macros AM por nombre.</div><div class="ttdef"><b>Definición</b> <a href="#l00094">gerber.hpp:94</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_a5360a6f6ca9473ccba6df0e35c4d175e"><div class="ttname"><a href="structfc_1_1_gerber_result.html#a5360a6f6ca9473ccba6df0e35c4d175e">fc::GerberResult::flashes</a></div><div class="ttdeci">std::size_t flashes</div><div class="ttdoc">Cantidad de flashes D03.</div><div class="ttdef"><b>Definición</b> <a href="#l00101">gerber.hpp:101</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_a58703ea47c0feecc5e290ec3f06f1a00"><div class="ttname"><a href="structfc_1_1_gerber_result.html#a58703ea47c0feecc5e290ec3f06f1a00">fc::GerberResult::solid</a></div><div class="ttdeci">Geom solid</div><div class="ttdoc">Unión de todos los sólidos (cobre).</div><div class="ttdef"><b>Definición</b> <a href="#l00098">gerber.hpp:98</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_a67663ce372120615df2bf552564cf305"><div class="ttname"><a href="structfc_1_1_gerber_result.html#a67663ce372120615df2bf552564cf305">fc::GerberResult::segments</a></div><div class="ttdeci">std::size_t segments</div><div class="ttdoc">Cantidad de trazos.</div><div class="ttdef"><b>Definición</b> <a href="#l00102">gerber.hpp:102</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_a8b4fdb77f8cf45f4d983f4ed3a75f754"><div class="ttname"><a href="structfc_1_1_gerber_result.html#a8b4fdb77f8cf45f4d983f4ed3a75f754">fc::GerberResult::fracDigits</a></div><div class="ttdeci">int fracDigits</div><div class="ttdoc">Dígitos fraccionarios del formato FS.</div><div class="ttdef"><b>Definición</b> <a href="#l00089">gerber.hpp:89</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_a93d637e63767889f781b7a4da513bae6"><div class="ttname"><a href="structfc_1_1_gerber_result.html#a93d637e63767889f781b7a4da513bae6">fc::GerberResult::bounds</a></div><div class="ttdeci">BBox bounds</div><div class="ttdoc">Límites de la geometría.</div><div class="ttdef"><b>Definición</b> <a href="#l00099">gerber.hpp:99</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_aa5659cc3c5cae9b394deba8fb517b3f4"><div class="ttname"><a href="structfc_1_1_gerber_result.html#aa5659cc3c5cae9b394deba8fb517b3f4">fc::GerberResult::apertures</a></div><div class="ttdeci">std::map&lt; std::string, GerberAperture &gt; apertures</div><div class="ttdoc">Aperturas por código Dnn.</div><div class="ttdef"><b>Definición</b> <a href="#l00093">gerber.hpp:93</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_aab25d3dcaaaa91a4abc5ca6100bfb583"><div class="ttname"><a href="structfc_1_1_gerber_result.html#aab25d3dcaaaa91a4abc5ca6100bfb583">fc::GerberResult::fileUnits</a></div><div class="ttdeci">Units fileUnits</div><div class="ttdoc">Unidades declaradas por el archivo.</div><div class="ttdef"><b>Definición</b> <a href="#l00087">gerber.hpp:87</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_ab04e5d6d559c32af758f111f8611d9ed"><div class="ttname"><a href="structfc_1_1_gerber_result.html#ab04e5d6d559c32af758f111f8611d9ed">fc::GerberResult::warnings</a></div><div class="ttdeci">std::vector&lt; std::string &gt; warnings</div><div class="ttdoc">Avisos no fatales.</div><div class="ttdef"><b>Definición</b> <a href="#l00104">gerber.hpp:104</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_ab31fb9d00cbaed54a168c9aec2bd5a27"><div class="ttname"><a href="structfc_1_1_gerber_result.html#ab31fb9d00cbaed54a168c9aec2bd5a27">fc::GerberResult::regions</a></div><div class="ttdeci">std::size_t regions</div><div class="ttdoc">Cantidad de regiones G36/G37.</div><div class="ttdef"><b>Definición</b> <a href="#l00103">gerber.hpp:103</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_aed9a317a833ac85750c2c22c106c0f6f"><div class="ttname"><a href="structfc_1_1_gerber_result.html#aed9a317a833ac85750c2c22c106c0f6f">fc::GerberResult::incremental</a></div><div class="ttdeci">bool incremental</div><div class="ttdoc">true si el archivo usa coordenadas incrementales.</div><div class="ttdef"><b>Definición</b> <a href="#l00091">gerber.hpp:91</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_aff1cae0108bbada993ca4c05ac502738"><div class="ttname"><a href="structfc_1_1_gerber_result.html#aff1cae0108bbada993ca4c05ac502738">fc::GerberResult::follows</a></div><div class="ttdeci">std::vector&lt; Geom &gt; follows</div><div class="ttdoc">Trazos y puntos, en unidades de la app.</div><div class="ttdef"><b>Definición</b> <a href="#l00097">gerber.hpp:97</a></div></div>
+<div class="ttc" id="astructfc_1_1_gerber_result_html_aff207af522b76fada12cc417f30578b6"><div class="ttname"><a href="structfc_1_1_gerber_result.html#aff207af522b76fada12cc417f30578b6">fc::GerberResult::intDigits</a></div><div class="ttdeci">int intDigits</div><div class="ttdoc">Dígitos enteros del formato FS.</div><div class="ttdef"><b>Definición</b> <a href="#l00088">gerber.hpp:88</a></div></div>
+<div class="ttc" id="aunits_8hpp_html"><div class="ttname"><a href="units_8hpp.html">units.hpp</a></div><div class="ttdoc">Unidades, conversiones y lectura de coordenadas Gerber.</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a href="dir_a1a815e8788d98990c3f3cc2cf9418f5.html">flatcam</a></li><li class="navelem"><a href="gerber_8hpp.html">gerber.hpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0 </li>
+  </ul>
+</div>
+</body>
+</html>

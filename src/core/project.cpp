@@ -1,3 +1,14 @@
+/**
+ * @file project.cpp
+ * @brief Lectura y escritura del proyecto .FlatPrj (JSON, opcionalmente xz).
+ *
+ * Ofrece cuatro modos de acceso: carga completa en memoria (limitada a 512
+ * MiB), carga de un solo objeto, recorrido secuencial con visitante e
+ * inspección de metadatos. Los proyectos grandes se leen por streaming: el
+ * descompresor lzma y los handlers SAX de nlohmann entregan objeto por objeto
+ * sin materializar el archivo, que en placas reales supera el GiB. Las
+ * geometrías se guardan como WKT dentro de {"__class__": "Shply"}.
+ */
 #include "flatcam/project.hpp"
 
 #include <chrono>
@@ -21,14 +32,25 @@ namespace {
 
 using json = nlohmann::json;
 
+/// Tope de memoria de loadProject(); por encima se sugiere usar --info.
 constexpr std::uint64_t kMaxLoadBytes = 512ull * 1024ull * 1024ull;
 
+/// Convierte el enum de unidades al texto del formato ("MM" o "IN").
 std::string unitsToString(Units u) { return u == Units::Mm ? "MM" : "IN"; }
 
+/**
+ * @brief Interpreta el texto de unidades del proyecto.
+ * @return Inch para "IN", "in" o "INCH"; Mm para cualquier otro valor.
+ */
 Units unitsFromString(const std::string& s) {
     return (s == "IN" || s == "in" || s == "INCH") ? Units::Inch : Units::Mm;
 }
 
+/**
+ * @brief Detecta la firma xz (FD 37 7A 58 5A 00) al inicio del archivo.
+ * @param path Archivo a inspeccionar.
+ * @return true si el proyecto está comprimido con lzma/xz.
+ */
 bool isXz(const std::string& path) {
     std::ifstream in(path, std::ios::binary);
     if (!in) return false;
@@ -41,8 +63,21 @@ bool isXz(const std::string& path) {
 #ifdef FC_HAVE_LZMA
 // Streaming decompressor: lets the SAX parser walk a multi-gigabyte .FlatPrj
 // without ever materialising it on disk or in memory.
+/**
+ * @brief streambuf que descomprime un .xz en streaming.
+ *
+ * Lee el archivo por bloques de 1 MiB, alimenta lzma_stream y expone el texto
+ * descomprimido a través de underflow(), de modo que nlohmann puede parsear
+ * proyectos de varios GiB con memoria acotada. Acepta streams concatenados
+ * (LZMA_CONCATENATED).
+ */
 class LzmaStreamBuf : public std::streambuf {
 public:
+    /**
+     * @brief Abre el archivo y prepara el decodificador lzma.
+     * @param path Ruta del .FlatPrj comprimido.
+     * @throw std::runtime_error si el archivo no se abre o lzma no inicializa.
+     */
     explicit LzmaStreamBuf(const std::string& path) : in_(path, std::ios::binary) {
         if (!in_) throw std::runtime_error("cannot open project: " + path);
         stream_ = LZMA_STREAM_INIT;
@@ -51,9 +86,20 @@ public:
         setg(buffer_, buffer_, buffer_);
     }
 
+    /// Libera el estado interno de liblzma.
     ~LzmaStreamBuf() override { lzma_end(&stream_); }
 
 protected:
+    /**
+     * @brief Produce el siguiente bloque de bytes descomprimidos.
+     *
+     * Refleja la mecánica clásica de streambuf: si el área de lectura tiene
+     * datos los devuelve; si no, bombea entrada al decodificador hasta obtener
+     * al menos un byte, EOF o error. Al agotarse la entrada se usa LZMA_FINISH
+     * para cerrar el stream.
+     * @return Siguiente carácter, o traits_type::eof() al terminar.
+     * @throw std::runtime_error si lzma devuelve un código distinto de OK.
+     */
     int_type underflow() override {
         if (gptr() < egptr()) return traits_type::to_int_type(*gptr());
 
@@ -90,6 +136,14 @@ private:
 };
 #endif
 
+/**
+ * @brief Abre el proyecto como istream, descomprimiendo si hace falta.
+ * @param path Ruta del proyecto.
+ * @param[out] compressed Se marca si el archivo venía comprimido en xz.
+ * @return Stream listo para SAX o para lectura completa.
+ * @throw std::runtime_error si el archivo no se puede abrir, o si es xz y
+ *        esta compilación no define FC_HAVE_LZMA.
+ */
 std::unique_ptr<std::istream> openProjectStream(const std::string& path, bool& compressed) {
     compressed = isXz(path);
     if (!compressed) {
@@ -105,6 +159,17 @@ std::unique_ptr<std::istream> openProjectStream(const std::string& path, bool& c
 #endif
 }
 
+/**
+ * @brief Extrae geometrías de un campo solid_geometry o follow_geometry.
+ *
+ * Acepta las tres formas que aparecen en los proyectos FlatCAM: un string WKT
+ * suelto, un objeto con "__inst__" (Shply) y un "__inst__" que es a su vez una
+ * lista anidada, que se recorre recursivamente. Los elementos no reconocidos
+ * se omiten.
+ * @param value Valor JSON del campo.
+ * @return Geometrías parseadas, en el orden encontrado.
+ * @throw std::runtime_error si algún WKT es inválido (lo lanza Geom::fromWkt).
+ */
 std::vector<Geom> readGeometryField(const json& value) {
     std::vector<Geom> out;
 
@@ -131,10 +196,15 @@ std::vector<Geom> readGeometryField(const json& value) {
     return out;
 }
 
+/// Envuelve una geometría en el objeto Shply con WKT de 9 decimales.
 json writeGeom(const Geom& geom) {
     return json{{"__class__", "Shply"}, {"__inst__", geom.toWkt(9)}};
 }
 
+/**
+ * @brief Serializa un vector de geometrías al array JSON del proyecto.
+ * @note Descarta geometrías nulas o vacías para no guardar ruido.
+ */
 json writeGeometryField(const std::vector<Geom>& geoms) {
     json list = json::array();
     for (const Geom& g : geoms) {
@@ -143,6 +213,14 @@ json writeGeometryField(const std::vector<Geom>& geoms) {
     return list;
 }
 
+/**
+ * @brief Handler SAX que extrae sólo los metadatos del proyecto.
+ *
+ * No construye ninguna geometría: recorre el JSON y guarda versión, opciones
+ * de proyecto y, por cada objeto, clase, unidades y nombre. La profundidad se
+ * cuenta a mano porque nlohmann no la expone; los objetos cuelgan de objs en
+ * el nivel 3.
+ */
 struct InfoSax : json::json_sax_t {
     ProjectInfo info;
     int depth = 0;
@@ -204,9 +282,17 @@ struct InfoSax : json::json_sax_t {
     }
 };
 
+/// Excepción centinela para abortar el SAX cuando ya se obtuvo el objeto.
 struct StopParsing {};
 
 // SAX handler that materialises only the geometry of one selected object.
+/**
+ * @brief Handler SAX que materializa un único objeto del proyecto.
+ *
+ * Sigue el mismo conteo de profundidad que InfoSax y, al llegar al objeto de
+ * índice target, activa la recolección de solid_geometry y follow_geometry; al
+ * cerrarlo lanza StopParsing para no descomprimir el resto del archivo.
+ */
 struct ObjectSax : json::json_sax_t {
     std::size_t target = 0;
     std::size_t index = 0;
@@ -311,6 +397,20 @@ struct ObjectSax : json::json_sax_t {
 
 }  // namespace
 
+/**
+ * @brief Carga un proyecto completo en memoria.
+ *
+ * Abre el stream (descomprimiendo si es xz), lee por bloques controlando el
+ * tope kMaxLoadBytes y parsea el JSON completo. Luego recorre objs tomando la
+ * clase (por defecto "gerber"), el nombre (options.name o "<kind>_<i>"), las
+ * unidades, source_file, text, properties y ambas colecciones de geometría.
+ * @param path Ruta del .FlatPrj.
+ * @return Proyecto con todos sus objetos.
+ * @throw std::runtime_error si el archivo no se abre, supera el tope de
+ *        memoria, el JSON es inválido o falta el array "objs".
+ * @note Pensado para proyectos chicos; los grandes deben usar
+ *       inspectProject, forEachProjectObject o loadProjectObject.
+ */
 Project loadProject(const std::string& path) {
     bool compressed = false;
     std::unique_ptr<std::istream> in = openProjectStream(path, compressed);
@@ -378,6 +478,17 @@ Project loadProject(const std::string& path) {
     return project;
 }
 
+/**
+ * @brief Escribe un proyecto en JSON legible, indentado con 2 espacios.
+ *
+ * Guarda versión, project_options y, por objeto, clase, unidades, archivo
+ * fuente, texto, propiedades, nombre y las geometrías en WKT. Los caracteres
+ * inválidos de UTF-8 se reemplazan para que el archivo siempre sea válido.
+ * @param path Destino.
+ * @param project Datos a serializar.
+ * @throw std::runtime_error si no se puede abrir el archivo.
+ * @note No comprime: el .xz lo produce otra herramienta.
+ */
 void saveProject(const std::string& path, const Project& project) {
     json doc;
     doc["version"] = project.version;
@@ -403,6 +514,17 @@ void saveProject(const std::string& path, const Project& project) {
     out << doc.dump(2, ' ', false, json::error_handler_t::replace);
 }
 
+/**
+ * @brief Carga un solo objeto del proyecto sin leer el resto.
+ *
+ * Usa ObjectSax y corta la descompresión en cuanto el objeto está completo; en
+ * proyectos de cientos de MiB esto reduce el tiempo a fracciones de segundo.
+ * @param path Ruta del proyecto.
+ * @param index Índice del objeto dentro de "objs".
+ * @return Objeto con metadatos y geometrías; la clase y el nombre se completan
+ *         con valores por defecto si faltaban.
+ * @throw std::runtime_error si el índice no existe o el archivo no se abre.
+ */
 ProjectObject loadProjectObject(const std::string& path, std::size_t index) {
     bool compressed = false;
     std::unique_ptr<std::istream> in = openProjectStream(path, compressed);
@@ -425,6 +547,13 @@ ProjectObject loadProjectObject(const std::string& path, std::size_t index) {
     return handler.object;
 }
 
+/**
+ * @brief Handler SAX que entrega cada objeto al visitante y lo libera.
+ *
+ * Es el modo de carga secuencial: mantiene un solo objeto en memoria, calcula
+ * un resumen (clase, nombre, unidades, cantidad de geometrías, área y caja) y
+ * llama al visitante; si éste devuelve false se aborta el parseo.
+ */
 struct AllObjectsSax : json::json_sax_t {
     ProjectObjectVisitor visitor;
     std::vector<ProjectObjectSummary> summaries;
@@ -486,6 +615,14 @@ struct AllObjectsSax : json::json_sax_t {
         return true;
     }
 
+    /**
+     * @brief Completa y entrega el objeto recién leído.
+     *
+     * Rellena clase y nombre faltantes, mueve las geometrías acumuladas, calcula
+     * el resumen (suma de áreas y unión de cajas de los sólidos) y llama al
+     * visitante.
+     * @return false si el visitante pidió detener el recorrido.
+     */
     bool finishObject() {
         if (object.kind.empty()) object.kind = "object";
         if (object.name.empty())
@@ -553,6 +690,14 @@ struct AllObjectsSax : json::json_sax_t {
     }
 };
 
+/**
+ * @brief Recorre todos los objetos de un proyecto en un solo pase SAX.
+ * @param path Ruta del .FlatPrj.
+ * @param visitor Callable que recibe ProjectObject por valor y devuelve false
+ *        para cortar el recorrido.
+ * @return Resumen de cada objeto procesado, con área y límites.
+ * @throw std::runtime_error si el archivo no se abre o el JSON es inválido.
+ */
 std::vector<ProjectObjectSummary> forEachProjectObject(const std::string& path,
                                                        const ProjectObjectVisitor& visitor) {
     bool compressed = false;
@@ -568,6 +713,15 @@ std::vector<ProjectObjectSummary> forEachProjectObject(const std::string& path,
     return handler.summaries;
 }
 
+/**
+ * @brief Lee sólo los metadatos del proyecto, sin su geometría.
+ *
+ * Pensado para proyectos enormes: no materializa WKT ni polígonos, así que
+ * responde en segundos incluso con archivos de varios GiB.
+ * @param path Ruta del .FlatPrj, comprimido o no.
+ * @return Versión, opciones de proyecto, indicador de compresión y objetos.
+ * @throw std::runtime_error si el archivo no se puede abrir o parsear.
+ */
 ProjectInfo inspectProject(const std::string& path) {
     bool compressed = false;
     std::unique_ptr<std::istream> in = openProjectStream(path, compressed);
