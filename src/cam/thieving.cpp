@@ -54,8 +54,18 @@ std::vector<Pt> thievingPoints(const Geom& copper, const BBox& area,
     const Geom keepOut = copper.valid() ? copper.buffer(radius + options.clearance, 8) : Geom();
 
     const double margin = options.margin;
-    for (double y = area.ymin + margin + spacing / 2.0; y <= area.ymax - margin; y += spacing) {
-        for (double x = area.xmin + margin + spacing / 2.0; x <= area.xmax - margin; x += spacing) {
+    const double x0 = area.xmin + margin + spacing / 2.0;
+    const double y0 = area.ymin + margin + spacing / 2.0;
+    const int nx = x0 <= area.xmax - margin
+                       ? static_cast<int>(std::floor((area.xmax - margin - x0) / spacing)) + 1
+                       : 0;
+    const int ny = y0 <= area.ymax - margin
+                       ? static_cast<int>(std::floor((area.ymax - margin - y0) / spacing)) + 1
+                       : 0;
+    for (int iy = 0; iy < ny; ++iy) {
+        const double y = y0 + iy * spacing;
+        for (int ix = 0; ix < nx; ++ix) {
+            const double x = x0 + ix * spacing;
             const Geom dot = Geom::circle({x, y}, radius, 8);
             if (keepOut.valid() && keepOut.intersects(dot)) continue;
             points.push_back({x, y});

@@ -344,9 +344,8 @@ int ScriptApi::extractDrills(double maxDiameter) {
  * @return Cantidad de geometrías del resultado, o -1 si falta el Gerber, el
  *         Excellon o el resultado queda vacío.
  *
- * @warning Al reemplazar `gerber_.solids` se pierden los recorridos "follow"
- *          originales: `gerber_.follows` no se actualiza y queda desalineado
- *          respecto de la nueva geometría.
+ * @note Los recorridos "follow" originales se descartan porque pueden cruzar
+ *       los taladros recién restados; el resultado queda como sólidos.
  * @warning `punchGerber` devuelve un único `Geom` que suele ser un
  *          `MultiPolygon`; si la implementación devolviera otra colección, el
  *          conteo de `numGeometries()` no equivale a la cantidad de piezas
@@ -365,6 +364,7 @@ int ScriptApi::punch(double margin) {
     }
     gerber_.solid = punched;
     gerber_.solids = {punched};
+    gerber_.follows.clear();
     gerber_.bounds = punched.bounds();
     if (sink_) sink_("punch", "gerber", {punched}, {});
     return punched.numGeometries();
