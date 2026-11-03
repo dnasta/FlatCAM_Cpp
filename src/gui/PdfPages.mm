@@ -75,6 +75,10 @@ QVector<QImage> renderPdfPages(const QString& path, int dpi, QVector<QSizeF>* pa
             [page drawWithBox:kPDFDisplayBoxCropBox toContext:context];
             CGContextRelease(context);
             CGColorSpaceRelease(colorSpace);
+            // PDFKit dibuja con el origen en la esquina inferior izquierda;
+            // QImage usa la esquina superior izquierda. El espejo vertical
+            // deja el texto y la geometría en la orientación correcta.
+            image = image.flipped(Qt::Vertical);
             pages.push_back(image);
             if (pageSizesMm)
                 pageSizesMm->push_back(QSizeF(box.size.width * 25.4 / 72.0,
