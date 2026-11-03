@@ -1,0 +1,13 @@
+build/
+dist/
+*.dmg
+build-*/
+cmake-build-*/
+tools/refenv/
+*.o
+*.a
+.DS_Store
+compile_commands.json
+__pycache__/
+*.pyc
+*.nc
