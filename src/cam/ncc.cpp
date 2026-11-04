@@ -122,12 +122,19 @@ NccResult clearCopper(const Geom& copper, const Geom& area, const NccOptions& op
     if (!region.valid() || region.empty()) return result;
     result.clearedArea = region;
 
+    // `paintArea` ya descuenta el radio de la herramienta. Para Paint hay que
+    // partir del área menos el cobre (con clearance), no del keep-out que ya
+    // incluye el radio; de lo contrario se pierden pasadas cerca del cobre.
+    Geom paintBase = workArea.difference(
+        copper.buffer(clearance, std::max(2, options.quadrantSegments)));
+    if (!paintBase.valid() || paintBase.empty()) paintBase = region;
+
     auto paintRegion = [&]() {
         PaintOptions paint;
         paint.toolDiameter = options.toolDiameter;
         paint.stepOver = options.stepOver;
         paint.quadrantSegments = options.quadrantSegments;
-        return paintArea(region, paint);
+        return paintArea(paintBase, paint);
     };
     if (options.strategy == NccStrategy::Paint || options.strategy == NccStrategy::Seed) {
         const PaintResult painted = paintRegion();

@@ -108,3 +108,16 @@ TEST(Ncc, PaintHalfMillimeterGapHasManyPasses) {
                                     Geom::box(-0.5, -0.5, 10.5, 10.5), opt);
     EXPECT_GT(r.paths.size(), std::size_t{15});
 }
+
+
+TEST(Ncc, PaintHalfMillimeterChannelHasAllLevels) {
+    NccOptions opt;
+    opt.strategy = NccStrategy::Paint;
+    opt.toolDiameter = 0.1;
+    opt.stepOver = 0.2;
+    const Geom copper = Geom::unionOf({Geom::box(0, 0, 10, 10), Geom::box(10.5, 0, 20.5, 10)});
+    const NccResult r = clearCopper(copper, Geom::box(10, 0, 10.5, 10), opt);
+    // Cada nivel es un contorno cerrado del canal; 10 niveles = 20 líneas visibles.
+    EXPECT_GE(r.paths.size(), std::size_t{10});
+    EXPECT_GT(r.totalLength, 190.0);
+}
