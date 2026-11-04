@@ -62,12 +62,12 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_canvas_8cpp.html",
-"class_main_window.html#a33f06ed684e519c0f6caec7afc9142a9",
-"class_unit_spin_box.html",
-"classfc_1_1_spatial_index.html#abdf8e08fc621ab95fc937b7434c5c9fa",
-"namespacefc_1_1theme.html#af372729049cc074c6f14ca388e5082c0",
-"structfc_1_1_excellon_result.html#ae6a5008ff20ef616b1340c87d1f5a48e",
-"structfc_1_1_paint_options.html#afc3a790af1af789ee844610aa898e059"
+"class_main_window.html#a2cfd0971aa8a2a72f60e7213ef421867",
+"class_main_window.html#af4413396dd9950a43908a9cbcffa3250",
+"classfc_1_1_script_api.html#ae921aedede55ad7f767de2eb9a64422e",
+"namespacefc.html#ae032096a10f53abdf5406d8309aa62ff",
+"structfc_1_1_dxf_text.html#ac31a1a5fc743003cdab29a047e2d93ed",
+"structfc_1_1_ncc_options.html#ab1ea4bf2a26019e2dc2d5eea72be6378"
 ];
 
 const SYNCONMSG = 'pulsar para deshabilitar sincronización';

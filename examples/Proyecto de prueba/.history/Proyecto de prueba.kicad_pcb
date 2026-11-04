@@ -455,7 +455,7 @@
 			(uuid "5ba349e3-e81a-4406-ba56-965d02494274")
 		)
 		(embedded_fonts no)
-		(model "${KICAD6_3DMODEL_DIR}/LED_THT.3dshapes/LED_D5.0mm_FlatTop.wrl"
+		(model "${KICAD10_3DMODEL_DIR}/LED_THT.3dshapes/LED_D5.0mm_FlatTop.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -812,30 +812,6 @@
 		(uuid "3e9b7843-ccc0-40a7-895f-b5ad55338f35")
 	)
 	(segment
-		(start 142.65 87.36)
-		(end 152.88 87.36)
-		(width 0.8)
-		(layer "B.Cu")
-		(net "Net-(D1-K)")
-		(uuid "6a8d349d-45c5-4639-8456-ff3fdb025b74")
-	)
-	(segment
-		(start 152.88 87.36)
-		(end 154.49 85.75)
-		(width 0.8)
-		(layer "B.Cu")
-		(net "Net-(D1-K)")
-		(uuid "6d77f2dc-5e5a-43e5-8ec4-43231b00f5c6")
-	)
-	(segment
-		(start 154.49 85.75)
-		(end 165.3 85.75)
-		(width 0.8)
-		(layer "B.Cu")
-		(net "Net-(D1-K)")
-		(uuid "7d99bb15-f505-4c11-8061-142ec0a4fa9d")
-	)
-	(segment
 		(start 142.64 78.26)
 		(end 142.64 84.81)
 		(width 0.4)
@@ -874,6 +850,30 @@
 		(layer "B.Cu")
 		(net "Net-(J1-Pin_1)")
 		(uuid "9df3bd15-5012-4900-a043-ab5779c3aa5a")
+	)
+	(segment
+		(start 142.65 87.36)
+		(end 152.88 87.36)
+		(width 0.8)
+		(layer "B.Cu")
+		(net "Net-(D1-K)")
+		(uuid "6a8d349d-45c5-4639-8456-ff3fdb025b74")
+	)
+	(segment
+		(start 152.88 87.36)
+		(end 154.49 85.75)
+		(width 0.8)
+		(layer "B.Cu")
+		(net "Net-(D1-K)")
+		(uuid "6d77f2dc-5e5a-43e5-8ec4-43231b00f5c6")
+	)
+	(segment
+		(start 154.49 85.75)
+		(end 165.3 85.75)
+		(width 0.8)
+		(layer "B.Cu")
+		(net "Net-(D1-K)")
+		(uuid "7d99bb15-f505-4c11-8061-142ec0a4fa9d")
 	)
 	(zone
 		(net "Net-(D1-K)")

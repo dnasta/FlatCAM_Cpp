@@ -78,3 +78,22 @@ TEST(Ncc, BorderLeavesOuterBandUnprocessed) {
     EXPECT_LE(r.bounds.xmax, 8.01);
     EXPECT_LE(r.bounds.ymax, 8.01);
 }
+
+TEST(Ncc, PaintUsesFineOverlap) {
+    NccOptions opt;
+    opt.strategy = NccStrategy::Paint;
+    opt.toolDiameter = 0.1;
+    opt.stepOver = 0.2;
+    const NccResult r = clearCopper(Geom::box(4, 4, 6, 6), Geom::box(0, 0, 10, 10), opt);
+    EXPECT_GT(r.paths.size(), std::size_t{10});
+}
+
+TEST(Ncc, PaintFillsNarrowGapWithManyPasses) {
+    NccOptions opt;
+    opt.strategy = NccStrategy::Paint;
+    opt.toolDiameter = 0.1;
+    opt.stepOver = 0.2;
+    const NccResult r = clearCopper(Geom::box(0, 0, 10, 10),
+                                    Geom::box(-0.4, -0.4, 10.4, 10.4), opt);
+    EXPECT_GT(r.paths.size(), std::size_t{10});
+}

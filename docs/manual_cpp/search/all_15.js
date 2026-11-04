@@ -12,7 +12,9 @@ var searchData=
   ['view3d_2eh_9',['View3D.h',['../_view3_d_8h.html',1,'']]],
   ['viewoffset_10',['viewOffset',['../class_canvas.html#a968fc3dc26549a596f5bed19320e6152',1,'Canvas']]],
   ['viewscale_11',['viewScale',['../class_canvas.html#a30b2542167bb9785fab6d8caea42e3d9',1,'Canvas']]],
-  ['visible_12',['visible',['../struct_canvas_1_1_layer_snapshot.html#ae1ea41ec96d58d362e43cd7b26b112dd',1,'Canvas::LayerSnapshot::visible'],['../struct_canvas_1_1_layer.html#a3fa3c8625b1c84f4f59e6b455fb1d394',1,'Canvas::Layer::visible']]],
-  ['visiblesolids_13',['visibleSolids',['../class_canvas.html#ac05951f9556504f9b536e30675039b49',1,'Canvas']]],
-  ['visitor_14',['visitor',['../structfc_1_1_all_objects_sax.html#afd2669ce12445c149c6256f82b67a594',1,'fc::AllObjectsSax']]]
+  ['viewtheme_12',['ViewTheme',['../struct_view_theme.html',1,'']]],
+  ['viewthemes_5f_13',['viewThemes_',['../class_main_window.html#a3ae0a7619cf7a2bcde5ef226a732fa04',1,'MainWindow']]],
+  ['visible_14',['visible',['../struct_canvas_1_1_layer_snapshot.html#ae1ea41ec96d58d362e43cd7b26b112dd',1,'Canvas::LayerSnapshot::visible'],['../struct_canvas_1_1_layer.html#a3fa3c8625b1c84f4f59e6b455fb1d394',1,'Canvas::Layer::visible']]],
+  ['visiblesolids_15',['visibleSolids',['../class_canvas.html#ac05951f9556504f9b536e30675039b49',1,'Canvas']]],
+  ['visitor_16',['visitor',['../structfc_1_1_all_objects_sax.html#afd2669ce12445c149c6256f82b67a594',1,'fc::AllObjectsSax']]]
 ];

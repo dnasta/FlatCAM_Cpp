@@ -15,6 +15,13 @@
 
 namespace fc {
 
+/// Tipo de brecha que se deja para sostener la pieza.
+enum class GapType {
+    Bridge,     ///< Puente normal.
+    Thin,       ///< Puente más delgado.
+    MouseBites  ///< M-Bites (mordidas de ratón).
+};
+
 /// Distribución de los puentes alrededor del contorno.
 enum class TabSides {
     All,       ///< Repartidos uniformemente por todo el perímetro.
@@ -34,6 +41,7 @@ struct CutoutOptions {
     int tabCount = 0;            ///< Puentes que sostienen la pieza; 0 = ninguno.
     double tabWidth = 0.0;       ///< Ancho de cada puente (mm).
     TabSides tabSides = TabSides::All; ///< Lados donde se permiten puentes.
+    GapType gapType = GapType::Bridge;  ///< Tipo de brecha.
     /// Posiciones manuales como fracción del perímetro (0..1). Si no está
     /// vacío, reemplaza a `tabCount` y `tabSides`.
     std::vector<double> tabPositions;

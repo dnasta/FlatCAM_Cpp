@@ -59,6 +59,11 @@ var namespacefc =
       [ "AsIs", "namespacefc.html#ad0f2792bab4de9d1ceaa4a709a05632aa2a299b97d622f2c29576b3bc2c709db0", null ],
       [ "NearestNeighbor", "namespacefc.html#ad0f2792bab4de9d1ceaa4a709a05632aaaa020331bb30d2fa2ecf7c3a0777823f", null ]
     ] ],
+    [ "GapType", "namespacefc.html#a3ee7b392107aac7bff3a6a7a19c9d128", [
+      [ "Bridge", "namespacefc.html#a3ee7b392107aac7bff3a6a7a19c9d128ade8504b73ea228d0ea9bbce69752092e", null ],
+      [ "Thin", "namespacefc.html#a3ee7b392107aac7bff3a6a7a19c9d128aaedfcbf06fc92bafadf4527a2fcccc69", null ],
+      [ "MouseBites", "namespacefc.html#a3ee7b392107aac7bff3a6a7a19c9d128a454bedf648625eb6f1b6ca19d29ef47c", null ]
+    ] ],
     [ "GCodeFlavor", "namespacefc.html#ab1000db7f3672945f3128b82831cdf62", [
       [ "Default", "namespacefc.html#ab1000db7f3672945f3128b82831cdf62a7a1920d61156abc05a60135aefe8bc67", null ],
       [ "DefaultNoM6", "namespacefc.html#ab1000db7f3672945f3128b82831cdf62aafe30ad452e178eec7644a33701910a1", null ],
@@ -82,7 +87,10 @@ var namespacefc =
     ] ],
     [ "NccStrategy", "namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63", [
       [ "Hatch", "namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63a1ca570bb907094b2921ea489c73f1c3d", null ],
-      [ "Paint", "namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63a4802a5ac6005a6ab9c68a2fb29e30a3e", null ]
+      [ "Paint", "namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63a4802a5ac6005a6ab9c68a2fb29e30a3e", null ],
+      [ "Seed", "namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63adba005190e58b252f9b5375cdf5655d9", null ],
+      [ "Lines", "namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63aa0b0293a2db49f5f93c15a62e095c819", null ],
+      [ "Combo", "namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63ad8929068f239cc2984d214ec4717cc5f", null ]
     ] ],
     [ "TabSides", "namespacefc.html#a3e29dc44d321f9f123160292dd769e18", [
       [ "All", "namespacefc.html#a3e29dc44d321f9f123160292dd769e18ab1c94ca2fbc3e78fc30069c8d0f01680", null ],

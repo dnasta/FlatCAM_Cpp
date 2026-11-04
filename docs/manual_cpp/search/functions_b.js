@@ -23,5 +23,6 @@ var searchData=
   ['loadproject_20',['loadProject',['../namespacefc.html#ad0e125e8a5d0f2406e00379db284a406',1,'fc']]],
   ['loadprojectobject_21',['loadProjectObject',['../namespacefc.html#aa97097c832406c71aa5e3ff445618824',1,'fc']]],
   ['loadtooltablesjson_22',['loadToolTablesJson',['../class_main_window.html#a6db0adb15e0466da957d1f79bcba9481',1,'MainWindow']]],
-  ['log_23',['log',['../classfc_1_1_script_api.html#a27ea9dae43c0f0ef8b80856485e4c336',1,'fc::ScriptApi']]]
+  ['loadviewthemes_23',['loadViewThemes',['../class_main_window.html#a4d3a646e683fc9a8270fe8c4d7fe3aa7',1,'MainWindow']]],
+  ['log_24',['log',['../classfc_1_1_script_api.html#a27ea9dae43c0f0ef8b80856485e4c336',1,'fc::ScriptApi']]]
 ];

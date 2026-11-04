@@ -3,6 +3,8 @@ var structfc_1_1_ncc_options =
     [ "angleDeg", "structfc_1_1_ncc_options.html#aa2f305583316dd235ba1ba1489b138c7", null ],
     [ "border", "structfc_1_1_ncc_options.html#a04eb40d000651cbe9e5f121be0f71b22", null ],
     [ "clearance", "structfc_1_1_ncc_options.html#af6998fce6203f64208a0e8c7da1ce51e", null ],
+    [ "climb", "structfc_1_1_ncc_options.html#a498cf0c086bcb5def2848d2e00f36219", null ],
+    [ "compensation", "structfc_1_1_ncc_options.html#ab1ea4bf2a26019e2dc2d5eea72be6378", null ],
     [ "margin", "structfc_1_1_ncc_options.html#a17081468fabe6a32a0b619d8d65e6cc1", null ],
     [ "quadrantSegments", "structfc_1_1_ncc_options.html#ace3d05ac9fe9824a15cf4d9f87cbe966", null ],
     [ "stepOver", "structfc_1_1_ncc_options.html#aad817cb18660c0d6b61cb4d965dc7cb6", null ],

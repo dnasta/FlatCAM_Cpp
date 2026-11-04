@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.4.0</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.4.1</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -151,6 +151,8 @@ Señales</h2></td></tr>
 <tr class="memdesc:a5273af4bd49d57ee8b7f53c8704912b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emite el id de la capa bajo el clic.  <br /></td></tr>
 <tr class="memitem:aa65f5c4d3a740de264716fe3d41acff4" id="r_aa65f5c4d3a740de264716fe3d41acff4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated</a> (int id)</td></tr>
 <tr class="memdesc:aa65f5c4d3a740de264716fe3d41acff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emite el id de la capa con doble clic.  <br /></td></tr>
+<tr class="memitem:ab3f2f7d7e418696bd6d7f4960affed8c" id="r_ab3f2f7d7e418696bd6d7f4960affed8c"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab3f2f7d7e418696bd6d7f4960affed8c">worldPicked</a> (double x, double y)</td></tr>
+<tr class="memdesc:ab3f2f7d7e418696bd6d7f4960affed8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emite una coordenada de mundo al hacer clic en modo captura.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Métodos públicos</h2></td></tr>
@@ -218,6 +220,13 @@ Métodos públicos</h2></td></tr>
 <tr class="memitem:a39226f966f12df2b3f3da7ee22542cbb" id="r_a39226f966f12df2b3f3da7ee22542cbb"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a39226f966f12df2b3f3da7ee22542cbb">gridStep</a> () const</td></tr>
 <tr class="memitem:a8ac31a980ab0eda8d7b4bb75efa2d4d6" id="r_a8ac31a980ab0eda8d7b4bb75efa2d4d6"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8ac31a980ab0eda8d7b4bb75efa2d4d6">setColors</a> (const QColor &amp;background, const QColor &amp;copper, const QColor &amp;follow, const QColor &amp;toolpath)</td></tr>
 <tr class="memdesc:a8ac31a980ab0eda8d7b4bb75efa2d4d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configura los colores del visor.  <br /></td></tr>
+<tr class="memitem:ac2f225ff276593f4464cdcb7bb8042e3" id="r_ac2f225ff276593f4464cdcb7bb8042e3"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac2f225ff276593f4464cdcb7bb8042e3">setGridColor</a> (const QColor &amp;color)</td></tr>
+<tr class="memdesc:ac2f225ff276593f4464cdcb7bb8042e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cambia el color de la rejilla.  <br /></td></tr>
+<tr class="memitem:a8796728f481c3034d5f4e1043963f1ad" id="r_a8796728f481c3034d5f4e1043963f1ad"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8796728f481c3034d5f4e1043963f1ad">setPointPickMode</a> (bool on)</td></tr>
+<tr class="memdesc:a8796728f481c3034d5f4e1043963f1ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activa el modo de captura de puntos (puentes manuales).  <br /></td></tr>
+<tr class="memitem:aaaa85936031b4945735da341d48dca6d" id="r_aaaa85936031b4945735da341d48dca6d"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aaaa85936031b4945735da341d48dca6d">pointPickMode</a> () const</td></tr>
+<tr class="memitem:a959ba79919907aaf1c043f15dba40c9a" id="r_a959ba79919907aaf1c043f15dba40c9a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a959ba79919907aaf1c043f15dba40c9a">setMarkers</a> (const std::vector&lt; <a class="el" href="structfc_1_1_pt.html">fc::Pt</a> &gt; &amp;markers)</td></tr>
+<tr class="memdesc:a959ba79919907aaf1c043f15dba40c9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja marcas temporales en el visor.  <br /></td></tr>
 <tr class="memitem:a33fe60451eacc13fe94c970c4c460e24" id="r_a33fe60451eacc13fe94c970c4c460e24"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a33fe60451eacc13fe94c970c4c460e24">hasData</a> () const</td></tr>
 <tr class="memitem:a30b2542167bb9785fab6d8caea42e3d9" id="r_a30b2542167bb9785fab6d8caea42e3d9"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a30b2542167bb9785fab6d8caea42e3d9">viewScale</a> () const</td></tr>
 <tr class="memitem:a968fc3dc26549a596f5bed19320e6152" id="r_a968fc3dc26549a596f5bed19320e6152"><td class="memItemLeft">QPointF&#160;</td><td class="memItemRight"><a class="el" href="#a968fc3dc26549a596f5bed19320e6152">viewOffset</a> () const</td></tr>
@@ -242,7 +251,6 @@ Métodos protegidos</h2></td></tr>
 <tr class="memitem:a67dbba80855f3b4fb95c26d5012f7ccc" id="r_a67dbba80855f3b4fb95c26d5012f7ccc"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a67dbba80855f3b4fb95c26d5012f7ccc">paintEvent</a> (QPaintEvent *event) override</td></tr>
 <tr class="memdesc:a67dbba80855f3b4fb95c26d5012f7ccc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja el lienzo completo.  <br /></td></tr>
 <tr class="memitem:af6760030ef7aaf5cf73e89fbb55bee26" id="r_af6760030ef7aaf5cf73e89fbb55bee26"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#af6760030ef7aaf5cf73e89fbb55bee26">resizeEvent</a> (QResizeEvent *event) override</td></tr>
-<tr class="memdesc:af6760030ef7aaf5cf73e89fbb55bee26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reajusta la vista cuando cambia el tamaño del widget.  <br /></td></tr>
 <tr class="memitem:a803e71255d31871cdb8cf12e9f3a1336" id="r_a803e71255d31871cdb8cf12e9f3a1336"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a803e71255d31871cdb8cf12e9f3a1336">wheelEvent</a> (QWheelEvent *event) override</td></tr>
 <tr class="memdesc:a803e71255d31871cdb8cf12e9f3a1336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Traduce la rueda del ratón en zoom anclado al cursor.  <br /></td></tr>
 <tr class="memitem:ac766a4e369f781943df021b80e5922c4" id="r_ac766a4e369f781943df021b80e5922c4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac766a4e369f781943df021b80e5922c4">mousePressEvent</a> (QMouseEvent *event) override</td></tr>
@@ -300,6 +308,9 @@ Atributos privados</h2></td></tr>
 <tr class="memitem:aefe113fe66cc919a5d3c2d6cbd6317c9" id="r_aefe113fe66cc919a5d3c2d6cbd6317c9"><td class="memItemLeft">QColor&#160;</td><td class="memItemRight"><a class="el" href="#aefe113fe66cc919a5d3c2d6cbd6317c9">copperEdge_</a> {240, 196, 106}</td></tr>
 <tr class="memitem:a3a041d0a16a7d0a039250b79dac588bb" id="r_a3a041d0a16a7d0a039250b79dac588bb"><td class="memItemLeft">QColor&#160;</td><td class="memItemRight"><a class="el" href="#a3a041d0a16a7d0a039250b79dac588bb">followColor_</a> {111, 168, 220, 170}</td></tr>
 <tr class="memitem:ab7f29fa984e655abba5c8f61e936270a" id="r_ab7f29fa984e655abba5c8f61e936270a"><td class="memItemLeft">QColor&#160;</td><td class="memItemRight"><a class="el" href="#ab7f29fa984e655abba5c8f61e936270a">toolpathColor_</a> {102, 214, 132}</td></tr>
+<tr class="memitem:a8068339a92731a562781f8e45d1e305a" id="r_a8068339a92731a562781f8e45d1e305a"><td class="memItemLeft">QColor&#160;</td><td class="memItemRight"><a class="el" href="#a8068339a92731a562781f8e45d1e305a">gridColor_</a> {38, 46, 54}</td></tr>
+<tr class="memitem:a61199bcf568a6236ec3cffa2b8e758bb" id="r_a61199bcf568a6236ec3cffa2b8e758bb"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a61199bcf568a6236ec3cffa2b8e758bb">pointPickMode_</a> = false</td></tr>
+<tr class="memitem:abb7032578806cbdbf07b43e1b425c7ac" id="r_abb7032578806cbdbf07b43e1b425c7ac"><td class="memItemLeft">std::vector&lt; <a class="el" href="structfc_1_1_pt.html">fc::Pt</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#abb7032578806cbdbf07b43e1b425c7ac">markers_</a></td></tr>
 <tr class="memitem:a1463e85751f2d306b035ca6dcbcae9f1" id="r_a1463e85751f2d306b035ca6dcbcae9f1"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a1463e85751f2d306b035ca6dcbcae9f1">nextId_</a> = 1</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
@@ -343,7 +354,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00037">37</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01237">MainWindow::buildLayout()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01385">MainWindow::buildLayout()</a>.</p>
 
 </div>
 </div>
@@ -398,9 +409,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00253">253</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00226">bounds_</a>, <a class="el" href="_canvas_8cpp_source.html#l00126">buildLinePath()</a>, <a class="el" href="_canvas_8cpp_source.html#l00061">buildPath()</a>, <a class="el" href="_canvas_8h_source.html#l00200">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00202">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a>, <a class="el" href="_canvas_8h_source.html#l00198">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00246">nextId_</a>, <a class="el" href="_canvas_8h_source.html#l00199">Canvas::Layer::solid</a>, <a class="el" href="_canvas_8h_source.html#l00201">Canvas::Layer::solids</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">bounds_</a>, <a class="el" href="_canvas_8cpp_source.html#l00126">buildLinePath()</a>, <a class="el" href="_canvas_8cpp_source.html#l00061">buildPath()</a>, <a class="el" href="_canvas_8h_source.html#l00210">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00212">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a>, <a class="el" href="_canvas_8h_source.html#l00208">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00259">nextId_</a>, <a class="el" href="_canvas_8h_source.html#l00209">Canvas::Layer::solid</a>, <a class="el" href="_canvas_8h_source.html#l00211">Canvas::Layer::solids</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08307">MainWindow::addCncJobObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l11084">MainWindow::addExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l05067">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l06936">MainWindow::addGCodeLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04720">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04740">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l10969">MainWindow::addGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l07210">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l05217">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l04855">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l08209">MainWindow::createTextObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08504">MainWindow::explodeObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08464">MainWindow::joinObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l08660">MainWindow::mirrorLayerToNew()</a>, <a class="el" href="_main_window_8cpp_source.html#l04920">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l07008">MainWindow::pcbWizardImport()</a>, <a class="el" href="_main_window_8cpp_source.html#l03235">MainWindow::runScriptFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l04002">MainWindow::tclJoin()</a> y <a class="el" href="_main_window_8cpp_source.html#l03873">MainWindow::tclNewObject()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08748">MainWindow::addCncJobObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l11882">MainWindow::addExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l05506">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l07377">MainWindow::addGCodeLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05154">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05174">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l11764">MainWindow::addGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l07651">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l05656">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l05294">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l08650">MainWindow::createTextObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l09039">MainWindow::explodeObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08999">MainWindow::joinObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l09203">MainWindow::mirrorLayerAround()</a>, <a class="el" href="_main_window_8cpp_source.html#l05359">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l07449">MainWindow::pcbWizardImport()</a>, <a class="el" href="_main_window_8cpp_source.html#l03411">MainWindow::runScriptFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l04178">MainWindow::tclJoin()</a> y <a class="el" href="_main_window_8cpp_source.html#l04049">MainWindow::tclNewObject()</a>.</p>
 
 </div>
 </div>
@@ -474,9 +485,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00231">231</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00226">bounds_</a>, <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a> y <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">bounds_</a>, <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a> y <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02253">MainWindow::openFiles()</a> y <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::openProject()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02415">MainWindow::openFiles()</a> y <a class="el" href="_main_window_8cpp_source.html#l02488">MainWindow::openProject()</a>.</p>
 
 </div>
 </div>
@@ -518,7 +529,7 @@ Atributos privados</h2></td></tr>
 
 <p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00101">appendLinePath()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00518">setLayerGeometry()</a> y <a class="el" href="_canvas_8cpp_source.html#l01152">setToolpaths()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00518">setLayerGeometry()</a> y <a class="el" href="_canvas_8cpp_source.html#l01184">setToolpaths()</a>.</p>
 
 </div>
 </div>
@@ -560,7 +571,7 @@ Atributos privados</h2></td></tr>
 
 <p class="reference">Hace referencia a <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a> y <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a> y <a class="el" href="_canvas_8cpp_source.html#l00518">setLayerGeometry()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a> y <a class="el" href="_canvas_8cpp_source.html#l00518">setLayerGeometry()</a>.</p>
 
 </div>
 </div>
@@ -596,9 +607,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00873">873</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00228">offset_</a> y <a class="el" href="_canvas_8h_source.html#l00227">scale_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00238">offset_</a> y <a class="el" href="_canvas_8h_source.html#l00237">scale_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08531">MainWindow::jumpToLocation()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l09066">MainWindow::jumpToLocation()</a>.</p>
 
 </div>
 </div>
@@ -624,9 +635,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00750">750</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00226">bounds_</a>, <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a> y <a class="el" href="_canvas_8h_source.html#l00225">toolpathPath_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">bounds_</a>, <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a> y <a class="el" href="_canvas_8h_source.html#l00235">toolpathPath_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l07895">MainWindow::newProject()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08336">MainWindow::newProject()</a>.</p>
 
 </div>
 </div>
@@ -659,7 +670,7 @@ Atributos privados</h2></td></tr>
 
 <p>Emite coordenadas de mundo al mover el cursor. </p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01237">MainWindow::buildLayout()</a>, <a class="el" href="_canvas_8cpp_source.html#l01337">leaveEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01385">MainWindow::buildLayout()</a>, <a class="el" href="_canvas_8cpp_source.html#l01379">leaveEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a>.</p>
 
 </div>
 </div>
@@ -687,11 +698,11 @@ Atributos privados</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Devuelve</dt><dd>Origen de visualización. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00154">154</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00161">161</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00239">displayOrigin_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00249">displayOrigin_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08324">MainWindow::setDisplayOrigin()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08765">MainWindow::setDisplayOrigin()</a>.</p>
 
 </div>
 </div>
@@ -724,9 +735,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00390">390</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>, <a class="el" href="_canvas_8h_source.html#l00198">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a> y <a class="el" href="_canvas_8h_source.html#l00246">nextId_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>, <a class="el" href="_canvas_8h_source.html#l00208">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a> y <a class="el" href="_canvas_8h_source.html#l00259">nextId_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02629">MainWindow::duplicateSelectedObject()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02805">MainWindow::duplicateSelectedObject()</a>.</p>
 
 </div>
 </div>
@@ -753,7 +764,7 @@ Atributos privados</h2></td></tr>
 
 <p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08307">MainWindow::addCncJobObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l05067">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l06936">MainWindow::addGCodeLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04720">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04740">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l07210">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l05217">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l04855">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l08209">MainWindow::createTextObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08504">MainWindow::explodeObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08464">MainWindow::joinObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l08660">MainWindow::mirrorLayerToNew()</a>, <a class="el" href="_main_window_8cpp_source.html#l02253">MainWindow::openFiles()</a>, <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::openProject()</a>, <a class="el" href="_main_window_8cpp_source.html#l04920">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l07008">MainWindow::pcbWizardImport()</a>, <a class="el" href="_main_window_8cpp_source.html#l03235">MainWindow::runScriptFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l04002">MainWindow::tclJoin()</a>, <a class="el" href="_main_window_8cpp_source.html#l03873">MainWindow::tclNewObject()</a> y <a class="el" href="_main_window_8cpp_source.html#l03516">MainWindow::tclOpen()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08748">MainWindow::addCncJobObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l05506">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l07377">MainWindow::addGCodeLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05154">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05174">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l07651">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l05656">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l05294">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l08650">MainWindow::createTextObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l09039">MainWindow::explodeObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08999">MainWindow::joinObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l09203">MainWindow::mirrorLayerAround()</a>, <a class="el" href="_main_window_8cpp_source.html#l02415">MainWindow::openFiles()</a>, <a class="el" href="_main_window_8cpp_source.html#l02488">MainWindow::openProject()</a>, <a class="el" href="_main_window_8cpp_source.html#l05359">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l07449">MainWindow::pcbWizardImport()</a>, <a class="el" href="_main_window_8cpp_source.html#l03411">MainWindow::runScriptFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l04178">MainWindow::tclJoin()</a>, <a class="el" href="_main_window_8cpp_source.html#l04049">MainWindow::tclNewObject()</a> y <a class="el" href="_main_window_8cpp_source.html#l03692">MainWindow::tclOpen()</a>.</p>
 
 </div>
 </div>
@@ -786,9 +797,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00708">708</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00226">bounds_</a>, <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a>, <a class="el" href="geometry_8hpp_source.html#l00071">fc::BBox::height()</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>, <a class="el" href="geometry_8hpp_source.html#l00068">fc::BBox::width()</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">bounds_</a>, <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a>, <a class="el" href="geometry_8hpp_source.html#l00071">fc::BBox::height()</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>, <a class="el" href="geometry_8hpp_source.html#l00068">fc::BBox::width()</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l03222">MainWindow::exportFilm()</a> y <a class="el" href="_main_window_8cpp_source.html#l03859">MainWindow::tclExportSvg()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l03398">MainWindow::exportFilm()</a> y <a class="el" href="_main_window_8cpp_source.html#l04035">MainWindow::tclExportSvg()</a>.</p>
 
 </div>
 </div>
@@ -828,7 +839,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00141">141</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00390">duplicateLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00414">layerBounds()</a>, <a class="el" href="_canvas_8cpp_source.html#l00622">layerFilled()</a>, <a class="el" href="_canvas_8cpp_source.html#l00501">layerFollows()</a>, <a class="el" href="_canvas_8cpp_source.html#l00633">layerMulticolor()</a>, <a class="el" href="_canvas_8cpp_source.html#l00443">layerSnapshot()</a>, <a class="el" href="_canvas_8cpp_source.html#l00490">layerSolids()</a>, <a class="el" href="_canvas_8cpp_source.html#l00608">setLayerFilled()</a>, <a class="el" href="_canvas_8cpp_source.html#l00518">setLayerGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00647">setLayerMulticolor()</a>, <a class="el" href="_canvas_8cpp_source.html#l00352">setLayerVisible()</a> y <a class="el" href="_canvas_8cpp_source.html#l00667">transformLayer()</a>.</p>
 
@@ -868,7 +879,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00154">154</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>.</p>
 
 </div>
 </div>
@@ -894,9 +905,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00769">769</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00226">bounds_</a>, <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a>, <a class="el" href="geometry_8hpp_source.html#l00071">fc::BBox::height()</a>, <a class="el" href="_canvas_8h_source.html#l00228">offset_</a>, <a class="el" href="_canvas_8h_source.html#l00227">scale_</a>, <a class="el" href="geometry_8hpp_source.html#l00068">fc::BBox::width()</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">bounds_</a>, <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a>, <a class="el" href="geometry_8hpp_source.html#l00071">fc::BBox::height()</a>, <a class="el" href="_canvas_8h_source.html#l00238">offset_</a>, <a class="el" href="_canvas_8h_source.html#l00237">scale_</a>, <a class="el" href="geometry_8hpp_source.html#l00068">fc::BBox::width()</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00289">endGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00898">fitTo()</a>, <a class="el" href="_main_window_8cpp_source.html#l11235">MainWindow::fitView()</a>, <a class="el" href="_canvas_8cpp_source.html#l00914">resizeEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00289">endGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00898">fitTo()</a>, <a class="el" href="_main_window_8cpp_source.html#l12033">MainWindow::fitView()</a>, <a class="el" href="_canvas_8cpp_source.html#l00927">resizeEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>.</p>
 
 </div>
 </div>
@@ -928,9 +939,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00898">898</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00226">bounds_</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a> y <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">bounds_</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a> y <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l06936">MainWindow::addGCodeLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04720">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04740">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l07210">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l04855">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l01237">MainWindow::buildLayout()</a>, <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l07008">MainWindow::pcbWizardImport()</a>, <a class="el" href="_main_window_8cpp_source.html#l03355">MainWindow::projectObjectSelected()</a>, <a class="el" href="_main_window_8cpp_source.html#l03235">MainWindow::runScriptFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l03890">MainWindow::tclAddCircle()</a>, <a class="el" href="_main_window_8cpp_source.html#l03931">MainWindow::tclAddPolygon()</a>, <a class="el" href="_main_window_8cpp_source.html#l03954">MainWindow::tclAddPolyline()</a> y <a class="el" href="_main_window_8cpp_source.html#l03910">MainWindow::tclAddRectangle()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l07377">MainWindow::addGCodeLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05154">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05174">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l07651">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l05294">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l01385">MainWindow::buildLayout()</a>, <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l07449">MainWindow::pcbWizardImport()</a>, <a class="el" href="_main_window_8cpp_source.html#l03531">MainWindow::projectObjectSelected()</a>, <a class="el" href="_main_window_8cpp_source.html#l03411">MainWindow::runScriptFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l04066">MainWindow::tclAddCircle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04107">MainWindow::tclAddPolygon()</a>, <a class="el" href="_main_window_8cpp_source.html#l04130">MainWindow::tclAddPolyline()</a> y <a class="el" href="_main_window_8cpp_source.html#l04086">MainWindow::tclAddRectangle()</a>.</p>
 
 </div>
 </div>
@@ -954,9 +965,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00783">783</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00226">bounds_</a>, <a class="el" href="geometry_8hpp_source.html#l00087">fc::BBox::expanded()</a>, <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a>, <a class="el" href="geometry_8hpp_source.html#l00071">fc::BBox::height()</a>, <a class="el" href="_canvas_8h_source.html#l00228">offset_</a>, <a class="el" href="_canvas_8h_source.html#l00227">scale_</a>, <a class="el" href="geometry_8hpp_source.html#l00068">fc::BBox::width()</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">bounds_</a>, <a class="el" href="geometry_8hpp_source.html#l00087">fc::BBox::expanded()</a>, <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a>, <a class="el" href="geometry_8hpp_source.html#l00071">fc::BBox::height()</a>, <a class="el" href="_canvas_8h_source.html#l00238">offset_</a>, <a class="el" href="_canvas_8h_source.html#l00237">scale_</a>, <a class="el" href="geometry_8hpp_source.html#l00068">fc::BBox::width()</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02253">MainWindow::openFiles()</a> y <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::openProject()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02415">MainWindow::openFiles()</a> y <a class="el" href="_main_window_8cpp_source.html#l02488">MainWindow::openProject()</a>.</p>
 
 </div>
 </div>
@@ -986,9 +997,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00133">133</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00235">gridStep_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00245">gridStep_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05787">MainWindow::showPreferences()</a> y <a class="el" href="_main_window_8cpp_source.html#l08191">MainWindow::snapValue()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l06228">MainWindow::showPreferences()</a> y <a class="el" href="_main_window_8cpp_source.html#l08632">MainWindow::snapValue()</a>.</p>
 
 </div>
 </div>
@@ -1018,9 +1029,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00128">128</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00234">gridVisible_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00244">gridVisible_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l05787">MainWindow::showPreferences()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l06228">MainWindow::showPreferences()</a>.</p>
 
 </div>
 </div>
@@ -1048,11 +1059,11 @@ Atributos privados</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Devuelve</dt><dd><span class="tt">true</span> si hay alguna capa con contenido. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00139">139</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00146">146</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l06936">MainWindow::addGCodeLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04720">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04740">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l07210">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l04855">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l07008">MainWindow::pcbWizardImport()</a> y <a class="el" href="_main_window_8cpp_source.html#l03235">MainWindow::runScriptFile()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l07377">MainWindow::addGCodeLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05154">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05174">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l07651">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l05294">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l07449">MainWindow::pcbWizardImport()</a> y <a class="el" href="_main_window_8cpp_source.html#l03411">MainWindow::runScriptFile()</a>.</p>
 
 </div>
 </div>
@@ -1080,11 +1091,11 @@ Atributos privados</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Devuelve</dt><dd><span class="tt">true</span> si el HUD está visible. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00164">164</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00171">171</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00237">hudVisible_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00247">hudVisible_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a>.</p>
 
 </div>
 </div>
@@ -1116,9 +1127,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00467">467</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00200">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00037">Canvas::LayerSnapshot::follow</a>, <a class="el" href="_canvas_8h_source.html#l00202">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8h_source.html#l00039">Canvas::LayerSnapshot::follows</a>, <a class="el" href="_canvas_8h_source.html#l00198">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00035">Canvas::LayerSnapshot::id</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00246">nextId_</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>, <a class="el" href="_canvas_8h_source.html#l00199">Canvas::Layer::solid</a>, <a class="el" href="_canvas_8h_source.html#l00036">Canvas::LayerSnapshot::solid</a>, <a class="el" href="_canvas_8h_source.html#l00201">Canvas::Layer::solids</a>, <a class="el" href="_canvas_8h_source.html#l00038">Canvas::LayerSnapshot::solids</a>, <a class="el" href="_canvas_8h_source.html#l00203">Canvas::Layer::visible</a> y <a class="el" href="_canvas_8h_source.html#l00040">Canvas::LayerSnapshot::visible</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00210">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00037">Canvas::LayerSnapshot::follow</a>, <a class="el" href="_canvas_8h_source.html#l00212">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8h_source.html#l00039">Canvas::LayerSnapshot::follows</a>, <a class="el" href="_canvas_8h_source.html#l00208">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00035">Canvas::LayerSnapshot::id</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00259">nextId_</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>, <a class="el" href="_canvas_8h_source.html#l00209">Canvas::Layer::solid</a>, <a class="el" href="_canvas_8h_source.html#l00036">Canvas::LayerSnapshot::solid</a>, <a class="el" href="_canvas_8h_source.html#l00211">Canvas::Layer::solids</a>, <a class="el" href="_canvas_8h_source.html#l00038">Canvas::LayerSnapshot::solids</a>, <a class="el" href="_canvas_8h_source.html#l00213">Canvas::Layer::visible</a> y <a class="el" href="_canvas_8h_source.html#l00040">Canvas::LayerSnapshot::visible</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02557">MainWindow::deleteSelectedObject()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02719">MainWindow::deleteSelectedObject()</a>.</p>
 
 </div>
 </div>
@@ -1147,9 +1158,7 @@ Atributos privados</h2></td></tr>
 
 <p>Emite el id de la capa con doble clic. </p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l01337">leaveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01306">mouseDoubleClickEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01216">mousePressEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01269">mouseReleaseEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00914">resizeEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01202">wheelEvent()</a>.</p>
-
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01237">MainWindow::buildLayout()</a> y <a class="el" href="_canvas_8cpp_source.html#l01306">mouseDoubleClickEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01385">MainWindow::buildLayout()</a> y <a class="el" href="_canvas_8cpp_source.html#l01348">mouseDoubleClickEvent()</a>.</p>
 
 </div>
 </div>
@@ -1182,9 +1191,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00414">414</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>, <a class="el" href="_canvas_8h_source.html#l00200">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00199">Canvas::Layer::solid</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>, <a class="el" href="_canvas_8h_source.html#l00210">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00209">Canvas::Layer::solid</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l06742">MainWindow::addCornerMarks()</a>, <a class="el" href="_main_window_8cpp_source.html#l05067">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l06936">MainWindow::addGCodeLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04720">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04740">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l07210">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l05217">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l08550">MainWindow::alignObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l04855">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l01237">MainWindow::buildLayout()</a>, <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l05110">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l08619">MainWindow::doubleSided()</a>, <a class="el" href="_main_window_8cpp_source.html#l02880">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l06540">MainWindow::invertGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l08660">MainWindow::mirrorLayerToNew()</a>, <a class="el" href="_main_window_8cpp_source.html#l08417">MainWindow::movePcbToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l08389">MainWindow::moveToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l05422">MainWindow::openToolTab()</a>, <a class="el" href="_main_window_8cpp_source.html#l04920">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l07008">MainWindow::pcbWizardImport()</a>, <a class="el" href="_main_window_8cpp_source.html#l03355">MainWindow::projectObjectSelected()</a>, <a class="el" href="_main_window_8cpp_source.html#l05476">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l02485">MainWindow::refreshProperties()</a>, <a class="el" href="_main_window_8cpp_source.html#l03235">MainWindow::runScriptFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l03890">MainWindow::tclAddCircle()</a>, <a class="el" href="_main_window_8cpp_source.html#l03931">MainWindow::tclAddPolygon()</a>, <a class="el" href="_main_window_8cpp_source.html#l03954">MainWindow::tclAddPolyline()</a>, <a class="el" href="_main_window_8cpp_source.html#l03910">MainWindow::tclAddRectangle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04197">MainWindow::tclAlignDrill()</a>, <a class="el" href="_main_window_8cpp_source.html#l03724">MainWindow::tclBBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l03622">MainWindow::tclCorners()</a>, <a class="el" href="_main_window_8cpp_source.html#l03790">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03595">MainWindow::tclPanelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l03765">MainWindow::tclScale()</a> y <a class="el" href="_main_window_8cpp_source.html#l03128">MainWindow::transformSelectedObject()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l07183">MainWindow::addCornerMarks()</a>, <a class="el" href="_main_window_8cpp_source.html#l05506">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l07377">MainWindow::addGCodeLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05154">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05174">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l07651">MainWindow::addVectorGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l05656">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l09085">MainWindow::alignObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l05294">MainWindow::buildConsole()</a>, <a class="el" href="_main_window_8cpp_source.html#l01385">MainWindow::buildLayout()</a>, <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l05549">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l09154">MainWindow::doubleSided()</a>, <a class="el" href="_main_window_8cpp_source.html#l03056">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l06981">MainWindow::invertGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l09203">MainWindow::mirrorLayerAround()</a>, <a class="el" href="_main_window_8cpp_source.html#l09195">MainWindow::mirrorLayerToNew()</a>, <a class="el" href="_main_window_8cpp_source.html#l08952">MainWindow::movePcbToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l05359">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l08904">MainWindow::pcbBounds()</a>, <a class="el" href="_main_window_8cpp_source.html#l07449">MainWindow::pcbWizardImport()</a>, <a class="el" href="_main_window_8cpp_source.html#l03531">MainWindow::projectObjectSelected()</a>, <a class="el" href="_main_window_8cpp_source.html#l05912">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l02647">MainWindow::refreshProperties()</a>, <a class="el" href="_main_window_8cpp_source.html#l03411">MainWindow::runScriptFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l04066">MainWindow::tclAddCircle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04107">MainWindow::tclAddPolygon()</a>, <a class="el" href="_main_window_8cpp_source.html#l04130">MainWindow::tclAddPolyline()</a>, <a class="el" href="_main_window_8cpp_source.html#l04086">MainWindow::tclAddRectangle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04373">MainWindow::tclAlignDrill()</a>, <a class="el" href="_main_window_8cpp_source.html#l03900">MainWindow::tclBBox()</a>, <a class="el" href="_main_window_8cpp_source.html#l03798">MainWindow::tclCorners()</a>, <a class="el" href="_main_window_8cpp_source.html#l03966">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03771">MainWindow::tclPanelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l03941">MainWindow::tclScale()</a> y <a class="el" href="_main_window_8cpp_source.html#l03304">MainWindow::transformSelectedObject()</a>.</p>
 
 </div>
 </div>
@@ -1215,9 +1224,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00622">622</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00204">Canvas::Layer::filled</a> y <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00214">Canvas::Layer::filled</a> y <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05476">MainWindow::refreshObjectToolPage()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05912">MainWindow::refreshObjectToolPage()</a>.</p>
 
 </div>
 </div>
@@ -1248,9 +1257,9 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00501">501</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a> y <a class="el" href="_canvas_8h_source.html#l00202">Canvas::Layer::follows</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a> y <a class="el" href="_canvas_8h_source.html#l00212">Canvas::Layer::follows</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08550">MainWindow::alignObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l05110">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l02665">MainWindow::editGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l06489">MainWindow::etchCompensation()</a>, <a class="el" href="_main_window_8cpp_source.html#l08504">MainWindow::explodeObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l07361">MainWindow::exportDxfFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l07333">MainWindow::exportHpglFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l02880">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08788">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l08464">MainWindow::joinObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l04763">MainWindow::layerGeometries()</a>, <a class="el" href="_main_window_8cpp_source.html#l08660">MainWindow::mirrorLayerToNew()</a>, <a class="el" href="_main_window_8cpp_source.html#l08088">MainWindow::moveObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08417">MainWindow::movePcbToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l08389">MainWindow::moveToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l05476">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l02485">MainWindow::refreshProperties()</a>, <a class="el" href="_main_window_8cpp_source.html#l08049">MainWindow::saveProjectToPath()</a>, <a class="el" href="_main_window_8cpp_source.html#l03890">MainWindow::tclAddCircle()</a>, <a class="el" href="_main_window_8cpp_source.html#l03931">MainWindow::tclAddPolygon()</a>, <a class="el" href="_main_window_8cpp_source.html#l03954">MainWindow::tclAddPolyline()</a>, <a class="el" href="_main_window_8cpp_source.html#l03910">MainWindow::tclAddRectangle()</a>, <a class="el" href="_main_window_8cpp_source.html#l03837">MainWindow::tclExportDxf()</a>, <a class="el" href="_main_window_8cpp_source.html#l04002">MainWindow::tclJoin()</a>, <a class="el" href="_main_window_8cpp_source.html#l03790">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03744">MainWindow::tclOffset()</a>, <a class="el" href="_main_window_8cpp_source.html#l03765">MainWindow::tclScale()</a> y <a class="el" href="_main_window_8cpp_source.html#l03128">MainWindow::transformSelectedObject()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l09085">MainWindow::alignObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l05549">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l02841">MainWindow::editGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l06930">MainWindow::etchCompensation()</a>, <a class="el" href="_main_window_8cpp_source.html#l09039">MainWindow::explodeObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l07802">MainWindow::exportDxfFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l07774">MainWindow::exportHpglFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l08832">MainWindow::generateGCodeFromObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l03056">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l09332">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l08999">MainWindow::joinObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l05197">MainWindow::layerGeometries()</a>, <a class="el" href="_main_window_8cpp_source.html#l09203">MainWindow::mirrorLayerAround()</a>, <a class="el" href="_main_window_8cpp_source.html#l08529">MainWindow::moveObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08952">MainWindow::movePcbToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l08924">MainWindow::moveToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l05912">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l02647">MainWindow::refreshProperties()</a>, <a class="el" href="_main_window_8cpp_source.html#l08490">MainWindow::saveProjectToPath()</a>, <a class="el" href="_main_window_8cpp_source.html#l04066">MainWindow::tclAddCircle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04107">MainWindow::tclAddPolygon()</a>, <a class="el" href="_main_window_8cpp_source.html#l04130">MainWindow::tclAddPolyline()</a>, <a class="el" href="_main_window_8cpp_source.html#l04086">MainWindow::tclAddRectangle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04013">MainWindow::tclExportDxf()</a>, <a class="el" href="_main_window_8cpp_source.html#l04178">MainWindow::tclJoin()</a>, <a class="el" href="_main_window_8cpp_source.html#l03966">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03920">MainWindow::tclOffset()</a>, <a class="el" href="_main_window_8cpp_source.html#l03941">MainWindow::tclScale()</a> y <a class="el" href="_main_window_8cpp_source.html#l03304">MainWindow::transformSelectedObject()</a>.</p>
 
 </div>
 </div>
@@ -1277,9 +1286,9 @@ Lista de ids de abajo hacia arriba (el último se dibuja encima). </dd></dl>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00300">300</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11084">MainWindow::addExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l10969">MainWindow::addGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l08550">MainWindow::alignObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l03033">MainWindow::booleanDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l06590">MainWindow::distanceTool()</a>, <a class="el" href="_main_window_8cpp_source.html#l07096">MainWindow::loadInfFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l11181">MainWindow::showExcellon()</a> y <a class="el" href="_main_window_8cpp_source.html#l11112">MainWindow::showGerber()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11882">MainWindow::addExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l11764">MainWindow::addGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l09085">MainWindow::alignObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l03209">MainWindow::booleanDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l07031">MainWindow::distanceTool()</a>, <a class="el" href="_main_window_8cpp_source.html#l07537">MainWindow::loadInfFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l11979">MainWindow::showExcellon()</a> y <a class="el" href="_main_window_8cpp_source.html#l11910">MainWindow::showGerber()</a>.</p>
 
 </div>
 </div>
@@ -1310,9 +1319,9 @@ Lista de ids de abajo hacia arriba (el último se dibuja encima). </dd></dl>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00633">633</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a> y <a class="el" href="_canvas_8h_source.html#l00205">Canvas::Layer::multicolor</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a> y <a class="el" href="_canvas_8h_source.html#l00215">Canvas::Layer::multicolor</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05476">MainWindow::refreshObjectToolPage()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05912">MainWindow::refreshObjectToolPage()</a>.</p>
 
 </div>
 </div>
@@ -1341,7 +1350,7 @@ Lista de ids de abajo hacia arriba (el último se dibuja encima). </dd></dl>
 
 <p>Emite el id de la capa bajo el clic. </p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01237">MainWindow::buildLayout()</a> y <a class="el" href="_canvas_8cpp_source.html#l01269">mouseReleaseEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01385">MainWindow::buildLayout()</a> y <a class="el" href="_canvas_8cpp_source.html#l01305">mouseReleaseEvent()</a>.</p>
 
 </div>
 </div>
@@ -1374,9 +1383,9 @@ Lista de ids de abajo hacia arriba (el último se dibuja encima). </dd></dl>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00443">443</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>, <a class="el" href="_canvas_8h_source.html#l00200">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00037">Canvas::LayerSnapshot::follow</a>, <a class="el" href="_canvas_8h_source.html#l00202">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8h_source.html#l00039">Canvas::LayerSnapshot::follows</a>, <a class="el" href="_canvas_8h_source.html#l00198">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00035">Canvas::LayerSnapshot::id</a>, <a class="el" href="_canvas_8h_source.html#l00199">Canvas::Layer::solid</a>, <a class="el" href="_canvas_8h_source.html#l00036">Canvas::LayerSnapshot::solid</a>, <a class="el" href="_canvas_8h_source.html#l00201">Canvas::Layer::solids</a>, <a class="el" href="_canvas_8h_source.html#l00038">Canvas::LayerSnapshot::solids</a>, <a class="el" href="_canvas_8h_source.html#l00203">Canvas::Layer::visible</a> y <a class="el" href="_canvas_8h_source.html#l00040">Canvas::LayerSnapshot::visible</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>, <a class="el" href="_canvas_8h_source.html#l00210">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00037">Canvas::LayerSnapshot::follow</a>, <a class="el" href="_canvas_8h_source.html#l00212">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8h_source.html#l00039">Canvas::LayerSnapshot::follows</a>, <a class="el" href="_canvas_8h_source.html#l00208">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00035">Canvas::LayerSnapshot::id</a>, <a class="el" href="_canvas_8h_source.html#l00209">Canvas::Layer::solid</a>, <a class="el" href="_canvas_8h_source.html#l00036">Canvas::LayerSnapshot::solid</a>, <a class="el" href="_canvas_8h_source.html#l00211">Canvas::Layer::solids</a>, <a class="el" href="_canvas_8h_source.html#l00038">Canvas::LayerSnapshot::solids</a>, <a class="el" href="_canvas_8h_source.html#l00213">Canvas::Layer::visible</a> y <a class="el" href="_canvas_8h_source.html#l00040">Canvas::LayerSnapshot::visible</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05110">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l02557">MainWindow::deleteSelectedObject()</a> y <a class="el" href="_main_window_8cpp_source.html#l03128">MainWindow::transformSelectedObject()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05549">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l02719">MainWindow::deleteSelectedObject()</a> y <a class="el" href="_main_window_8cpp_source.html#l03304">MainWindow::transformSelectedObject()</a>.</p>
 
 </div>
 </div>
@@ -1408,9 +1417,9 @@ Lista de ids de abajo hacia arriba (el último se dibuja encima). </dd></dl>
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00490">490</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a> y <a class="el" href="_canvas_8h_source.html#l00201">Canvas::Layer::solids</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a> y <a class="el" href="_canvas_8h_source.html#l00211">Canvas::Layer::solids</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05217">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l08550">MainWindow::alignObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l03033">MainWindow::booleanDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l05110">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l08619">MainWindow::doubleSided()</a>, <a class="el" href="_main_window_8cpp_source.html#l02665">MainWindow::editGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l06489">MainWindow::etchCompensation()</a>, <a class="el" href="_main_window_8cpp_source.html#l08504">MainWindow::explodeObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l07361">MainWindow::exportDxfFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l07333">MainWindow::exportHpglFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l02880">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08788">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l06540">MainWindow::invertGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l08464">MainWindow::joinObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l04763">MainWindow::layerGeometries()</a>, <a class="el" href="_main_window_8cpp_source.html#l08660">MainWindow::mirrorLayerToNew()</a>, <a class="el" href="_main_window_8cpp_source.html#l08088">MainWindow::moveObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08417">MainWindow::movePcbToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l08389">MainWindow::moveToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l06652">MainWindow::optimalTool()</a>, <a class="el" href="_main_window_8cpp_source.html#l04920">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l05476">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l08049">MainWindow::saveProjectToPath()</a>, <a class="el" href="_main_window_8cpp_source.html#l03381">MainWindow::show3D()</a>, <a class="el" href="_main_window_8cpp_source.html#l03890">MainWindow::tclAddCircle()</a>, <a class="el" href="_main_window_8cpp_source.html#l03931">MainWindow::tclAddPolygon()</a>, <a class="el" href="_main_window_8cpp_source.html#l03954">MainWindow::tclAddPolyline()</a>, <a class="el" href="_main_window_8cpp_source.html#l03910">MainWindow::tclAddRectangle()</a>, <a class="el" href="_main_window_8cpp_source.html#l03837">MainWindow::tclExportDxf()</a>, <a class="el" href="_main_window_8cpp_source.html#l04021">MainWindow::tclGeoUnion()</a>, <a class="el" href="_main_window_8cpp_source.html#l04002">MainWindow::tclJoin()</a>, <a class="el" href="_main_window_8cpp_source.html#l03790">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l04146">MainWindow::tclNRegions()</a>, <a class="el" href="_main_window_8cpp_source.html#l03744">MainWindow::tclOffset()</a>, <a class="el" href="_main_window_8cpp_source.html#l03595">MainWindow::tclPanelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l03979">MainWindow::tclRings()</a>, <a class="el" href="_main_window_8cpp_source.html#l03765">MainWindow::tclScale()</a>, <a class="el" href="_main_window_8cpp_source.html#l04158">MainWindow::tclSubtractShape()</a> y <a class="el" href="_main_window_8cpp_source.html#l03128">MainWindow::transformSelectedObject()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05656">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l09085">MainWindow::alignObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l03209">MainWindow::booleanDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l05549">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l09154">MainWindow::doubleSided()</a>, <a class="el" href="_main_window_8cpp_source.html#l02841">MainWindow::editGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l06930">MainWindow::etchCompensation()</a>, <a class="el" href="_main_window_8cpp_source.html#l09039">MainWindow::explodeObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l07802">MainWindow::exportDxfFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l07774">MainWindow::exportHpglFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l08832">MainWindow::generateGCodeFromObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l03056">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l09332">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l06981">MainWindow::invertGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l08999">MainWindow::joinObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l05197">MainWindow::layerGeometries()</a>, <a class="el" href="_main_window_8cpp_source.html#l09203">MainWindow::mirrorLayerAround()</a>, <a class="el" href="_main_window_8cpp_source.html#l08529">MainWindow::moveObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08952">MainWindow::movePcbToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l08924">MainWindow::moveToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l07093">MainWindow::optimalTool()</a>, <a class="el" href="_main_window_8cpp_source.html#l05359">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l05912">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l08490">MainWindow::saveProjectToPath()</a>, <a class="el" href="_main_window_8cpp_source.html#l03557">MainWindow::show3D()</a>, <a class="el" href="_main_window_8cpp_source.html#l04066">MainWindow::tclAddCircle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04107">MainWindow::tclAddPolygon()</a>, <a class="el" href="_main_window_8cpp_source.html#l04130">MainWindow::tclAddPolyline()</a>, <a class="el" href="_main_window_8cpp_source.html#l04086">MainWindow::tclAddRectangle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04013">MainWindow::tclExportDxf()</a>, <a class="el" href="_main_window_8cpp_source.html#l04197">MainWindow::tclGeoUnion()</a>, <a class="el" href="_main_window_8cpp_source.html#l04178">MainWindow::tclJoin()</a>, <a class="el" href="_main_window_8cpp_source.html#l03966">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l04322">MainWindow::tclNRegions()</a>, <a class="el" href="_main_window_8cpp_source.html#l03920">MainWindow::tclOffset()</a>, <a class="el" href="_main_window_8cpp_source.html#l03771">MainWindow::tclPanelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l04155">MainWindow::tclRings()</a>, <a class="el" href="_main_window_8cpp_source.html#l03941">MainWindow::tclScale()</a>, <a class="el" href="_main_window_8cpp_source.html#l04334">MainWindow::tclSubtractShape()</a> y <a class="el" href="_main_window_8cpp_source.html#l03304">MainWindow::transformSelectedObject()</a>.</p>
 
 </div>
 </div>
@@ -1446,11 +1455,11 @@ Lista de ids de abajo hacia arriba (el último se dibuja encima). </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01337">1337</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01379">1379</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="#ae8d80940a5811079c59b90df6b08d9f7">cursorMoved()</a>, <a class="el" href="_canvas_8h_source.html#l00240">hasCursor_</a> y <a class="el" href="_canvas_8h_source.html#l00237">hudVisible_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="#ae8d80940a5811079c59b90df6b08d9f7">cursorMoved()</a>, <a class="el" href="_canvas_8h_source.html#l00250">hasCursor_</a> y <a class="el" href="_canvas_8h_source.html#l00247">hudVisible_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="#ab3f2f7d7e418696bd6d7f4960affed8c">worldPicked()</a>.</p>
 
 </div>
 </div>
@@ -1479,9 +1488,9 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00574">574</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00200">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00202">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8h_source.html#l00198">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00246">nextId_</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>, <a class="el" href="_canvas_8h_source.html#l00199">Canvas::Layer::solid</a> y <a class="el" href="_canvas_8h_source.html#l00201">Canvas::Layer::solids</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00210">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00212">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8h_source.html#l00208">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00259">nextId_</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>, <a class="el" href="_canvas_8h_source.html#l00209">Canvas::Layer::solid</a> y <a class="el" href="_canvas_8h_source.html#l00211">Canvas::Layer::solids</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l03213">MainWindow::createFilm()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l03389">MainWindow::createFilm()</a>.</p>
 
 </div>
 </div>
@@ -1518,11 +1527,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 </dl>
 <dl class="section note"><dt>Nota</dt><dd>A diferencia de mouseReleaseEvent, no emite ningún valor cuando no hay impacto (no existe un "ninguno activado"), así que el llamador no puede distinguir "sin objeto" de "evento no procesado". </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01306">1306</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01348">1348</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated()</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00228">offset_</a> y <a class="el" href="_canvas_8h_source.html#l00227">scale_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated()</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00238">offset_</a> y <a class="el" href="_canvas_8h_source.html#l00237">scale_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="#ab3f2f7d7e418696bd6d7f4960affed8c">worldPicked()</a>.</p>
 
 </div>
 </div>
@@ -1559,11 +1568,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 </dl>
 <dl class="section note"><dt>Nota</dt><dd><span class="tt">position()</span> (QPointF) se usa para el mundo y <span class="tt">pos()</span> (QPoint) para el delta: mezcla de tipos deliberada para mantener el pan en píxeles enteros. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01239">1239</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01275">1275</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="#ae8d80940a5811079c59b90df6b08d9f7">cursorMoved()</a>, <a class="el" href="_canvas_8h_source.html#l00238">cursorWorld_</a>, <a class="el" href="_canvas_8h_source.html#l00232">dragged_</a>, <a class="el" href="_canvas_8h_source.html#l00240">hasCursor_</a>, <a class="el" href="_canvas_8h_source.html#l00237">hudVisible_</a>, <a class="el" href="_canvas_8h_source.html#l00229">lastMouse_</a>, <a class="el" href="_canvas_8h_source.html#l00228">offset_</a>, <a class="el" href="_canvas_8h_source.html#l00230">panning_</a>, <a class="el" href="_canvas_8h_source.html#l00231">pressPos_</a> y <a class="el" href="_canvas_8h_source.html#l00227">scale_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="#ae8d80940a5811079c59b90df6b08d9f7">cursorMoved()</a>, <a class="el" href="_canvas_8h_source.html#l00248">cursorWorld_</a>, <a class="el" href="_canvas_8h_source.html#l00242">dragged_</a>, <a class="el" href="_canvas_8h_source.html#l00250">hasCursor_</a>, <a class="el" href="_canvas_8h_source.html#l00247">hudVisible_</a>, <a class="el" href="_canvas_8h_source.html#l00239">lastMouse_</a>, <a class="el" href="_canvas_8h_source.html#l00238">offset_</a>, <a class="el" href="_canvas_8h_source.html#l00240">panning_</a>, <a class="el" href="_canvas_8h_source.html#l00241">pressPos_</a> y <a class="el" href="_canvas_8h_source.html#l00237">scale_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="#ab3f2f7d7e418696bd6d7f4960affed8c">worldPicked()</a>.</p>
 
 </div>
 </div>
@@ -1599,11 +1608,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
   </dd>
 </dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01216">1216</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01248">1248</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00232">dragged_</a>, <a class="el" href="_canvas_8h_source.html#l00229">lastMouse_</a>, <a class="el" href="_canvas_8h_source.html#l00230">panning_</a> y <a class="el" href="_canvas_8h_source.html#l00231">pressPos_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00242">dragged_</a>, <a class="el" href="_canvas_8h_source.html#l00239">lastMouse_</a>, <a class="el" href="_canvas_8h_source.html#l00240">panning_</a>, <a class="el" href="_canvas_8h_source.html#l00257">pointPickMode_</a> y <a class="el" href="_canvas_8h_source.html#l00241">pressPos_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="#ab3f2f7d7e418696bd6d7f4960affed8c">worldPicked()</a>.</p>
 
 </div>
 </div>
@@ -1640,11 +1649,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 </dl>
 <dl class="section note"><dt>Nota</dt><dd>La tolerancia se expresa en mundo (<span class="tt">6/scale_</span>) con un mínimo de 2 unidades, así que se mantiene constante en píxeles al hacer zoom. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01269">1269</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01305">1305</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00232">dragged_</a>, <a class="el" href="#a5273af4bd49d57ee8b7f53c8704912b7">layerPicked()</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00228">offset_</a>, <a class="el" href="_canvas_8h_source.html#l00230">panning_</a> y <a class="el" href="_canvas_8h_source.html#l00227">scale_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00242">dragged_</a>, <a class="el" href="#a5273af4bd49d57ee8b7f53c8704912b7">layerPicked()</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00238">offset_</a>, <a class="el" href="_canvas_8h_source.html#l00240">panning_</a>, <a class="el" href="_canvas_8h_source.html#l00257">pointPickMode_</a>, <a class="el" href="_canvas_8h_source.html#l00237">scale_</a> y <a class="el" href="#ab3f2f7d7e418696bd6d7f4960affed8c">worldPicked()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="#ab3f2f7d7e418696bd6d7f4960affed8c">worldPicked()</a>.</p>
 
 </div>
 </div>
@@ -1682,11 +1691,40 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 <dl class="section note"><dt>Nota</dt><dd>La transformación de mundo es <span class="tt">[scale 0 0 -scale ox oy]</span>, es decir, Y crece hacia arriba como en CAM. En modo multicolor se reconstruye la ruta de cada sólido en cada repintado: es correcto pero costoso con miles de primitivas. </dd></dl>
 <dl class="section warning"><dt>Atención</dt><dd>No hay recorte por región visible (sólo el que aplica Qt); con zoom extremo el coste de dibujar todas las rutas sigue siendo el mismo. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00936">936</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00949">949</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00241">background_</a>, <a class="el" href="_canvas_8h_source.html#l00226">bounds_</a>, <a class="el" href="_canvas_8cpp_source.html#l00061">buildPath()</a>, <a class="el" href="_canvas_8h_source.html#l00243">copperEdge_</a>, <a class="el" href="_canvas_8h_source.html#l00242">copperFill_</a>, <a class="el" href="_canvas_8h_source.html#l00238">cursorWorld_</a>, <a class="el" href="_canvas_8h_source.html#l00239">displayOrigin_</a>, <a class="el" href="_canvas_8h_source.html#l00244">followColor_</a>, <a class="el" href="_canvas_8h_source.html#l00235">gridStep_</a>, <a class="el" href="_canvas_8h_source.html#l00234">gridVisible_</a>, <a class="el" href="_canvas_8h_source.html#l00240">hasCursor_</a>, <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a>, <a class="el" href="geometry_8hpp_source.html#l00071">fc::BBox::height()</a>, <a class="el" href="_canvas_8h_source.html#l00237">hudVisible_</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00228">offset_</a>, <a class="el" href="_canvas_8h_source.html#l00227">scale_</a>, <a class="el" href="_canvas_8h_source.html#l00245">toolpathColor_</a>, <a class="el" href="_canvas_8h_source.html#l00225">toolpathPath_</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00068">fc::BBox::width()</a>, <a class="el" href="_canvas_8h_source.html#l00236">workspace_</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00251">background_</a>, <a class="el" href="_canvas_8h_source.html#l00236">bounds_</a>, <a class="el" href="_canvas_8cpp_source.html#l00061">buildPath()</a>, <a class="el" href="_canvas_8h_source.html#l00253">copperEdge_</a>, <a class="el" href="_canvas_8h_source.html#l00252">copperFill_</a>, <a class="el" href="_canvas_8h_source.html#l00248">cursorWorld_</a>, <a class="el" href="_canvas_8h_source.html#l00249">displayOrigin_</a>, <a class="el" href="_canvas_8h_source.html#l00254">followColor_</a>, <a class="el" href="_canvas_8h_source.html#l00256">gridColor_</a>, <a class="el" href="_canvas_8h_source.html#l00245">gridStep_</a>, <a class="el" href="_canvas_8h_source.html#l00244">gridVisible_</a>, <a class="el" href="_canvas_8h_source.html#l00250">hasCursor_</a>, <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a>, <a class="el" href="geometry_8hpp_source.html#l00071">fc::BBox::height()</a>, <a class="el" href="_canvas_8h_source.html#l00247">hudVisible_</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00258">markers_</a>, <a class="el" href="_canvas_8h_source.html#l00238">offset_</a>, <a class="el" href="_canvas_8h_source.html#l00237">scale_</a>, <a class="el" href="_canvas_8h_source.html#l00255">toolpathColor_</a>, <a class="el" href="_canvas_8h_source.html#l00235">toolpathPath_</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00068">fc::BBox::width()</a>, <a class="el" href="_canvas_8h_source.html#l00246">workspace_</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="#ab3f2f7d7e418696bd6d7f4960affed8c">worldPicked()</a>.</p>
+
+</div>
+</div>
+<a id="aaaa85936031b4945735da341d48dca6d" name="aaaa85936031b4945735da341d48dca6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaaa85936031b4945735da341d48dca6d">&#9670;&#160;</a></span>pointPickMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Canvas::pointPickMode </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00141">141</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00257">pointPickMode_</a>.</p>
 
 </div>
 </div>
@@ -1720,7 +1758,7 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00540">540</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00226">bounds_</a>, <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">bounds_</a>, <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00467">insertLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00574">mergeVisibleLayers()</a>, <a class="el" href="_canvas_8cpp_source.html#l00370">removeLayer()</a> y <a class="el" href="_canvas_8cpp_source.html#l00518">setLayerGeometry()</a>.</p>
 
@@ -1754,9 +1792,9 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00370">370</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00224">layers_</a> y <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00234">layers_</a> y <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02557">MainWindow::deleteSelectedObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l02629">MainWindow::duplicateSelectedObject()</a> y <a class="el" href="_main_window_8cpp_source.html#l03817">MainWindow::tclDelete()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02719">MainWindow::deleteSelectedObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l02805">MainWindow::duplicateSelectedObject()</a> y <a class="el" href="_main_window_8cpp_source.html#l03993">MainWindow::tclDelete()</a>.</p>
 
 </div>
 </div>
@@ -1783,20 +1821,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 </table>
 </div><div class="memdoc">
 
-<p>Reajusta la vista cuando cambia el tamaño del widget. </p>
-<p>Mantiene el contenido encuadrado tras redimensionar la ventana; no hace nada si aún no hay datos. El evento de pintado posterior se encarga del repintado.</p>
-<dl class="params"><dt>Parámetros</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">event</td><td>Evento de redimensión (no se usa). </td></tr>
-  </table>
-  </dd>
-</dl>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00927">927</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00914">914</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a> y <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a> y <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a>.</p>
-
-<p class="reference">Referenciado por <a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="#ab3f2f7d7e418696bd6d7f4960affed8c">worldPicked()</a>.</p>
 
 </div>
 </div>
@@ -1844,9 +1873,9 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00823">823</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00241">background_</a>, <a class="el" href="_canvas_8h_source.html#l00243">copperEdge_</a>, <a class="el" href="_canvas_8h_source.html#l00242">copperFill_</a>, <a class="el" href="_canvas_8h_source.html#l00244">followColor_</a> y <a class="el" href="_canvas_8h_source.html#l00245">toolpathColor_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00251">background_</a>, <a class="el" href="_canvas_8h_source.html#l00253">copperEdge_</a>, <a class="el" href="_canvas_8h_source.html#l00252">copperFill_</a>, <a class="el" href="_canvas_8h_source.html#l00254">followColor_</a> y <a class="el" href="_canvas_8h_source.html#l00255">toolpathColor_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l07956">MainWindow::loadConfiguration()</a>, <a class="el" href="_main_window_8cpp_source.html#l04367">MainWindow::loadPreferences()</a> y <a class="el" href="_main_window_8cpp_source.html#l05787">MainWindow::showPreferences()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l04628">MainWindow::applyViewTheme()</a>, <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l08397">MainWindow::loadConfiguration()</a>, <a class="el" href="_main_window_8cpp_source.html#l04803">MainWindow::loadPreferences()</a> y <a class="el" href="_main_window_8cpp_source.html#l06228">MainWindow::showPreferences()</a>.</p>
 
 </div>
 </div>
@@ -1875,11 +1904,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p>Define el origen mostrado en la barra de estado. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00151">151</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00158">158</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00239">displayOrigin_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00249">displayOrigin_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08324">MainWindow::setDisplayOrigin()</a> y <a class="el" href="_main_window_8cpp_source.html#l04350">MainWindow::tclSetOrigin()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08765">MainWindow::setDisplayOrigin()</a> y <a class="el" href="_main_window_8cpp_source.html#l04526">MainWindow::tclSetOrigin()</a>.</p>
 
 </div>
 </div>
@@ -1917,9 +1946,42 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00178">178</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00226">bounds_</a>, <a class="el" href="_canvas_8cpp_source.html#l00126">buildLinePath()</a>, <a class="el" href="_canvas_8cpp_source.html#l00061">buildPath()</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8h_source.html#l00200">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00202">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8h_source.html#l00233">hasData_</a>, <a class="el" href="_canvas_8h_source.html#l00198">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00246">nextId_</a>, <a class="el" href="_canvas_8h_source.html#l00199">Canvas::Layer::solid</a>, <a class="el" href="_canvas_8h_source.html#l00201">Canvas::Layer::solids</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">bounds_</a>, <a class="el" href="_canvas_8cpp_source.html#l00126">buildLinePath()</a>, <a class="el" href="_canvas_8cpp_source.html#l00061">buildPath()</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8h_source.html#l00210">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00212">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8h_source.html#l00243">hasData_</a>, <a class="el" href="_canvas_8h_source.html#l00208">Canvas::Layer::id</a>, <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>, <a class="el" href="_canvas_8h_source.html#l00259">nextId_</a>, <a class="el" href="_canvas_8h_source.html#l00209">Canvas::Layer::solid</a>, <a class="el" href="_canvas_8h_source.html#l00211">Canvas::Layer::solids</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11084">MainWindow::addExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l10969">MainWindow::addGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l02411">MainWindow::chooseProjectObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l11181">MainWindow::showExcellon()</a> y <a class="el" href="_main_window_8cpp_source.html#l11112">MainWindow::showGerber()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11882">MainWindow::addExcellon()</a>, <a class="el" href="_main_window_8cpp_source.html#l11764">MainWindow::addGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l02573">MainWindow::chooseProjectObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l11979">MainWindow::showExcellon()</a> y <a class="el" href="_main_window_8cpp_source.html#l11910">MainWindow::showGerber()</a>.</p>
+
+</div>
+</div>
+<a id="ac2f225ff276593f4464cdcb7bb8042e3" name="ac2f225ff276593f4464cdcb7bb8042e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2f225ff276593f4464cdcb7bb8042e3">&#9670;&#160;</a></span>setGridColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Canvas::setGridColor </td>
+          <td>(</td>
+          <td class="paramtype">const QColor &amp;</td>          <td class="paramname"><span class="paramname"><em>color</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cambia el color de la rejilla. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00138">138</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00256">gridColor_</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l04628">MainWindow::applyViewTheme()</a>.</p>
 
 </div>
 </div>
@@ -1950,9 +2012,9 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00130">130</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00235">gridStep_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00245">gridStep_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l05787">MainWindow::showPreferences()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l06228">MainWindow::showPreferences()</a>.</p>
 
 </div>
 </div>
@@ -1981,9 +2043,9 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00883">883</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00234">gridVisible_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00244">gridVisible_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l05787">MainWindow::showPreferences()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l06228">MainWindow::showPreferences()</a>.</p>
 
 </div>
 </div>
@@ -2012,11 +2074,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p>Muestra u oculta el HUD de coordenadas. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00161">161</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00168">168</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00237">hudVisible_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00247">hudVisible_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l04367">MainWindow::loadPreferences()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l04803">MainWindow::loadPreferences()</a>.</p>
 
 </div>
 </div>
@@ -2052,9 +2114,9 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00608">608</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00204">Canvas::Layer::filled</a> y <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00214">Canvas::Layer::filled</a> y <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05476">MainWindow::refreshObjectToolPage()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05912">MainWindow::refreshObjectToolPage()</a>.</p>
 
 </div>
 </div>
@@ -2097,9 +2159,9 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00518">518</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00126">buildLinePath()</a>, <a class="el" href="_canvas_8cpp_source.html#l00061">buildPath()</a>, <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>, <a class="el" href="_canvas_8h_source.html#l00200">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00202">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>, <a class="el" href="_canvas_8h_source.html#l00199">Canvas::Layer::solid</a> y <a class="el" href="_canvas_8h_source.html#l00201">Canvas::Layer::solids</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00126">buildLinePath()</a>, <a class="el" href="_canvas_8cpp_source.html#l00061">buildPath()</a>, <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>, <a class="el" href="_canvas_8h_source.html#l00210">Canvas::Layer::follow</a>, <a class="el" href="_canvas_8h_source.html#l00212">Canvas::Layer::follows</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>, <a class="el" href="_canvas_8h_source.html#l00209">Canvas::Layer::solid</a> y <a class="el" href="_canvas_8h_source.html#l00211">Canvas::Layer::solids</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08550">MainWindow::alignObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l08685">MainWindow::applyApertureSizes()</a>, <a class="el" href="_main_window_8cpp_source.html#l08742">MainWindow::applyMacroDefinition()</a>, <a class="el" href="_main_window_8cpp_source.html#l03033">MainWindow::booleanDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l05110">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l02665">MainWindow::editGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l09350">MainWindow::editSource()</a>, <a class="el" href="_main_window_8cpp_source.html#l06489">MainWindow::etchCompensation()</a>, <a class="el" href="_main_window_8cpp_source.html#l06039">MainWindow::excellonEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l02880">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08788">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l06540">MainWindow::invertGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l07096">MainWindow::loadInfFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l08088">MainWindow::moveObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08417">MainWindow::movePcbToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l08389">MainWindow::moveToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l05476">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l03890">MainWindow::tclAddCircle()</a>, <a class="el" href="_main_window_8cpp_source.html#l03931">MainWindow::tclAddPolygon()</a>, <a class="el" href="_main_window_8cpp_source.html#l03954">MainWindow::tclAddPolyline()</a>, <a class="el" href="_main_window_8cpp_source.html#l03910">MainWindow::tclAddRectangle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04197">MainWindow::tclAlignDrill()</a>, <a class="el" href="_main_window_8cpp_source.html#l04236">MainWindow::tclAlignDrillGrid()</a>, <a class="el" href="_main_window_8cpp_source.html#l03790">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03744">MainWindow::tclOffset()</a> y <a class="el" href="_main_window_8cpp_source.html#l03765">MainWindow::tclScale()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l09085">MainWindow::alignObjects()</a>, <a class="el" href="_main_window_8cpp_source.html#l09229">MainWindow::applyApertureSizes()</a>, <a class="el" href="_main_window_8cpp_source.html#l09286">MainWindow::applyMacroDefinition()</a>, <a class="el" href="_main_window_8cpp_source.html#l03209">MainWindow::booleanDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l05549">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l02841">MainWindow::editGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l09894">MainWindow::editSource()</a>, <a class="el" href="_main_window_8cpp_source.html#l06930">MainWindow::etchCompensation()</a>, <a class="el" href="_main_window_8cpp_source.html#l06480">MainWindow::excellonEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l03056">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l09332">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l06981">MainWindow::invertGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l07537">MainWindow::loadInfFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l08529">MainWindow::moveObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l08952">MainWindow::movePcbToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l08924">MainWindow::moveToOrigin()</a>, <a class="el" href="_main_window_8cpp_source.html#l05912">MainWindow::refreshObjectToolPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l04066">MainWindow::tclAddCircle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04107">MainWindow::tclAddPolygon()</a>, <a class="el" href="_main_window_8cpp_source.html#l04130">MainWindow::tclAddPolyline()</a>, <a class="el" href="_main_window_8cpp_source.html#l04086">MainWindow::tclAddRectangle()</a>, <a class="el" href="_main_window_8cpp_source.html#l04373">MainWindow::tclAlignDrill()</a>, <a class="el" href="_main_window_8cpp_source.html#l04412">MainWindow::tclAlignDrillGrid()</a>, <a class="el" href="_main_window_8cpp_source.html#l03966">MainWindow::tclMirror()</a>, <a class="el" href="_main_window_8cpp_source.html#l03920">MainWindow::tclOffset()</a> y <a class="el" href="_main_window_8cpp_source.html#l03941">MainWindow::tclScale()</a>.</p>
 
 </div>
 </div>
@@ -2135,9 +2197,9 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00647">647</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a> y <a class="el" href="_canvas_8h_source.html#l00205">Canvas::Layer::multicolor</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a> y <a class="el" href="_canvas_8h_source.html#l00215">Canvas::Layer::multicolor</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05476">MainWindow::refreshObjectToolPage()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05912">MainWindow::refreshObjectToolPage()</a>.</p>
 
 </div>
 </div>
@@ -2169,9 +2231,9 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00319">319</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01237">MainWindow::buildLayout()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01385">MainWindow::buildLayout()</a>.</p>
 
 </div>
 </div>
@@ -2206,9 +2268,64 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00352">352</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a> y <a class="el" href="_canvas_8h_source.html#l00203">Canvas::Layer::visible</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a> y <a class="el" href="_canvas_8h_source.html#l00213">Canvas::Layer::visible</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l04837">MainWindow::setObjectVisible()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05276">MainWindow::setObjectVisible()</a>.</p>
+
+</div>
+</div>
+<a id="a959ba79919907aaf1c043f15dba40c9a" name="a959ba79919907aaf1c043f15dba40c9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a959ba79919907aaf1c043f15dba40c9a">&#9670;&#160;</a></span>setMarkers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Canvas::setMarkers </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="structfc_1_1_pt.html">fc::Pt</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>markers</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dibuja marcas temporales en el visor. </p>
+<p>Reemplaza las marcas temporales de puentes manuales. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00922">922</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00258">markers_</a>.</p>
+
+</div>
+</div>
+<a id="a8796728f481c3034d5f4e1043963f1ad" name="a8796728f481c3034d5f4e1043963f1ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8796728f481c3034d5f4e1043963f1ad">&#9670;&#160;</a></span>setPointPickMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Canvas::setPointPickMode </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>on</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Activa el modo de captura de puntos (puentes manuales). </p>
+<p>Reajusta la vista cuando cambia el tamaño del widget.</p>
+<p>Mantiene el contenido encuadrado tras redimensionar la ventana; no hace nada si aún no hay datos. El evento de pintado posterior se encarga del repintado.</p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>Evento de redimensión (no se usa). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00914">914</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00258">markers_</a> y <a class="el" href="_canvas_8h_source.html#l00257">pointPickMode_</a>.</p>
 
 </div>
 </div>
@@ -2237,11 +2354,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 </dl>
 <dl class="section note"><dt>Nota</dt><dd>Es una capa aparte, no participa de la selección ni de la exportación, y se pierde al recargar geometría con setGeometryData. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01152">1152</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01184">1184</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00126">buildLinePath()</a> y <a class="el" href="_canvas_8h_source.html#l00225">toolpathPath_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l00126">buildLinePath()</a> y <a class="el" href="_canvas_8h_source.html#l00235">toolpathPath_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02411">MainWindow::chooseProjectObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l02253">MainWindow::openFiles()</a>, <a class="el" href="_main_window_8cpp_source.html#l02326">MainWindow::openProject()</a>, <a class="el" href="_main_window_8cpp_source.html#l11181">MainWindow::showExcellon()</a> y <a class="el" href="_main_window_8cpp_source.html#l11112">MainWindow::showGerber()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l02573">MainWindow::chooseProjectObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l02415">MainWindow::openFiles()</a>, <a class="el" href="_main_window_8cpp_source.html#l02488">MainWindow::openProject()</a>, <a class="el" href="_main_window_8cpp_source.html#l11979">MainWindow::showExcellon()</a> y <a class="el" href="_main_window_8cpp_source.html#l11910">MainWindow::showGerber()</a>.</p>
 
 </div>
 </div>
@@ -2277,9 +2394,9 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00859">859</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00228">offset_</a> y <a class="el" href="_canvas_8h_source.html#l00227">scale_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00238">offset_</a> y <a class="el" href="_canvas_8h_source.html#l00237">scale_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08307">MainWindow::addCncJobObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l04720">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l04740">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l07824">MainWindow::rebuildBookmarksMenu()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08748">MainWindow::addCncJobObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l05154">MainWindow::addGeneratedLayer()</a>, <a class="el" href="_main_window_8cpp_source.html#l05174">MainWindow::addGeneratedSolid()</a>, <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l08265">MainWindow::rebuildBookmarksMenu()</a>.</p>
 
 </div>
 </div>
@@ -2308,11 +2425,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 
 <p>Define el área de trabajo a dibujar. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00156">156</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00163">163</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">workspace_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00246">workspace_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l04367">MainWindow::loadPreferences()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a> y <a class="el" href="_main_window_8cpp_source.html#l04803">MainWindow::loadPreferences()</a>.</p>
 
 </div>
 </div>
@@ -2378,11 +2495,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 </div><div class="memdoc">
 <dl class="section return"><dt>Devuelve</dt><dd>Desplazamiento actual de la vista. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00144">144</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00151">151</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00228">offset_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00238">offset_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l07804">MainWindow::addBookmark()</a>, <a class="el" href="_main_window_8cpp_source.html#l08307">MainWindow::addCncJobObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l04720">MainWindow::addGeneratedLayer()</a> y <a class="el" href="_main_window_8cpp_source.html#l04740">MainWindow::addGeneratedSolid()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08245">MainWindow::addBookmark()</a>, <a class="el" href="_main_window_8cpp_source.html#l08748">MainWindow::addCncJobObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l05154">MainWindow::addGeneratedLayer()</a> y <a class="el" href="_main_window_8cpp_source.html#l05174">MainWindow::addGeneratedSolid()</a>.</p>
 
 </div>
 </div>
@@ -2410,11 +2527,11 @@ La unión de rutas es una operación costosa con mucho cobre; en placas grandes 
 </div><div class="memdoc">
 <dl class="section return"><dt>Devuelve</dt><dd>Escala actual de la vista. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00141">141</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00148">148</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00227">scale_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00237">scale_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l07804">MainWindow::addBookmark()</a>, <a class="el" href="_main_window_8cpp_source.html#l08307">MainWindow::addCncJobObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l04720">MainWindow::addGeneratedLayer()</a> y <a class="el" href="_main_window_8cpp_source.html#l04740">MainWindow::addGeneratedSolid()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l08245">MainWindow::addBookmark()</a>, <a class="el" href="_main_window_8cpp_source.html#l08748">MainWindow::addCncJobObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l05154">MainWindow::addGeneratedLayer()</a> y <a class="el" href="_main_window_8cpp_source.html#l05174">MainWindow::addGeneratedSolid()</a>.</p>
 
 </div>
 </div>
@@ -2442,9 +2559,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 
 <p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l00842">842</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00224">layers_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00234">layers_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05217">MainWindow::advancedFilm()</a> y <a class="el" href="_main_window_8cpp_source.html#l03381">MainWindow::show3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05656">MainWindow::advancedFilm()</a> y <a class="el" href="_main_window_8cpp_source.html#l03557">MainWindow::show3D()</a>.</p>
 
 </div>
 </div>
@@ -2481,11 +2598,11 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </dl>
 <dl class="section note"><dt>Nota</dt><dd>Se ignora el desplazamiento horizontal y <span class="tt">pixelDelta()</span>; un delta Y nulo (giro puramente horizontal) se interpreta como alejar. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01202">1202</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01234">1234</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l01168">zoomAt()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l01200">zoomAt()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="#aa65f5c4d3a740de264716fe3d41acff4">layerActivated()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="#ab3f2f7d7e418696bd6d7f4960affed8c">worldPicked()</a>.</p>
 
 </div>
 </div>
@@ -2513,11 +2630,46 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </div><div class="memdoc">
 <dl class="section return"><dt>Devuelve</dt><dd>Área de trabajo. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00159">159</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00166">166</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00236">workspace_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00246">workspace_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a>.</p>
+
+</div>
+</div>
+<a id="ab3f2f7d7e418696bd6d7f4960affed8c" name="ab3f2f7d7e418696bd6d7f4960affed8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3f2f7d7e418696bd6d7f4960affed8c">&#9670;&#160;</a></span>worldPicked</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Canvas::worldPicked </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel signal">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Emite una coordenada de mundo al hacer clic en modo captura. </p>
+
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l01379">leaveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01348">mouseDoubleClickEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01248">mousePressEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01305">mouseReleaseEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00927">resizeEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01234">wheelEvent()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01305">mouseReleaseEvent()</a>.</p>
 
 </div>
 </div>
@@ -2558,11 +2710,11 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
   </dd>
 </dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01168">1168</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01200">1200</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00228">offset_</a> y <a class="el" href="_canvas_8h_source.html#l00227">scale_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8h_source.html#l00238">offset_</a> y <a class="el" href="_canvas_8h_source.html#l00237">scale_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01202">wheelEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01180">zoomIn()</a> y <a class="el" href="_canvas_8cpp_source.html#l01187">zoomOut()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01234">wheelEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01212">zoomIn()</a> y <a class="el" href="_canvas_8cpp_source.html#l01219">zoomOut()</a>.</p>
 
 </div>
 </div>
@@ -2592,11 +2744,11 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 <p>Aumenta el zoom. </p>
 <p>Acerca la vista un 25 % respecto del centro del widget. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01180">1180</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01212">1212</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l01168">zoomAt()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l01200">zoomAt()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a>.</p>
 
 </div>
 </div>
@@ -2626,11 +2778,11 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 <p>Disminuye el zoom. </p>
 <p>Aleja la vista un 20 % respecto del centro del widget. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01187">1187</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8cpp_source.html#l01219">1219</a> del archivo <a class="el" href="_canvas_8cpp_source.html">Canvas.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l01168">zoomAt()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_canvas_8cpp_source.html#l01200">zoomAt()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01640">MainWindow::buildMenus()</a>.</p>
 
 </div>
 </div>
@@ -2655,9 +2807,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00241">241</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00251">251</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00823">setColors()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00823">setColors()</a>.</p>
 
 </div>
 </div>
@@ -2681,9 +2833,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00226">226</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00236">236</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00231">beginGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00750">clearData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00708">exportSvg()</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8cpp_source.html#l00898">fitTo()</a>, <a class="el" href="_canvas_8cpp_source.html#l00783">fitWithOrigin()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a> y <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00231">beginGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00750">clearData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00708">exportSvg()</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8cpp_source.html#l00898">fitTo()</a>, <a class="el" href="_canvas_8cpp_source.html#l00783">fitWithOrigin()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a> y <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>.</p>
 
 </div>
 </div>
@@ -2707,9 +2859,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00243">243</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00253">253</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00823">setColors()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00823">setColors()</a>.</p>
 
 </div>
 </div>
@@ -2733,9 +2885,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00242">242</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00252">252</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00823">setColors()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00823">setColors()</a>.</p>
 
 </div>
 </div>
@@ -2759,9 +2911,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00238">238</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00248">248</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>.</p>
 
 </div>
 </div>
@@ -2785,9 +2937,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00239">239</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00249">249</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8h_source.html#l00154">displayOrigin()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a> y <a class="el" href="_canvas_8h_source.html#l00151">setDisplayOrigin()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8h_source.html#l00161">displayOrigin()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8h_source.html#l00158">setDisplayOrigin()</a>.</p>
 
 </div>
 </div>
@@ -2811,9 +2963,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00232">232</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00242">242</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01216">mousePressEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01269">mouseReleaseEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01248">mousePressEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01305">mouseReleaseEvent()</a>.</p>
 
 </div>
 </div>
@@ -2837,9 +2989,35 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00244">244</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00254">254</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00823">setColors()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00823">setColors()</a>.</p>
+
+</div>
+</div>
+<a id="a8068339a92731a562781f8e45d1e305a" name="a8068339a92731a562781f8e45d1e305a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8068339a92731a562781f8e45d1e305a">&#9670;&#160;</a></span>gridColor_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QColor Canvas::gridColor_ {38, 46, 54}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00256">256</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8h_source.html#l00138">setGridColor()</a>.</p>
 
 </div>
 </div>
@@ -2863,9 +3041,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00235">235</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00245">245</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8h_source.html#l00133">gridStep()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a> y <a class="el" href="_canvas_8h_source.html#l00130">setGridStep()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8h_source.html#l00133">gridStep()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8h_source.html#l00130">setGridStep()</a>.</p>
 
 </div>
 </div>
@@ -2889,9 +3067,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00234">234</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00244">244</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8h_source.html#l00128">gridVisible()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00883">setGridVisible()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8h_source.html#l00128">gridVisible()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00883">setGridVisible()</a>.</p>
 
 </div>
 </div>
@@ -2915,9 +3093,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00240">240</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00250">250</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01337">leaveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01379">leaveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>.</p>
 
 </div>
 </div>
@@ -2941,9 +3119,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00233">233</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00243">243</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00231">beginGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00750">clearData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00708">exportSvg()</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8cpp_source.html#l00898">fitTo()</a>, <a class="el" href="_canvas_8cpp_source.html#l00783">fitWithOrigin()</a>, <a class="el" href="_canvas_8h_source.html#l00139">hasData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>, <a class="el" href="_canvas_8cpp_source.html#l00914">resizeEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00231">beginGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00750">clearData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00708">exportSvg()</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8cpp_source.html#l00898">fitTo()</a>, <a class="el" href="_canvas_8cpp_source.html#l00783">fitWithOrigin()</a>, <a class="el" href="_canvas_8h_source.html#l00146">hasData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>, <a class="el" href="_canvas_8cpp_source.html#l00927">resizeEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>.</p>
 
 </div>
 </div>
@@ -2967,9 +3145,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00237">237</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00247">247</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8h_source.html#l00164">hudVisible()</a>, <a class="el" href="_canvas_8cpp_source.html#l01337">leaveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a> y <a class="el" href="_canvas_8h_source.html#l00161">setHudVisible()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8h_source.html#l00171">hudVisible()</a>, <a class="el" href="_canvas_8cpp_source.html#l01379">leaveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8h_source.html#l00168">setHudVisible()</a>.</p>
 
 </div>
 </div>
@@ -2993,9 +3171,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00229">229</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00239">239</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01216">mousePressEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01248">mousePressEvent()</a>.</p>
 
 </div>
 </div>
@@ -3019,9 +3197,35 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00224">224</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00234">234</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00231">beginGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00750">clearData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00390">duplicateLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00708">exportSvg()</a>, <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00154">findLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00467">insertLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00300">layerIds()</a>, <a class="el" href="_canvas_8cpp_source.html#l00574">mergeVisibleLayers()</a>, <a class="el" href="_canvas_8cpp_source.html#l01306">mouseDoubleClickEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01269">mouseReleaseEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>, <a class="el" href="_canvas_8cpp_source.html#l00370">removeLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00319">setLayerOrder()</a> y <a class="el" href="_canvas_8cpp_source.html#l00842">visibleSolids()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00231">beginGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00750">clearData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00390">duplicateLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00708">exportSvg()</a>, <a class="el" href="_canvas_8cpp_source.html#l00141">findLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00154">findLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00467">insertLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00300">layerIds()</a>, <a class="el" href="_canvas_8cpp_source.html#l00574">mergeVisibleLayers()</a>, <a class="el" href="_canvas_8cpp_source.html#l01348">mouseDoubleClickEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01305">mouseReleaseEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00540">recomputeBounds()</a>, <a class="el" href="_canvas_8cpp_source.html#l00370">removeLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00319">setLayerOrder()</a> y <a class="el" href="_canvas_8cpp_source.html#l00842">visibleSolids()</a>.</p>
+
+</div>
+</div>
+<a id="abb7032578806cbdbf07b43e1b425c7ac" name="abb7032578806cbdbf07b43e1b425c7ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb7032578806cbdbf07b43e1b425c7ac">&#9670;&#160;</a></span>markers_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structfc_1_1_pt.html">fc::Pt</a>&gt; Canvas::markers_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00258">258</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00922">setMarkers()</a> y <a class="el" href="_canvas_8cpp_source.html#l00914">setPointPickMode()</a>.</p>
 
 </div>
 </div>
@@ -3045,7 +3249,7 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00246">246</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00259">259</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00253">appendGeometry()</a>, <a class="el" href="_canvas_8cpp_source.html#l00390">duplicateLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00467">insertLayer()</a>, <a class="el" href="_canvas_8cpp_source.html#l00574">mergeVisibleLayers()</a> y <a class="el" href="_canvas_8cpp_source.html#l00178">setGeometryData()</a>.</p>
 
@@ -3071,9 +3275,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00228">228</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00238">238</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00873">centerOn()</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8cpp_source.html#l00783">fitWithOrigin()</a>, <a class="el" href="_canvas_8cpp_source.html#l01306">mouseDoubleClickEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01269">mouseReleaseEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00859">setView()</a>, <a class="el" href="_canvas_8h_source.html#l00144">viewOffset()</a> y <a class="el" href="_canvas_8cpp_source.html#l01168">zoomAt()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00873">centerOn()</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8cpp_source.html#l00783">fitWithOrigin()</a>, <a class="el" href="_canvas_8cpp_source.html#l01348">mouseDoubleClickEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01305">mouseReleaseEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00859">setView()</a>, <a class="el" href="_canvas_8h_source.html#l00151">viewOffset()</a> y <a class="el" href="_canvas_8cpp_source.html#l01200">zoomAt()</a>.</p>
 
 </div>
 </div>
@@ -3097,9 +3301,35 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00230">230</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00240">240</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01216">mousePressEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01269">mouseReleaseEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01248">mousePressEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01305">mouseReleaseEvent()</a>.</p>
+
+</div>
+</div>
+<a id="a61199bcf568a6236ec3cffa2b8e758bb" name="a61199bcf568a6236ec3cffa2b8e758bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61199bcf568a6236ec3cffa2b8e758bb">&#9670;&#160;</a></span>pointPickMode_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Canvas::pointPickMode_ = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00257">257</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01248">mousePressEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01305">mouseReleaseEvent()</a>, <a class="el" href="_canvas_8h_source.html#l00141">pointPickMode()</a> y <a class="el" href="_canvas_8cpp_source.html#l00914">setPointPickMode()</a>.</p>
 
 </div>
 </div>
@@ -3123,9 +3353,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00231">231</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00241">241</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01216">mousePressEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01248">mousePressEvent()</a>.</p>
 
 </div>
 </div>
@@ -3149,9 +3379,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00227">227</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00237">237</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00873">centerOn()</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8cpp_source.html#l00783">fitWithOrigin()</a>, <a class="el" href="_canvas_8cpp_source.html#l01306">mouseDoubleClickEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01239">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01269">mouseReleaseEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00859">setView()</a>, <a class="el" href="_canvas_8h_source.html#l00141">viewScale()</a> y <a class="el" href="_canvas_8cpp_source.html#l01168">zoomAt()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00873">centerOn()</a>, <a class="el" href="_canvas_8cpp_source.html#l00769">fit()</a>, <a class="el" href="_canvas_8cpp_source.html#l00783">fitWithOrigin()</a>, <a class="el" href="_canvas_8cpp_source.html#l01348">mouseDoubleClickEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01275">mouseMoveEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l01305">mouseReleaseEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>, <a class="el" href="_canvas_8cpp_source.html#l00859">setView()</a>, <a class="el" href="_canvas_8h_source.html#l00148">viewScale()</a> y <a class="el" href="_canvas_8cpp_source.html#l01200">zoomAt()</a>.</p>
 
 </div>
 </div>
@@ -3175,9 +3405,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00245">245</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00255">255</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00823">setColors()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l00823">setColors()</a>.</p>
 
 </div>
 </div>
@@ -3201,9 +3431,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00225">225</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00235">235</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00750">clearData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01152">setToolpaths()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00750">clearData()</a>, <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a> y <a class="el" href="_canvas_8cpp_source.html#l01184">setToolpaths()</a>.</p>
 
 </div>
 </div>
@@ -3227,9 +3457,9 @@ Vector con los sólidos concatenados en orden de dibujo. Lo usan las herramienta
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00236">236</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_canvas_8h_source.html#l00246">246</a> del archivo <a class="el" href="_canvas_8h_source.html">Canvas.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00936">paintEvent()</a>, <a class="el" href="_canvas_8h_source.html#l00156">setWorkspace()</a> y <a class="el" href="_canvas_8h_source.html#l00159">workspace()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_canvas_8cpp_source.html#l00949">paintEvent()</a>, <a class="el" href="_canvas_8h_source.html#l00163">setWorkspace()</a> y <a class="el" href="_canvas_8h_source.html#l00166">workspace()</a>.</p>
 
 </div>
 </div>

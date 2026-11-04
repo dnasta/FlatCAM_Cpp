@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.4.0</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.4.1</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -140,6 +140,8 @@ Atributos públicos</h2></td></tr>
 <tr class="memdesc:a0eb6a723527d3ed4ae96c78a153c6d66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ancho de cada puente (mm).  <br /></td></tr>
 <tr class="memitem:ab191131ee4d20288e497d1e6aff44e02" id="r_ab191131ee4d20288e497d1e6aff44e02"><td class="memItemLeft"><a class="el" href="namespacefc.html#a3e29dc44d321f9f123160292dd769e18">TabSides</a>&#160;</td><td class="memItemRight"><a class="el" href="#ab191131ee4d20288e497d1e6aff44e02">tabSides</a> = <a class="el" href="namespacefc.html#a3e29dc44d321f9f123160292dd769e18ab1c94ca2fbc3e78fc30069c8d0f01680">TabSides::All</a></td></tr>
 <tr class="memdesc:ab191131ee4d20288e497d1e6aff44e02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lados donde se permiten puentes.  <br /></td></tr>
+<tr class="memitem:ae6cb3fd193f4443cb26662d384d2a663" id="r_ae6cb3fd193f4443cb26662d384d2a663"><td class="memItemLeft"><a class="el" href="namespacefc.html#a3ee7b392107aac7bff3a6a7a19c9d128">GapType</a>&#160;</td><td class="memItemRight"><a class="el" href="#ae6cb3fd193f4443cb26662d384d2a663">gapType</a> = <a class="el" href="namespacefc.html#a3ee7b392107aac7bff3a6a7a19c9d128ade8504b73ea228d0ea9bbce69752092e">GapType::Bridge</a></td></tr>
+<tr class="memdesc:ae6cb3fd193f4443cb26662d384d2a663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tipo de brecha.  <br /></td></tr>
 <tr class="memitem:ad572b037b5229e15d089daa06057bc20" id="r_ad572b037b5229e15d089daa06057bc20"><td class="memItemLeft">std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ad572b037b5229e15d089daa06057bc20">tabPositions</a></td></tr>
 <tr class="memdesc:ad572b037b5229e15d089daa06057bc20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Posiciones manuales como fracción del perímetro (0..1).  <br /></td></tr>
 <tr class="memitem:aaa2bb8884b59076358ca3ca342f08ec6" id="r_aaa2bb8884b59076358ca3ca342f08ec6"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#aaa2bb8884b59076358ca3ca342f08ec6">includeHoles</a> = false</td></tr>
@@ -150,7 +152,7 @@ Atributos públicos</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
 <div class="textblock"><p>Parámetros del corte de contorno. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00028">28</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00035">35</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Documentación de datos miembro</h2>
 <a id="a7f06a5f6e9ee7f6f5841ac8c920d3544" name="a7f06a5f6e9ee7f6f5841ac8c920d3544"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7f06a5f6e9ee7f6f5841ac8c920d3544">&#9670;&#160;</a></span>area</h2>
@@ -166,7 +168,7 @@ Atributos públicos</h2></td></tr>
 
 <p>Área rectangular opcional de trabajo. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00041">41</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00049">49</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
 
@@ -186,9 +188,29 @@ Atributos públicos</h2></td></tr>
 
 <p><span class="tt">true</span> corta por fuera; <span class="tt">false</span> por dentro. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00031">31</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00038">38</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11408">MainWindow::applyCutout()</a> y <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l12206">MainWindow::applyCutout()</a> y <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
+
+</div>
+</div>
+<a id="ae6cb3fd193f4443cb26662d384d2a663" name="ae6cb3fd193f4443cb26662d384d2a663"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6cb3fd193f4443cb26662d384d2a663">&#9670;&#160;</a></span>gapType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacefc.html#a3ee7b392107aac7bff3a6a7a19c9d128">GapType</a> fc::CutoutOptions::gapType = <a class="el" href="namespacefc.html#a3ee7b392107aac7bff3a6a7a19c9d128ade8504b73ea228d0ea9bbce69752092e">GapType::Bridge</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tipo de brecha. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00044">44</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
 
 </div>
 </div>
@@ -206,7 +228,7 @@ Atributos públicos</h2></td></tr>
 
 <p>Corta también contornos internos. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00040">40</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00048">48</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
 
@@ -226,7 +248,7 @@ Atributos públicos</h2></td></tr>
 
 <p>Invierte el sentido del recorrido. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00033">33</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00040">40</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
 
@@ -246,9 +268,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Margen extra más allá del radio. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00030">30</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00037">37</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11408">MainWindow::applyCutout()</a>, <a class="el" href="_script_api_8cpp_source.html#l00181">fc::ScriptApi::cutout()</a>, <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l12206">MainWindow::applyCutout()</a>, <a class="el" href="_script_api_8cpp_source.html#l00181">fc::ScriptApi::cutout()</a>, <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
 
 </div>
 </div>
@@ -266,7 +288,7 @@ Atributos públicos</h2></td></tr>
 
 <p>Segmentos por cuadrante de las curvas. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00032">32</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00039">39</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
 
@@ -286,9 +308,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Puentes que sostienen la pieza; 0 = ninguno. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00034">34</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00041">41</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11408">MainWindow::applyCutout()</a>, <a class="el" href="_script_api_8cpp_source.html#l00181">fc::ScriptApi::cutout()</a>, <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l12206">MainWindow::applyCutout()</a>, <a class="el" href="_script_api_8cpp_source.html#l00181">fc::ScriptApi::cutout()</a>, <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
 
 </div>
 </div>
@@ -307,9 +329,9 @@ Atributos públicos</h2></td></tr>
 <p>Posiciones manuales como fracción del perímetro (0..1). </p>
 <p>Si no está vacío, reemplaza a <span class="tt"><a class="el" href="#a412b3d1e8d1e29bd4a6bdf13284024aa" title="Puentes que sostienen la pieza; 0 = ninguno.">tabCount</a></span> y <span class="tt"><a class="el" href="#ab191131ee4d20288e497d1e6aff44e02" title="Lados donde se permiten puentes.">tabSides</a></span>. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00039">39</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00047">47</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11408">MainWindow::applyCutout()</a> y <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l12206">MainWindow::applyCutout()</a> y <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
 
 </div>
 </div>
@@ -327,9 +349,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Lados donde se permiten puentes. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00036">36</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00043">43</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11408">MainWindow::applyCutout()</a> y <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l12206">MainWindow::applyCutout()</a> y <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>.</p>
 
 </div>
 </div>
@@ -347,9 +369,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Ancho de cada puente (mm). </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00035">35</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00042">42</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11408">MainWindow::applyCutout()</a>, <a class="el" href="_script_api_8cpp_source.html#l00181">fc::ScriptApi::cutout()</a>, <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l12206">MainWindow::applyCutout()</a>, <a class="el" href="_script_api_8cpp_source.html#l00181">fc::ScriptApi::cutout()</a>, <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
 
 </div>
 </div>
@@ -367,9 +389,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Diámetro de la fresa. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00029">29</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="cutout_8hpp_source.html#l00036">36</a> del archivo <a class="el" href="cutout_8hpp_source.html">cutout.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11408">MainWindow::applyCutout()</a>, <a class="el" href="_script_api_8cpp_source.html#l00181">fc::ScriptApi::cutout()</a>, <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l11462">MainWindow::exportCutoutGCode()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l12206">MainWindow::applyCutout()</a>, <a class="el" href="_script_api_8cpp_source.html#l00181">fc::ScriptApi::cutout()</a>, <a class="el" href="cutout_8cpp_source.html#l00248">fc::cutoutGeometry()</a>, <a class="el" href="_main_window_8cpp_source.html#l12260">MainWindow::exportCutoutGCode()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
 
 </div>
 </div>

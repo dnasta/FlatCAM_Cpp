@@ -29,6 +29,7 @@
 #include <QToolButton>
 #include <QTabWidget>
 #include <QToolBar>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QDoubleSpinBox>
 #include <QUndoCommand>
@@ -62,6 +63,7 @@
 #include <QIcon>
 #include <QIconEngine>
 #include <QSettings>
+#include <QShortcut>
 #include <QPushButton>
 #include <QTableWidget>
 #include <QHeaderView>
@@ -97,6 +99,7 @@
 #include <cmath>
 #include <fstream>
 #include <functional>
+#include <limits>
 #include <memory>
 #include <set>
 #include <sstream>
@@ -144,6 +147,151 @@ double parseNumberText(const QString& text, bool* ok = nullptr) {
 void addHeaderComments(fc::GCodeOptions& opt, std::initializer_list<QString> lines) {
     for (const QString& line : lines) opt.headerComments.push_back(line.toStdString());
 }
+
+/// @brief Dibuja el recorrido de la herramienta, incluyendo viajes entre tramos.
+void setPathToolpaths(Canvas* canvas, const std::vector<std::vector<fc::Pt>>& paths) {
+    if (!canvas) return;
+    std::vector<Geom> moves;
+    fc::Pt last{0.0, 0.0};
+    bool hasLast = false;
+    for (const auto& path : paths) {
+        if (path.size() < 2) continue;
+        if (hasLast) moves.push_back(Geom::line({last, path.front()}));
+        moves.push_back(Geom::line(path));
+        last = path.back();
+        hasLast = true;
+    }
+    canvas->setToolpaths(moves);
+}
+
+/// @brief Devuelve la fracción de perímetro más cercana a un punto.
+double nearestFractionOnOutline(const Geom& outline, const Pt& point) {
+    Ring ring;
+    if (outline.typeId() == GEOS_POLYGON) {
+        const auto polygons = outline.polygons();
+        if (!polygons.empty()) ring = polygons.front().outer;
+    } else if (outline.typeId() == GEOS_MULTIPOLYGON ||
+               outline.typeId() == GEOS_GEOMETRYCOLLECTION) {
+        double best = -1.0;
+        for (int i = 0; i < outline.numGeometries(); ++i) {
+            const Geom part = outline.geometryN(i);
+            Ring candidate;
+            if (part.typeId() == GEOS_POLYGON) {
+                const auto polygons = part.polygons();
+                if (!polygons.empty()) candidate = polygons.front().outer;
+            }
+            if (candidate.size() > 1 && candidate.size() > ring.size()) ring = candidate;
+            (void)best;
+        }
+    }
+    if (ring.empty()) ring = outline.coords();
+    if (ring.size() < 2) return 0.0;
+
+    double total = 0.0;
+    double bestCumulative = 0.0;
+    double bestDistance = std::numeric_limits<double>::max();
+    double cumulative = 0.0;
+    const auto project = [&](const Pt& a, const Pt& b) {
+        const double dx = b.x - a.x;
+        const double dy = b.y - a.y;
+        const double len2 = dx * dx + dy * dy;
+        const double len = std::sqrt(len2);
+        double t = len2 > 0.0
+                       ? ((point.x - a.x) * dx + (point.y - a.y) * dy) / len2
+                       : 0.0;
+        t = std::clamp(t, 0.0, 1.0);
+        const double px = a.x + dx * t;
+        const double py = a.y + dy * t;
+        const double d = std::hypot(point.x - px, point.y - py);
+        if (d < bestDistance) {
+            bestDistance = d;
+            bestCumulative = cumulative + len * t;
+        }
+        cumulative += len;
+        total += len;
+    };
+    for (std::size_t i = 1; i < ring.size(); ++i) project(ring[i - 1], ring[i]);
+    if (ring.front().x != ring.back().x || ring.front().y != ring.back().y)
+        project(ring.back(), ring.front());
+    return total > 0.0 ? bestCumulative / total : 0.0;
+}
+
+/// @brief Dibuja el recorrido del taladrado en el orden de ejecución.
+void setDrillToolpaths(Canvas* canvas, const fc::DrillJob& job) {
+    if (!canvas) return;
+    std::vector<Geom> moves;
+    fc::Pt last{0.0, 0.0};
+    bool hasLast = false;
+    auto travelTo = [&](const fc::Pt& p) {
+        if (hasLast) moves.push_back(Geom::line({last, p}));
+        last = p;
+        hasLast = true;
+    };
+    for (const fc::DrillTool& tool : job.tools) {
+        const fc::Pt offset{tool.offsetX, tool.offsetY};
+        for (const fc::Pt& hole : tool.holes) {
+            travelTo({hole.x + offset.x, hole.y + offset.y});
+        }
+        for (const auto& [start, stop] : tool.slotSegments) {
+            const fc::Pt a{start.x + offset.x, start.y + offset.y};
+            const fc::Pt b{stop.x + offset.x, stop.y + offset.y};
+            travelTo(a);
+            moves.push_back(Geom::line({a, b}));
+            last = b;
+        }
+    }
+    canvas->setToolpaths(moves);
+}
+
+/// @brief Temas de colores iniciales del visor.
+std::vector<ViewTheme> defaultViewThemes() {
+    return {
+        {QObject::tr("Oscuro"), QColor("#101418"), QColor("#d9a441"), QColor("#6fa8dc"),
+         QColor("#66d684"), QColor("#262e36")},
+        {QObject::tr("Claro"), QColor("#ffffff"), QColor("#b06a1f"), QColor("#2a6fb0"),
+         QColor("#1b8a2f"), QColor("#e2e2e2")},
+        {QObject::tr("Papel"), QColor("#f5f1e8"), QColor("#8b4513"), QColor("#2f5d8a"),
+         QColor("#2e7d32"), QColor("#d8d0c0")},
+        {QObject::tr("Azul noche"), QColor("#0b1b2b"), QColor("#e0a458"), QColor("#4fc3f7"),
+         QColor("#7bd88f"), QColor("#1e3550")},
+        {QObject::tr("Alto contraste"), QColor("#000000"), QColor("#ffb000"),
+         QColor("#00e5ff"), QColor("#00ff66"), QColor("#333333")},
+    };
+}
+
+/// @brief Vista previa de un tema de visor.
+class ViewThemePreview : public QWidget {
+public:
+    explicit ViewThemePreview(QWidget* parent = nullptr) : QWidget(parent) {
+        setMinimumSize(300, 150);
+    }
+    void setTheme(const ViewTheme& theme) {
+        theme_ = theme;
+        update();
+    }
+
+protected:
+    void paintEvent(QPaintEvent*) override {
+        QPainter p(this);
+        p.fillRect(rect(), theme_.background);
+        p.setPen(QPen(theme_.grid, 1));
+        for (int x = 0; x < width(); x += 24) p.drawLine(x, 0, x, height());
+        for (int y = 0; y < height(); y += 24) p.drawLine(0, y, width(), y);
+        p.setPen(QPen(theme_.copper, 2));
+        p.setBrush(QColor(theme_.copper.red(), theme_.copper.green(), theme_.copper.blue(), 90));
+        p.drawRoundedRect(QRectF(24, 28, width() - 48, height() - 56), 8, 8);
+        p.setPen(QPen(theme_.follow, 2));
+        p.drawLine(36, height() / 2, width() - 36, height() / 2);
+        p.setPen(QPen(theme_.toolpath, 2, Qt::DashLine));
+        p.drawLine(36, height() - 30, width() - 36, 30);
+        p.setBrush(Qt::NoBrush);
+        p.setPen(QPen(QColor(128, 128, 128), 1));
+        p.drawRect(rect().adjusted(0, 0, -1, -1));
+    }
+
+private:
+    ViewTheme theme_;
+};
 
 #ifdef FC_HAVE_TCL
 /// @name Adaptadores de comandos Tcl
@@ -1337,7 +1485,9 @@ void MainWindow::buildLayout() {
         leftTabs_->tabBar()->setTabButton(i, QTabBar::LeftSide, nullptr);
     }
     connect(leftTabs_, &QTabWidget::tabCloseRequested, this, [this](int index) {
-        if (index >= 3) leftTabs_->removeTab(index);
+        if (index < 3) return;
+        leftTabs_->removeTab(index);
+        leftTabs_->setCurrentIndex(0);
     });
     buildToolPanel(leftTabs_);
     resetObjectGroups();
@@ -1389,6 +1539,12 @@ void MainWindow::buildLayout() {
         refreshObjectToolPage();
         if (leftTabs_) leftTabs_->setCurrentIndex(2);
     });
+    auto* deleteShortcut = new QShortcut(QKeySequence::Delete, objects_);
+    deleteShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    connect(deleteShortcut, &QShortcut::activated, this, &MainWindow::deleteSelectedObject);
+    auto* backspaceShortcut = new QShortcut(QKeySequence(Qt::Key_Backspace), objects_);
+    backspaceShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    connect(backspaceShortcut, &QShortcut::activated, this, &MainWindow::deleteSelectedObject);
     connect(objects_, &QTreeWidget::itemClicked, this, &MainWindow::projectObjectSelected);
     connect(objects_, &QTreeWidget::currentItemChanged, this,
             [this](QTreeWidgetItem*, QTreeWidgetItem*) {
@@ -1626,6 +1782,9 @@ void MainWindow::buildMenus() {
     connect(addBookmarkAction, &QAction::triggered, this, &MainWindow::addBookmark);
     bookmarksMenu_->addSeparator();
     rebuildBookmarksMenu();
+    QAction* viewThemesAction = view->addAction(tr("Temas del &visor..."));
+    viewThemesAction->setIcon(originalIcon("set_color"));
+    connect(viewThemesAction, &QAction::triggered, this, &MainWindow::showViewThemesDialog);
 
     QMenu* tools = menuBar()->addMenu(tr("&Herramienta"));
     QAction* isolate = tools->addAction(tr("&Aislar cobre..."));
@@ -1852,10 +2011,10 @@ void MainWindow::buildMenus() {
     QAction* sourceEditor = objectsMenu->addAction(tr("&Editor de fuente..."));
     sourceEditor->setIcon(originalIcon("code_editor"));
     connect(sourceEditor, &QAction::triggered, this, &MainWindow::editSource);
-    QAction* moveOrigin = objectsMenu->addAction(tr("Centrar objeto en (0, 0)"));
+    QAction* moveOrigin = objectsMenu->addAction(tr("Objeto a su posición relativa (centro PCB → 0,0)"));
     moveOrigin->setIcon(originalIcon("origin"));
     connect(moveOrigin, &QAction::triggered, this, &MainWindow::moveToOrigin);
-    QAction* movePcb = objectsMenu->addAction(tr("Llevar toda la PCB a (0, 0)"));
+    QAction* movePcb = objectsMenu->addAction(tr("Centrar toda la PCB en (0, 0)"));
     movePcb->setIcon(originalIcon("align"));
     connect(movePcb, &QAction::triggered, this, &MainWindow::movePcbToOrigin);
     QAction* joinAction = objectsMenu->addAction(tr("&Unir objetos..."));
@@ -2007,6 +2166,9 @@ void MainWindow::buildMenus() {
         connect(action, &QAction::triggered, this,
                 [this, selected = choice.theme] { applyTheme(selected); });
     }
+    QAction* viewThemesOption = options->addAction(tr("Temas del &visor..."));
+    viewThemesOption->setIcon(originalIcon("set_color"));
+    connect(viewThemesOption, &QAction::triggered, this, &MainWindow::showViewThemesDialog);
 
     QMenu* help = menuBar()->addMenu(tr("A&yuda"));
     QAction* about = help->addAction(tr("Acerca de"));
@@ -2015,7 +2177,7 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.4.0</b> · build 2026-11-04<br>"
+                           tr("<b>FlatCAM C++ 0.4.1</b> · build 2026-11-04<br>"
                               "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
                               "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
@@ -2042,10 +2204,10 @@ void MainWindow::buildMenus() {
            tr("Eliminar el objeto seleccionado."));
     addBar("distance_min", tr("Distancia mínima"), &MainWindow::distanceTool,
            tr("Medir la distancia mínima entre dos objetos."));
-    addBar("origin", tr("Centrar objeto en (0, 0)"), &MainWindow::moveToOrigin,
-           tr("Mover el objeto seleccionado para que su centro quede en (0, 0)."));
+    addBar("origin", tr("Objeto a su posición relativa (centro PCB → 0,0)"), &MainWindow::moveToOrigin,
+           tr("Mueve sólo el objeto para que su posición relativa al centro de la PCB pase a ser su posición absoluta."));
     addBar("align", tr("PCB a (0, 0)"), &MainWindow::movePcbToOrigin,
-           tr("Llevar toda la PCB al origen de máquina (esquina inferior izquierda)."));
+           tr("Mueve toda la PCB para que su centro quede en (0, 0)."));
     addBar("jump_to", tr("Ir a coordenadas"), &MainWindow::jumpToLocation,
            tr("Centrar la vista en una coordenada."));
     addBar("distance", tr("Medir distancia"), &MainWindow::distanceMeasure,
@@ -2132,7 +2294,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.4.0\nBuild: 2026-11-04\n"
+            tr("FlatCAM C++ 0.4.1\nBuild: 2026-11-04\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -2556,6 +2718,20 @@ void MainWindow::refreshProperties() {
 /// @brief Elimina los objetos seleccionados con undo.
 void MainWindow::deleteSelectedObject() {
     const auto selected = objects_->selectedItems();
+    if (selected.isEmpty()) return;
+    QStringList names;
+    for (QTreeWidgetItem* row : selected) {
+        const int id = row->data(0, Qt::UserRole).toInt();
+        if (id > 0) names << row->text(1);
+    }
+    if (names.isEmpty()) return;
+    const QString detail = names.size() == 1
+                               ? tr("¿Eliminar «%1» del proyecto?").arg(names.first())
+                               : tr("¿Eliminar %1 objetos del proyecto?").arg(names.size());
+    if (QMessageBox::question(this, tr("Eliminar del proyecto"), detail,
+                              QMessageBox::Yes | QMessageBox::No, QMessageBox::No) !=
+        QMessageBox::Yes)
+        return;
     if (selected.size() > 1) {
         struct Entry {
             int id = 0;
@@ -3691,7 +3867,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.4.0");
+    return QStringLiteral("FlatCAM C++ 0.4.1");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
@@ -4363,6 +4539,266 @@ QString MainWindow::tclInfo() const {
 // Preferencias, tema y nivel de interfaz
 // ============================================================================
 
+/// @brief Carga los temas de colores del visor desde QSettings.
+void MainWindow::loadViewThemes() {
+    QSettings settings;
+    viewThemes_.clear();
+    const QJsonDocument doc = QJsonDocument::fromJson(
+        settings.value("preferences/viewThemes").toByteArray());
+    if (doc.isArray()) {
+        for (const QJsonValue& value : doc.array()) {
+            const QJsonObject obj = value.toObject();
+            ViewTheme theme;
+            theme.name = obj.value("name").toString();
+            theme.background = QColor(obj.value("background").toString());
+            theme.copper = QColor(obj.value("copper").toString());
+            theme.follow = QColor(obj.value("follow").toString());
+            theme.toolpath = QColor(obj.value("toolpath").toString());
+            theme.grid = QColor(obj.value("grid").toString());
+            if (theme.name.isEmpty() || !theme.background.isValid()) continue;
+            if (!theme.grid.isValid()) theme.grid = theme.background.lighter(130);
+            viewThemes_.push_back(theme);
+        }
+    }
+    if (viewThemes_.empty()) {
+        viewThemes_ = defaultViewThemes();
+        // Migración de los colores sueltos de versiones anteriores.
+        if (settings.contains("preferences/bg") || settings.contains("preferences/copper")) {
+            ViewTheme custom;
+            custom.name = tr("Personalizado");
+            custom.background = settings.value("preferences/bg", QColor("#101418")).value<QColor>();
+            custom.copper = settings.value("preferences/copper", QColor("#d9a441")).value<QColor>();
+            custom.follow = settings.value("preferences/follow", QColor("#6fa8dc")).value<QColor>();
+            custom.toolpath = settings.value("preferences/toolpath", QColor("#66d684")).value<QColor>();
+            custom.grid = custom.background.lighter(135);
+            viewThemes_.push_back(custom);
+            currentViewTheme_ = custom.name;
+        }
+    }
+    QString selected = settings.value("preferences/viewTheme", currentViewTheme_).toString();
+    int index = -1;
+    for (int i = 0; i < static_cast<int>(viewThemes_.size()); ++i) {
+        if (viewThemes_[static_cast<std::size_t>(i)].name == selected) {
+            index = i;
+            break;
+        }
+    }
+    if (index < 0) index = 0;
+    applyViewTheme(viewThemes_[static_cast<std::size_t>(index)]);
+}
+
+/// @brief Sincroniza los colores actuales con el tema seleccionado.
+void MainWindow::syncCurrentViewTheme() {
+    for (ViewTheme& theme : viewThemes_) {
+        if (theme.name != currentViewTheme_) continue;
+        theme.background = background_;
+        theme.copper = copperColor_;
+        theme.follow = followColor_;
+        theme.toolpath = toolpathColor_;
+        return;
+    }
+}
+
+/// @brief Guarda los temas y el seleccionado en QSettings.
+void MainWindow::saveViewThemes() {
+    if (viewThemes_.empty()) return;
+    syncCurrentViewTheme();
+    QJsonArray array;
+    for (const ViewTheme& theme : viewThemes_) {
+        QJsonObject obj;
+        obj["name"] = theme.name;
+        obj["background"] = theme.background.name();
+        obj["copper"] = theme.copper.name();
+        obj["follow"] = theme.follow.name();
+        obj["toolpath"] = theme.toolpath.name();
+        obj["grid"] = theme.grid.name();
+        array.append(obj);
+    }
+    QSettings settings;
+    settings.setValue("preferences/viewThemes",
+                      QJsonDocument(array).toJson(QJsonDocument::Compact));
+    settings.setValue("preferences/viewTheme", currentViewTheme_);
+    settings.setValue("preferences/bg", background_);
+    settings.setValue("preferences/copper", copperColor_);
+    settings.setValue("preferences/follow", followColor_);
+    settings.setValue("preferences/toolpath", toolpathColor_);
+}
+
+/// @brief Aplica un tema de visor al canvas y a los colores activos.
+void MainWindow::applyViewTheme(const ViewTheme& theme) {
+    currentViewTheme_ = theme.name;
+    background_ = theme.background;
+    copperColor_ = theme.copper;
+    followColor_ = theme.follow;
+    toolpathColor_ = theme.toolpath;
+    if (canvas_) {
+        canvas_->setColors(background_, copperColor_, followColor_, toolpathColor_);
+        canvas_->setGridColor(theme.grid);
+        canvas_->update();
+    }
+}
+
+/// @brief Diálogo para crear, editar y borrar temas del visor.
+void MainWindow::showViewThemesDialog() {
+    QDialog dialog(this);
+    dialog.setWindowTitle(tr("Temas del visor"));
+    dialog.resize(560, 430);
+    auto* layout = new QVBoxLayout(&dialog);
+
+    auto* top = new QHBoxLayout();
+    auto* combo = new QComboBox(&dialog);
+    for (const ViewTheme& theme : viewThemes_) combo->addItem(theme.name);
+    top->addWidget(new QLabel(tr("Tema:"), &dialog));
+    top->addWidget(combo, 1);
+    auto* addButton = new QPushButton(tr("Nuevo"), &dialog);
+    auto* copyButton = new QPushButton(tr("Duplicar"), &dialog);
+    auto* renameButton = new QPushButton(tr("Renombrar"), &dialog);
+    auto* removeButton = new QPushButton(tr("Eliminar"), &dialog);
+    top->addWidget(addButton);
+    top->addWidget(copyButton);
+    top->addWidget(renameButton);
+    top->addWidget(removeButton);
+    layout->addLayout(top);
+
+    auto* form = new QFormLayout();
+    auto* colors = new QWidget(&dialog);
+    auto* grid = new QGridLayout(colors);
+    auto makeColor = [&](const QString& label, QPushButton*& button) {
+        button = new QPushButton(&dialog);
+        button->setMinimumSize(110, 26);
+        grid->addWidget(new QLabel(label, &dialog), grid->rowCount(), 0);
+        grid->addWidget(button, grid->rowCount() - 1, 1);
+    };
+    QPushButton* bgButton = nullptr;
+    QPushButton* copperButton = nullptr;
+    QPushButton* followButton = nullptr;
+    QPushButton* toolpathButton = nullptr;
+    QPushButton* gridButton = nullptr;
+    makeColor(tr("Fondo:"), bgButton);
+    makeColor(tr("Cobre:"), copperButton);
+    makeColor(tr("Recorridos:"), followButton);
+    makeColor(tr("Trayectoria:"), toolpathButton);
+    makeColor(tr("Rejilla:"), gridButton);
+    form->addRow(colors);
+    layout->addLayout(form);
+
+    auto* preview = new ViewThemePreview(&dialog);
+    layout->addWidget(preview, 1);
+    auto* box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog);
+    layout->addWidget(box);
+    connect(box, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+    connect(box, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+
+    std::vector<ViewTheme> themes = viewThemes_;
+    int index = combo->currentIndex();
+    if (index < 0) index = 0;
+    QColor bgColor;
+    QColor copperColor;
+    QColor followColor;
+    QColor toolpathColor;
+    QColor gridColor;
+
+    auto paintButton = [](QPushButton* button, const QColor& color) {
+        if (button)
+            button->setStyleSheet(QString("background:%1; border:1px solid #888;")
+                                      .arg(color.name()));
+    };
+    auto load = [&] {
+        if (index < 0 || index >= static_cast<int>(themes.size())) return;
+        const ViewTheme& theme = themes[static_cast<std::size_t>(index)];
+        bgColor = theme.background;
+        copperColor = theme.copper;
+        followColor = theme.follow;
+        toolpathColor = theme.toolpath;
+        gridColor = theme.grid;
+        paintButton(bgButton, bgColor);
+        paintButton(copperButton, copperColor);
+        paintButton(followButton, followColor);
+        paintButton(toolpathButton, toolpathColor);
+        paintButton(gridButton, gridColor);
+        preview->setTheme({theme.name, bgColor, copperColor, followColor, toolpathColor, gridColor});
+    };
+    auto choose = [&](const QString& title, QColor& target) {
+        const QColor color = QColorDialog::getColor(target, &dialog, title);
+        if (!color.isValid()) return;
+        target = color;
+        paintButton(bgButton, bgColor);
+        paintButton(copperButton, copperColor);
+        paintButton(followButton, followColor);
+        paintButton(toolpathButton, toolpathColor);
+        paintButton(gridButton, gridColor);
+        if (index >= 0 && index < static_cast<int>(themes.size())) {
+            ViewTheme& theme = themes[static_cast<std::size_t>(index)];
+            theme.background = bgColor;
+            theme.copper = copperColor;
+            theme.follow = followColor;
+            theme.toolpath = toolpathColor;
+            theme.grid = gridColor;
+            preview->setTheme(theme);
+        }
+    };
+    connect(bgButton, &QPushButton::clicked, this, [&] { choose(tr("Color de fondo"), bgColor); });
+    connect(copperButton, &QPushButton::clicked, this,
+            [&] { choose(tr("Color del cobre"), copperColor); });
+    connect(followButton, &QPushButton::clicked, this,
+            [&] { choose(tr("Color de recorridos"), followColor); });
+    connect(toolpathButton, &QPushButton::clicked, this,
+            [&] { choose(tr("Color de trayectoria"), toolpathColor); });
+    connect(gridButton, &QPushButton::clicked, this,
+            [&] { choose(tr("Color de rejilla"), gridColor); });
+    connect(combo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [&](int value) {
+        index = value;
+        load();
+    });
+    connect(addButton, &QPushButton::clicked, this, [&] {
+        ViewTheme theme{tr("Tema %1").arg(themes.size() + 1), bgColor, copperColor,
+                        followColor, toolpathColor, gridColor};
+        themes.push_back(theme);
+        combo->addItem(theme.name);
+        combo->setCurrentIndex(combo->count() - 1);
+    });
+    connect(copyButton, &QPushButton::clicked, this, [&] {
+        if (index < 0 || index >= static_cast<int>(themes.size())) return;
+        ViewTheme theme = themes[static_cast<std::size_t>(index)];
+        theme.name = tr("%1 copia").arg(theme.name);
+        themes.push_back(theme);
+        combo->addItem(theme.name);
+        combo->setCurrentIndex(combo->count() - 1);
+    });
+    connect(renameButton, &QPushButton::clicked, this, [&] {
+        if (index < 0 || index >= static_cast<int>(themes.size())) return;
+        bool ok = false;
+        const QString name = QInputDialog::getText(&dialog, tr("Renombrar tema"),
+                                                   tr("Nombre:"), QLineEdit::Normal,
+                                                   combo->currentText(), &ok);
+        if (!ok || name.trimmed().isEmpty()) return;
+        themes[static_cast<std::size_t>(index)].name = name.trimmed();
+        combo->setItemText(index, name.trimmed());
+    });
+    connect(removeButton, &QPushButton::clicked, this, [&] {
+        if (themes.size() <= 1 || index < 0) return;
+        themes.erase(themes.begin() + index);
+        combo->removeItem(index);
+        index = std::min(index, combo->count() - 1);
+        combo->setCurrentIndex(index);
+        load();
+    });
+    load();
+
+    if (dialog.exec() != QDialog::Accepted) return;
+    if (index < 0 || index >= static_cast<int>(themes.size())) return;
+    themes[static_cast<std::size_t>(index)].background = bgColor;
+    themes[static_cast<std::size_t>(index)].copper = copperColor;
+    themes[static_cast<std::size_t>(index)].follow = followColor;
+    themes[static_cast<std::size_t>(index)].toolpath = toolpathColor;
+    themes[static_cast<std::size_t>(index)].grid = gridColor;
+    themes[static_cast<std::size_t>(index)].name = combo->currentText();
+    viewThemes_ = themes;
+    applyViewTheme(themes[static_cast<std::size_t>(index)]);
+    saveViewThemes();
+    statusBar()->showMessage(tr("Tema del visor aplicado: %1").arg(currentViewTheme_), 4000);
+}
+
 /// @brief Carga preferencias y aplica unidad, tema y nivel.
 void MainWindow::loadPreferences() {
     QSettings settings;
@@ -4371,10 +4807,7 @@ void MainWindow::loadPreferences() {
     defaultUnits_ = settings.value("preferences/units", "mm").toString() == "in"
                         ? fc::Units::Inch
                         : fc::Units::Mm;
-    background_ = settings.value("preferences/bg", background_).value<QColor>();
-    copperColor_ = settings.value("preferences/copper", copperColor_).value<QColor>();
-    followColor_ = settings.value("preferences/follow", followColor_).value<QColor>();
-    toolpathColor_ = settings.value("preferences/toolpath", toolpathColor_).value<QColor>();
+    loadViewThemes();
     theme_ = fc::theme::themeFromSettings();
     customToolchange_ = settings.value("preferences/customToolchange").toString();
     {
@@ -4441,6 +4874,7 @@ void MainWindow::savePreferences() {
     settings.setValue("preferences/cncFeedZ", cncDefaultFeedZ_);
     settings.setValue("preferences/cncRPM", cncDefaultRPM_);
     settings.setValue("preferences/cncZCut", cncDefaultZCut_);
+    saveViewThemes();
     if (shellDock_ && shellDock_->isVisible()) {
         settings.setValue("preferences/consoleVisible", true);
         if (shellDock_->height() > 80)
@@ -4819,15 +5253,20 @@ QTreeWidgetItem* MainWindow::findObjectByName(const QString& name) const {
 /// @brief Reinicia los grupos Archivos/Herramientas/G-code.
 void MainWindow::resetObjectGroups() {
     objects_->clear();
-    filesGroup_ = new QTreeWidgetItem(objects_);
-    filesGroup_->setText(1, tr("Archivos"));
-    filesGroup_->setFlags(Qt::ItemIsEnabled);
-    toolsGroup_ = new QTreeWidgetItem(objects_);
-    toolsGroup_->setText(1, tr("Herramientas"));
-    toolsGroup_->setFlags(Qt::ItemIsEnabled);
-    gcodeGroup_ = new QTreeWidgetItem(objects_);
-    gcodeGroup_->setText(1, tr("G-code"));
-    gcodeGroup_->setFlags(Qt::ItemIsEnabled);
+    auto makeGroup = [this](const QString& title) {
+        auto* group = new QTreeWidgetItem(objects_);
+        group->setText(1, title);
+        group->setFlags(Qt::ItemIsEnabled);
+        QFont font = group->font(1);
+        font.setBold(true);
+        font.setPointSize(13);
+        group->setFont(1, font);
+        group->setForeground(1, QColor(180, 119, 27));
+        return group;
+    };
+    filesGroup_ = makeGroup(tr("Archivos"));
+    toolsGroup_ = makeGroup(tr("Herramientas"));
+    gcodeGroup_ = makeGroup(tr("G-code"));
     objects_->expandAll();
     generatedFrom_.clear();
     refreshSourceCombos();
@@ -5442,10 +5881,7 @@ void MainWindow::openToolTab(const QString& title) {
         }
         if (title.contains("2 lados") || title.contains("Doble")) {
             pick(dblSource_);
-            if (dblOffsetX_ && dblSource_) {
-                const BBox b = canvas_->layerBounds(dblSource_->currentData().toInt());
-                if (b.valid) dblOffsetX_->setValue(b.width());
-            }
+            if (dblCalc_) dblCalc_->click();
         }
     }
     showToolTab(title);
@@ -5654,6 +6090,11 @@ void MainWindow::refreshObjectToolPage() {
     toolsFont.setBold(true);
     toolsLabel->setFont(toolsFont);
     objectToolLayout_->addWidget(toolsLabel);
+
+    if (kind == "herramienta" || kind == "geometry") {
+        auto* gcode = makeButton("cnc", tr("Generar G-code"), objectToolPage_);
+        connect(gcode, &QPushButton::clicked, this, [this, id] { generateGCodeFromObject(id); });
+    }
 
     if (isGerber) {
         auto* iso = makeButton("isolate", tr("Enrutamiento de aislamiento"), objectToolPage_);
@@ -8382,20 +8823,114 @@ void MainWindow::distanceMeasure() {
 void MainWindow::closeToolTab() {
     if (!leftTabs_) return;
     const int index = leftTabs_->currentIndex();
-    if (index >= 3) leftTabs_->removeTab(index);
+    if (index < 3) return;
+    leftTabs_->removeTab(index);
+    leftTabs_->setCurrentIndex(0);
 }
 
-/// @brief Mueve el objeto al origen.
+/// @brief Genera un CNCJob a partir de una capa de herramienta ya creada.
+void MainWindow::generateGCodeFromObject(int layerId) {
+    QTreeWidgetItem* item = findObjectItem(layerId);
+    if (!item) return;
+    const QString name = item->text(1);
+    std::string code;
+    GCodeOptions props;
+    props.units = defaultUnits_;
+    if (name.startsWith(tr("Taladrado")) && lastDrillJob_ && !lastDrillJob_->tools.empty()) {
+        code = drillingGCode(*lastDrillJob_, lastDrillHeader_);
+        props = lastDrillHeader_;
+    } else if (name.startsWith(tr("Aislamiento")) && !lastIsoMulti_.empty()) {
+        code = pathsGCodeMulti(lastIsoMulti_, lastIsoHeader_);
+        props = lastIsoHeader_;
+    } else if (name.startsWith(tr("NCC")) && !lastNccMulti_.empty()) {
+        code = pathsGCodeMulti(lastNccMulti_, lastNccHeader_);
+        props = lastNccHeader_;
+    } else if (name.startsWith(tr("Corte")) && !lastCutMulti_.empty()) {
+        code = pathsGCodeMulti(lastCutMulti_, lastCutHeader_);
+        props = lastCutHeader_;
+    } else if (name.startsWith(tr("Pintura")) && !lastPaintMulti_.empty()) {
+        code = pathsGCodeMulti(lastPaintMulti_, lastPaintHeader_);
+        props = lastPaintHeader_;
+    } else if (lastMillJob_ && name.startsWith(tr("Fresado"))) {
+        code = pathsGCode(*lastMillJob_, lastMillOptions_);
+        props = lastMillOptions_;
+    } else {
+        std::vector<std::vector<Pt>> paths;
+        auto append = [&paths](const std::vector<Geom>& geoms) {
+            for (const Geom& g : geoms) {
+                if (!g.valid() || g.empty()) continue;
+                if (g.typeId() == GEOS_LINESTRING || g.typeId() == GEOS_LINEARRING) {
+                    Ring ring = g.coords();
+                    if (ring.size() >= 2) paths.emplace_back(ring.begin(), ring.end());
+                } else {
+                    for (const PolygonContours& pc : g.polygons()) {
+                        if (pc.outer.size() >= 2)
+                            paths.emplace_back(pc.outer.begin(), pc.outer.end());
+                    }
+                }
+            }
+        };
+        append(canvas_->layerFollows(layerId));
+        append(canvas_->layerSolids(layerId));
+        if (paths.empty()) {
+            QMessageBox::information(this, tr("G-code"),
+                                     tr("La capa no tiene recorridos para generar G-code."));
+            return;
+        }
+        GCodeOptions opt;
+        opt.units = defaultUnits_;
+        opt.feedXY = cncDefaultFeedXY_;
+        opt.feedZ = cncDefaultFeedZ_;
+        opt.spindleSpeed = cncDefaultRPM_;
+        opt.zCut = cncDefaultZCut_;
+        fc::PathToolJob job;
+        job.number = 1;
+        job.diameter = 0.2;
+        job.options = opt;
+        job.paths = paths;
+        code = pathsGCodeMulti({job}, opt);
+        props = opt;
+    }
+    if (code.empty()) {
+        QMessageBox::information(this, tr("G-code"),
+                                 tr("No se pudo generar G-code para este objeto."));
+        return;
+    }
+    addCncJobObject(name, QString::fromStdString(code), cncProps(props, tr("Herramienta")));
+    statusBar()->showMessage(tr("CNCJob generado para %1").arg(name), 4000);
+}
+
+/// @return Caja envolvente de todos los objetos con geometría.
+fc::BBox MainWindow::pcbBounds() const {
+    BBox all;
+    for (QTreeWidgetItem* item : objectItems()) {
+        const int id = item->data(0, Qt::UserRole).toInt();
+        if (id <= 0) continue;
+        const BBox b = canvas_->layerBounds(id);
+        if (!b.valid) continue;
+        if (!all.valid) {
+            all = b;
+        } else {
+            all.xmin = std::min(all.xmin, b.xmin);
+            all.ymin = std::min(all.ymin, b.ymin);
+            all.xmax = std::max(all.xmax, b.xmax);
+            all.ymax = std::max(all.ymax, b.ymax);
+        }
+    }
+    return all;
+}
+
+/// @brief Mueve el objeto conservando su posición relativa al centro de la PCB.
 void MainWindow::moveToOrigin() {
     auto* item = objects_->currentItem();
     if (!item) return;
     const int id = item->data(0, Qt::UserRole).toInt();
-    const BBox b = canvas_->layerBounds(id);
-    if (!b.valid) return;
+    const BBox pcb = pcbBounds();
+    if (!pcb.valid || id <= 0) return;
     const std::vector<Geom> solids = canvas_->layerSolids(id);
     const std::vector<Geom> follows = canvas_->layerFollows(id);
-    const double dx = -(b.xmin + b.xmax) / 2.0;
-    const double dy = -(b.ymin + b.ymax) / 2.0;
+    const double dx = -(pcb.xmin + pcb.xmax) / 2.0;
+    const double dy = -(pcb.ymin + pcb.ymax) / 2.0;
     std::vector<Geom> afterSolids;
     std::vector<Geom> afterFollows;
     for (const Geom& g : solids) afterSolids.push_back(g.translate(dx, dy));
@@ -8410,7 +8945,7 @@ void MainWindow::moveToOrigin() {
                                            apply(afterSolids, afterFollows);
                                        },
                                        tr("Mover a origen")));
-    statusBar()->showMessage(tr("Objeto centrado en (0, 0)"), 4000);
+    statusBar()->showMessage(tr("Objeto llevado a su posición relativa al centro de la PCB"), 4000);
 }
 
 /// @brief Lleva toda la PCB a (0,0) usando la esquina inferior izquierda.
@@ -8439,8 +8974,8 @@ void MainWindow::movePcbToOrigin() {
     }
     if (!all.valid || before.empty()) return;
 
-    const double dx = -all.xmin;
-    const double dy = -all.ymin;
+    const double dx = -(all.xmin + all.xmax) / 2.0;
+    const double dy = -(all.ymin + all.ymax) / 2.0;
     std::vector<Entry> after;
     after.reserve(before.size());
     for (const Entry& entry : before) {
@@ -8457,7 +8992,7 @@ void MainWindow::movePcbToOrigin() {
     undoStack_->push(new LambdaCommand([apply, before] { apply(before); },
                                        [apply, after] { apply(after); },
                                        tr("Llevar PCB a (0, 0)")));
-    statusBar()->showMessage(tr("PCB llevada a (0, 0)"), 4000);
+    statusBar()->showMessage(tr("Centro de la PCB llevado a (0, 0)"), 4000);
 }
 
 /// @brief Une varios objetos en una capa.
@@ -8656,15 +9191,24 @@ void MainWindow::doubleSided() {
         statusBar()->showMessage(tr("Copia espejada creada"), 4000);
 }
 
-/// @brief Crea una copia espejada de una capa en el grupo Herramientas.
+/// @brief Crea una copia espejada alrededor del centro de una capa.
 int MainWindow::mirrorLayerToNew(int sourceId, bool mirrorX, double offsetX, double offsetY) {
+    const BBox b = canvas_->layerBounds(sourceId);
+    if (!b.valid) return -1;
+    return mirrorLayerAround(sourceId, mirrorX, (b.xmin + b.xmax) / 2.0,
+                             (b.ymin + b.ymax) / 2.0, offsetX, offsetY);
+}
+
+/// @brief Crea una copia espejada alrededor de un punto de referencia.
+int MainWindow::mirrorLayerAround(int sourceId, bool mirrorX, double refX, double refY,
+                                  double offsetX, double offsetY) {
     QTreeWidgetItem* item = findObjectItem(sourceId);
     const BBox b = canvas_->layerBounds(sourceId);
     if (!item || !b.valid) return -1;
     const std::vector<Geom> solids = canvas_->layerSolids(sourceId);
     const std::vector<Geom> follows = canvas_->layerFollows(sourceId);
-    const double cx = (b.xmin + b.xmax) / 2.0;
-    const double cy = (b.ymin + b.ymax) / 2.0;
+    const double cx = refX;
+    const double cy = refY;
     auto transform = [&](const std::vector<Geom>& source) {
         std::vector<Geom> out;
         out.reserve(source.size());
@@ -9912,6 +10456,12 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastIsoHeader_.headerComments = lastIsoMulti_.front().options.headerComments;
                 const int sourceId = isoSource_ ? isoSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("Aislamiento"), isoSource_), preview, sourceId);
+                {
+                    std::vector<std::vector<Pt>> moves;
+                    for (const auto& job : lastIsoMulti_)
+                        for (const auto& path : job.paths) moves.push_back(path);
+                    setPathToolpaths(canvas_, moves);
+                }
                 statusBar()->showMessage(tr("Aislamiento: %1 herramientas").arg(lastIsoMulti_.size()), 4000);
             });
     connect(isoCnc, &QPushButton::clicked, this, [this, camName] {
@@ -9948,19 +10498,32 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
         tr("<b>Borde sin procesar</b><br>Banda exterior que se deja intacta, "
            "entre el borde de la placa y el despeje."));
     auto* nccStrategy = new QComboBox(this);
-    nccStrategy->addItems({tr("Hatch (líneas)"), tr("Paint (contornos)")});
+    nccStrategy->addItems({tr("Estándar"), tr("Semilla"), tr("Líneas"), tr("Combo")});
     nccStrategy->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-    nccStrategy->setToolTip(tr("Hatch: líneas paralelas. Paint: contornos concéntricos."));
+    nccStrategy->setToolTip(tr("Método de despeje: estándar, semilla, líneas o combinado."));
     nccStrategy->setItemData(0, tr("Líneas paralelas para despejar áreas grandes."),
                              Qt::ToolTipRole);
-    nccStrategy->setItemData(1, tr("Contornos paralelos para un acabado más uniforme."),
+    nccStrategy->setItemData(1, tr("Contornos concéntricos desde semillas."),
                              Qt::ToolTipRole);
+    nccStrategy->setItemData(2, tr("Sólo líneas paralelas."), Qt::ToolTipRole);
+    nccStrategy->setItemData(3, tr("Combina líneas y contornos."), Qt::ToolTipRole);
+    auto* nccClimb = new QComboBox(this);
+    nccClimb->addItems({tr("Subida"), tr("Convencional")});
+    nccClimb->setToolTip(tr("Tipo de fresado: subida (climb) o convencional."));
+    auto* nccCompensate = new QCheckBox(tr("Compensar"), this);
+    auto* nccComp = makeSpin(0.0, 5.0, 0.0, 4, " mm",
+        tr("<b>Compensación</b><br>Margen extra alrededor del cobre."));
+    nccComp->setEnabled(false);
+    connect(nccCompensate, &QCheckBox::toggled, nccComp, &QWidget::setEnabled);
     addRow(nccForm, tr("Superposición:"), nccStep);
     addRow(nccForm, tr("Distancia al cobre:"), nccClear);
     addRow(nccForm, tr("Ángulo:"), nccAngle);
     addRow(nccForm, tr("Margen del área:"), nccMargin);
     addRow(nccForm, tr("Borde sin procesar:"), nccBorder);
-    addRow(nccForm, tr("Estrategia:"), nccStrategy);
+    addRow(nccForm, tr("Método:"), nccStrategy);
+    addRow(nccForm, tr("Tipo de fresado:"), nccClimb);
+    nccForm->addRow(nccCompensate);
+    addRow(nccForm, tr("Compensación:"), nccComp);
     auto* nccConnect = new QCheckBox(tr("Conectar recorridos cercanos"), this);
     nccConnect->setToolTip(tr("Une recorridos cuyos extremos estén a menos de 0,5 mm."));
     nccForm->addRow(QString(), nccConnect);
@@ -9974,6 +10537,17 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     section(nccForm, tr("Tabla de herramientas"));
     nccForm->addRow(nccTable);
     addTableButtons(nccForm, nccTable, true);
+    auto* nccApplyAll = new QPushButton(tr("Aplicar parám. a todas las herramientas"), this);
+    nccForm->addRow(nccApplyAll);
+    connect(nccApplyAll, &QPushButton::clicked, this, [nccTable] {
+        if (nccTable->rowCount() < 1) return;
+        for (int col = 2; col <= 7; ++col) {
+            auto* first = nccTable->item(0, col);
+            if (!first) continue;
+            for (int row = 1; row < nccTable->rowCount(); ++row)
+                nccTable->setItem(row, col, first->clone());
+        }
+    });
     section(nccForm, tr("Parámetros comunes"));
     Common nccCommon = addCommon(nccForm, nccTable);
     auto* nccPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
@@ -9985,7 +10559,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     nccForm->addRow(nccExport);
     connect(nccPreview, &QPushButton::clicked, this,
             [this, camName, nccTable, nccStep, nccClear, nccAngle, nccMargin, nccBorder,
-             nccStrategy, nccConnect, nccRest, nccCommon, optionsFor, readTable] {
+             nccStrategy, nccClimb, nccCompensate, nccComp, nccConnect, nccRest, nccCommon,
+             optionsFor, readTable] {
                 fc::GerberResult* src = sourceGerber(nccSource_);
                 if (!src) return;
                 auto rows = readTable(nccTable);
@@ -10004,7 +10579,14 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     o.angleDeg = nccAngle->value();
                     o.margin = nccMargin->value();
                     o.border = nccBorder->value();
-                    o.strategy = nccStrategy->currentIndex() == 1 ? NccStrategy::Paint : NccStrategy::Hatch;
+                    switch (nccStrategy->currentIndex()) {
+                        case 1: o.strategy = NccStrategy::Seed; break;
+                        case 2: o.strategy = NccStrategy::Lines; break;
+                        case 3: o.strategy = NccStrategy::Combo; break;
+                        default: o.strategy = NccStrategy::Hatch; break;
+                    }
+                    o.climb = nccClimb->currentIndex() == 0;
+                    o.compensation = nccCompensate->isChecked() ? nccComp->value() : 0.0;
                     const BBox b = src->bounds.expanded(nccMargin->value());
                     const Geom area = b.valid ? Geom::box(b.xmin, b.ymin, b.xmax, b.ymax) : Geom();
                     const NccResult res = clearCopper(src->solid, area, o);
@@ -10021,6 +10603,10 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                         tr("Area margin: %1 mm").arg(nccMargin->value()),
                         tr("Unprocessed border: %1 mm").arg(nccBorder->value()),
                         tr("Hatch angle: %1 deg").arg(nccAngle->value()),
+                        tr("Milling type: %1").arg(nccClimb->currentText()),
+                        tr("Compensation: %1 mm").arg(nccCompensate->isChecked()
+                                                          ? nccComp->value()
+                                                          : 0.0),
                         tr("Connect paths: %1").arg(nccConnect->isChecked() ? tr("yes") : tr("no")),
                         tr("Rest machining: %1").arg(nccRest->isChecked() ? tr("yes") : tr("no")),
                     });
@@ -10045,6 +10631,12 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastNccHeader_.headerComments = lastNccMulti_.front().options.headerComments;
                 const int sourceId = nccSource_ ? nccSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("NCC"), nccSource_), preview, sourceId);
+                {
+                    std::vector<std::vector<Pt>> moves;
+                    for (const auto& job : lastNccMulti_)
+                        for (const auto& path : job.paths) moves.push_back(path);
+                    setPathToolpaths(canvas_, moves);
+                }
                 statusBar()->showMessage(tr("NCC: %1 herramientas").arg(lastNccMulti_.size()), 4000);
             });
     connect(nccCnc, &QPushButton::clicked, this, [this, camName] {
@@ -10071,35 +10663,43 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     section(cutForm, tr("Parámetros para: Herramienta"));
     auto* cutMargin = makeSpin(-50.0, 50.0, 0.0, 3, " mm",
         tr("<b>Margen</b><br>Separación extra del contorno."));
-    auto* cutTabs = new QSpinBox(this);
-    cutTabs->setRange(0, 12);
-    cutTabs->setValue(4);
     auto* cutTabW = makeSpin(0.0, 50.0, 1.8, 3, " mm",
-        tr("<b>Ancho de puente</b><br>Debe superar el diámetro de la fresa."));
+        tr("<b>Tamaño de la brecha</b><br>Debe superar el diámetro de la fresa."));
     auto* cutInternal = new QCheckBox(tr("Corte interno"), this);
     auto* cutGapType = new QComboBox(this);
     cutGapType->addItems({tr("Con puentes"), tr("Corte completo")});
-    auto* cutSides = new QComboBox(this);
-    cutSides->addItems({tr("Todos los lados"), tr("Arriba y abajo"),
-                        tr("Izquierda y derecha")});
-    cutSides->setToolTip(tr("Zona del contorno donde se permiten puentes."));
+    auto* cutGapKind = new QComboBox(this);
+    cutGapKind->addItems({tr("Ninguno"), tr("LR"), tr("TB"), tr("4"),
+                          tr("2LR"), tr("2TB"), tr("8")});
+    cutGapKind->setCurrentIndex(3);
+    cutGapKind->setToolTip(tr("Cantidad y ubicación de las brechas: LR izquierda/derecha, "
+                              "TB arriba/abajo."));
+    auto* cutBridgeType = new QComboBox(this);
+    cutBridgeType->addItems({tr("Puente"), tr("Delgado"), tr("M-Bites")});
+    cutBridgeType->setToolTip(tr("Puente: corte interrumpido. Delgado: puente más fino. "
+                                 "M-Bites: puente tipo mouse bites."));
     auto* cutManual = new QLineEdit(this);
-    cutManual->setPlaceholderText(tr("ej. 10, 30, 70 % (vacío = automático)"));
+    cutManual->setPlaceholderText(tr("porcentajes: ej. 10, 30, 70"));
     cutManual->setToolTip(tr("Posiciones manuales de los puentes como porcentaje del "
-                             "perímetro. Si se completa, reemplaza la cantidad y los lados."));
+                             "perímetro. También podés agregarlos con clics."));
     auto* cutHoles = new QCheckBox(tr("Incluir agujeros internos"), this);
+    auto* cutManualButton = new QPushButton(tr("Agregar puentes manuales"), this);
+    cutManualButton->setCheckable(true);
+    cutManualButton->setToolTip(tr("Activá, hacé clic sobre el contorno para marcar cada puente "
+                                   "y volvé a presionar para procesarlos."));
     addRow(cutForm, tr("Margen:"), cutMargin);
-    cutForm->addRow(tr("Puentes:"), cutTabs);
-    addRow(cutForm, tr("Ancho de puente:"), cutTabW);
-    addRow(cutForm, tr("Lados de puente:"), cutSides);
+    addRow(cutForm, tr("Tamaño de la brecha:"), cutTabW);
+    addRow(cutForm, tr("Auto huecos de puentes:"), cutGapKind);
+    addRow(cutForm, tr("Tipo de brecha:"), cutBridgeType);
     addRow(cutForm, tr("Puentes manuales:"), cutManual);
+    cutForm->addRow(cutManualButton);
     addRow(cutForm, tr("Separación:"), cutGapType);
     markAdvanced(cutForm, cutGapType);
-    auto updateCutTabs = [cutGapType, cutTabs, cutTabW, cutSides, cutManual] {
+    auto updateCutTabs = [cutGapType, cutTabW, cutGapKind, cutBridgeType, cutManual] {
         const bool enabled = cutGapType->currentIndex() == 0;
-        cutTabs->setEnabled(enabled);
         cutTabW->setEnabled(enabled);
-        cutSides->setEnabled(enabled);
+        cutGapKind->setEnabled(enabled);
+        cutBridgeType->setEnabled(enabled);
         cutManual->setEnabled(enabled);
     };
     connect(cutGapType, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
@@ -10123,8 +10723,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     cutForm->addRow(cutCnc);
     cutForm->addRow(cutExport);
     connect(cutPreview, &QPushButton::clicked, this,
-            [this, camName, cutTable, cutMargin, cutTabs, cutTabW, cutInternal, cutGapType,
-             cutSides, cutManual, cutHoles, cutCommon, optionsFor, readTable] {
+            [this, camName, cutTable, cutMargin, cutTabW, cutInternal, cutGapType,
+             cutGapKind, cutBridgeType, cutManual, cutHoles, cutCommon, optionsFor, readTable] {
                 fc::GerberResult* src = sourceGerber(cutSource_);
                 if (!src) return;
                 const auto rows = readTable(cutTable);
@@ -10135,13 +10735,28 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     CutoutOptions o;
                     o.toolDiameter = rows[i].dia;
                     o.margin = cutMargin->value();
-                    o.tabCount = cutGapType->currentIndex() == 1 ? 0 : cutTabs->value();
                     o.tabWidth = cutTabW->value();
-                    o.tabSides = cutSides->currentIndex() == 1
-                                     ? fc::TabSides::TopBottom
-                                     : (cutSides->currentIndex() == 2
-                                            ? fc::TabSides::LeftRight
-                                            : fc::TabSides::All);
+                    o.gapType = cutBridgeType->currentIndex() == 1
+                                    ? fc::GapType::Thin
+                                    : (cutBridgeType->currentIndex() == 2
+                                           ? fc::GapType::MouseBites
+                                           : fc::GapType::Bridge);
+                    o.tabCount = 0;
+                    o.tabSides = fc::TabSides::All;
+                    if (cutGapType->currentIndex() == 0) {
+                        const int gap = cutGapKind->currentIndex();
+                        if (gap == 1 || gap == 4) {
+                            o.tabCount = 2;
+                            o.tabSides = fc::TabSides::LeftRight;
+                        } else if (gap == 2 || gap == 5) {
+                            o.tabCount = 2;
+                            o.tabSides = fc::TabSides::TopBottom;
+                        } else if (gap == 3) {
+                            o.tabCount = 4;
+                        } else if (gap == 6) {
+                            o.tabCount = 8;
+                        }
+                    }
                     o.tabPositions.clear();
                     if (cutGapType->currentIndex() == 0) {
                         const QString manual = cutManual->text().trimmed();
@@ -10164,7 +10779,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                         tr("Margin: %1 mm").arg(cutMargin->value()),
                         tr("Bridges: %1").arg(o.tabCount),
                         tr("Bridge width: %1 mm").arg(o.tabWidth),
-                        tr("Bridge sides: %1").arg(cutSides->currentText()),
+                        tr("Bridge type: %1").arg(cutBridgeType->currentText()),
+                        tr("Bridge layout: %1").arg(cutGapKind->currentText()),
                         tr("Manual bridges: %1").arg(cutManual->text()),
                         tr("External cut: %1").arg(o.external ? tr("yes") : tr("no")),
                         tr("Include holes: %1").arg(o.includeHoles ? tr("yes") : tr("no")),
@@ -10182,7 +10798,46 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastCutHeader_.headerComments = lastCutMulti_.front().options.headerComments;
                 const int sourceId = cutSource_ ? cutSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("Corte"), cutSource_), preview, sourceId);
+                {
+                    std::vector<std::vector<Pt>> moves;
+                    for (const auto& job : lastCutMulti_)
+                        for (const auto& path : job.paths) moves.push_back(path);
+                    setPathToolpaths(canvas_, moves);
+                }
                 statusBar()->showMessage(tr("Corte: %1 herramientas").arg(lastCutMulti_.size()), 4000);
+            });
+    auto manualTabPoints = std::make_shared<std::vector<Pt>>();
+    connect(canvas_, &Canvas::worldPicked, this,
+            [this, cutManualButton, manualTabPoints](double x, double y) {
+                if (!cutManualButton->isChecked()) return;
+                manualTabPoints->push_back({x, y});
+                canvas_->setMarkers(*manualTabPoints);
+                cutManualButton->setText(
+                    tr("Finalizar puentes (%1)").arg(manualTabPoints->size()));
+            });
+    connect(cutManualButton, &QPushButton::toggled, this,
+            [this, cutManualButton, manualTabPoints, cutManual, cutGapType, cutPreview](bool on) {
+                if (on) {
+                    manualTabPoints->clear();
+                    canvas_->setMarkers({});
+                    canvas_->setPointPickMode(true);
+                    cutManualButton->setText(tr("Finalizar puentes (0)"));
+                    return;
+                }
+                canvas_->setPointPickMode(false);
+                canvas_->setMarkers({});
+                cutManualButton->setText(tr("Agregar puentes manuales"));
+                if (manualTabPoints->empty()) return;
+                fc::GerberResult* src = sourceGerber(cutSource_);
+                if (!src) return;
+                QStringList positions;
+                for (const Pt& point : *manualTabPoints) {
+                    const double fraction = nearestFractionOnOutline(src->solid, point);
+                    positions << QString::number(fraction * 100.0, 'f', 3);
+                }
+                cutManual->setText(positions.join(", "));
+                cutGapType->setCurrentIndex(0);
+                cutPreview->click();
             });
     connect(cutCnc, &QPushButton::clicked, this, [this, camName] {
         if (lastCutMulti_.empty()) {
@@ -10262,6 +10917,12 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastPaintHeader_.headerComments = lastPaintMulti_.front().options.headerComments;
                 const int sourceId = paintSource_ ? paintSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("Pintura"), paintSource_), preview, sourceId);
+                {
+                    std::vector<std::vector<Pt>> moves;
+                    for (const auto& job : lastPaintMulti_)
+                        for (const auto& path : job.paths) moves.push_back(path);
+                    setPathToolpaths(canvas_, moves);
+                }
                 statusBar()->showMessage(tr("Pintura: %1 herramientas").arg(lastPaintMulti_.size()), 4000);
             });
     connect(paintCnc, &QPushButton::clicked, this, [this, camName] {
@@ -10377,6 +11038,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
         }
         const int sourceId = drillSource_ ? drillSource_->currentData().toInt() : 0;
         addGeneratedLayer(camName(tr("Taladrado"), drillSource_), preview, sourceId);
+        setDrillToolpaths(canvas_, *lastDrillJob_);
         statusBar()->showMessage(
             tr("Taladrado: %1 herramientas · trazado generado").arg(lastDrillJob_->tools.size()),
             4000);
@@ -10396,47 +11058,176 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     // --- Double-sided
     auto* dblPage = new QWidget(this);
     auto* dblForm = new QFormLayout(dblPage);
+    dblKind_ = new QComboBox(this);
+    dblKind_->addItems({tr("Gerber"), tr("Geometría"), tr("Excellon")});
     dblSource_ = new QComboBox(this);
     dblSource_->setToolTip(tr("Objeto de la cara superior que se refleja para la cara inferior."));
     pageTitle(dblForm, tr("Herramienta de 2 lados"),
-              tr("Crea la cara inferior espejada de una placa de doble faz."));
-    dblForm->addRow(tr("OBJETO:"), dblSource_);
-    section(dblForm, tr("Espejo de la cara inferior"));
+              tr("Crea la cara inferior espejada y los taladros de alineación."));
+    dblForm->addRow(tr("Tipo:"), dblKind_);
+    dblForm->addRow(tr("Objeto:"), dblSource_);
+
+    section(dblForm, tr("Valores de límites"));
+    auto* dblXmin = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm", tr("Límite X mínimo."));
+    auto* dblYmin = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm", tr("Límite Y mínimo."));
+    auto* dblXmax = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm", tr("Límite X máximo."));
+    auto* dblYmax = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm", tr("Límite Y máximo."));
+    auto* dblCenter = new QLineEdit(this);
+    dblCenter->setReadOnly(true);
+    addRow(dblForm, tr("X min:"), dblXmin);
+    addRow(dblForm, tr("Y min:"), dblYmin);
+    addRow(dblForm, tr("X max:"), dblXmax);
+    addRow(dblForm, tr("Y max:"), dblYmax);
+    dblForm->addRow(tr("Centroide:"), dblCenter);
+    auto* dblCalc = new QPushButton(tr("Calcular valores de límites"), this);
+    dblCalc_ = dblCalc;
+    dblForm->addRow(dblCalc);
+
+    section(dblForm, tr("Operación Espejo"));
     auto* dblAxis = new QComboBox(this);
-    dblAxis->addItems({tr("Espejar horizontal (X)"), tr("Espejar vertical (Y)")});
+    dblAxis->addItems({tr("Eje X"), tr("Eje Y")});
     dblAxis->setToolTip(tr("Eje alrededor del cual se refleja el objeto."));
-    auto* dblOffsetX = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm",
-        tr("<b>Desplazamiento X</b><br>Distancia entre la cara superior y la inferior."));
-    dblOffsetX_ = dblOffsetX;
-    auto* dblOffsetY = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm",
-        tr("<b>Desplazamiento Y</b><br>Ajuste fino de alineación entre caras."));
+    auto* dblRefMode = new QComboBox(this);
+    dblRefMode->addItems({tr("Punto"), tr("Caja"), tr("Enganchar en el agujero")});
+    auto* dblRefX = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm",
+        tr("<b>Referencia X</b><br>Punto usado como eje del espejo."));
+    auto* dblRefY = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm",
+        tr("<b>Referencia Y</b><br>Punto usado como eje del espejo."));
+    auto* dblPoints = new QListWidget(this);
+    dblPoints->setMaximumHeight(80);
+    dblPoints->setToolTip(tr("Puntos de referencia agregados. Clic para usarlos."));
+    auto* dblAddPoint = new QPushButton(tr("Añadir"), this);
+    auto* dblMirror = new QPushButton(originalIcon("doubleside"), tr("Espejo"), this);
+    dblMirror->setProperty("primary", true);
     addRow(dblForm, tr("Eje:"), dblAxis);
-    addRow(dblForm, tr("Desplazamiento X:"), dblOffsetX);
-    addRow(dblForm, tr("Desplazamiento Y:"), dblOffsetY);
-    auto* dblHint = new QLabel(tr("Se crea una copia espejada en el grupo Herramientas. "
-                                  "Usá el desplazamiento X para separar las dos caras."), this);
-    dblHint->setWordWrap(true);
-    dblForm->addRow(dblHint);
-    auto* dblGenerate = new QPushButton(originalIcon("doubleside"),
-                                        tr("Generar cara inferior"), this);
-    dblGenerate->setProperty("primary", true);
-    dblForm->addRow(dblGenerate);
-    connect(dblSource_, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
-            [this, dblOffsetX](int) {
-                const BBox b = canvas_->layerBounds(dblSource_->currentData().toInt());
-                if (b.valid) dblOffsetX->setValue(b.width());
-            });
-    connect(dblGenerate, &QPushButton::clicked, this, [this, dblAxis, dblOffsetX, dblOffsetY] {
+    addRow(dblForm, tr("Referencia:"), dblRefMode);
+    addRow(dblForm, tr("Coordenadas:"), dblRefX);
+    addRow(dblForm, QString(), dblRefY);
+    dblForm->addRow(dblPoints);
+    dblForm->addRow(dblAddPoint);
+    dblForm->addRow(dblMirror);
+
+    section(dblForm, tr("Alineación de PCB"));
+    auto* dblDrillDia = makeSpin(0.1, 10.0, 3.125, 3, " mm",
+        tr("<b>Diámetro del taladro de alineación</b><br>Se usa al crear el Excellon."));
+    auto* dblAlignAxis = new QComboBox(this);
+    dblAlignAxis->addItems({tr("Eje X"), tr("Eje Y")});
+    auto* dblAlignRef = new QLineEdit(this);
+    dblAlignRef->setPlaceholderText(tr("Referencia de alineación"));
+    auto* dblAlignX = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm", tr("Coordenada X del taladro."));
+    auto* dblAlignY = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm", tr("Coordenada Y del taladro."));
+    auto* dblAlignList = new QListWidget(this);
+    dblAlignList->setMaximumHeight(80);
+    auto* dblAddAlign = new QPushButton(tr("Añadir"), this);
+    auto* dblRemoveAlign = new QPushButton(tr("Eliminar último"), this);
+    auto* dblCreateExcellon = new QPushButton(originalIcon("drill"),
+                                               tr("Crear objeto Excellon"), this);
+    addRow(dblForm, tr("Diá. del taladro:"), dblDrillDia);
+    addRow(dblForm, tr("Eje:"), dblAlignAxis);
+    addRow(dblForm, tr("Referencia:"), dblAlignRef);
+    addRow(dblForm, tr("Taladro X:"), dblAlignX);
+    addRow(dblForm, tr("Taladro Y:"), dblAlignY);
+    dblForm->addRow(dblAlignList);
+    dblForm->addRow(dblAddAlign);
+    dblForm->addRow(dblRemoveAlign);
+    dblForm->addRow(dblCreateExcellon);
+    auto* dblReset = new QPushButton(tr("Restablecer la herramienta"), this);
+    dblForm->addRow(dblReset);
+
+    auto updateBounds = [this, dblXmin, dblYmin, dblXmax, dblYmax, dblCenter, dblRefX, dblRefY] {
         const int id = dblSource_ ? dblSource_->currentData().toInt() : 0;
-        if (id <= 0) {
-            QMessageBox::information(this, tr("2 lados"), tr("Seleccioná un objeto primero."));
-            return;
-        }
-        if (mirrorLayerToNew(id, dblAxis->currentIndex() == 0, dblOffsetX->value(),
-                             dblOffsetY->value()) >= 0) {
-            statusBar()->showMessage(tr("Cara inferior espejada creada"), 4000);
-        }
+        const BBox b = canvas_->layerBounds(id);
+        if (!b.valid) return;
+        dblXmin->setValue(b.xmin);
+        dblYmin->setValue(b.ymin);
+        dblXmax->setValue(b.xmax);
+        dblYmax->setValue(b.ymax);
+        const double cx = (b.xmin + b.xmax) / 2.0;
+        const double cy = (b.ymin + b.ymax) / 2.0;
+        dblCenter->setText(QString("%1, %2 mm").arg(cx, 0, 'f', 3).arg(cy, 0, 'f', 3));
+        dblRefX->setValue(cx);
+        dblRefY->setValue(cy);
+    };
+    connect(dblKind_, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            [this](int) { refreshSourceCombos(); });
+    connect(dblSource_, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            [updateBounds](int) { updateBounds(); });
+    connect(dblCalc, &QPushButton::clicked, this, updateBounds);
+    connect(dblAddPoint, &QPushButton::clicked, this, [dblPoints, dblRefX, dblRefY] {
+        auto* item = new QListWidgetItem(
+            QString("%1, %2").arg(dblRefX->value(), 0, 'f', 3).arg(dblRefY->value(), 0, 'f', 3));
+        item->setData(Qt::UserRole, QPointF(dblRefX->value(), dblRefY->value()));
+        dblPoints->addItem(item);
     });
+    connect(dblPoints, &QListWidget::itemClicked, this, [dblRefX, dblRefY](QListWidgetItem* item) {
+        const QPointF p = item->data(Qt::UserRole).toPointF();
+        dblRefX->setValue(p.x());
+        dblRefY->setValue(p.y());
+    });
+    connect(dblMirror, &QPushButton::clicked, this,
+            [this, dblAxis, dblRefMode, dblRefX, dblRefY, dblXmin, dblYmin, dblXmax, dblYmax,
+             dblPoints] {
+                const int id = dblSource_ ? dblSource_->currentData().toInt() : 0;
+                if (id <= 0) {
+                    QMessageBox::information(this, tr("2 lados"),
+                                             tr("Seleccioná un objeto primero."));
+                    return;
+                }
+                double rx = dblRefX->value();
+                double ry = dblRefY->value();
+                if (dblRefMode->currentIndex() == 1) {
+                    rx = (dblXmin->value() + dblXmax->value()) / 2.0;
+                    ry = (dblYmin->value() + dblYmax->value()) / 2.0;
+                } else if (dblPoints->currentItem()) {
+                    const QPointF p = dblPoints->currentItem()->data(Qt::UserRole).toPointF();
+                    rx = p.x();
+                    ry = p.y();
+                }
+                if (mirrorLayerAround(id, dblAxis->currentIndex() == 0, rx, ry, 0.0, 0.0) >= 0)
+                    statusBar()->showMessage(tr("Cara inferior espejada creada"), 4000);
+            });
+    connect(dblAddAlign, &QPushButton::clicked, this, [dblAlignList, dblAlignX, dblAlignY] {
+        auto* item = new QListWidgetItem(
+            QString("%1, %2").arg(dblAlignX->value(), 0, 'f', 3).arg(dblAlignY->value(), 0, 'f', 3));
+        item->setData(Qt::UserRole, QPointF(dblAlignX->value(), dblAlignY->value()));
+        dblAlignList->addItem(item);
+    });
+    connect(dblRemoveAlign, &QPushButton::clicked, this, [dblAlignList] {
+        if (dblAlignList->count() > 0) delete dblAlignList->takeItem(dblAlignList->count() - 1);
+    });
+    connect(dblCreateExcellon, &QPushButton::clicked, this,
+            [this, dblAlignList, dblDrillDia] {
+                if (dblAlignList->count() == 0) {
+                    QMessageBox::information(this, tr("Alineación"),
+                                             tr("Agregá al menos un taladro de alineación."));
+                    return;
+                }
+                fc::ExcellonResult result;
+                result.fileUnits = defaultUnits_;
+                fc::ExcellonTool tool;
+                tool.number = 1;
+                tool.diameter = dblDrillDia->value();
+                tool.diameterKnown = true;
+                for (int i = 0; i < dblAlignList->count(); ++i) {
+                    const QPointF p = dblAlignList->item(i)->data(Qt::UserRole).toPointF();
+                    tool.drills.push_back({p.x(), p.y()});
+                }
+                result.tools[1] = tool;
+                const QString path = QDir::tempPath() + "/flatcam_alignment.drl";
+                try {
+                    writeExcellon(path.toStdString(), result, defaultUnits_);
+                    if (addExcellon(path))
+                        statusBar()->showMessage(tr("Objeto Excellon de alineación creado"), 4000);
+                } catch (const std::exception& e) {
+                    showError(QString::fromUtf8(e.what()));
+                }
+            });
+    connect(dblReset, &QPushButton::clicked, this,
+            [updateBounds, dblPoints, dblAlignList] {
+                dblPoints->clear();
+                dblAlignList->clear();
+                updateBounds();
+            });
     toolTabs_[tr("Herramienta de 2 lados")] = wrapScroll(dblPage);
 
     // --- Milling (follow paths)
@@ -10516,6 +11307,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 for (const auto& l : lines) preview.push_back(Geom::line(l));
                 const int sourceId = millSource_ ? millSource_->currentData().toInt() : 0;
                 addGeneratedLayer(tr("Fresado"), preview, sourceId);
+                setPathToolpaths(canvas_, lines);
                 statusBar()->showMessage(tr("Fresado: %1 recorridos").arg(lines.size()), 4000);
             });
     connect(millCnc, &QPushButton::clicked, this, [this, camName] {
@@ -10837,7 +11629,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
 /// @brief Aplica NCC (hatch o paint) al objeto activo.
 bool MainWindow::applyNcc(double toolDiameter, double stepOverPercent, double clearance,
                           double angle, double margin, bool paintStrategy,
-                          const fc::GCodeOptions& gcode, double border) {
+                          const fc::GCodeOptions& gcode, double border, bool climb,
+                          double compensation) {
     if (!lastGerber_) return false;
     NccOptions opt;
     opt.toolDiameter = toolDiameter;
@@ -10846,6 +11639,8 @@ bool MainWindow::applyNcc(double toolDiameter, double stepOverPercent, double cl
     opt.angleDeg = angle;
     opt.margin = margin;
     opt.border = border;
+    opt.climb = climb;
+    opt.compensation = compensation;
     opt.strategy = paintStrategy ? NccStrategy::Paint : NccStrategy::Hatch;
 
     const BBox b = lastGerber_->bounds.expanded(margin);
@@ -11040,14 +11835,17 @@ void MainWindow::refreshSourceCombos() {
     fill(pasteSource_, "gerber");
     if (dblSource_) {
         const int keep = dblSource_->currentData().toInt();
+        const int filter = dblKind_ ? dblKind_->currentIndex() : 0;
         dblSource_->blockSignals(true);
         dblSource_->clear();
         for (QTreeWidgetItem* item : objectItems()) {
             const int id = item->data(0, Qt::UserRole).toInt();
             if (id <= 0) continue;
             const QString kind = item->text(2).toLower();
-            if (kind != "gerber" && kind != "excellon" && kind != "herramienta") continue;
-            dblSource_->addItem(item->text(1), id);
+            const bool match = filter == 2 ? kind == "excellon"
+                               : filter == 1 ? (kind == "herramienta" || kind == "geometry")
+                                             : kind == "gerber";
+            if (match) dblSource_->addItem(item->text(1), id);
         }
         const int index = dblSource_->findData(keep);
         if (index >= 0) dblSource_->setCurrentIndex(index);

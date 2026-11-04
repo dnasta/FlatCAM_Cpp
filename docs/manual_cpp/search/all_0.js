@@ -34,13 +34,14 @@ var searchData=
   ['applydrill_31',['applyDrill',['../class_main_window.html#a6667af8898772024af2ff640af013e22',1,'MainWindow']]],
   ['applyisolation_32',['applyIsolation',['../class_main_window.html#a817fe48dca96058a2ceab058831feb09',1,'MainWindow']]],
   ['applymacrodefinition_33',['applyMacroDefinition',['../class_main_window.html#a382634d40ffe46bba688011e6133cd65',1,'MainWindow']]],
-  ['applyncc_34',['applyNcc',['../class_main_window.html#a9ac9d0f0f56a4a11ceb13312abc9320c',1,'MainWindow']]],
+  ['applyncc_34',['applyNcc',['../class_main_window.html#a4071759c34e84115336d45f059517942',1,'MainWindow']]],
   ['applypaint_35',['applyPaint',['../class_main_window.html#a06e9757aed6f530b1066680a35b1ea1d',1,'MainWindow']]],
   ['applytheme_36',['applyTheme',['../class_main_window.html#ad4cac636010209427e5c39d27b4f4449',1,'MainWindow']]],
   ['applyuilevel_37',['applyUiLevel',['../class_main_window.html#a9f2e43e2dfed5a35d025bc6ea8edf29d',1,'MainWindow']]],
-  ['appunits_38',['appUnits',['../structfc_1_1_excellon_options.html#a1ca13b4bde4bfd0f196b6ce483dc286d',1,'fc::ExcellonOptions::appUnits'],['../structfc_1_1_gerber_options.html#a1bea2c469f394df1772c1a80359a8076',1,'fc::GerberOptions::appUnits']]],
-  ['area_39',['area',['../structfc_1_1_cutout_options.html#a7f06a5f6e9ee7f6f5841ac8c920d3544',1,'fc::CutoutOptions::area'],['../structfc_1_1_project_object_summary.html#aea7225802e5e4c5c7464c910594ddce8',1,'fc::ProjectObjectSummary::area'],['../classfc_1_1_geom.html#a3f9e323af792e2c534783d0b886aa68f',1,'fc::Geom::area()'],['../class_geom.html#a3f9e323af792e2c534783d0b886aa68f',1,'Geom::area()']]],
-  ['arquitectura_20en_20capas_40',['Arquitectura en capas',['../index.html#autotoc_md2',1,'']]],
-  ['asis_41',['AsIs',['../namespacefc.html#ad0f2792bab4de9d1ceaa4a709a05632aa2a299b97d622f2c29576b3bc2c709db0',1,'fc']]],
-  ['avoidintersections_42',['avoidIntersections',['../structfc_1_1_isolation_options.html#a395719d30799bbfa379a77cd01d735ca',1,'fc::IsolationOptions']]]
+  ['applyviewtheme_38',['applyViewTheme',['../class_main_window.html#a0e1a9f1d2aa0d064455528ecf7013c58',1,'MainWindow']]],
+  ['appunits_39',['appUnits',['../structfc_1_1_excellon_options.html#a1ca13b4bde4bfd0f196b6ce483dc286d',1,'fc::ExcellonOptions::appUnits'],['../structfc_1_1_gerber_options.html#a1bea2c469f394df1772c1a80359a8076',1,'fc::GerberOptions::appUnits']]],
+  ['area_40',['area',['../structfc_1_1_cutout_options.html#a7f06a5f6e9ee7f6f5841ac8c920d3544',1,'fc::CutoutOptions::area'],['../structfc_1_1_project_object_summary.html#aea7225802e5e4c5c7464c910594ddce8',1,'fc::ProjectObjectSummary::area'],['../classfc_1_1_geom.html#a3f9e323af792e2c534783d0b886aa68f',1,'fc::Geom::area()'],['../class_geom.html#a3f9e323af792e2c534783d0b886aa68f',1,'Geom::area()']]],
+  ['arquitectura_20en_20capas_41',['Arquitectura en capas',['../index.html#autotoc_md2',1,'']]],
+  ['asis_42',['AsIs',['../namespacefc.html#ad0f2792bab4de9d1ceaa4a709a05632aa2a299b97d622f2c29576b3bc2c709db0',1,'fc']]],
+  ['avoidintersections_43',['avoidIntersections',['../structfc_1_1_isolation_options.html#a395719d30799bbfa379a77cd01d735ca',1,'fc::IsolationOptions']]]
 ];

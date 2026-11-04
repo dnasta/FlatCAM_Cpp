@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.4.0</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.4.1</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -122,6 +122,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_s.ht
 <li>savePreferences()&#160;:&#160;<a class="el" href="class_main_window.html#acd02c5350e89e8e3fa8dd4608b64bda7">MainWindow</a></li>
 <li>saveProjectAs()&#160;:&#160;<a class="el" href="class_main_window.html#acb0d089a9bd777962ddd3e7d30e81c1a">MainWindow</a></li>
 <li>saveProjectToPath()&#160;:&#160;<a class="el" href="class_main_window.html#af614002004569a1807ad9c66ebc797a8">MainWindow</a></li>
+<li>saveViewThemes()&#160;:&#160;<a class="el" href="class_main_window.html#acf9eac7d6d0b03029633b33eb119092c">MainWindow</a></li>
 <li>scale()&#160;:&#160;<a class="el" href="classfc_1_1_geom.html#ab48984654afd1ac8254e869e15928605">fc::Geom</a>, <a class="el" href="class_geom.html#ab48984654afd1ac8254e869e15928605">Geom</a></li>
 <li>scale_&#160;:&#160;<a class="el" href="class_canvas.html#ac298c75f05ac3b6f3a82f4b171a8f9e3">Canvas</a>, <a class="el" href="class_view3_d.html#a7f93f51afef5836f3aaa071f99b2c368">View3D</a></li>
 <li>ScriptApi()&#160;:&#160;<a class="el" href="classfc_1_1_script_api.html#a450bd77dc9eb3314121bb605b123c367">fc::ScriptApi</a></li>
@@ -133,6 +134,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_s.ht
 <li>setDisplayInch()&#160;:&#160;<a class="el" href="class_unit_spin_box.html#aedf450d74a26f50b154baba8a9007492">UnitSpinBox</a></li>
 <li>setDisplayOrigin()&#160;:&#160;<a class="el" href="class_canvas.html#a2c4af0df59beea7f009df3c4832d4287">Canvas</a>, <a class="el" href="class_main_window.html#a3ec6c246a4182cc3aee313b4f2419a50">MainWindow</a></li>
 <li>setGeometryData()&#160;:&#160;<a class="el" href="class_canvas.html#a7b185a942dd35e34a5d74a42173b4115">Canvas</a></li>
+<li>setGridColor()&#160;:&#160;<a class="el" href="class_canvas.html#ac2f225ff276593f4464cdcb7bb8042e3">Canvas</a></li>
 <li>setGridStep()&#160;:&#160;<a class="el" href="class_canvas.html#af68bda699d702231ab89caffaa364f94">Canvas</a></li>
 <li>setGridVisible()&#160;:&#160;<a class="el" href="class_canvas.html#a5083a7dd3004cd66ced76c1d1fa27a3b">Canvas</a></li>
 <li>setHudVisible()&#160;:&#160;<a class="el" href="class_canvas.html#a5d43546d9779c2b96609909dd0e06808">Canvas</a></li>
@@ -143,7 +145,9 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_s.ht
 <li>setLayerOrder()&#160;:&#160;<a class="el" href="class_canvas.html#a629967c211f5bc0dac01c6a433d9f877">Canvas</a></li>
 <li>setLayerSink()&#160;:&#160;<a class="el" href="classfc_1_1_script_api.html#a8a285216c556d6f5764cd5a36c8068f1">fc::ScriptApi</a></li>
 <li>setLayerVisible()&#160;:&#160;<a class="el" href="class_canvas.html#a503786744b4c1d8a7e0447aee792c5b9">Canvas</a></li>
+<li>setMarkers()&#160;:&#160;<a class="el" href="class_canvas.html#a959ba79919907aaf1c043f15dba40c9a">Canvas</a></li>
 <li>setObjectVisible()&#160;:&#160;<a class="el" href="class_main_window.html#a3c38abaca68c7ba00a5510cbc0cab4f4">MainWindow</a></li>
+<li>setPointPickMode()&#160;:&#160;<a class="el" href="class_canvas.html#a8796728f481c3034d5f4e1043963f1ad">Canvas</a></li>
 <li>setRange()&#160;:&#160;<a class="el" href="class_unit_spin_box.html#a36241af247867fd2e8df2db43c556930">UnitSpinBox</a></li>
 <li>setSingleStep()&#160;:&#160;<a class="el" href="class_unit_spin_box.html#a90ceb18a9a19082d2e93cca1d1d4153c">UnitSpinBox</a></li>
 <li>setSuffix()&#160;:&#160;<a class="el" href="class_unit_spin_box.html#a2913ef2017ec11806b4467453c90fc13">UnitSpinBox</a></li>
@@ -165,6 +169,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_s.ht
 <li>showPreferences()&#160;:&#160;<a class="el" href="class_main_window.html#a2127abcf62e3de6f596cafaeb94bd494">MainWindow</a></li>
 <li>showToolDb()&#160;:&#160;<a class="el" href="class_main_window.html#ae4388304f957c1982e15bd9f45b7ffc9">MainWindow</a></li>
 <li>showToolTab()&#160;:&#160;<a class="el" href="class_main_window.html#a9e659d52589b9d784ee6ce762d4d7761">MainWindow</a></li>
+<li>showViewThemesDialog()&#160;:&#160;<a class="el" href="class_main_window.html#a14b30383f540adcab3adb11a11d1de9f">MainWindow</a></li>
 <li>simplification&#160;:&#160;<a class="el" href="structfc_1_1_gerber_options.html#ac9ee09d033a36319ea527446a5d1b769">fc::GerberOptions</a></li>
 <li>simplify()&#160;:&#160;<a class="el" href="classfc_1_1_geom.html#aec3ecd3eeb8ff26276ffff00e2ff2c14">fc::Geom</a>, <a class="el" href="class_geom.html#aec3ecd3eeb8ff26276ffff00e2ff2c14">Geom</a></li>
 <li>simplifyTolerance&#160;:&#160;<a class="el" href="structfc_1_1_gerber_options.html#a01cfd4b7e2732d44d1fea4a7af9f5954">fc::GerberOptions</a></li>
@@ -194,6 +199,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_s.ht
 <li>strategy&#160;:&#160;<a class="el" href="structfc_1_1_ncc_options.html#a80a190a1ca68c97a10e877aeaa3c53c9">fc::NccOptions</a></li>
 <li>string()&#160;:&#160;<a class="el" href="structfc_1_1_all_objects_sax.html#ae72fe2c9c77de6611e2fc620293fedff">fc::AllObjectsSax</a></li>
 <li>summaries&#160;:&#160;<a class="el" href="structfc_1_1_all_objects_sax.html#a8a1798011937fdd202ceb5b50125e6e6">fc::AllObjectsSax</a></li>
+<li>syncCurrentViewTheme()&#160;:&#160;<a class="el" href="class_main_window.html#a77ad0e5a21578df4f807710eaa43d144">MainWindow</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

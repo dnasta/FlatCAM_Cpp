@@ -57,5 +57,6 @@ var hierarchy =
       [ "Canvas", "class_canvas.html", null ]
     ] ],
     [ "fc::SpatialIndex", "classfc_1_1_spatial_index.html", null ],
-    [ "fc::ThievingOptions", "structfc_1_1_thieving_options.html", null ]
+    [ "fc::ThievingOptions", "structfc_1_1_thieving_options.html", null ],
+    [ "ViewTheme", "struct_view_theme.html", null ]
 ];

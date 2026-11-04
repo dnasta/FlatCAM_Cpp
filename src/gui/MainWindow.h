@@ -16,6 +16,7 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QColor>
 #include <QString>
 #include <functional>
 #include <map>
@@ -35,6 +36,16 @@
 
 class Canvas;
 class UnitSpinBox;
+
+/// @brief Tema de colores del visor (fondo, cobre y recorridos).
+struct ViewTheme {
+    QString name;
+    QColor background;
+    QColor copper;
+    QColor follow;
+    QColor toolpath;
+    QColor grid;
+};
 class QLabel;
 class QImage;
 class QMenu;
@@ -201,7 +212,7 @@ public:
     /// @brief Aplica NCC (hatch o paint).
     bool applyNcc(double toolDiameter, double stepOverPercent, double clearance, double angle,
                   double margin, bool paintStrategy, const fc::GCodeOptions& gcode = {},
-                  double border = 1.0);
+                  double border = 1.0, bool climb = true, double compensation = 0.0);
     /// @brief Aplica pintura.
     bool applyPaint(double toolDiameter, double stepOverPercent, double margin,
                     const fc::GCodeOptions& gcode = {});
@@ -310,6 +321,8 @@ private:
     void alignObjects();
     void doubleSided();
     int mirrorLayerToNew(int sourceId, bool mirrorX, double offsetX, double offsetY);
+    int mirrorLayerAround(int sourceId, bool mirrorX, double refX, double refY,
+                          double offsetX, double offsetY);
     void newProject();
     void recordRecent(const QString& path);
     void rebuildRecentMenu();
@@ -321,6 +334,13 @@ private:
     void moveObject();
     void moveToOrigin();
     void movePcbToOrigin();
+    void generateGCodeFromObject(int layerId);
+    void loadViewThemes();
+    void saveViewThemes();
+    void syncCurrentViewTheme();
+    void applyViewTheme(const ViewTheme& theme);
+    void showViewThemesDialog();
+    fc::BBox pcbBounds() const;
     void joinObjects();
     void explodeObject();
     void jumpToLocation();
@@ -415,8 +435,9 @@ private:
     class QComboBox* millSource_ = nullptr;
     class QComboBox* thiefSource_ = nullptr;
     class QComboBox* pasteSource_ = nullptr;
+    class QComboBox* dblKind_ = nullptr;
     class QComboBox* dblSource_ = nullptr;
-    class UnitSpinBox* dblOffsetX_ = nullptr;
+    class QPushButton* dblCalc_ = nullptr;
     void refreshDrillTable();
     void refreshSourceCombos();
     fc::GerberResult* sourceGerber(QComboBox* combo);
@@ -459,6 +480,8 @@ private:
     QTreeWidgetItem* toolsGroup_ = nullptr;
     QTreeWidgetItem* gcodeGroup_ = nullptr;
     std::map<int, std::vector<int>> generatedFrom_;
+    std::vector<ViewTheme> viewThemes_;
+    QString currentViewTheme_;
     QColor background_{16, 20, 24};
     QColor copperColor_{217, 164, 65};
     QColor followColor_{111, 168, 220};

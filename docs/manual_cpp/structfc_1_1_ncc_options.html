@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.4.0</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.4.1</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -138,13 +138,17 @@ Atributos públicos</h2></td></tr>
 <tr class="memdesc:a17081468fabe6a32a0b619d8d65e6cc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expansión del área de trabajo.  <br /></td></tr>
 <tr class="memitem:a04eb40d000651cbe9e5f121be0f71b22" id="r_a04eb40d000651cbe9e5f121be0f71b22"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a04eb40d000651cbe9e5f121be0f71b22">border</a> = 0.0</td></tr>
 <tr class="memdesc:a04eb40d000651cbe9e5f121be0f71b22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Banda exterior sin despejar.  <br /></td></tr>
+<tr class="memitem:ab1ea4bf2a26019e2dc2d5eea72be6378" id="r_ab1ea4bf2a26019e2dc2d5eea72be6378"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ab1ea4bf2a26019e2dc2d5eea72be6378">compensation</a> = 0.0</td></tr>
+<tr class="memdesc:ab1ea4bf2a26019e2dc2d5eea72be6378"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compensación extra del contorno de cobre.  <br /></td></tr>
+<tr class="memitem:a498cf0c086bcb5def2848d2e00f36219" id="r_a498cf0c086bcb5def2848d2e00f36219"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a498cf0c086bcb5def2848d2e00f36219">climb</a> = true</td></tr>
+<tr class="memdesc:a498cf0c086bcb5def2848d2e00f36219"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fresado en subida (true) o convencional.  <br /></td></tr>
 <tr class="memitem:ace3d05ac9fe9824a15cf4d9f87cbe966" id="r_ace3d05ac9fe9824a15cf4d9f87cbe966"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ace3d05ac9fe9824a15cf4d9f87cbe966">quadrantSegments</a> = 16</td></tr>
 <tr class="memdesc:ace3d05ac9fe9824a15cf4d9f87cbe966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Segmentos por cuadrante.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Descripción detallada</h2>
 <div class="textblock"><p>Parámetros de NCC. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00022">22</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00025">25</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Documentación de datos miembro</h2>
 <a id="aa2f305583316dd235ba1ba1489b138c7" name="aa2f305583316dd235ba1ba1489b138c7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa2f305583316dd235ba1ba1489b138c7">&#9670;&#160;</a></span>angleDeg</h2>
@@ -160,9 +164,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Dirección del hatch. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00027">27</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00030">30</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10838">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a> y <a class="el" href="_main_window_8cpp_source.html#l11499">MainWindow::nccDialog()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11630">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a> y <a class="el" href="_main_window_8cpp_source.html#l12297">MainWindow::nccDialog()</a>.</p>
 
 </div>
 </div>
@@ -180,9 +184,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Banda exterior sin despejar. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00029">29</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00032">32</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10838">MainWindow::applyNcc()</a> y <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11630">MainWindow::applyNcc()</a> y <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>.</p>
 
 </div>
 </div>
@@ -200,9 +204,49 @@ Atributos públicos</h2></td></tr>
 
 <p>Distancia extra de seguridad al cobre. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00026">26</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00029">29</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10838">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a> y <a class="el" href="_main_window_8cpp_source.html#l11499">MainWindow::nccDialog()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11630">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a> y <a class="el" href="_main_window_8cpp_source.html#l12297">MainWindow::nccDialog()</a>.</p>
+
+</div>
+</div>
+<a id="a498cf0c086bcb5def2848d2e00f36219" name="a498cf0c086bcb5def2848d2e00f36219"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a498cf0c086bcb5def2848d2e00f36219">&#9670;&#160;</a></span>climb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::NccOptions::climb = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fresado en subida (true) o convencional. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00034">34</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11630">MainWindow::applyNcc()</a> y <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>.</p>
+
+</div>
+</div>
+<a id="ab1ea4bf2a26019e2dc2d5eea72be6378" name="ab1ea4bf2a26019e2dc2d5eea72be6378"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1ea4bf2a26019e2dc2d5eea72be6378">&#9670;&#160;</a></span>compensation</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double fc::NccOptions::compensation = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compensación extra del contorno de cobre. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00033">33</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11630">MainWindow::applyNcc()</a> y <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>.</p>
 
 </div>
 </div>
@@ -220,9 +264,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Expansión del área de trabajo. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00028">28</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00031">31</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10838">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a> y <a class="el" href="_main_window_8cpp_source.html#l11499">MainWindow::nccDialog()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11630">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a> y <a class="el" href="_main_window_8cpp_source.html#l12297">MainWindow::nccDialog()</a>.</p>
 
 </div>
 </div>
@@ -240,7 +284,7 @@ Atributos públicos</h2></td></tr>
 
 <p>Segmentos por cuadrante. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00030">30</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00035">35</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>.</p>
 
@@ -260,9 +304,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Paso como fracción del diámetro. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00025">25</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00028">28</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10838">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l11499">MainWindow::nccDialog()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11630">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l12297">MainWindow::nccDialog()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
 
 </div>
 </div>
@@ -280,9 +324,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Hatch o paint. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00023">23</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00026">26</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10838">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a> y <a class="el" href="_main_window_8cpp_source.html#l11499">MainWindow::nccDialog()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11630">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a> y <a class="el" href="_main_window_8cpp_source.html#l12297">MainWindow::nccDialog()</a>.</p>
 
 </div>
 </div>
@@ -300,9 +344,9 @@ Atributos públicos</h2></td></tr>
 
 <p>Diámetro de la fresa. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00024">24</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="ncc_8hpp_source.html#l00027">27</a> del archivo <a class="el" href="ncc_8hpp_source.html">ncc.hpp</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l10838">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l11499">MainWindow::nccDialog()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l11630">MainWindow::applyNcc()</a>, <a class="el" href="ncc_8cpp_source.html#l00095">fc::clearCopper()</a>, <a class="el" href="_script_api_8cpp_source.html#l00219">fc::ScriptApi::ncc()</a>, <a class="el" href="_main_window_8cpp_source.html#l12297">MainWindow::nccDialog()</a> y <a class="el" href="tcl_8cpp_source.html#l00206">fc::runTclScript()</a>.</p>
 
 </div>
 </div>

@@ -98,7 +98,7 @@ NccResult clearCopper(const Geom& copper, const Geom& area, const NccOptions& op
 
     const double radius = options.toolDiameter / 2.0;
     const double clearance = std::max(0.0, options.clearance);
-    const double spacing = std::max(0.05, options.stepOver * options.toolDiameter);
+    const double spacing = std::max(0.005, options.stepOver * options.toolDiameter);
 
     Geom workArea = area;
     if (!workArea.valid() || workArea.empty()) {
@@ -116,17 +116,21 @@ NccResult clearCopper(const Geom& copper, const Geom& area, const NccOptions& op
         if (inset.valid() && !inset.empty()) workArea = inset;
     }
 
-    Geom keepOut = copper.buffer(radius + clearance, std::max(2, options.quadrantSegments));
+    Geom keepOut = copper.buffer(radius + clearance + std::max(0.0, options.compensation),
+                                 std::max(2, options.quadrantSegments));
     Geom region = workArea.difference(keepOut);
     if (!region.valid() || region.empty()) return result;
     result.clearedArea = region;
 
-    if (options.strategy == NccStrategy::Paint) {
+    auto paintRegion = [&]() {
         PaintOptions paint;
         paint.toolDiameter = options.toolDiameter;
         paint.stepOver = options.stepOver;
         paint.quadrantSegments = options.quadrantSegments;
-        const PaintResult painted = paintArea(region, paint);
+        return paintArea(region, paint);
+    };
+    if (options.strategy == NccStrategy::Paint || options.strategy == NccStrategy::Seed) {
+        const PaintResult painted = paintRegion();
         result.paths = painted.paths;
         result.totalLength = painted.totalLength;
         result.bounds = painted.bounds;
@@ -171,6 +175,21 @@ NccResult clearCopper(const Geom& copper, const Geom& area, const NccOptions& op
         }
     }
     (void)lineCount;
+
+    if (options.strategy == NccStrategy::Combo) {
+        const PaintResult painted = paintRegion();
+        result.paths.insert(result.paths.end(), painted.paths.begin(), painted.paths.end());
+        result.totalLength += painted.totalLength;
+        addBounds(result.bounds, painted.bounds);
+    }
+
+    if (!options.climb) {
+        for (Geom& path : result.paths) {
+            Ring ring = path.coords();
+            std::reverse(ring.begin(), ring.end());
+            path = Geom::line(ring);
+        }
+    }
 
     return result;
 }

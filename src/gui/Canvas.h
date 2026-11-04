@@ -134,6 +134,13 @@ public:
     /// @brief Configura los colores del visor.
     void setColors(const QColor& background, const QColor& copper, const QColor& follow,
                    const QColor& toolpath);
+    /// @brief Cambia el color de la rejilla.
+    void setGridColor(const QColor& color) { gridColor_ = color; update(); }
+    /// @brief Activa el modo de captura de puntos (puentes manuales).
+    void setPointPickMode(bool on);
+    bool pointPickMode() const { return pointPickMode_; }
+    /// @brief Dibuja marcas temporales en el visor.
+    void setMarkers(const std::vector<fc::Pt>& markers);
 
     /// @return `true` si hay alguna capa con contenido.
     bool hasData() const { return hasData_; }
@@ -181,6 +188,9 @@ signals:
 
     /// @brief Emite el id de la capa con doble clic.
     void layerActivated(int id);
+
+    /// @brief Emite una coordenada de mundo al hacer clic en modo captura.
+    void worldPicked(double x, double y);
 
 protected:
     void paintEvent(QPaintEvent* event) override;
@@ -243,5 +253,8 @@ private:
     QColor copperEdge_{240, 196, 106};
     QColor followColor_{111, 168, 220, 170};
     QColor toolpathColor_{102, 214, 132};
+    QColor gridColor_{38, 46, 54};
+    bool pointPickMode_ = false;
+    std::vector<fc::Pt> markers_;
     int nextId_ = 1;
 };

@@ -1,17 +1,20 @@
 var searchData=
 [
   ['gap_0',['gap',['../structfc_1_1_optimal_tool.html#a201b0d6404dd88ea40ba5708829f272a',1,'fc::OptimalTool']]],
-  ['gcodegroup_5f_1',['gcodeGroup_',['../class_main_window.html#ab334ef2fabae14049eb9d17450207df0',1,'MainWindow']]],
-  ['gcodeview_5f_2',['gcodeView_',['../class_main_window.html#a6402f99433611aff8326c5aad905bd2b',1,'MainWindow']]],
-  ['generatedfrom_5f_3',['generatedFrom_',['../class_main_window.html#abffed7ae91d95ede8ea306a9f92b8a7f',1,'MainWindow']]],
-  ['geomdepth_4',['geomDepth',['../structfc_1_1_all_objects_sax.html#a8c7493bda6057cdd7746726d5fb2ab20',1,'fc::AllObjectsSax']]],
-  ['geometry_5',['geometry',['../structfc_1_1_excellon_tool.html#a014ca4142848edb288564bdd68074d6a',1,'fc::ExcellonTool::geometry'],['../structfc_1_1_excellon_result.html#af514454d15885677cdc66ba60e252fea',1,'fc::ExcellonResult::geometry'],['../structfc_1_1_gerber_aperture.html#acf18848777fbb8481d165f999b57d51e',1,'fc::GerberAperture::geometry']]],
-  ['geometrysimplify_5f_6',['geometrySimplify_',['../class_main_window.html#ace040c12cf5fc2f868a9d745d0f0a023',1,'MainWindow']]],
-  ['geometrytolerance_5f_7',['geometryTolerance_',['../class_main_window.html#a9fbcea40fa4ef9ad746b789a850bc1a3',1,'MainWindow']]],
-  ['gerber_5f_8',['gerber_',['../classfc_1_1_script_api.html#a726ea25f72a41d3e4f7bb73bba4000d9',1,'fc::ScriptApi']]],
-  ['gerberlayers_5f_9',['gerberLayers_',['../class_main_window.html#a6487a9e5b1bc0352841f2e30b502b098',1,'MainWindow']]],
-  ['gerbersimplify_5f_10',['gerberSimplify_',['../class_main_window.html#a2e0c72e2bbf8865a29f129fc2cafc7eb',1,'MainWindow']]],
-  ['gerbertolerance_5f_11',['gerberTolerance_',['../class_main_window.html#a534fa4b0a2deb4849ef932b115196cf4',1,'MainWindow']]],
-  ['gridstep_5f_12',['gridStep_',['../class_canvas.html#a0bcd938d969e4c0772ce7ac0c7d436d4',1,'Canvas']]],
-  ['gridvisible_5f_13',['gridVisible_',['../class_canvas.html#aed717b4637236299f23f987688860475',1,'Canvas']]]
+  ['gaptype_1',['gapType',['../structfc_1_1_cutout_options.html#ae6cb3fd193f4443cb26662d384d2a663',1,'fc::CutoutOptions']]],
+  ['gcodegroup_5f_2',['gcodeGroup_',['../class_main_window.html#ab334ef2fabae14049eb9d17450207df0',1,'MainWindow']]],
+  ['gcodeview_5f_3',['gcodeView_',['../class_main_window.html#a6402f99433611aff8326c5aad905bd2b',1,'MainWindow']]],
+  ['generatedfrom_5f_4',['generatedFrom_',['../class_main_window.html#abffed7ae91d95ede8ea306a9f92b8a7f',1,'MainWindow']]],
+  ['geomdepth_5',['geomDepth',['../structfc_1_1_all_objects_sax.html#a8c7493bda6057cdd7746726d5fb2ab20',1,'fc::AllObjectsSax']]],
+  ['geometry_6',['geometry',['../structfc_1_1_excellon_tool.html#a014ca4142848edb288564bdd68074d6a',1,'fc::ExcellonTool::geometry'],['../structfc_1_1_excellon_result.html#af514454d15885677cdc66ba60e252fea',1,'fc::ExcellonResult::geometry'],['../structfc_1_1_gerber_aperture.html#acf18848777fbb8481d165f999b57d51e',1,'fc::GerberAperture::geometry']]],
+  ['geometrysimplify_5f_7',['geometrySimplify_',['../class_main_window.html#ace040c12cf5fc2f868a9d745d0f0a023',1,'MainWindow']]],
+  ['geometrytolerance_5f_8',['geometryTolerance_',['../class_main_window.html#a9fbcea40fa4ef9ad746b789a850bc1a3',1,'MainWindow']]],
+  ['gerber_5f_9',['gerber_',['../classfc_1_1_script_api.html#a726ea25f72a41d3e4f7bb73bba4000d9',1,'fc::ScriptApi']]],
+  ['gerberlayers_5f_10',['gerberLayers_',['../class_main_window.html#a6487a9e5b1bc0352841f2e30b502b098',1,'MainWindow']]],
+  ['gerbersimplify_5f_11',['gerberSimplify_',['../class_main_window.html#a2e0c72e2bbf8865a29f129fc2cafc7eb',1,'MainWindow']]],
+  ['gerbertolerance_5f_12',['gerberTolerance_',['../class_main_window.html#a534fa4b0a2deb4849ef932b115196cf4',1,'MainWindow']]],
+  ['grid_13',['grid',['../struct_view_theme.html#a589af0a06cd009e41b7de95f6996e04e',1,'ViewTheme']]],
+  ['gridcolor_5f_14',['gridColor_',['../class_canvas.html#a8068339a92731a562781f8e45d1e305a',1,'Canvas']]],
+  ['gridstep_5f_15',['gridStep_',['../class_canvas.html#a0bcd938d969e4c0772ce7ac0c7d436d4',1,'Canvas']]],
+  ['gridvisible_5f_16',['gridVisible_',['../class_canvas.html#aed717b4637236299f23f987688860475',1,'Canvas']]]
 ];

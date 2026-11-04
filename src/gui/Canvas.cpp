@@ -911,6 +911,19 @@ void Canvas::fitTo(const fc::BBox& bounds) {
  *
  * @param event Evento de redimensión (no se usa).
  */
+void Canvas::setPointPickMode(bool on) {
+    pointPickMode_ = on;
+    setCursor(on ? Qt::CrossCursor : Qt::ArrowCursor);
+    if (!on) markers_.clear();
+    update();
+}
+
+/// @brief Reemplaza las marcas temporales de puentes manuales.
+void Canvas::setMarkers(const std::vector<fc::Pt>& markers) {
+    markers_ = markers;
+    update();
+}
+
 void Canvas::resizeEvent(QResizeEvent*) {
     if (hasData_) fit();
 }
@@ -955,7 +968,7 @@ void Canvas::paintEvent(QPaintEvent*) {
         while (step * scale_ > 200.0) step /= 10.0;
     }
     if (gridVisible_) {
-        p.setPen(QPen(QColor(38, 46, 54), 0.0));
+        p.setPen(QPen(gridColor_, 0.0));
         const double x0 = std::floor(view.xmin / step) * step;
         const double y0 = std::floor(view.ymin / step) * step;
         for (double x = x0; x <= view.xmax + step; x += step)
@@ -966,8 +979,9 @@ void Canvas::paintEvent(QPaintEvent*) {
 
     // Ejes de máquina X=0 / Y=0 resaltados. Son la referencia desde la que
     // arranca el cabezal, distinta del origen de visualización configurable.
-    const QColor axisX(226, 108, 117, 230);
-    const QColor axisY(96, 200, 136, 230);
+    const bool darkCanvas = background_.lightness() < 128;
+    const QColor axisX = darkCanvas ? QColor(226, 108, 117, 230) : QColor(190, 40, 55, 230);
+    const QColor axisY = darkCanvas ? QColor(96, 200, 136, 230) : QColor(20, 130, 70, 230);
     const double axisWidth = 2.0 / std::max(1.0, scale_);
     if (view.ymin <= 0.0 && view.ymax >= 0.0) {
         p.setPen(QPen(axisX, axisWidth));
@@ -1031,16 +1045,31 @@ void Canvas::paintEvent(QPaintEvent*) {
     const auto inside = [&viewport](const QPointF& p) {
         return viewport.adjusted(-2, -2, 2, 2).contains(p.toPoint());
     };
+    if (!markers_.empty()) {
+        const QColor markerColor = darkCanvas ? QColor(255, 190, 90, 240)
+                                              : QColor(170, 95, 15, 240);
+        p.setPen(QPen(markerColor, 1.5));
+        p.setBrush(Qt::NoBrush);
+        for (const fc::Pt& marker : markers_) {
+            const QPointF s = toScreen(marker.x, marker.y);
+            if (!inside(s)) continue;
+            p.drawEllipse(s, 4.0, 4.0);
+            p.drawLine(s + QPointF(-7, 0), s + QPointF(7, 0));
+            p.drawLine(s + QPointF(0, -7), s + QPointF(0, 7));
+        }
+    }
 
     // Rótulos de los ejes y marcas de coordenadas.
     const QPointF originScreen = toScreen(0.0, 0.0);
+    const QColor originColor = darkCanvas ? QColor(235, 238, 242, 230)
+                                         : QColor(20, 24, 30, 230);
     if (inside(originScreen)) {
-        p.setPen(QPen(QColor(235, 238, 242, 220), 1.2));
+        p.setPen(QPen(originColor, 1.2));
         p.setBrush(Qt::NoBrush);
         p.drawEllipse(originScreen, 5.0, 5.0);
         p.drawLine(originScreen + QPointF(-8, 0), originScreen + QPointF(8, 0));
         p.drawLine(originScreen + QPointF(0, -8), originScreen + QPointF(0, 8));
-        p.setPen(QColor(235, 238, 242, 220));
+        p.setPen(originColor);
         p.drawText(originScreen + QPointF(8, -7), QStringLiteral("0,0"));
     }
     if (inside(toScreen(0.0, 0.0))) {
@@ -1052,7 +1081,8 @@ void Canvas::paintEvent(QPaintEvent*) {
                    QStringLiteral("X=0"));
     }
     if (step * scale_ >= 28.0) {
-        const QColor tickColor(160, 168, 178, 190);
+        const QColor tickColor = darkCanvas ? QColor(160, 168, 178, 190)
+                                            : QColor(85, 95, 105, 200);
         p.setPen(tickColor);
         const double x0 = std::floor(view.xmin / step) * step;
         for (double x = x0; x <= view.xmax + step && view.ymin <= 0.0 && view.ymax >= 0.0;
@@ -1082,7 +1112,9 @@ void Canvas::paintEvent(QPaintEvent*) {
         const bool outside = 0.0 < bounds_.xmin || 0.0 > bounds_.xmax ||
                              0.0 < bounds_.ymin || 0.0 > bounds_.ymax;
         if (outside && inside(originScreen) && inside(target)) {
-            p.setPen(QPen(QColor(255, 190, 90, 220), 1.4, Qt::DashLine));
+            const QColor travelColor = darkCanvas ? QColor(255, 190, 90, 230)
+                                                  : QColor(170, 95, 15, 230);
+            p.setPen(QPen(travelColor, 1.4, Qt::DashLine));
             p.drawLine(originScreen, target);
             const double angle = std::atan2(target.y() - originScreen.y(),
                                             target.x() - originScreen.x());
@@ -1093,7 +1125,7 @@ void Canvas::paintEvent(QPaintEvent*) {
                                                std::sin(angle + 0.45) * len);
             p.drawLine(target, a);
             p.drawLine(target, b);
-            p.setPen(QColor(255, 210, 140));
+            p.setPen(darkCanvas ? QColor(255, 210, 140) : QColor(145, 75, 10));
             p.drawText((originScreen + target) / 2.0 + QPointF(6, -6),
                        QString("ΔX %1  ΔY %2")
                            .arg(nx, 0, 'f', 2)
@@ -1214,6 +1246,10 @@ void Canvas::wheelEvent(QWheelEvent* event) {
  *        ignoran (no hay menú contextual ni pan con el botón central).
  */
 void Canvas::mousePressEvent(QMouseEvent* event) {
+    if (event->button() == Qt::LeftButton && pointPickMode_) {
+        panning_ = false;
+        return;
+    }
     if (event->button() == Qt::LeftButton) {
         panning_ = true;
         pressPos_ = event->pos();
@@ -1268,6 +1304,12 @@ void Canvas::mouseMoveEvent(QMouseEvent* event) {
  */
 void Canvas::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() != Qt::LeftButton) return;
+    if (pointPickMode_) {
+        const QPointF world((event->position().x() - offset_.x()) / scale_,
+                            -(event->position().y() - offset_.y()) / scale_);
+        emit worldPicked(world.x(), world.y());
+        return;
+    }
     panning_ = false;
     setCursor(Qt::ArrowCursor);
     if (dragged_) return;

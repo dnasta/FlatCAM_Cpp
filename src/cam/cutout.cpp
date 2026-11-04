@@ -272,7 +272,9 @@ CutoutResult cutoutGeometry(const Geom& outline, const CutoutOptions& options) {
 
     for (const PolygonContours& pc : envelope.polygons()) {
         const double outerLength = ringLength(pc.outer);
-        for (const Ring& segment : splitWithTabs(pc.outer, options.tabWidth, options.tabCount,
+        const double gapWidth = options.tabWidth *
+                                (options.gapType == GapType::Bridge ? 1.0 : 0.65);
+        for (const Ring& segment : splitWithTabs(pc.outer, gapWidth, options.tabCount,
                                                 outerLength, options.tabSides,
                                                 options.tabPositions)) {
             appendPath(result, segment, options.invert);
@@ -280,7 +282,7 @@ CutoutResult cutoutGeometry(const Geom& outline, const CutoutOptions& options) {
         if (options.includeHoles) {
             for (const Ring& holeRing : pc.holes) {
                 const double holeLength = ringLength(holeRing);
-                for (const Ring& segment : splitWithTabs(holeRing, options.tabWidth,
+                for (const Ring& segment : splitWithTabs(holeRing, gapWidth,
                                                          options.tabCount, holeLength,
                                                          options.tabSides,
                                                          options.tabPositions)) {

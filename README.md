@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.0"><img alt="Release" src="https://img.shields.io/badge/release-v0.4.0-b4771b"></a>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.1"><img alt="Release" src="https://img.shields.io/badge/release-v0.4.1-b4771b"></a>
   <a href="LICENSE"><img alt="Licencia" src="https://img.shields.io/badge/licencia-GPLv3-2f6f4f"></a>
   <img alt="macOS" src="https://img.shields.io/badge/macOS-14.4%2B%20arm64-16202b">
   <img alt="C++" src="https://img.shields.io/badge/C%2B%2B-20-00599C">
@@ -22,7 +22,7 @@
   <a href="README_US.md">🇬🇧 English</a> ·
   <a href="https://dnasta.github.io/FlatCAM_Cpp/manual_html/index.html"><strong>📖 Manual de usuario</strong></a> ·
   <a href="https://dnasta.github.io/FlatCAM_Cpp/manual_cpp/index.html"><strong>🛠 Manual del código</strong></a> ·
-  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.0"><strong>⬇ Descargar v0.4.0</strong></a>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.1"><strong>⬇ Descargar v0.4.1</strong></a>
 </p>
 
 ---
@@ -112,8 +112,8 @@ Es un port del FlatCAM original (Python + PyQt5) a **C++20**, con **Qt 6** para 
 
 - **Aislamiento**: pasadas, solape, V-shape, herramienta bola, follow, combine, rest machining, orden y sentido.
 - **Perforación**: taladros y ranuras desde Excellon, trazado en el visor, peck, offsets, orden optimizado y TSP exacto hasta 18 puntos.
-- **Corte de contorno**: margen, puentes por lados o posiciones manuales, esquinas rectas, corte completo, agujeros internos y multipasada.
-- **NCC**: hatch o paint, superposición, distancia al cobre, margen, **borde exterior sin procesar**, ángulo, área, conexión y rest.
+- **Corte de contorno**: margen, tipos de brecha (LR/TB/4/2LR/2TB/8), puente/delgado/M-Bites, puentes manuales por clic, esquinas rectas, corte completo, agujeros internos y multipasada.
+- **NCC**: métodos Estándar/Semilla/Líneas/Combo, subida/convencional, compensación, superposición fina, distancia al cobre, margen, **borde exterior sin procesar**, ángulo, área, conexión y rest.
 - **Pintura**: relleno por contornos paralelos.
 - **Fresado**: sigue los recorridos del Gerber.
 - **Copper Thieving**: puntos, cuadrados o líneas, PPM y referencia.
@@ -122,7 +122,7 @@ Es un port del FlatCAM original (Python + PyQt5) a **C++20**, con **Qt 6** para 
 - **Solder Paste**: boquillas por tamaño de pad, Z de dosificación, pausa y dirección.
 - **QR Code**: texto, módulo, borde, ECC y exportación.
 - **Punch Gerber** y **Extraer taladros**.
-- **Herramienta de 2 lados** para espejar caras, **marcas de esquina**, **fiduciales**, **herramienta óptima**, **reglas**, **calibración**, **distancia mínima**, **alinear**, **compensación**, **invertir**.
+- **Herramienta de 2 lados** con límites, centroide, referencia, espejo y taladros de alineación; **marcas de esquina**, **fiduciales**, **herramienta óptima**, **reglas**, **calibración**, **distancia mínima**, **alinear**, **compensación**, **invertir**.
 
 ### Editores
 
@@ -134,14 +134,17 @@ Es un port del FlatCAM original (Python + PyQt5) a **C++20**, con **Qt 6** para 
 
 ### Interfaz
 
-- Árbol de proyecto con grupos **Archivos**, **Herramientas** y **G-code**.
+- Árbol de proyecto con grupos **Archivos**, **Herramientas** y **G-code** resaltados; borrado con Supr/Retroceso y confirmación.
 - Columna **Vis** con iconos, propiedades por objeto y tablas de herramientas por operación.
-- Canvas con zoom/pan, selección, medición, rejilla, snap, unidades **mm/in**, ejes **X=0/Y=0** resaltados, reglas, medidas de la PCB y recorrido desde el origen.
+- Canvas con zoom/pan, selección, medición, rejilla, snap, unidades **mm/in**, ejes **X=0/Y=0** resaltados, reglas, medidas de la PCB, recorrido desde el origen y trayectoria de la herramienta con viajes.
 - **Vista 3D** con cobre extruido, placa, taladros, iluminación por cara y exportación PNG.
 - Nivel **BASIC/ADVANCED**.
 - **Cuatro temas** en `Opciones → Temas`: Moderno claro/oscuro (Fusion + QSS, acento ámbar) y Sistema claro/oscuro (controles nativos). Se aplican en caliente.
+- **Temas del visor** (fondo, cobre, recorridos, trayectoria y rejilla) con temas incluidos, fondo blanco y editor para crear/duplicar/renombrar/eliminar temas.
 - Iconos originales de FlatCAM adaptados automáticamente al tema, y globos explicativos.
 - Consola inferior con **Shell Tcl**, **Consola JS**, **G-code** e **Informe**; recuerda visibilidad, pestaña y altura.
+- Pestañas de herramienta cerrables: al cerrar una, vuelve **Proyecto**.
+- La lengüeta Herramienta de una capa generada permite **Generar G-code**.
 - Entradas numéricas que aceptan coma o punto y normalizan el separador decimal.
 
 ### Automatización
@@ -200,7 +203,7 @@ Es un port del FlatCAM original (Python + PyQt5) a **C++20**, con **Qt 6** para 
 
 ### Desde el DMG
 
-1. Descargá [`FlatCAM-CPP-0.4.0-arm64.dmg`](https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.0).
+1. Descargá [`FlatCAM-CPP-0.4.1-arm64.dmg`](https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.1).
 2. Abrí el DMG.
 3. Arrastrá **FlatCAM C++** a *Aplicaciones*.
 4. La primera vez: clic derecho → **Abrir** (firma ad-hoc).
@@ -330,8 +333,8 @@ cmake --build build -j8
 ### Empaquetar el DMG
 
 ```bash
-./tools/create_dmg.sh 0.4.0
-# dist/FlatCAM-CPP-0.4.0-arm64.dmg
+./tools/create_dmg.sh 0.4.1
+# dist/FlatCAM-CPP-0.4.1-arm64.dmg
 ```
 
 El script compila, ejecuta `macdeployqt`, copia GEOS, incrusta licencias, firma ad-hoc y crea el DMG con la app renombrada a `FlatCAM C++.app`.
@@ -348,7 +351,7 @@ El código es portable y CMake detecta GEOS por pkg-config o por configuración.
 ## Tests y verificación
 
 ```bash
-./build/flatcam_tests        # 93 tests de núcleo
+./build/flatcam_tests        # 95 tests de núcleo
 ./build/flatcam_gui_tests    # 7 tests de GUI
 ```
 
@@ -462,4 +465,4 @@ cadena original.
 - **QR Code generator:** Project Nayuki.
 - **Comunidad FlatCAM** por la documentación y los ejemplos.
 
-<p align="center"><sub>Hecho con C++20, Qt 6 y GEOS · macOS Apple Silicon · v0.4.0</sub></p>
+<p align="center"><sub>Hecho con C++20, Qt 6 y GEOS · macOS Apple Silicon · v0.4.1</sub></p>

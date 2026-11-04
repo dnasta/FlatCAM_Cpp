@@ -12,8 +12,11 @@ namespace fc {
 
 /// Estrategia de despeje.
 enum class NccStrategy {
-    Hatch, ///< Líneas paralelas.
-    Paint  ///< Contornos paralelos.
+    Hatch, ///< Líneas paralelas (Estándar).
+    Paint, ///< Contornos paralelos.
+    Seed,  ///< Contornos desde semillas.
+    Lines, ///< Sólo líneas.
+    Combo  ///< Líneas + contornos.
 };
 
 /**
@@ -27,6 +30,8 @@ struct NccOptions {
     double angleDeg = 0.0;     ///< Dirección del hatch.
     double margin = 0.0;       ///< Expansión del área de trabajo.
     double border = 0.0;       ///< Banda exterior sin despejar.
+    double compensation = 0.0; ///< Compensación extra del contorno de cobre.
+    bool climb = true;         ///< Fresado en subida (true) o convencional.
     int quadrantSegments = 16; ///< Segmentos por cuadrante.
 };
 

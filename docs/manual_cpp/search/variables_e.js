@@ -12,10 +12,11 @@ var searchData=
   ['pitch_5f_9',['pitch_',['../class_view3_d.html#a5033cf67b1388791ec3cd19905d2fbff',1,'View3D']]],
   ['pointa_10',['pointA',['../structfc_1_1_optimal_tool.html#ab08a252cb8d4109cd35329405d658f5d',1,'fc::OptimalTool']]],
   ['pointb_11',['pointB',['../structfc_1_1_optimal_tool.html#a0c32f196355f9cac2e5ad740695c7af6',1,'fc::OptimalTool']]],
-  ['points_12',['points',['../structfc_1_1_paste_job.html#aa62e6bf9e5f3308769b092cb3a5bc0a4',1,'fc::PasteJob::points'],['../struct_view3_d_1_1_face.html#a08c53888a5833dd588c331e94c69432f',1,'View3D::Face::points']]],
-  ['presspos_5f_13',['pressPos_',['../class_canvas.html#ad37d65c1d2f0dc2110ed47df8da693cc',1,'Canvas']]],
-  ['projectdirty_5f_14',['projectDirty_',['../class_main_window.html#a01ac6cb15cb1f5a4ad4014cf1bc7e736',1,'MainWindow']]],
-  ['projectpath_5f_15',['projectPath_',['../class_main_window.html#ad8b2cb0cb84a7fe6ce926966a31aea43',1,'MainWindow']]],
-  ['properties_16',['properties',['../structfc_1_1_project_object.html#acff463b322c5c14967e7841c1a53a210',1,'fc::ProjectObject']]],
-  ['properties_5f_17',['properties_',['../class_main_window.html#a27b8a0289835063840cff5e53c970f1d',1,'MainWindow']]]
+  ['pointpickmode_5f_12',['pointPickMode_',['../class_canvas.html#a61199bcf568a6236ec3cffa2b8e758bb',1,'Canvas']]],
+  ['points_13',['points',['../structfc_1_1_paste_job.html#aa62e6bf9e5f3308769b092cb3a5bc0a4',1,'fc::PasteJob::points'],['../struct_view3_d_1_1_face.html#a08c53888a5833dd588c331e94c69432f',1,'View3D::Face::points']]],
+  ['presspos_5f_14',['pressPos_',['../class_canvas.html#ad37d65c1d2f0dc2110ed47df8da693cc',1,'Canvas']]],
+  ['projectdirty_5f_15',['projectDirty_',['../class_main_window.html#a01ac6cb15cb1f5a4ad4014cf1bc7e736',1,'MainWindow']]],
+  ['projectpath_5f_16',['projectPath_',['../class_main_window.html#ad8b2cb0cb84a7fe6ce926966a31aea43',1,'MainWindow']]],
+  ['properties_17',['properties',['../structfc_1_1_project_object.html#acff463b322c5c14967e7841c1a53a210',1,'fc::ProjectObject']]],
+  ['properties_5f_18',['properties_',['../class_main_window.html#a27b8a0289835063840cff5e53c970f1d',1,'MainWindow']]]
 ];

@@ -44,5 +44,6 @@ var annotated_dup =
     [ "Geom", "class_geom.html", "class_geom" ],
     [ "MainWindow", "class_main_window.html", "class_main_window" ],
     [ "UnitSpinBox", "class_unit_spin_box.html", "class_unit_spin_box" ],
-    [ "View3D", "class_view3_d.html", "class_view3_d" ]
+    [ "View3D", "class_view3_d.html", "class_view3_d" ],
+    [ "ViewTheme", "struct_view_theme.html", "struct_view_theme" ]
 ];
