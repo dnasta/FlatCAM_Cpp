@@ -97,3 +97,4 @@ TEST(Ncc, PaintFillsNarrowGapWithManyPasses) {
                                     Geom::box(-0.4, -0.4, 10.4, 10.4), opt);
     EXPECT_GT(r.paths.size(), std::size_t{10});
 }
+

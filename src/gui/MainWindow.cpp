@@ -2177,7 +2177,7 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.4.1</b> · build 2026-11-04<br>"
+                           tr("<b>FlatCAM C++ 0.4.2</b> · build 2026-11-04<br>"
                               "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
                               "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
@@ -2294,7 +2294,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.4.1\nBuild: 2026-11-04\n"
+            tr("FlatCAM C++ 0.4.2\nBuild: 2026-11-04\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -3867,7 +3867,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.4.1");
+    return QStringLiteral("FlatCAM C++ 0.4.2");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
@@ -10572,6 +10572,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 std::vector<Geom> preview;
                 Geom covered;
                 for (std::size_t i = 0; i < rows.size(); ++i) {
+                    Geom toolCovered;
                     NccOptions o;
                     o.toolDiameter = rows[i].dia;
                     o.stepOver = (100.0 - nccStep->value()) / 100.0;
@@ -10621,9 +10622,11 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                         preview.push_back(g);
                         if (nccRest->isChecked()) {
                             const Geom area = g.buffer(rows[i].dia / 2.0, 8);
-                            covered = covered.valid() ? covered.unite(area) : area;
+                            toolCovered = toolCovered.valid() ? toolCovered.unite(area) : area;
                         }
                     }
+                    if (nccRest->isChecked() && toolCovered.valid())
+                        covered = covered.valid() ? covered.unite(toolCovered) : toolCovered;
                     lastNccMulti_.push_back(std::move(job));
                 }
                 lastNccHeader_ = optionsFor(rows.front(), nccCommon);
