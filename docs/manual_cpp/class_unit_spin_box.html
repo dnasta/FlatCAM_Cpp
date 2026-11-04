@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.3.1</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.4.0</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -153,6 +153,17 @@ Métodos públicos estáticos</h2></td></tr>
 <tr class="memdesc:aedf450d74a26f50b154baba8a9007492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cambia la unidad de todos los campos registrados.  <br /></td></tr>
 <tr class="memitem:ac17899a5e76f401654411e3f7d604404" id="r_ac17899a5e76f401654411e3f7d604404"><td class="memItemLeft">static bool&#160;</td><td class="memItemRight"><a class="el" href="#ac17899a5e76f401654411e3f7d604404">displayInch</a> ()</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Métodos protegidos</h2></td></tr>
+<tr class="memitem:a52f4972187c7fd111eaf3342afd1ded6" id="r_a52f4972187c7fd111eaf3342afd1ded6"><td class="memItemLeft">QValidator::State&#160;</td><td class="memItemRight"><a class="el" href="#a52f4972187c7fd111eaf3342afd1ded6">validate</a> (QString &amp;input, int &amp;pos) const override</td></tr>
+<tr class="memdesc:a52f4972187c7fd111eaf3342afd1ded6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Acepta coma o punto como separador decimal al escribir.  <br /></td></tr>
+<tr class="memitem:a9f41fd19ffd141edae0dcf9364e77b63" id="r_a9f41fd19ffd141edae0dcf9364e77b63"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a9f41fd19ffd141edae0dcf9364e77b63">valueFromText</a> (const QString &amp;text) const override</td></tr>
+<tr class="memdesc:a9f41fd19ffd141edae0dcf9364e77b63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interpreta la coma como punto decimal.  <br /></td></tr>
+<tr class="memitem:a85c6618c147bd51642380f6cf2656827" id="r_a85c6618c147bd51642380f6cf2656827"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a85c6618c147bd51642380f6cf2656827">fixup</a> (QString &amp;input) const override</td></tr>
+<tr class="memdesc:a85c6618c147bd51642380f6cf2656827"><td class="mdescLeft">&#160;</td><td class="mdescRight">Corrige el texto pendiente antes de aceptar el valor.  <br /></td></tr>
+<tr class="memitem:a348a47ce101416b7945e6c9caa85cab0" id="r_a348a47ce101416b7945e6c9caa85cab0"><td class="memItemLeft">QString&#160;</td><td class="memItemRight"><a class="el" href="#a348a47ce101416b7945e6c9caa85cab0">textFromValue</a> (double value) const override</td></tr>
+<tr class="memdesc:a348a47ce101416b7945e6c9caa85cab0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Muestra siempre el separador decimal como punto.  <br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Métodos privados</h2></td></tr>
 <tr class="memitem:a0e601e38eedaab5fccbe16b088270ded" id="r_a0e601e38eedaab5fccbe16b088270ded"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a0e601e38eedaab5fccbe16b088270ded">applyConversion</a> ()</td></tr>
@@ -182,7 +193,7 @@ Atributos estáticos privados</h2></td></tr>
 <p>Internamente guarda el valor en milímetros. Cuando el sufijo es exactamente <span class="tt">" mm"</span> muestra el valor en la unidad activa (mm o pulgadas) y convierte los límites, el paso y los decimales. Ángulos, RPM, avances y porcentajes se comportan como un <span class="tt">QDoubleSpinBox</span> normal.</p>
 <p>Un registro estático permite actualizar todos los campos abiertos al cambiar de unidad sin reiniciar la aplicación. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00024">24</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00026">26</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Documentación de constructores y destructores</h2>
 <a id="a84d10aa7460804c283da9fb72194a057" name="a84d10aa7460804c283da9fb72194a057"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a84d10aa7460804c283da9fb72194a057">&#9670;&#160;</a></span>UnitSpinBox()</h2>
@@ -209,11 +220,11 @@ Atributos estáticos privados</h2></td></tr>
 
 <p>Crea el campo y lo registra para el cambio de unidad. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00027">27</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00029">29</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00085">instances()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00116">instances()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l06641">MainWindow::addCornerMarks()</a>, <a class="el" href="_main_window_8cpp_source.html#l04996">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l05146">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l05236">MainWindow::buildCalculatorPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l01452">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l09223">MainWindow::buildToolPanel()</a>, <a class="el" href="_main_window_8cpp_source.html#l05039">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l10978">MainWindow::cutoutDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l08204">MainWindow::distanceMeasure()</a>, <a class="el" href="_main_window_8cpp_source.html#l08432">MainWindow::doubleSided()</a>, <a class="el" href="_main_window_8cpp_source.html#l06388">MainWindow::etchCompensation()</a>, <a class="el" href="_main_window_8cpp_source.html#l05938">MainWindow::excellonEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l06777">MainWindow::extractDrillsAction()</a>, <a class="el" href="_main_window_8cpp_source.html#l02837">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08588">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l07302">MainWindow::importImage()</a>, <a class="el" href="_main_window_8cpp_source.html#l06439">MainWindow::invertGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l10871">MainWindow::isolateDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l07986">MainWindow::moveObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l11124">MainWindow::nccDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l06551">MainWindow::optimalTool()</a>, <a class="el" href="_main_window_8cpp_source.html#l11250">MainWindow::paintDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l04849">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l06677">MainWindow::punchGerberAction()</a>, <a class="el" href="_main_window_8cpp_source.html#l07484">MainWindow::rulesCheck()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00076">setDisplayInch()</a>, <a class="el" href="_main_window_8cpp_source.html#l05686">MainWindow::showPreferences()</a>, <a class="el" href="_main_window_8cpp_source.html#l03085">MainWindow::transformSelectedObject()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l06742">MainWindow::addCornerMarks()</a>, <a class="el" href="_main_window_8cpp_source.html#l05067">MainWindow::addFiducials()</a>, <a class="el" href="_main_window_8cpp_source.html#l05217">MainWindow::advancedFilm()</a>, <a class="el" href="_main_window_8cpp_source.html#l05307">MainWindow::buildCalculatorPage()</a>, <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l09427">MainWindow::buildToolPanel()</a>, <a class="el" href="_main_window_8cpp_source.html#l05110">MainWindow::calibrate()</a>, <a class="el" href="_main_window_8cpp_source.html#l11346">MainWindow::cutoutDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l08344">MainWindow::distanceMeasure()</a>, <a class="el" href="_main_window_8cpp_source.html#l08619">MainWindow::doubleSided()</a>, <a class="el" href="_main_window_8cpp_source.html#l06489">MainWindow::etchCompensation()</a>, <a class="el" href="_main_window_8cpp_source.html#l06039">MainWindow::excellonEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l06878">MainWindow::extractDrillsAction()</a>, <a class="el" href="_main_window_8cpp_source.html#l02880">MainWindow::geometryOperations()</a>, <a class="el" href="_main_window_8cpp_source.html#l08788">MainWindow::gerberEditor()</a>, <a class="el" href="_main_window_8cpp_source.html#l07403">MainWindow::importImage()</a>, <a class="el" href="_main_window_8cpp_source.html#l06540">MainWindow::invertGerber()</a>, <a class="el" href="_main_window_8cpp_source.html#l11238">MainWindow::isolateDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l08088">MainWindow::moveObject()</a>, <a class="el" href="_main_window_8cpp_source.html#l11499">MainWindow::nccDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l06652">MainWindow::optimalTool()</a>, <a class="el" href="_main_window_8cpp_source.html#l11625">MainWindow::paintDialog()</a>, <a class="el" href="_main_window_8cpp_source.html#l04920">MainWindow::panelize()</a>, <a class="el" href="_main_window_8cpp_source.html#l06778">MainWindow::punchGerberAction()</a>, <a class="el" href="_main_window_8cpp_source.html#l07585">MainWindow::rulesCheck()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00081">setDisplayInch()</a>, <a class="el" href="_main_window_8cpp_source.html#l05787">MainWindow::showPreferences()</a>, <a class="el" href="_main_window_8cpp_source.html#l03128">MainWindow::transformSelectedObject()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
 
 </div>
 </div>
@@ -242,9 +253,9 @@ Atributos estáticos privados</h2></td></tr>
 
 <p>Quita el campo del registro. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00033">33</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00038">38</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00085">instances()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00116">instances()</a>.</p>
 
 </div>
 </div>
@@ -274,11 +285,11 @@ Atributos estáticos privados</h2></td></tr>
 
 <p>Aplica la unidad activa a los valores crudos en mm. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00091">91</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00122">122</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00115">displayInch_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00114">length_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00112">rawDecimals_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00109">rawMax_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00108">rawMin_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00111">rawStep_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00113">rawSuffix_</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00110">rawValue_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00146">displayInch_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00145">length_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00143">rawDecimals_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00140">rawMax_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00139">rawMin_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00142">rawStep_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00144">rawSuffix_</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00141">rawValue_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00063">setDecimals()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00039">setRange()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00057">setSingleStep()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00069">setSuffix()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00046">setValue()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00027">UnitSpinBox()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00068">setDecimals()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00044">setRange()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00062">setSingleStep()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00074">setSuffix()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00051">setValue()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00029">UnitSpinBox()</a>.</p>
 
 </div>
 </div>
@@ -306,9 +317,38 @@ Atributos estáticos privados</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Devuelve</dt><dd><span class="tt">true</span> si la unidad activa es pulgadas. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00081">81</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00086">86</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00115">displayInch_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00146">displayInch_</a>.</p>
+
+</div>
+</div>
+<a id="a85c6618c147bd51642380f6cf2656827" name="a85c6618c147bd51642380f6cf2656827"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85c6618c147bd51642380f6cf2656827">&#9670;&#160;</a></span>fixup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UnitSpinBox::fixup </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;</td>          <td class="paramname"><span class="paramname"><em>input</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Corrige el texto pendiente antes de aceptar el valor. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00104">104</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
 </div>
 </div>
@@ -337,9 +377,9 @@ Atributos estáticos privados</h2></td></tr>
 
 <p>Lista de campos vivos para actualizar la unidad en caliente. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00085">85</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00116">116</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00076">setDisplayInch()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00027">UnitSpinBox()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00033">~UnitSpinBox()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00081">setDisplayInch()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00029">UnitSpinBox()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00038">~UnitSpinBox()</a>.</p>
 
 </div>
 </div>
@@ -368,9 +408,9 @@ Atributos estáticos privados</h2></td></tr>
 
 <p>Fija los decimales en milímetros. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00063">63</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00068">68</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00112">rawDecimals_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00143">rawDecimals_</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
 
@@ -401,11 +441,11 @@ Atributos estáticos privados</h2></td></tr>
 
 <p>Cambia la unidad de todos los campos registrados. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00076">76</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00081">81</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00115">displayInch_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00085">instances()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00027">UnitSpinBox()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00146">displayInch_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00116">instances()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00029">UnitSpinBox()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01452">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l04324">MainWindow::loadPreferences()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l01484">MainWindow::buildMenus()</a>, <a class="el" href="_main_window_8cpp_source.html#l04367">MainWindow::loadPreferences()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
 
 </div>
 </div>
@@ -438,9 +478,9 @@ Atributos estáticos privados</h2></td></tr>
 
 <p>Fija el rango en milímetros. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00039">39</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00044">44</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00109">rawMax_</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00108">rawMin_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00140">rawMax_</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00139">rawMin_</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
 
@@ -471,9 +511,9 @@ Atributos estáticos privados</h2></td></tr>
 
 <p>Fija el incremento en milímetros. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00057">57</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00062">62</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00111">rawStep_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00142">rawStep_</a>.</p>
 
 </div>
 </div>
@@ -502,9 +542,9 @@ Atributos estáticos privados</h2></td></tr>
 
 <p>Define el sufijo; <span class="tt">" mm"</span> activa la conversión. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00069">69</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00074">74</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00114">length_</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00113">rawSuffix_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00145">length_</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00144">rawSuffix_</a>.</p>
 
 <p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
 
@@ -535,11 +575,75 @@ Atributos estáticos privados</h2></td></tr>
 
 <p>Fija el valor en milímetros. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00046">46</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00051">51</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00110">rawValue_</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00052">value()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00141">rawValue_</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00057">value()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l05422">MainWindow::openToolTab()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
+
+</div>
+</div>
+<a id="a348a47ce101416b7945e6c9caa85cab0" name="a348a47ce101416b7945e6c9caa85cab0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a348a47ce101416b7945e6c9caa85cab0">&#9670;&#160;</a></span>textFromValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString UnitSpinBox::textFromValue </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>value</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Muestra siempre el separador decimal como punto. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00110">110</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00057">value()</a>.</p>
+
+</div>
+</div>
+<a id="a52f4972187c7fd111eaf3342afd1ded6" name="a52f4972187c7fd111eaf3342afd1ded6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52f4972187c7fd111eaf3342afd1ded6">&#9670;&#160;</a></span>validate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QValidator::State UnitSpinBox::validate </td>
+          <td>(</td>
+          <td class="paramtype">QString &amp;</td>          <td class="paramname"><span class="paramname"><em>input</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;</td>          <td class="paramname"><span class="paramname"><em>pos</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Acepta coma o punto como separador decimal al escribir. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00090">90</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
 </div>
 </div>
@@ -567,11 +671,40 @@ Atributos estáticos privados</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Devuelve</dt><dd>Valor en milímetros (aunque se muestre en pulgadas). </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00052">52</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00057">57</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00114">length_</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00110">rawValue_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_unit_spin_box_8h_source.html#l00145">length_</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00141">rawValue_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00046">setValue()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00051">setValue()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00110">textFromValue()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D::View3D()</a>.</p>
+
+</div>
+</div>
+<a id="a9f41fd19ffd141edae0dcf9364e77b63" name="a9f41fd19ffd141edae0dcf9364e77b63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f41fd19ffd141edae0dcf9364e77b63">&#9670;&#160;</a></span>valueFromText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double UnitSpinBox::valueFromText </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>text</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Interpreta la coma como punto decimal. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00097">97</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
 </div>
 </div>
@@ -596,9 +729,9 @@ Atributos estáticos privados</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00115">115</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00146">146</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00081">displayInch()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00076">setDisplayInch()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00086">displayInch()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00081">setDisplayInch()</a>.</p>
 
 </div>
 </div>
@@ -622,9 +755,9 @@ Atributos estáticos privados</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00114">114</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00145">145</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00069">setSuffix()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00052">value()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00074">setSuffix()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00057">value()</a>.</p>
 
 </div>
 </div>
@@ -648,9 +781,9 @@ Atributos estáticos privados</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00112">112</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00143">143</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00063">setDecimals()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00068">setDecimals()</a>.</p>
 
 </div>
 </div>
@@ -674,9 +807,9 @@ Atributos estáticos privados</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00109">109</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00140">140</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00039">setRange()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00044">setRange()</a>.</p>
 
 </div>
 </div>
@@ -700,9 +833,9 @@ Atributos estáticos privados</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00108">108</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00139">139</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00039">setRange()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00044">setRange()</a>.</p>
 
 </div>
 </div>
@@ -726,9 +859,9 @@ Atributos estáticos privados</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00111">111</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00142">142</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00057">setSingleStep()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00062">setSingleStep()</a>.</p>
 
 </div>
 </div>
@@ -752,9 +885,9 @@ Atributos estáticos privados</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00113">113</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00144">144</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00069">setSuffix()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00074">setSuffix()</a>.</p>
 
 </div>
 </div>
@@ -778,9 +911,9 @@ Atributos estáticos privados</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00110">110</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_unit_spin_box_8h_source.html#l00141">141</a> del archivo <a class="el" href="_unit_spin_box_8h_source.html">UnitSpinBox.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00091">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00046">setValue()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00052">value()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_unit_spin_box_8h_source.html#l00122">applyConversion()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00051">setValue()</a> y <a class="el" href="_unit_spin_box_8h_source.html#l00057">value()</a>.</p>
 
 </div>
 </div>

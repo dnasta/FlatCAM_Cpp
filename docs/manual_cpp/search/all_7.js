@@ -12,10 +12,11 @@ var searchData=
   ['haspathjob_5f_9',['hasPathJob_',['../classfc_1_1_script_api.html#a182427299d3d3abc71e4e13b13e06bcb',1,'fc::ScriptApi']]],
   ['hasrotation_10',['hasRotation',['../structfc_1_1_gerber_aperture.html#a4e0b7447ced30bae21abe64213667bce',1,'fc::GerberAperture']]],
   ['hatch_11',['Hatch',['../namespacefc.html#aff1595f3d9a92a3c9774a5fd3cf16b63a1ca570bb907094b2921ea489c73f1c3d',1,'fc']]],
-  ['height_12',['height',['../structfc_1_1_gerber_aperture.html#a7672dbc19d58fd200e1fdf3b0463b2ee',1,'fc::GerberAperture::height'],['../structfc_1_1_dxf_text.html#aeb2151c19a627527c1120c8d5776b2c8',1,'fc::DxfText::height'],['../structfc_1_1_b_box.html#a3cb5cc0c1ab69bd0b0bc57838d0f076f',1,'fc::BBox::height()']]],
-  ['holes_13',['holes',['../structfc_1_1_drill_tool.html#a4b0c459b49cdb8a80e4e9a2ab5dce807',1,'fc::DrillTool::holes'],['../structfc_1_1_polygon_contours.html#a75bafc62014bf3caddee893d93a1ec11',1,'fc::PolygonContours::holes'],['../struct_view3_d_1_1_face.html#a1e53bca1ee61df4d7f0f615b2f222294',1,'View3D::Face::holes']]],
-  ['holes_5f_14',['holes_',['../class_view3_d.html#a707942f5971980cbdae1e5032222cd12',1,'View3D']]],
-  ['hpgl_15',['Hpgl',['../namespacefc.html#ab1000db7f3672945f3128b82831cdf62a29b6ecd55043100b1265401d3b7a0832',1,'fc']]],
-  ['hudvisible_16',['hudVisible',['../class_canvas.html#ae8377ccc08c06244625354fc22b26feb',1,'Canvas']]],
-  ['hudvisible_5f_17',['hudVisible_',['../class_canvas.html#a2b2146cba0a6f3778f57096b07bcf1b9',1,'Canvas']]]
+  ['headercomments_12',['headerComments',['../structfc_1_1_g_code_options.html#a1fc82ef97a1b4566aa2ca3a13a8cfaad',1,'fc::GCodeOptions']]],
+  ['height_13',['height',['../structfc_1_1_gerber_aperture.html#a7672dbc19d58fd200e1fdf3b0463b2ee',1,'fc::GerberAperture::height'],['../structfc_1_1_dxf_text.html#aeb2151c19a627527c1120c8d5776b2c8',1,'fc::DxfText::height'],['../structfc_1_1_b_box.html#a3cb5cc0c1ab69bd0b0bc57838d0f076f',1,'fc::BBox::height()']]],
+  ['holes_14',['holes',['../structfc_1_1_drill_tool.html#a4b0c459b49cdb8a80e4e9a2ab5dce807',1,'fc::DrillTool::holes'],['../structfc_1_1_polygon_contours.html#a75bafc62014bf3caddee893d93a1ec11',1,'fc::PolygonContours::holes'],['../struct_view3_d_1_1_face.html#a1e53bca1ee61df4d7f0f615b2f222294',1,'View3D::Face::holes']]],
+  ['holes_5f_15',['holes_',['../class_view3_d.html#a707942f5971980cbdae1e5032222cd12',1,'View3D']]],
+  ['hpgl_16',['Hpgl',['../namespacefc.html#ab1000db7f3672945f3128b82831cdf62a29b6ecd55043100b1265401d3b7a0832',1,'fc']]],
+  ['hudvisible_17',['hudVisible',['../class_canvas.html#ae8377ccc08c06244625354fc22b26feb',1,'Canvas']]],
+  ['hudvisible_5f_18',['hudVisible_',['../class_canvas.html#a2b2146cba0a6f3778f57096b07bcf1b9',1,'Canvas']]]
 ];

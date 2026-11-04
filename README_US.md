@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.3.1"><img alt="Release" src="https://img.shields.io/badge/release-v0.3.1-b4771b"></a>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.0"><img alt="Release" src="https://img.shields.io/badge/release-v0.4.0-b4771b"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-GPLv3-2f6f4f"></a>
   <img alt="macOS" src="https://img.shields.io/badge/macOS-14.4%2B%20arm64-16202b">
   <img alt="C++" src="https://img.shields.io/badge/C%2B%2B-20-00599C">
@@ -21,7 +21,7 @@
 <p align="center">
   <a href="https://dnasta.github.io/FlatCAM_Cpp/manual_html/index.html"><strong>📖 User manual</strong></a> ·
   <a href="https://dnasta.github.io/FlatCAM_Cpp/manual_cpp/index.html"><strong>🛠 Code manual</strong></a> ·
-  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.3.1"><strong>⬇ Download v0.3.1</strong></a>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.0"><strong>⬇ Download v0.4.0</strong></a>
 </p>
 
 ---
@@ -109,9 +109,9 @@ It is a port of the original FlatCAM (Python + PyQt5) to **C++20**, using **Qt 6
 ### CAM tools
 
 - **Isolation**: passes, overlap, V-shape, ball tool, follow, combine, rest machining, order and direction.
-- **Drilling**: drills and slots from Excellon, peck, offsets, optimized order and exact TSP up to 18 holes.
-- **Cutout**: margin, tabs by side or manual positions, full cut, internal holes and multipass.
-- **NCC**: hatch or paint, overlap, copper clearance, margin, angle, area, connection and rest.
+- **Drilling**: drills and slots from Excellon, on-canvas toolpath, peck, offsets, optimized order and exact TSP up to 18 holes.
+- **Cutout**: margin, tabs by side or manual positions, sharp corners, full cut, internal holes and multipass.
+- **NCC**: hatch or paint, overlap, copper clearance, margin, **unprocessed outer border**, angle, area, connection and rest.
 - **Paint**: contour-parallel fill.
 - **Milling**: follows Gerber paths.
 - **Copper thieving**: dots, squares or lines, PPM and reference.
@@ -120,26 +120,27 @@ It is a port of the original FlatCAM (Python + PyQt5) to **C++20**, using **Qt 6
 - **Solder paste**: nozzles per pad size, dispense Z, dwell and direction.
 - **QR Code**: text, module, border, ECC and export.
 - **Punch Gerber** and **Extract drills**.
-- **Corner marks**, **fiducials**, **optimal tool**, **rules**, **calibration**, **minimum distance**, **align**, **double-sided**, **compensation**, **invert**.
+- **Double-sided tool** for mirrored faces, **corner marks**, **fiducials**, **optimal tool**, **rules**, **calibration**, **minimum distance**, **align**, **compensation**, **invert**.
 
 ### Editors
 
 - **Gerber**: primitives, multi-select, move/duplicate/delete, rotate/scale, add circle/rectangle/line/arc, booleans, simplify, buffer, apertures and macros.
 - **Excellon**: tools, drills/slots, move, duplicate, copy/paste, shift all and save.
 - **Geometry**: contours, holes, vertices, undo/redo and operations.
-- **G-code**: syntax highlighting.
+- **G-code**: syntax highlighting, a header with all machining parameters and file saving.
 - **Source**: edit the original Gerber/Excellon and reprocess it.
 
 ### UI
 
 - Project tree with **Files**, **Tools** and **G-code** groups.
 - **Vis** column, per-object properties and per-operation tool tables.
-- Canvas with zoom/pan, selection, measurement, grid, snap, **mm/in** units and colors.
+- Canvas with zoom/pan, selection, measurement, grid, snap, **mm/in** units, highlighted **X=0/Y=0** axes, rulers, PCB measurements and travel from the machine origin.
 - **3D view** with extruded copper, board, drills, per-face lighting and PNG export.
 - **BASIC/ADVANCED** level.
 - **Four themes** in `Options → Themes`: Modern light/dark (Fusion + QSS, amber accent) and System light/dark (native controls). They switch live.
 - Original FlatCAM icons automatically adapted to the theme, with explanatory tooltips.
-- Bottom console with **Tcl shell**, **JS console**, **G-code** and **Report**.
+- Bottom console with **Tcl shell**, **JS console**, **G-code** and **Report**; remembers visibility, tab and height.
+- Numeric inputs accept comma or dot and normalize the decimal separator.
 
 ### Automation
 
@@ -197,7 +198,7 @@ It is a port of the original FlatCAM (Python + PyQt5) to **C++20**, using **Qt 6
 
 ### From the DMG
 
-1. Download [`FlatCAM-CPP-0.3.1-arm64.dmg`](https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.3.1).
+1. Download [`FlatCAM-CPP-0.4.0-arm64.dmg`](https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.0).
 2. Open the DMG.
 3. Drag **FlatCAM C++** to *Applications*.
 4. First launch: right-click → **Open** (ad-hoc signature).
@@ -327,8 +328,8 @@ cmake --build build -j8
 ### Build the DMG
 
 ```bash
-./tools/create_dmg.sh 0.3.1
-# dist/FlatCAM-CPP-0.3.1-arm64.dmg
+./tools/create_dmg.sh 0.4.0
+# dist/FlatCAM-CPP-0.4.0-arm64.dmg
 ```
 
 The script builds, runs `macdeployqt`, copies GEOS, embeds licenses, signs ad-hoc and creates the DMG with the app renamed to `FlatCAM C++.app`.
@@ -345,7 +346,7 @@ The code is portable and CMake detects GEOS through pkg-config or a config packa
 ## Tests and verification
 
 ```bash
-./build/flatcam_tests        # 89 core tests
+./build/flatcam_tests        # 93 core tests
 ./build/flatcam_gui_tests    # 7 GUI tests
 ```
 
@@ -461,4 +462,4 @@ The **GPLv3** license and the acknowledgement of all authors in the chain are pr
 - **QR Code generator:** Project Nayuki.
 - **FlatCAM community** for documentation and examples.
 
-<p align="center"><sub>Built with C++20, Qt 6 and GEOS · macOS Apple Silicon · v0.3.1</sub></p>
+<p align="center"><sub>Built with C++20, Qt 6 and GEOS · macOS Apple Silicon · v0.4.0</sub></p>

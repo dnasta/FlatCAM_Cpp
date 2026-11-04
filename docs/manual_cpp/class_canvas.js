@@ -19,6 +19,7 @@ var class_canvas =
     [ "findLayer", "class_canvas.html#a92c11a1373449f8de2c0fcb25244b7eb", null ],
     [ "fit", "class_canvas.html#a06fa7120e9a8fc01cb861995548cc69f", null ],
     [ "fitTo", "class_canvas.html#aeb8e372c77ae08a0b858033d28e5662f", null ],
+    [ "fitWithOrigin", "class_canvas.html#a342a694b416a3d9d44412eafb59cefd9", null ],
     [ "gridStep", "class_canvas.html#a39226f966f12df2b3f3da7ee22542cbb", null ],
     [ "gridVisible", "class_canvas.html#aae18446d7d8d02005073e733a36351a9", null ],
     [ "hasData", "class_canvas.html#a33fe60451eacc13fe94c970c4c460e24", null ],

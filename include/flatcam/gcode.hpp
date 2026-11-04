@@ -79,10 +79,13 @@ struct GCodeOptions {
     double dwellTime = 0.0;          ///< Pausa tras bajar (segundos).
     double laserPower = 300.0;       ///< Potencia láser (`S`).
     double zFocus = 0.0;             ///< Z de foco en modo láser.
-    GCodeFlavor flavor = GCodeFlavor::Default; ///< Postprocesador.
+    GCodeFlavor flavor = GCodeFlavor::Grbl; ///< Postprocesador (GRBL por defecto).
     /// Plantilla para `ToolchangeCustom`; admite `{tool}`, `{diameter}`,
     /// `{z}`, `{x}` e `{y}`.
     std::string customToolchange;
+    /// Líneas adicionales para el encabezado, con los parámetros propios de la
+    /// operación (estrategia, solape, puentes, etc.).
+    std::vector<std::string> headerComments;
 };
 
 /**

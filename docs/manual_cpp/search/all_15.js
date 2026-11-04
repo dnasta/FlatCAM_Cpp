@@ -1,16 +1,18 @@
 var searchData=
 [
   ['valid_0',['valid',['../structfc_1_1_b_box.html#aa01e601be965de7902d629f1137cb914',1,'fc::BBox::valid'],['../structfc_1_1_optimal_tool.html#a15ea89c27b0fc73c756ff7a4a32f2be0',1,'fc::OptimalTool::valid'],['../classfc_1_1_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9',1,'fc::Geom::valid()'],['../class_geom.html#a322d9e9be30a1ca2ad2fa66e2438b8e9',1,'Geom::valid()']]],
-  ['valign_1',['vAlign',['../structfc_1_1_dxf_text.html#ac31a1a5fc743003cdab29a047e2d93ed',1,'fc::DxfText']]],
-  ['value_2',['value',['../class_unit_spin_box.html#aed1e76da29da302738059263c27284ce',1,'UnitSpinBox']]],
-  ['version_3',['version',['../structfc_1_1_project.html#ae865ade70110aad5763d20396d846880',1,'fc::Project::version'],['../structfc_1_1_project_info.html#aa4199e9b96d6e5e2d30c090cfb4664a7',1,'fc::ProjectInfo::version']]],
-  ['vertices_4',['vertices',['../structfc_1_1_gerber_aperture.html#aa8981947dd7c52ecca2cbbc817a9cf0f',1,'fc::GerberAperture']]],
-  ['view3d_5',['View3D',['../class_view3_d.html',1,'View3D'],['../class_view3_d.html#a76693c706b7942afbc77b453ccb699d4',1,'View3D::View3D()']]],
-  ['view3d_2ecpp_6',['View3D.cpp',['../_view3_d_8cpp.html',1,'']]],
-  ['view3d_2eh_7',['View3D.h',['../_view3_d_8h.html',1,'']]],
-  ['viewoffset_8',['viewOffset',['../class_canvas.html#a968fc3dc26549a596f5bed19320e6152',1,'Canvas']]],
-  ['viewscale_9',['viewScale',['../class_canvas.html#a30b2542167bb9785fab6d8caea42e3d9',1,'Canvas']]],
-  ['visible_10',['visible',['../struct_canvas_1_1_layer_snapshot.html#ae1ea41ec96d58d362e43cd7b26b112dd',1,'Canvas::LayerSnapshot::visible'],['../struct_canvas_1_1_layer.html#a3fa3c8625b1c84f4f59e6b455fb1d394',1,'Canvas::Layer::visible']]],
-  ['visiblesolids_11',['visibleSolids',['../class_canvas.html#ac05951f9556504f9b536e30675039b49',1,'Canvas']]],
-  ['visitor_12',['visitor',['../structfc_1_1_all_objects_sax.html#afd2669ce12445c149c6256f82b67a594',1,'fc::AllObjectsSax']]]
+  ['validate_1',['validate',['../class_unit_spin_box.html#a52f4972187c7fd111eaf3342afd1ded6',1,'UnitSpinBox']]],
+  ['valign_2',['vAlign',['../structfc_1_1_dxf_text.html#ac31a1a5fc743003cdab29a047e2d93ed',1,'fc::DxfText']]],
+  ['value_3',['value',['../class_unit_spin_box.html#aed1e76da29da302738059263c27284ce',1,'UnitSpinBox']]],
+  ['valuefromtext_4',['valueFromText',['../class_unit_spin_box.html#a9f41fd19ffd141edae0dcf9364e77b63',1,'UnitSpinBox']]],
+  ['version_5',['version',['../structfc_1_1_project.html#ae865ade70110aad5763d20396d846880',1,'fc::Project::version'],['../structfc_1_1_project_info.html#aa4199e9b96d6e5e2d30c090cfb4664a7',1,'fc::ProjectInfo::version']]],
+  ['vertices_6',['vertices',['../structfc_1_1_gerber_aperture.html#aa8981947dd7c52ecca2cbbc817a9cf0f',1,'fc::GerberAperture']]],
+  ['view3d_7',['View3D',['../class_view3_d.html',1,'View3D'],['../class_view3_d.html#a76693c706b7942afbc77b453ccb699d4',1,'View3D::View3D()']]],
+  ['view3d_2ecpp_8',['View3D.cpp',['../_view3_d_8cpp.html',1,'']]],
+  ['view3d_2eh_9',['View3D.h',['../_view3_d_8h.html',1,'']]],
+  ['viewoffset_10',['viewOffset',['../class_canvas.html#a968fc3dc26549a596f5bed19320e6152',1,'Canvas']]],
+  ['viewscale_11',['viewScale',['../class_canvas.html#a30b2542167bb9785fab6d8caea42e3d9',1,'Canvas']]],
+  ['visible_12',['visible',['../struct_canvas_1_1_layer_snapshot.html#ae1ea41ec96d58d362e43cd7b26b112dd',1,'Canvas::LayerSnapshot::visible'],['../struct_canvas_1_1_layer.html#a3fa3c8625b1c84f4f59e6b455fb1d394',1,'Canvas::Layer::visible']]],
+  ['visiblesolids_13',['visibleSolids',['../class_canvas.html#ac05951f9556504f9b536e30675039b49',1,'Canvas']]],
+  ['visitor_14',['visitor',['../structfc_1_1_all_objects_sax.html#afd2669ce12445c149c6256f82b67a594',1,'fc::AllObjectsSax']]]
 ];

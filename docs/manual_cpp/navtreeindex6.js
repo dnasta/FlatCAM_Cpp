@@ -1,5 +1,18 @@
 var NAVTREEINDEX6 =
 {
+"structfc_1_1_paint_options.html#afc3a790af1af789ee844610aa898e059":[1,0,0,24,2],
+"structfc_1_1_paint_options.html#afc3a790af1af789ee844610aa898e059":[2,0,0,23,2],
+"structfc_1_1_paint_result.html":[1,0,0,25],
+"structfc_1_1_paint_result.html":[2,0,0,24],
+"structfc_1_1_paint_result.html#a1175fbd74f474ef2485824ed3423f261":[1,0,0,25,0],
+"structfc_1_1_paint_result.html#a1175fbd74f474ef2485824ed3423f261":[2,0,0,24,0],
+"structfc_1_1_paint_result.html#a8793708f00564d8ee65dd53233fdf676":[1,0,0,25,1],
+"structfc_1_1_paint_result.html#a8793708f00564d8ee65dd53233fdf676":[2,0,0,24,1],
+"structfc_1_1_paint_result.html#a9ebf031edfb9ba7a799e175776934a09":[1,0,0,25,2],
+"structfc_1_1_paint_result.html#a9ebf031edfb9ba7a799e175776934a09":[2,0,0,24,2],
+"structfc_1_1_paste_job.html":[1,0,0,26],
+"structfc_1_1_paste_job.html":[2,0,0,25],
+"structfc_1_1_paste_job.html#a38e443cb8ae9b49e4fa4c2d5b6b33ffa":[1,0,0,26,7],
 "structfc_1_1_paste_job.html#a38e443cb8ae9b49e4fa4c2d5b6b33ffa":[2,0,0,25,7],
 "structfc_1_1_paste_job.html#a7dedd05d986934cdfa9308d349fd297b":[1,0,0,26,0],
 "structfc_1_1_paste_job.html#a7dedd05d986934cdfa9308d349fd297b":[2,0,0,25,0],

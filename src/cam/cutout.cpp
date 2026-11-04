@@ -255,7 +255,12 @@ CutoutResult cutoutGeometry(const Geom& outline, const CutoutOptions& options) {
     Geom merged = outline.unaryUnion();
     if (!merged.valid() || merged.empty()) merged = outline;
 
-    Geom envelope = offset == 0.0 ? merged : merged.buffer(offset, std::max(2, options.quadrantSegments));
+    // GEOS redondea las esquinas por defecto; para una placa hay que conservar
+    // el ángulo recto del contorno usando uniones en inglete.
+    Geom envelope = offset == 0.0
+                        ? merged
+                        : merged.bufferStyle(offset, std::max(2, options.quadrantSegments),
+                                             GEOSBUF_CAP_ROUND, GEOSBUF_JOIN_MITRE, 10.0);
     if (!envelope.valid() || envelope.empty()) return result;
 
     if (options.area) {

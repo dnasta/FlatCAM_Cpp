@@ -179,7 +179,7 @@ TEST(GCode, DefaultNoM6OmitsToolChangePause) {
     GCodeOptions opt;
     opt.flavor = GCodeFlavor::DefaultNoM6;
     const std::string code = drillingGCode(sampleJob(), opt);
-    EXPECT_EQ(code.find("M6"), std::string::npos);
+    EXPECT_EQ(code.find("M6\n"), std::string::npos);
 }
 
 TEST(GCode, DrillOffsetShiftsHoles) {
@@ -368,4 +368,41 @@ TEST(GCode, LaserMultiToolSkipsEmptyPathsSafely) {
     EXPECT_NE(code.find("M5"), std::string::npos);
     // The empty first path must not produce a rapid to an invalid point.
     EXPECT_EQ(code.find("G00 XY"), std::string::npos);
+}
+
+TEST(GCode, GrblLaserAvoidsRedundantM5) {
+    GCodeOptions opt;
+    opt.flavor = GCodeFlavor::GrblLaser;
+    opt.laserPower = 300.0;
+    PathJob job;
+    job.paths = {{{0, 0}, {10, 0}}, {{0, 1}, {10, 1}}, {{0, 2}, {10, 2}}};
+    const std::string code = pathsGCode(job, opt);
+    EXPECT_EQ(countOccurrences(code, "M5"), std::size_t{2});   // inicio y fin
+    EXPECT_EQ(countOccurrences(code, "M03"), std::size_t{1});  // una sola activación
+}
+
+TEST(GCode, GrblLaserMultiToolAvoidsRedundantM5) {
+    GCodeOptions header;
+    header.flavor = GCodeFlavor::GrblLaser;
+    header.laserPower = 300.0;
+    PathToolJob tool;
+    tool.number = 1;
+    tool.diameter = 0.2;
+    tool.options = header;
+    tool.paths = {{{0, 0}, {5, 0}}, {{0, 1}, {5, 1}}};
+    const std::string code = pathsGCodeMulti({tool}, header);
+    EXPECT_EQ(countOccurrences(code, "M5"), std::size_t{2});
+    EXPECT_EQ(countOccurrences(code, "\nM03 "), std::size_t{1});
+}
+
+TEST(GCode, DefaultFlavorIsGrblAndHeaderListsParameters) {
+    GCodeOptions opt;
+    EXPECT_EQ(opt.flavor, GCodeFlavor::Grbl);
+    PathJob job;
+    job.paths = {{{0, 0}, {10, 0}}};
+    job.toolDiameter = 0.2;
+    const std::string code = pathsGCode(job, opt);
+    EXPECT_NE(code.find("(Postprocessor: GRBL)"), std::string::npos);
+    EXPECT_NE(code.find("(Feedrate XY:"), std::string::npos);
+    EXPECT_NE(code.find("(Z cut:"), std::string::npos);
 }

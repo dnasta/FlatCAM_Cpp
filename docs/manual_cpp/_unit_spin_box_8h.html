@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.3.1</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.4.0</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -120,7 +120,9 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('_unit_spin_box
 <p>QDoubleSpinBox que guarda longitudes en mm y las muestra en mm/in.  
 <a href="#details">Más...</a></p>
 <div class="textblock"><code>#include &lt;QDoubleSpinBox&gt;</code><br />
+<code>#include &lt;QLocale&gt;</code><br />
 <code>#include &lt;QString&gt;</code><br />
+<code>#include &lt;QValidator&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 </div>

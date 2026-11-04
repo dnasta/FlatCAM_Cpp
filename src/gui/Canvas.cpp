@@ -13,6 +13,7 @@
 
 #include <QMouseEvent>
 #include <QPainterPathStroker>
+#include <QFontMetrics>
 #include <QPainter>
 #include <QPainterPath>
 #include <QSvgGenerator>
@@ -778,6 +779,35 @@ void Canvas::fit() {
     offset_ = QPointF(w / 2.0 - cx * scale_, h / 2.0 + cy * scale_);
 }
 
+/// @brief Ajusta la vista incluyendo el origen de máquina cuando está cerca.
+void Canvas::fitWithOrigin() {
+    if (!hasData_) return;
+    fc::BBox view = bounds_;
+    const double diag = std::hypot(bounds_.width(), bounds_.height());
+    const double nx = std::clamp(0.0, bounds_.xmin, bounds_.xmax);
+    const double ny = std::clamp(0.0, bounds_.ymin, bounds_.ymax);
+    const double distance = std::hypot(nx, ny);
+    const bool inside = 0.0 >= bounds_.xmin && 0.0 <= bounds_.xmax &&
+                        0.0 >= bounds_.ymin && 0.0 <= bounds_.ymax;
+    if (!inside && distance <= std::max(10.0, diag * 6.0)) {
+        view.xmin = std::min(view.xmin, 0.0);
+        view.ymin = std::min(view.ymin, 0.0);
+        view.xmax = std::max(view.xmax, 0.0);
+        view.ymax = std::max(view.ymax, 0.0);
+    }
+    const double pad = std::max(0.5, diag * 0.04);
+    view = view.expanded(pad);
+    const double w = std::max(1, width());
+    const double h = std::max(1, height());
+    scale_ = std::min((w - 40.0) / std::max(view.width(), 1e-6),
+                      (h - 40.0) / std::max(view.height(), 1e-6));
+    if (!std::isfinite(scale_) || scale_ <= 0.0) scale_ = 1.0;
+    const double cx = (view.xmin + view.xmax) / 2.0;
+    const double cy = (view.ymin + view.ymax) / 2.0;
+    offset_ = QPointF(w / 2.0 - cx * scale_, h / 2.0 + cy * scale_);
+    update();
+}
+
 /**
  * @brief Configura la paleta del visor.
  *
@@ -915,24 +945,46 @@ void Canvas::paintEvent(QPaintEvent*) {
     QTransform t(scale_, 0.0, 0.0, -scale_, offset_.x(), offset_.y());
     p.setTransform(t);
 
+    const fc::BBox view{(0.0 - offset_.x()) / scale_,
+                        (offset_.y() - height()) / scale_,
+                        (width() - offset_.x()) / scale_,
+                        offset_.y() / scale_};
+    double step = gridStep_ > 0.0 ? gridStep_ : 10.0;
+    if (gridStep_ <= 0.0) {
+        while (step * scale_ < 40.0) step *= 10.0;
+        while (step * scale_ > 200.0) step /= 10.0;
+    }
     if (gridVisible_) {
-        double step = gridStep_ > 0.0 ? gridStep_ : 10.0;
-        if (gridStep_ <= 0.0) {
-            while (step * scale_ < 40.0) step *= 10.0;
-            while (step * scale_ > 200.0) step /= 10.0;
-        }
         p.setPen(QPen(QColor(38, 46, 54), 0.0));
-        const double x0 = std::floor(bounds_.xmin / step) * step;
-        const double y0 = std::floor(bounds_.ymin / step) * step;
-        for (double x = x0; x <= bounds_.xmax + step; x += step)
-            p.drawLine(QPointF(x, bounds_.ymin - step), QPointF(x, bounds_.ymax + step));
-        for (double y = y0; y <= bounds_.ymax + step; y += step)
-            p.drawLine(QPointF(bounds_.xmin - step, y), QPointF(bounds_.xmax + step, y));
+        const double x0 = std::floor(view.xmin / step) * step;
+        const double y0 = std::floor(view.ymin / step) * step;
+        for (double x = x0; x <= view.xmax + step; x += step)
+            p.drawLine(QPointF(x, view.ymin - step), QPointF(x, view.ymax + step));
+        for (double y = y0; y <= view.ymax + step; y += step)
+            p.drawLine(QPointF(view.xmin - step, y), QPointF(view.xmax + step, y));
     }
 
-    p.setPen(QPen(QColor(90, 100, 110), 0.0));
-    p.drawLine(QPointF(bounds_.xmin, displayOrigin_.y), QPointF(bounds_.xmax, displayOrigin_.y));
-    p.drawLine(QPointF(displayOrigin_.x, bounds_.ymin), QPointF(displayOrigin_.x, bounds_.ymax));
+    // Ejes de máquina X=0 / Y=0 resaltados. Son la referencia desde la que
+    // arranca el cabezal, distinta del origen de visualización configurable.
+    const QColor axisX(226, 108, 117, 230);
+    const QColor axisY(96, 200, 136, 230);
+    const double axisWidth = 2.0 / std::max(1.0, scale_);
+    if (view.ymin <= 0.0 && view.ymax >= 0.0) {
+        p.setPen(QPen(axisX, axisWidth));
+        p.drawLine(QPointF(view.xmin, 0.0), QPointF(view.xmax, 0.0));
+    }
+    if (view.xmin <= 0.0 && view.xmax >= 0.0) {
+        p.setPen(QPen(axisY, axisWidth));
+        p.drawLine(QPointF(0.0, view.ymin), QPointF(0.0, view.ymax));
+    }
+
+    if (std::abs(displayOrigin_.x) > 1e-9 || std::abs(displayOrigin_.y) > 1e-9) {
+        p.setPen(QPen(QColor(120, 130, 140, 150), 0.0, Qt::DashLine));
+        p.drawLine(QPointF(bounds_.xmin, displayOrigin_.y),
+                   QPointF(bounds_.xmax, displayOrigin_.y));
+        p.drawLine(QPointF(displayOrigin_.x, bounds_.ymin),
+                   QPointF(displayOrigin_.x, bounds_.ymax));
+    }
 
     if (workspace_.valid) {
         QPen pen(QColor(120, 90, 200), 0.0, Qt::DashLine);
@@ -968,11 +1020,119 @@ void Canvas::paintEvent(QPaintEvent*) {
     p.drawPath(toolpathPath_);
 
     p.setTransform(QTransform());
+    p.setRenderHint(QPainter::TextAntialiasing, true);
+    QFont small = p.font();
+    small.setPointSizeF(9.0);
+    p.setFont(small);
+    const auto toScreen = [this](double x, double y) {
+        return QPointF(x * scale_ + offset_.x(), -y * scale_ + offset_.y());
+    };
+    const QRect viewport = rect();
+    const auto inside = [&viewport](const QPointF& p) {
+        return viewport.adjusted(-2, -2, 2, 2).contains(p.toPoint());
+    };
+
+    // Rótulos de los ejes y marcas de coordenadas.
+    const QPointF originScreen = toScreen(0.0, 0.0);
+    if (inside(originScreen)) {
+        p.setPen(QPen(QColor(235, 238, 242, 220), 1.2));
+        p.setBrush(Qt::NoBrush);
+        p.drawEllipse(originScreen, 5.0, 5.0);
+        p.drawLine(originScreen + QPointF(-8, 0), originScreen + QPointF(8, 0));
+        p.drawLine(originScreen + QPointF(0, -8), originScreen + QPointF(0, 8));
+        p.setPen(QColor(235, 238, 242, 220));
+        p.drawText(originScreen + QPointF(8, -7), QStringLiteral("0,0"));
+    }
+    if (inside(toScreen(0.0, 0.0))) {
+        p.setPen(axisX);
+        p.drawText(viewport.adjusted(8, 0, -8, -8), Qt::AlignRight | Qt::AlignBottom,
+                   QStringLiteral("Y=0"));
+        p.setPen(axisY);
+        p.drawText(viewport.adjusted(8, 8, -8, -8), Qt::AlignLeft | Qt::AlignTop,
+                   QStringLiteral("X=0"));
+    }
+    if (step * scale_ >= 28.0) {
+        const QColor tickColor(160, 168, 178, 190);
+        p.setPen(tickColor);
+        const double x0 = std::floor(view.xmin / step) * step;
+        for (double x = x0; x <= view.xmax + step && view.ymin <= 0.0 && view.ymax >= 0.0;
+             x += step) {
+            if (std::abs(x) < step * 0.01) continue;
+            const QPointF s = toScreen(x, 0.0);
+            if (!inside(s)) continue;
+            p.drawLine(s + QPointF(0, -3), s + QPointF(0, 3));
+            p.drawText(s + QPointF(3, -4), QString::number(x, 'f', step < 1.0 ? 2 : 0));
+        }
+        const double y0 = std::floor(view.ymin / step) * step;
+        for (double y = y0; y <= view.ymax + step && view.xmin <= 0.0 && view.xmax >= 0.0;
+             y += step) {
+            if (std::abs(y) < step * 0.01) continue;
+            const QPointF s = toScreen(0.0, y);
+            if (!inside(s)) continue;
+            p.drawLine(s + QPointF(-3, 0), s + QPointF(3, 0));
+            p.drawText(s + QPointF(5, 3), QString::number(y, 'f', step < 1.0 ? 2 : 0));
+        }
+    }
+
+    // Recorrido desde el origen de máquina hasta la PCB y medidas del área.
+    if (bounds_.valid) {
+        const double nx = std::clamp(0.0, bounds_.xmin, bounds_.xmax);
+        const double ny = std::clamp(0.0, bounds_.ymin, bounds_.ymax);
+        const QPointF target = toScreen(nx, ny);
+        const bool outside = 0.0 < bounds_.xmin || 0.0 > bounds_.xmax ||
+                             0.0 < bounds_.ymin || 0.0 > bounds_.ymax;
+        if (outside && inside(originScreen) && inside(target)) {
+            p.setPen(QPen(QColor(255, 190, 90, 220), 1.4, Qt::DashLine));
+            p.drawLine(originScreen, target);
+            const double angle = std::atan2(target.y() - originScreen.y(),
+                                            target.x() - originScreen.x());
+            const double len = 9.0;
+            const QPointF a = target - QPointF(std::cos(angle - 0.45) * len,
+                                               std::sin(angle - 0.45) * len);
+            const QPointF b = target - QPointF(std::cos(angle + 0.45) * len,
+                                               std::sin(angle + 0.45) * len);
+            p.drawLine(target, a);
+            p.drawLine(target, b);
+            p.setPen(QColor(255, 210, 140));
+            p.drawText((originScreen + target) / 2.0 + QPointF(6, -6),
+                       QString("ΔX %1  ΔY %2")
+                           .arg(nx, 0, 'f', 2)
+                           .arg(ny, 0, 'f', 2));
+        }
+
+        const QString l1 = QString("PCB  X %1 … %2   (Δ %3)")
+                               .arg(bounds_.xmin, 0, 'f', 2)
+                               .arg(bounds_.xmax, 0, 'f', 2)
+                               .arg(bounds_.width(), 0, 'f', 2);
+        const QString l2 = QString("     Y %1 … %2   (Δ %3)")
+                               .arg(bounds_.ymin, 0, 'f', 2)
+                               .arg(bounds_.ymax, 0, 'f', 2)
+                               .arg(bounds_.height(), 0, 'f', 2);
+        const QString l3 = outside
+                               ? QString("Origen 0,0 → ΔX %1  ΔY %2")
+                                     .arg(nx, 0, 'f', 2)
+                                     .arg(ny, 0, 'f', 2)
+                               : QStringLiteral("Origen 0,0 dentro de la PCB");
+        QFontMetrics metrics(small);
+        const int width = std::max({metrics.horizontalAdvance(l1),
+                                    metrics.horizontalAdvance(l2),
+                                    metrics.horizontalAdvance(l3)}) + 18;
+        const QRect box(10, 10, width, 62);
+        p.setPen(Qt::NoPen);
+        p.setBrush(QColor(8, 12, 16, 190));
+        p.drawRoundedRect(box, 6, 6);
+        p.setPen(QColor(214, 222, 232));
+        p.drawText(box.adjusted(9, 4, -6, -4), Qt::AlignLeft | Qt::AlignTop, l1);
+        p.drawText(box.adjusted(9, 20, -6, -4), Qt::AlignLeft | Qt::AlignTop, l2);
+        p.setPen(QColor(255, 204, 128));
+        p.drawText(box.adjusted(9, 40, -6, -4), Qt::AlignLeft | Qt::AlignTop, l3);
+    }
+
     if (hudVisible_ && hasCursor_) {
         const QString text = QString("X %1  Y %2")
                                  .arg(cursorWorld_.x(), 0, 'f', 3)
                                  .arg(cursorWorld_.y(), 0, 'f', 3);
-        const QRect box(10, 10, 180, 26);
+        const QRect box(10, 80, 180, 26);
         p.setPen(Qt::NoPen);
         p.setBrush(QColor(0, 0, 0, 170));
         p.drawRoundedRect(box, 5, 5);

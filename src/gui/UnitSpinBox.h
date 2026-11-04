@@ -5,7 +5,9 @@
 #pragma once
 
 #include <QDoubleSpinBox>
+#include <QLocale>
 #include <QString>
+#include <QValidator>
 
 #include <algorithm>
 #include <vector>
@@ -25,6 +27,9 @@ class UnitSpinBox : public QDoubleSpinBox {
 public:
     /// @brief Crea el campo y lo registra para el cambio de unidad.
     explicit UnitSpinBox(QWidget* parent = nullptr) : QDoubleSpinBox(parent) {
+        // El programa usa punto decimal en el G-code y en las tablas; forzar
+        // la locale C evita que el mismo valor se muestre con coma.
+        setLocale(QLocale::c());
         instances().push_back(this);
         applyConversion();
     }
@@ -79,6 +84,32 @@ public:
     }
     /// @return `true` si la unidad activa es pulgadas.
     static bool displayInch() { return displayInch_; }
+
+protected:
+    /// @brief Acepta coma o punto como separador decimal al escribir.
+    QValidator::State validate(QString& input, int& pos) const override {
+        QString normalized = input;
+        normalized.replace(',', '.');
+        return QDoubleSpinBox::validate(normalized, pos);
+    }
+
+    /// @brief Interpreta la coma como punto decimal.
+    double valueFromText(const QString& text) const override {
+        QString normalized = text;
+        normalized.replace(',', '.');
+        return QDoubleSpinBox::valueFromText(normalized);
+    }
+
+    /// @brief Corrige el texto pendiente antes de aceptar el valor.
+    void fixup(QString& input) const override {
+        input.replace(',', '.');
+        QDoubleSpinBox::fixup(input);
+    }
+
+    /// @brief Muestra siempre el separador decimal como punto.
+    QString textFromValue(double value) const override {
+        return QDoubleSpinBox::textFromValue(value).replace(',', '.');
+    }
 
 private:
     /// Lista de campos vivos para actualizar la unidad en caliente.

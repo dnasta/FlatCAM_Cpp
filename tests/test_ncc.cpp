@@ -64,3 +64,17 @@ TEST(IsolationRest, SmallToolIsolatesCloseFeatures) {
     EXPECT_GT(rest.paths.size(), std::size_t{0});
     EXPECT_EQ(rest.notIsolated.size(), std::size_t{2});
 }
+
+TEST(Ncc, BorderLeavesOuterBandUnprocessed) {
+    NccOptions opt;
+    opt.toolDiameter = 0.5;
+    opt.stepOver = 0.8;
+    opt.border = 2.0;
+
+    const NccResult r = clearCopper(Geom::box(4, 4, 6, 6), Geom::box(0, 0, 10, 10), opt);
+    ASSERT_TRUE(r.bounds.valid);
+    EXPECT_GE(r.bounds.xmin, 1.99);
+    EXPECT_GE(r.bounds.ymin, 1.99);
+    EXPECT_LE(r.bounds.xmax, 8.01);
+    EXPECT_LE(r.bounds.ymax, 8.01);
+}

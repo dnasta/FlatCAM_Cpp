@@ -116,6 +116,9 @@ public:
     /// @brief Ajusta la vista a todo el contenido.
     void fit();
 
+    /// @brief Ajusta la vista al contenido y al origen de máquina.
+    void fitWithOrigin();
+
     /// @brief Ajusta la vista a una caja.
     void fitTo(const fc::BBox& bounds);
     /// @brief Muestra u oculta la rejilla.

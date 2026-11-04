@@ -20,7 +20,7 @@ TEST(Cutout, ExternalSquare) {
 
     const CutoutResult r = cutoutGeometry(Geom::box(0, 0, 50, 50), opt);
     ASSERT_EQ(r.paths.size(), std::size_t{1});
-    EXPECT_NEAR(r.totalLength, 200.0 + 2.0 * M_PI, 0.02);
+    EXPECT_NEAR(r.totalLength, 208.0, 0.02);  // 52 x 52 con esquinas en inglete
     ASSERT_TRUE(r.bounds.valid);
     EXPECT_NEAR(r.bounds.xmin, -1.0, 1e-9);
     EXPECT_NEAR(r.bounds.xmax, 51.0, 1e-9);
@@ -73,8 +73,8 @@ TEST(Cutout, TabsSplitThePath) {
 
     const CutoutResult r = cutoutGeometry(Geom::box(0, 0, 50, 50), opt);
     ASSERT_EQ(r.paths.size(), std::size_t{2});
-    // 200 mm perimeter + rounded corners (pi) minus two 5 mm bridges.
-    EXPECT_NEAR(r.totalLength, 200.0 + M_PI - 10.0, 0.05);
+    // Perímetro 51 x 51 con esquinas en inglete, menos dos puentes de 5 mm.
+    EXPECT_NEAR(r.totalLength, 204.0 - 10.0, 0.05);
 }
 
 TEST(Cutout, AreaClipsTheEnvelope) {

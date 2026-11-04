@@ -129,6 +129,22 @@ using namespace fc;
 
 namespace {
 
+/// @brief Interpreta un número aceptando coma o punto decimal.
+double parseNumberText(const QString& text, bool* ok = nullptr) {
+    QString normalized = text.trimmed();
+    normalized.remove(' ');
+    normalized.replace(',', '.');
+    bool valid = false;
+    const double value = normalized.toDouble(&valid);
+    if (ok) *ok = valid;
+    return valid ? value : 0.0;
+}
+
+/// @brief Agrega líneas propias de la operación al encabezado del G-code.
+void addHeaderComments(fc::GCodeOptions& opt, std::initializer_list<QString> lines) {
+    for (const QString& line : lines) opt.headerComments.push_back(line.toStdString());
+}
+
 #ifdef FC_HAVE_TCL
 /// @name Adaptadores de comandos Tcl
 /// Cada `tclCmd*` valida argumentos y delega en un método `tcl*`.
@@ -1088,6 +1104,7 @@ QIcon toolIconForTitle(const QString& title) {
     if (title.contains("Solder")) return originalIcon("solderpaste");
     if (title.contains("QR")) return originalIcon("qrcode");
     if (title.contains("Film")) return originalIcon("film");
+    if (title.contains("2 lados") || title.contains("Doble")) return originalIcon("doubleside");
     return QIcon();
 }
 
@@ -1245,6 +1262,12 @@ void MainWindow::buildLayout() {
     shellDock_->setTitleBarWidget(new QWidget(shellDock_));
     shellDock_->setWidget(bottomTabs_);
     addDockWidget(Qt::BottomDockWidgetArea, shellDock_);
+    connect(shellDock_, &QDockWidget::visibilityChanged, this, [this](bool visible) {
+        QSettings().setValue("preferences/consoleVisible", visible);
+    });
+    connect(bottomTabs_, &QTabWidget::currentChanged, this, [this](int index) {
+        QSettings().setValue("preferences/consoleTab", index);
+    });
 
     auto* closeConsole = new QToolButton(bottomTabs_);
     closeConsole->setText("×");
@@ -1343,15 +1366,24 @@ void MainWindow::buildLayout() {
         refreshProperties();
     });
     connect(objects_, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* item, int) {
-        const QString path = item->data(0, Qt::UserRole + 2).toString();
-        if (!path.isEmpty()) {
-            openGCodeEditor(path, this);
+        objects_->setCurrentItem(item);
+        const int id = item->data(0, Qt::UserRole).toInt();
+        const QString kind = item->text(2).toLower();
+        if (kind == "cncjob" || kind == "document" || kind == "script") {
+            openTextObject(id);
             return;
         }
-        objects_->setCurrentItem(item);
-        const QString kind = item->text(2).toLower();
-        if (kind == "document" || kind == "script" || kind == "cncjob") {
-            openTextObject(item->data(0, Qt::UserRole).toInt());
+        if (kind == "gerber") {
+            openToolTab(tr("Herramienta de aislamiento"));
+            return;
+        }
+        if (kind == "excellon") {
+            openToolTab(tr("Herramienta de perforación"));
+            return;
+        }
+        const QString path = item->data(0, Qt::UserRole + 2).toString();
+        if (!path.isEmpty() && QFileInfo::exists(path)) {
+            openGCodeEditor(path, this);
             return;
         }
         refreshObjectToolPage();
@@ -1694,13 +1726,14 @@ void MainWindow::buildMenus() {
     auto addToolAction = [this, tools](const QString& text, const QString& title) {
         QAction* action = tools->addAction(text);
         action->setIcon(toolIconForTitle(title));
-        connect(action, &QAction::triggered, this, [this, title] { showToolTab(title); });
+        connect(action, &QAction::triggered, this, [this, title] { openToolTab(title); });
     };
     addToolAction(tr("&Aislamiento"), tr("Herramienta de aislamiento"));
     addToolAction(tr("&NCC"), tr("Herramienta NCC"));
     addToolAction(tr("&Corte"), tr("Herramienta de corte"));
     addToolAction(tr("&Pintura"), tr("Herramienta de pintura"));
     addToolAction(tr("&Perforación"), tr("Herramienta de perforación"));
+    addToolAction(tr("&2 lados"), tr("Herramienta de 2 lados"));
     addToolAction(tr("&Fresado"), tr("Herramienta de fresado"));
     addToolAction(tr("Copper &Thieving"), tr("Copper Thieving"));
     addToolAction(tr("Solder &Paste"), tr("Solder Paste"));
@@ -1819,9 +1852,12 @@ void MainWindow::buildMenus() {
     QAction* sourceEditor = objectsMenu->addAction(tr("&Editor de fuente..."));
     sourceEditor->setIcon(originalIcon("code_editor"));
     connect(sourceEditor, &QAction::triggered, this, &MainWindow::editSource);
-    QAction* moveOrigin = objectsMenu->addAction(tr("Mover a &origen"));
+    QAction* moveOrigin = objectsMenu->addAction(tr("Centrar objeto en (0, 0)"));
     moveOrigin->setIcon(originalIcon("origin"));
     connect(moveOrigin, &QAction::triggered, this, &MainWindow::moveToOrigin);
+    QAction* movePcb = objectsMenu->addAction(tr("Llevar toda la PCB a (0, 0)"));
+    movePcb->setIcon(originalIcon("align"));
+    connect(movePcb, &QAction::triggered, this, &MainWindow::movePcbToOrigin);
     QAction* joinAction = objectsMenu->addAction(tr("&Unir objetos..."));
     joinAction->setIcon(originalIcon("join"));
     connect(joinAction, &QAction::triggered, this, &MainWindow::joinObjects);
@@ -1979,7 +2015,7 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.3.1</b> · build 2026-11-04<br>"
+                           tr("<b>FlatCAM C++ 0.4.0</b> · build 2026-11-04<br>"
                               "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
                               "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
@@ -2006,8 +2042,10 @@ void MainWindow::buildMenus() {
            tr("Eliminar el objeto seleccionado."));
     addBar("distance_min", tr("Distancia mínima"), &MainWindow::distanceTool,
            tr("Medir la distancia mínima entre dos objetos."));
-    addBar("origin", tr("Mover a origen"), &MainWindow::moveToOrigin,
-           tr("Llevar el objeto seleccionado a (0, 0)."));
+    addBar("origin", tr("Centrar objeto en (0, 0)"), &MainWindow::moveToOrigin,
+           tr("Mover el objeto seleccionado para que su centro quede en (0, 0)."));
+    addBar("align", tr("PCB a (0, 0)"), &MainWindow::movePcbToOrigin,
+           tr("Llevar toda la PCB al origen de máquina (esquina inferior izquierda)."));
     addBar("jump_to", tr("Ir a coordenadas"), &MainWindow::jumpToLocation,
            tr("Centrar la vista en una coordenada."));
     addBar("distance", tr("Medir distancia"), &MainWindow::distanceMeasure,
@@ -2036,27 +2074,30 @@ void MainWindow::buildMenus() {
     }, tr("Hacer zoom al objeto seleccionado."));
     toolsBar->addSeparator();
     addBar("isolate", tr("Aislamiento"), [this] {
-        showToolTab(tr("Herramienta de aislamiento"));
+        openToolTab(tr("Herramienta de aislamiento"));
     }, tr("Abrir la herramienta de aislamiento."));
-    addBar("ncc", tr("NCC"), [this] { showToolTab(tr("Herramienta NCC")); },
+    addBar("ncc", tr("NCC"), [this] { openToolTab(tr("Herramienta NCC")); },
            tr("Abrir la herramienta NCC."));
-    addBar("cutout", tr("Corte"), [this] { showToolTab(tr("Herramienta de corte")); },
+    addBar("cutout", tr("Corte"), [this] { openToolTab(tr("Herramienta de corte")); },
            tr("Abrir la herramienta de corte."));
-    addBar("paint", tr("Pintura"), [this] { showToolTab(tr("Herramienta de pintura")); },
+    addBar("paint", tr("Pintura"), [this] { openToolTab(tr("Herramienta de pintura")); },
            tr("Abrir la herramienta de pintura."));
     addBar("drill", tr("Perforación"), [this] {
-        showToolTab(tr("Herramienta de perforación"));
+        openToolTab(tr("Herramienta de perforación"));
     }, tr("Abrir la herramienta de perforación."));
-    addBar("milling", tr("Fresado"), [this] { showToolTab(tr("Herramienta de fresado")); },
+    addBar("doubleside", tr("2 lados"), [this] {
+        openToolTab(tr("Herramienta de 2 lados"));
+    }, tr("Abrir la herramienta de doble faz."));
+    addBar("milling", tr("Fresado"), [this] { openToolTab(tr("Herramienta de fresado")); },
            tr("Abrir la herramienta de fresado."));
     toolsBar->addSeparator();
     addBar("panelize", tr("Panelizar"), &MainWindow::panelize,
            tr("Duplicar el objeto en una grilla de panel."));
     addBar("film", tr("Film"), &MainWindow::createFilm,
            tr("Combinar las capas visibles en un film."));
-    addBar("solderpaste", tr("Solder Paste"), [this] { showToolTab(tr("Solder Paste")); },
+    addBar("solderpaste", tr("Solder Paste"), [this] { openToolTab(tr("Solder Paste")); },
            tr("Abrir la herramienta de pasta de soldar."));
-    addBar("clean", tr("Thieving"), [this] { showToolTab(tr("Copper Thieving")); },
+    addBar("clean", tr("Thieving"), [this] { openToolTab(tr("Copper Thieving")); },
            tr("Abrir Copper Thieving."));
     addBar("rules", tr("Reglas"), &MainWindow::rulesCheck,
            tr("Comprobar separaciones mínimas."));
@@ -2091,7 +2132,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.3.1\nBuild: 2026-11-04\n"
+            tr("FlatCAM C++ 0.4.0\nBuild: 2026-11-04\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -2264,6 +2305,7 @@ bool MainWindow::openFiles(const QStringList& paths) {
     }
 
     canvas_->endGeometry();
+    canvas_->fitWithOrigin();
     canvas_->setToolpaths({});
     if (!objectItems().empty()) objects_->setCurrentItem(objectItems().front());
 
@@ -2341,6 +2383,7 @@ bool MainWindow::openProject(const QString& path) {
             });
 
         canvas_->endGeometry();
+        canvas_->fitWithOrigin();
         canvas_->setToolpaths({});
         if (!objectItems().empty())
             objects_->setCurrentItem(objectItems().front());
@@ -2751,7 +2794,7 @@ void MainWindow::editGeometry() {
             auto* x = table->item(i, 0);
             auto* y = table->item(i, 1);
             if (!x || !y) continue;
-            ring.push_back({x->text().toDouble(), y->text().toDouble()});
+            ring.push_back({parseNumberText(x->text()), parseNumberText(y->text())});
         }
     };
 
@@ -3494,7 +3537,7 @@ int MainWindow::tclIsolate(double dia, int passes, double overlap) {
 /// @brief Adaptador Tcl del comando `cutout`.
 int MainWindow::tclCutout(double dia, double margin, int tabs, double width) {
     GCodeOptions opt;
-    if (!applyCutout(dia, margin, true, opt)) return 0;
+    if (!applyCutout(dia, margin, true, opt, tabs, width)) return 0;
     return static_cast<int>(lastCutMulti_.size());
 }
 
@@ -3648,7 +3691,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.3.1");
+    return QStringLiteral("FlatCAM C++ 0.4.0");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
@@ -4077,7 +4120,7 @@ void MainWindow::convertToolTableUnits(bool toInch) {
             for (int column : {1, 6, 7}) {
                 if (auto* item = table->item(row, column)) {
                     bool ok = false;
-                    const double v = item->text().toDouble(&ok);
+                    const double v = parseNumberText(item->text(), &ok);
                     if (ok) item->setText(QString::number(v * factor, 'f', decimals));
                 }
             }
@@ -4357,6 +4400,21 @@ void MainWindow::loadPreferences() {
     if (canvas_ && wsW > 0.0 && wsH > 0.0) canvas_->setWorkspace(BBox{0.0, 0.0, wsW, wsH});
     if (canvas_) canvas_->setHudVisible(settings.value("preferences/hud", false).toBool());
     if (canvas_) canvas_->setColors(background_, copperColor_, followColor_, toolpathColor_);
+
+    if (bottomTabs_) {
+        const int tab = settings.value("preferences/consoleTab", 0).toInt();
+        if (tab >= 0 && tab < bottomTabs_->count()) bottomTabs_->setCurrentIndex(tab);
+    }
+    if (shellDock_) {
+        const bool visible = settings.value("preferences/consoleVisible", true).toBool();
+        shellDock_->setVisible(visible);
+        const int height = settings.value("preferences/consoleHeight", 0).toInt();
+        if (visible && height > 80) {
+            QTimer::singleShot(0, this, [this, height] {
+                if (shellDock_) resizeDocks({shellDock_}, {height}, Qt::Vertical);
+            });
+        }
+    }
 }
 
 /// @brief Persiste las preferencias en QSettings.
@@ -4383,6 +4441,13 @@ void MainWindow::savePreferences() {
     settings.setValue("preferences/cncFeedZ", cncDefaultFeedZ_);
     settings.setValue("preferences/cncRPM", cncDefaultRPM_);
     settings.setValue("preferences/cncZCut", cncDefaultZCut_);
+    if (shellDock_ && shellDock_->isVisible()) {
+        settings.setValue("preferences/consoleVisible", true);
+        if (shellDock_->height() > 80)
+            settings.setValue("preferences/consoleHeight", shellDock_->height());
+    }
+    if (bottomTabs_)
+        settings.setValue("preferences/consoleTab", bottomTabs_->currentIndex());
 }
 
 namespace {
@@ -4548,13 +4613,13 @@ void MainWindow::showToolDb() {
             };
             QJsonObject entry;
             entry["name"] = cell(0);
-            entry["diameter"] = cell(1).toDouble();
-            entry["feedXY"] = cell(2).toDouble();
-            entry["feedZ"] = cell(3).toDouble();
-            entry["rpm"] = cell(4).toDouble();
-            entry["laser"] = cell(5).toDouble();
-            entry["zCut"] = cell(6).toDouble();
-            entry["depth"] = cell(7).toDouble();
+            entry["diameter"] = parseNumberText(cell(1));
+            entry["feedXY"] = parseNumberText(cell(2));
+            entry["feedZ"] = parseNumberText(cell(3));
+            entry["rpm"] = parseNumberText(cell(4));
+            entry["laser"] = parseNumberText(cell(5));
+            entry["zCut"] = parseNumberText(cell(6));
+            entry["depth"] = parseNumberText(cell(7));
             entries.append(entry);
         }
         setToolDbEntries(entries);
@@ -4654,8 +4719,11 @@ QTreeWidgetItem* MainWindow::addObjectRow(const QString& name, const QString& ki
 /// @brief Agrega una capa generada al grupo Herramientas.
 int MainWindow::addGeneratedLayer(const QString& name, const std::vector<Geom>& paths, int sourceId) {
     if (paths.empty()) return -1;
+    const double oldScale = canvas_->viewScale();
+    const QPointF oldOffset = canvas_->viewOffset();
     const int id = canvas_->appendGeometry({}, paths, true);
     canvas_->endGeometry();
+    canvas_->setView(oldScale, oldOffset);
     addObjectRow(name, "herramienta", "-", id, true, toolsGroup_);
     if (sourceId > 0) generatedFrom_[sourceId].push_back(id);
     if (toolsGroup_) toolsGroup_->setExpanded(true);
@@ -4672,8 +4740,11 @@ int MainWindow::addGeneratedLayer(const QString& name, const std::vector<Geom>& 
 int MainWindow::addGeneratedSolid(const QString& name, const std::vector<Geom>& solids,
                                  int sourceId, const QString& kind) {
     if (solids.empty()) return -1;
+    const double oldScale = canvas_->viewScale();
+    const QPointF oldOffset = canvas_->viewOffset();
     const int id = canvas_->appendGeometry(solids, {}, true);
     canvas_->endGeometry();
+    canvas_->setView(oldScale, oldOffset);
     double area = 0.0;
     for (const Geom& g : solids) area += g.area();
     addObjectRow(name, kind, QString::number(area, 'f', 2), id, true, toolsGroup_);
@@ -5348,7 +5419,37 @@ void MainWindow::showCalculators() {
 }
 
 /// @brief Abre una pestaña de herramienta.
-void MainWindow::openToolTab(const QString& title) { showToolTab(title); }
+void MainWindow::openToolTab(const QString& title) {
+    auto* item = objects_ ? objects_->currentItem() : nullptr;
+    if (item && item->data(0, Qt::UserRole).toInt() > 0) {
+        const int id = item->data(0, Qt::UserRole).toInt();
+        const QString kind = item->text(2).toLower();
+        auto pick = [id](QComboBox* combo) {
+            if (!combo) return;
+            const int index = combo->findData(id);
+            if (index >= 0) combo->setCurrentIndex(index);
+        };
+        if (kind == "gerber") {
+            if (title.contains("aislamiento") || title.contains("Aislamiento")) pick(isoSource_);
+            else if (title.contains("NCC")) pick(nccSource_);
+            else if (title.contains("corte") || title.contains("Corte")) pick(cutSource_);
+            else if (title.contains("pintura") || title.contains("Pintura")) pick(paintSource_);
+            else if (title.contains("fresado") || title.contains("Fresado")) pick(millSource_);
+            else if (title.contains("Thieving")) pick(thiefSource_);
+            else if (title.contains("Solder")) pick(pasteSource_);
+        } else if (kind == "excellon" && title.contains("perforación")) {
+            pick(drillSource_);
+        }
+        if (title.contains("2 lados") || title.contains("Doble")) {
+            pick(dblSource_);
+            if (dblOffsetX_ && dblSource_) {
+                const BBox b = canvas_->layerBounds(dblSource_->currentData().toInt());
+                if (b.valid) dblOffsetX_->setValue(b.width());
+            }
+        }
+    }
+    showToolTab(title);
+}
 
 /// @brief Muestra o crea la pestaña de una herramienta.
 void MainWindow::showToolTab(const QString& title) {
@@ -5557,24 +5658,24 @@ void MainWindow::refreshObjectToolPage() {
     if (isGerber) {
         auto* iso = makeButton("isolate", tr("Enrutamiento de aislamiento"), objectToolPage_);
         connect(iso, &QPushButton::clicked, this,
-                [this] { showToolTab(tr("Herramienta de aislamiento")); });
+                [this] { openToolTab(tr("Herramienta de aislamiento")); });
         auto* ncc = makeButton("ncc", tr("Herramienta NCC"), objectToolPage_);
         connect(ncc, &QPushButton::clicked, this,
-                [this] { showToolTab(tr("Herramienta NCC")); });
+                [this] { openToolTab(tr("Herramienta NCC")); });
         auto* cut = makeButton("cutout", tr("Herramienta de Corte"), objectToolPage_);
         connect(cut, &QPushButton::clicked, this,
-                [this] { showToolTab(tr("Herramienta de corte")); });
+                [this] { openToolTab(tr("Herramienta de corte")); });
     } else if (isExcellon) {
         auto* drill = makeButton("drill", tr("Herramienta de Perforación"), objectToolPage_);
         connect(drill, &QPushButton::clicked, this,
-                [this] { showToolTab(tr("Herramienta de perforación")); });
+                [this] { openToolTab(tr("Herramienta de perforación")); });
         auto* mill = makeButton("milling", tr("Herramienta de fresado"), objectToolPage_);
         mill->setEnabled(false);
         mill->setToolTip(tr("No aplicable a un objeto Excellon."));
     } else {
         auto* iso = makeButton("geometry", tr("Herramientas de mecanizado"), objectToolPage_);
         connect(iso, &QPushButton::clicked, this, [this] {
-            showToolTab(tr("Herramienta de aislamiento"));
+            openToolTab(tr("Herramienta de aislamiento"));
         });
     }
 
@@ -5588,7 +5689,7 @@ void MainWindow::refreshObjectToolPage() {
     };
     addUtility(tr("Panelizar..."), &MainWindow::panelize);
     addUtility(tr("Fiduciales..."), &MainWindow::addFiducials);
-    addUtility(tr("Copper Thieving"), [this] { showToolTab(tr("Copper Thieving")); });
+    addUtility(tr("Copper Thieving"), [this] { openToolTab(tr("Copper Thieving")); });
     addUtility(tr("Film"), &MainWindow::createFilm);
     addUtility(tr("Punch Gerber..."), &MainWindow::punchGerberAction);
     addUtility(tr("Extraer taladros..."), &MainWindow::extractDrillsAction);
@@ -7905,6 +8006,7 @@ void MainWindow::allowCloseWithoutPrompt() {
  *        el guardado.
  */
 void MainWindow::closeEvent(QCloseEvent* event) {
+    savePreferences();
     if (!projectDirty_ || objectItems().empty()) {
         QMainWindow::closeEvent(event);
         return;
@@ -8158,10 +8260,45 @@ void MainWindow::openTextObject(int layerId) {
     }
     layout->addWidget(box);
     connect(box, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+    const bool isCncJob = item && item->text(2).compare("cncjob", Qt::CaseInsensitive) == 0;
     connect(box->button(QDialogButtonBox::Save), &QPushButton::clicked, &dialog,
-            [this, layerId, editor] {
+            [this, layerId, editor, item, isCncJob, &dialog] {
                 objectText_[layerId] = editor->toPlainText();
-                statusBar()->showMessage(tr("Texto guardado"), 3000);
+                if (!isCncJob) {
+                    dialog.setWindowTitle(tr("%1 — guardado en el proyecto")
+                                              .arg(item ? item->text(1) : tr("Texto")));
+                    statusBar()->showMessage(tr("Texto guardado en el proyecto"), 3000);
+                    markProjectDirty();
+                    return;
+                }
+                QString path = item ? item->data(0, Qt::UserRole + 2).toString() : QString();
+                if (path.isEmpty()) {
+                    path = QFileDialog::getSaveFileName(
+                        this, tr("Guardar G-code"),
+                        QFileInfo(lastDir_).absolutePath() + "/cncjob.nc",
+                        tr("G-code (*.nc *.gcode);;Todos (*)"));
+                }
+                if (path.isEmpty()) return;
+                QFile out(path);
+                if (!out.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                    showError(tr("No se pudo escribir %1").arg(path));
+                    return;
+                }
+                const QByteArray data = editor->toPlainText().toUtf8();
+                if (out.write(data) != data.size() || !out.flush()) {
+                    showError(tr("No se pudo escribir todo el archivo %1").arg(path));
+                    return;
+                }
+                out.close();
+                lastDir_ = QFileInfo(path).absolutePath();
+                if (item) {
+                    item->setData(0, Qt::UserRole + 2, path);
+                    objectProps_[layerId][tr("Archivo")] = path;
+                    dialog.setWindowTitle(tr("%1 — guardado").arg(item->text(1)));
+                }
+                statusBar()->showMessage(
+                    tr("G-code guardado: %1").arg(QFileInfo(path).fileName()), 4000);
+                markProjectDirty();
             });
     dialog.exec();
 }
@@ -8169,8 +8306,11 @@ void MainWindow::openTextObject(int layerId) {
 /// @brief Agrega un CNCJob con su G-code y propiedades.
 void MainWindow::addCncJobObject(const QString& name, const QString& code,
                                  const std::map<QString, QString>& props) {
+    const double oldScale = canvas_->viewScale();
+    const QPointF oldOffset = canvas_->viewOffset();
     const int id = canvas_->appendGeometry({}, {}, true);
     canvas_->endGeometry();
+    canvas_->setView(oldScale, oldOffset);
     addObjectRow(tr("CNCJob: %1").arg(name), "cncjob", "-", id, true, gcodeGroup_);
     objectText_[id] = code;
     objectProps_[id][tr("Tipo")] = tr("CNCJob");
@@ -8254,8 +8394,8 @@ void MainWindow::moveToOrigin() {
     if (!b.valid) return;
     const std::vector<Geom> solids = canvas_->layerSolids(id);
     const std::vector<Geom> follows = canvas_->layerFollows(id);
-    const double dx = -b.xmin;
-    const double dy = -b.ymin;
+    const double dx = -(b.xmin + b.xmax) / 2.0;
+    const double dy = -(b.ymin + b.ymax) / 2.0;
     std::vector<Geom> afterSolids;
     std::vector<Geom> afterFollows;
     for (const Geom& g : solids) afterSolids.push_back(g.translate(dx, dy));
@@ -8270,7 +8410,54 @@ void MainWindow::moveToOrigin() {
                                            apply(afterSolids, afterFollows);
                                        },
                                        tr("Mover a origen")));
-    statusBar()->showMessage(tr("Objeto movido al origen"), 4000);
+    statusBar()->showMessage(tr("Objeto centrado en (0, 0)"), 4000);
+}
+
+/// @brief Lleva toda la PCB a (0,0) usando la esquina inferior izquierda.
+void MainWindow::movePcbToOrigin() {
+    struct Entry {
+        int id = 0;
+        std::vector<Geom> solids;
+        std::vector<Geom> follows;
+    };
+    std::vector<Entry> before;
+    BBox all;
+    for (QTreeWidgetItem* item : objectItems()) {
+        const int id = item->data(0, Qt::UserRole).toInt();
+        if (id <= 0) continue;
+        const BBox b = canvas_->layerBounds(id);
+        if (!b.valid) continue;
+        before.push_back({id, canvas_->layerSolids(id), canvas_->layerFollows(id)});
+        if (!all.valid) {
+            all = b;
+        } else {
+            all.xmin = std::min(all.xmin, b.xmin);
+            all.ymin = std::min(all.ymin, b.ymin);
+            all.xmax = std::max(all.xmax, b.xmax);
+            all.ymax = std::max(all.ymax, b.ymax);
+        }
+    }
+    if (!all.valid || before.empty()) return;
+
+    const double dx = -all.xmin;
+    const double dy = -all.ymin;
+    std::vector<Entry> after;
+    after.reserve(before.size());
+    for (const Entry& entry : before) {
+        Entry moved{entry.id, {}, {}};
+        for (const Geom& g : entry.solids) moved.solids.push_back(g.translate(dx, dy));
+        for (const Geom& g : entry.follows) moved.follows.push_back(g.translate(dx, dy));
+        after.push_back(std::move(moved));
+    }
+    auto apply = [this](const std::vector<Entry>& entries) {
+        for (const Entry& entry : entries)
+            canvas_->setLayerGeometry(entry.id, entry.solids, entry.follows);
+        refreshProperties();
+    };
+    undoStack_->push(new LambdaCommand([apply, before] { apply(before); },
+                                       [apply, after] { apply(after); },
+                                       tr("Llevar PCB a (0, 0)")));
+    statusBar()->showMessage(tr("PCB llevada a (0, 0)"), 4000);
 }
 
 /// @brief Une varios objetos en una capa.
@@ -8465,20 +8652,33 @@ void MainWindow::doubleSided() {
     connect(box, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
     if (dialog.exec() != QDialog::Accepted) return;
 
+    if (mirrorLayerToNew(id, axis->currentIndex() == 0, offsetX->value(), offsetY->value()) >= 0)
+        statusBar()->showMessage(tr("Copia espejada creada"), 4000);
+}
+
+/// @brief Crea una copia espejada de una capa en el grupo Herramientas.
+int MainWindow::mirrorLayerToNew(int sourceId, bool mirrorX, double offsetX, double offsetY) {
+    QTreeWidgetItem* item = findObjectItem(sourceId);
+    const BBox b = canvas_->layerBounds(sourceId);
+    if (!item || !b.valid) return -1;
+    const std::vector<Geom> solids = canvas_->layerSolids(sourceId);
+    const std::vector<Geom> follows = canvas_->layerFollows(sourceId);
     const double cx = (b.xmin + b.xmax) / 2.0;
     const double cy = (b.ymin + b.ymax) / 2.0;
-    const bool mirrorX = axis->currentIndex() == 0;
-    std::vector<Geom> out;
-    out.reserve(solids.size());
-    for (const Geom& g : solids) {
-        Geom t = mirrorX ? g.scale(-1.0, 1.0, {cx, cy}) : g.scale(1.0, -1.0, {cx, cy});
-        t = t.translate(offsetX->value(), offsetY->value());
-        out.push_back(t);
-    }
-    const int newId = canvas_->appendGeometry(out, {}, true);
+    auto transform = [&](const std::vector<Geom>& source) {
+        std::vector<Geom> out;
+        out.reserve(source.size());
+        for (const Geom& g : source) {
+            Geom t = mirrorX ? g.scale(-1.0, 1.0, {cx, cy}) : g.scale(1.0, -1.0, {cx, cy});
+            out.push_back(t.translate(offsetX, offsetY));
+        }
+        return out;
+    };
+    const int newId = canvas_->appendGeometry(transform(solids), transform(follows), true);
     canvas_->endGeometry();
-    addObjectRow(tr("Doble faz (espejo)"), "gerber", "-", newId, true, toolsGroup_);
-    statusBar()->showMessage(tr("Copia espejada creada"), 4000);
+    addObjectRow(tr("2 lados · %1").arg(item->text(1)), item->text(2), "-", newId, true,
+                 toolsGroup_);
+    return newId;
 }
 
 /// @brief Regenera el Gerber con nuevos tamaños de apertura.
@@ -8612,7 +8812,11 @@ void MainWindow::gerberEditor() {
 
     auto* right = new QWidget(&dialog);
     auto* form = new QFormLayout(right);
-    layout->addWidget(right);
+    auto* rightScroll = new QScrollArea(&dialog);
+    rightScroll->setWidgetResizable(true);
+    rightScroll->setFrameShape(QFrame::NoFrame);
+    rightScroll->setWidget(right);
+    layout->addWidget(rightScroll, 1);
 
     auto* info = new QLabel(tr("Seleccione una primitiva"), right);
     info->setWordWrap(true);
@@ -9339,7 +9543,19 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
         const int* chosen = displayInch_ ? inchWidths : widths;
         for (int c = 0; c < 8; ++c) table->setColumnWidth(c, chosen[c]);
         connect(table, &QTableWidget::cellChanged, this,
-                [this](int, int) { markProjectDirty(); });
+                [this, table](int row, int column) {
+                    if (auto* item = table->item(row, column)) {
+                        const QString original = item->text();
+                        QString normalized = original;
+                        normalized.replace(',', '.');
+                        if (normalized != original) {
+                            const bool blocked = table->blockSignals(true);
+                            item->setText(normalized);
+                            table->blockSignals(blocked);
+                        }
+                    }
+                    markProjectDirty();
+                });
         return table;
     };
 
@@ -9350,7 +9566,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 auto* item = table->item(i, col);
                 if (!item) return fallback;
                 bool ok = false;
-                const double v = item->text().toDouble(&ok);
+                const double v = parseNumberText(item->text(), &ok);
                 return ok ? v : fallback;
             };
             ToolRow r;
@@ -9450,6 +9666,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
             tr("<b>Y final</b><br>0,0 = sin movimiento final."));
         c.pre = new QComboBox(this);
         c.pre->addItems(gcodeFlavorLabels());
+        c.pre->setCurrentIndex(2);  // GRBL por defecto
         applyTip(c.pre, tr("<b>Postprocesador</b><br>Todos los perfiles de FlatCAM 2024.4: "
                            "MACH3, GRBL, Marlin, Repetier, Berta, ISEL, Roland, cambio de "
                            "herramienta y láser.<br>Al elegir un perfil láser se activa "
@@ -9534,6 +9751,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     auto optionsFor = [](const ToolRow& row, const Common& c) {
         fc::GCodeOptions opt;
         opt.units = fc::Units::Mm;
+        opt.toolDiameter = row.dia;
         opt.feedXY = row.fxy;
         opt.feedZ = row.fz;
         opt.spindleSpeed = row.rpm;
@@ -9690,6 +9908,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastIsoMulti_.push_back(std::move(job));
                 }
                 lastIsoHeader_ = optionsFor(rows.front(), isoCommon);
+                if (!lastIsoMulti_.empty())
+                    lastIsoHeader_.headerComments = lastIsoMulti_.front().options.headerComments;
                 const int sourceId = isoSource_ ? isoSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("Aislamiento"), isoSource_), preview, sourceId);
                 statusBar()->showMessage(tr("Aislamiento: %1 herramientas").arg(lastIsoMulti_.size()), 4000);
@@ -9724,6 +9944,9 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
         tr("<b>Ángulo del hatch</b><br>45° recomendado."));
     auto* nccMargin = makeSpin(0.0, 50.0, 1.0, 2, " mm",
         tr("<b>Margen del área</b><br>Expande el área a despejar."));
+    auto* nccBorder = makeSpin(0.0, 20.0, 1.0, 2, " mm",
+        tr("<b>Borde sin procesar</b><br>Banda exterior que se deja intacta, "
+           "entre el borde de la placa y el despeje."));
     auto* nccStrategy = new QComboBox(this);
     nccStrategy->addItems({tr("Hatch (líneas)"), tr("Paint (contornos)")});
     nccStrategy->setSizeAdjustPolicy(QComboBox::AdjustToContents);
@@ -9736,6 +9959,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     addRow(nccForm, tr("Distancia al cobre:"), nccClear);
     addRow(nccForm, tr("Ángulo:"), nccAngle);
     addRow(nccForm, tr("Margen del área:"), nccMargin);
+    addRow(nccForm, tr("Borde sin procesar:"), nccBorder);
     addRow(nccForm, tr("Estrategia:"), nccStrategy);
     auto* nccConnect = new QCheckBox(tr("Conectar recorridos cercanos"), this);
     nccConnect->setToolTip(tr("Une recorridos cuyos extremos estén a menos de 0,5 mm."));
@@ -9760,8 +9984,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     nccForm->addRow(nccCnc);
     nccForm->addRow(nccExport);
     connect(nccPreview, &QPushButton::clicked, this,
-            [this, camName, nccTable, nccStep, nccClear, nccAngle, nccMargin, nccStrategy, nccConnect,
-             nccRest, nccCommon, optionsFor, readTable] {
+            [this, camName, nccTable, nccStep, nccClear, nccAngle, nccMargin, nccBorder,
+             nccStrategy, nccConnect, nccRest, nccCommon, optionsFor, readTable] {
                 fc::GerberResult* src = sourceGerber(nccSource_);
                 if (!src) return;
                 auto rows = readTable(nccTable);
@@ -9779,6 +10003,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     o.clearance = nccClear->value();
                     o.angleDeg = nccAngle->value();
                     o.margin = nccMargin->value();
+                    o.border = nccBorder->value();
                     o.strategy = nccStrategy->currentIndex() == 1 ? NccStrategy::Paint : NccStrategy::Hatch;
                     const BBox b = src->bounds.expanded(nccMargin->value());
                     const Geom area = b.valid ? Geom::box(b.xmin, b.ymin, b.xmax, b.ymax) : Geom();
@@ -9788,6 +10013,17 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     job.diameter = rows[i].dia;
                     job.options = optionsFor(rows[i], nccCommon);
                     job.options.connectPaths = nccConnect->isChecked();
+                    addHeaderComments(job.options, {
+                        tr("Operation: NCC"),
+                        tr("Strategy: %1").arg(nccStrategy->currentText()),
+                        tr("Overlap: %1 %").arg(nccStep->value()),
+                        tr("Copper clearance: %1 mm").arg(nccClear->value()),
+                        tr("Area margin: %1 mm").arg(nccMargin->value()),
+                        tr("Unprocessed border: %1 mm").arg(nccBorder->value()),
+                        tr("Hatch angle: %1 deg").arg(nccAngle->value()),
+                        tr("Connect paths: %1").arg(nccConnect->isChecked() ? tr("yes") : tr("no")),
+                        tr("Rest machining: %1").arg(nccRest->isChecked() ? tr("yes") : tr("no")),
+                    });
                     job.bounds = res.bounds;
                     for (const Geom& g : res.paths) {
                         if (nccRest->isChecked() && covered.valid() && !covered.empty()) {
@@ -9805,6 +10041,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastNccMulti_.push_back(std::move(job));
                 }
                 lastNccHeader_ = optionsFor(rows.front(), nccCommon);
+                if (!lastNccMulti_.empty())
+                    lastNccHeader_.headerComments = lastNccMulti_.front().options.headerComments;
                 const int sourceId = nccSource_ ? nccSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("NCC"), nccSource_), preview, sourceId);
                 statusBar()->showMessage(tr("NCC: %1 herramientas").arg(lastNccMulti_.size()), 4000);
@@ -9835,7 +10073,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
         tr("<b>Margen</b><br>Separación extra del contorno."));
     auto* cutTabs = new QSpinBox(this);
     cutTabs->setRange(0, 12);
-    cutTabs->setValue(0);
+    cutTabs->setValue(4);
     auto* cutTabW = makeSpin(0.0, 50.0, 1.8, 3, " mm",
         tr("<b>Ancho de puente</b><br>Debe superar el diámetro de la fresa."));
     auto* cutInternal = new QCheckBox(tr("Corte interno"), this);
@@ -9921,6 +10159,16 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     job.number = static_cast<int>(i) + 1;
                     job.diameter = rows[i].dia;
                     job.options = optionsFor(rows[i], cutCommon);
+                    addHeaderComments(job.options, {
+                        tr("Operation: Cutout"),
+                        tr("Margin: %1 mm").arg(cutMargin->value()),
+                        tr("Bridges: %1").arg(o.tabCount),
+                        tr("Bridge width: %1 mm").arg(o.tabWidth),
+                        tr("Bridge sides: %1").arg(cutSides->currentText()),
+                        tr("Manual bridges: %1").arg(cutManual->text()),
+                        tr("External cut: %1").arg(o.external ? tr("yes") : tr("no")),
+                        tr("Include holes: %1").arg(o.includeHoles ? tr("yes") : tr("no")),
+                    });
                     job.bounds = res.bounds;
                     for (const Geom& g : res.paths) {
                         Ring ring = g.coords();
@@ -9930,6 +10178,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastCutMulti_.push_back(std::move(job));
                 }
                 lastCutHeader_ = optionsFor(rows.front(), cutCommon);
+                if (!lastCutMulti_.empty())
+                    lastCutHeader_.headerComments = lastCutMulti_.front().options.headerComments;
                 const int sourceId = cutSource_ ? cutSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("Corte"), cutSource_), preview, sourceId);
                 statusBar()->showMessage(tr("Corte: %1 herramientas").arg(lastCutMulti_.size()), 4000);
@@ -9994,6 +10244,11 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     job.number = static_cast<int>(i) + 1;
                     job.diameter = rows[i].dia;
                     job.options = optionsFor(rows[i], paintCommon);
+                    addHeaderComments(job.options, {
+                        tr("Operation: Paint"),
+                        tr("Step over: %1 %").arg(paintStep->value()),
+                        tr("Area margin: %1 mm").arg(paintMargin->value()),
+                    });
                     job.bounds = res.bounds;
                     for (const Geom& g : res.paths) {
                         Ring ring = g.coords();
@@ -10003,6 +10258,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastPaintMulti_.push_back(std::move(job));
                 }
                 lastPaintHeader_ = optionsFor(rows.front(), paintCommon);
+                if (!lastPaintMulti_.empty())
+                    lastPaintHeader_.headerComments = lastPaintMulti_.front().options.headerComments;
                 const int sourceId = paintSource_ ? paintSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("Pintura"), paintSource_), preview, sourceId);
                 statusBar()->showMessage(tr("Pintura: %1 herramientas").arg(lastPaintMulti_.size()), 4000);
@@ -10051,57 +10308,136 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     drillOrder->setChecked(true);
     drillForm->addRow(QString(), drillOrder);
     markAdvanced(drillForm, drillOrder);
+    auto* drillGeometry = new QPushButton(originalIcon("geometry"), tr("Generar trazado"), this);
+    drillGeometry->setToolTip(tr("Dibuja en el visor los taladros y ranuras del Excellon."));
     auto* drillPreview = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
     drillPreview->setProperty("primary", true);
     auto* drillExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
+    drillForm->addRow(drillGeometry);
     drillForm->addRow(drillPreview);
     drillForm->addRow(drillExport);
-    connect(drillPreview, &QPushButton::clicked, this,
-            [this, camName, drillCommon, drillOffsetX, drillOffsetY, drillOrder, optionsFor,
-             readTable] {
-                fc::ExcellonResult* src = sourceExcellon(drillSource_);
-                if (!src) {
-                    QMessageBox::information(this, tr("Taladrado"), tr("Cargá un Excellon primero."));
-                    return;
-                }
-                const auto rows = readTable(drillTable_);
-                fc::DrillJob job;
-                std::vector<int> numbers;
-                for (const auto& [number, tool] : src->tools) {
-                    if (tool.drills.empty() && tool.slotSegments.empty()) continue;
-                    numbers.push_back(number);
-                }
-                for (std::size_t i = 0; i < numbers.size() && i < rows.size(); ++i) {
-                    const int number = numbers[i];
-                    const auto& source = src->tools.at(number);
-                    fc::DrillTool tool;
-                    tool.number = number;
-                    tool.diameter = source.diameter;
-                    tool.holes = source.drills;
-                    tool.slotSegments = source.slotSegments;
-                    tool.zCut = rows[i].zcut;
-                    tool.feedZ = rows[i].fz;
-                    tool.feedXY = rows[i].fxy;
-                    tool.spindleSpeed = rows[i].rpm;
-                    tool.dwell = drillCommon.dwell->value();
-                    tool.offsetX = drillOffsetX->value();
-                    tool.offsetY = drillOffsetY->value();
-                    job.tools.push_back(std::move(tool));
-                }
-                if (job.tools.empty()) return;
-                lastDrillJob_ = job;
-                lastDrillHeader_ = optionsFor(rows.front(), drillCommon);
-                lastDrillGCode_ = lastDrillHeader_;
-                if (drillOrder->isChecked()) optimizeDrillOrder(*lastDrillJob_);
-                const std::string code = drillingGCode(*lastDrillJob_, lastDrillHeader_);
-                addCncJobObject(camName(tr("Taladrado"), drillSource_),
-                                QString::fromStdString(code),
-                                cncProps(lastDrillHeader_, tr("Taladrado")));
-                statusBar()->showMessage(
-                    tr("Taladrado: %1 herramientas · CNCJob generado").arg(job.tools.size()), 4000);
-            });
+
+    auto buildDrill = [this, drillCommon, drillOffsetX, drillOffsetY, drillOrder, optionsFor,
+                       readTable]() -> bool {
+        fc::ExcellonResult* src = sourceExcellon(drillSource_);
+        if (!src) {
+            QMessageBox::information(this, tr("Taladrado"), tr("Cargá un Excellon primero."));
+            return false;
+        }
+        const auto rows = readTable(drillTable_);
+        fc::DrillJob job;
+        std::vector<int> numbers;
+        for (const auto& [number, tool] : src->tools) {
+            if (tool.drills.empty() && tool.slotSegments.empty()) continue;
+            numbers.push_back(number);
+        }
+        for (std::size_t i = 0; i < numbers.size() && i < rows.size(); ++i) {
+            const int number = numbers[i];
+            const auto& source = src->tools.at(number);
+            fc::DrillTool tool;
+            tool.number = number;
+            tool.diameter = source.diameter;
+            tool.holes = source.drills;
+            tool.slotSegments = source.slotSegments;
+            tool.zCut = rows[i].zcut;
+            tool.feedZ = rows[i].fz;
+            tool.feedXY = rows[i].fxy;
+            tool.spindleSpeed = rows[i].rpm;
+            tool.dwell = drillCommon.dwell->value();
+            tool.offsetX = drillOffsetX->value();
+            tool.offsetY = drillOffsetY->value();
+            job.tools.push_back(std::move(tool));
+        }
+        if (job.tools.empty()) return false;
+        lastDrillJob_ = job;
+        lastDrillHeader_ = optionsFor(rows.front(), drillCommon);
+        addHeaderComments(lastDrillHeader_, {
+            tr("Operation: Drilling"),
+            tr("X offset: %1 mm").arg(drillOffsetX->value()),
+            tr("Y offset: %1 mm").arg(drillOffsetY->value()),
+            tr("Optimize order: %1").arg(drillOrder->isChecked() ? tr("yes") : tr("no")),
+        });
+        lastDrillGCode_ = lastDrillHeader_;
+        if (drillOrder->isChecked()) optimizeDrillOrder(*lastDrillJob_);
+        return true;
+    };
+
+    connect(drillGeometry, &QPushButton::clicked, this, [this, buildDrill, camName] {
+        if (!buildDrill()) return;
+        std::vector<Geom> preview;
+        for (const fc::DrillTool& tool : lastDrillJob_->tools) {
+            const double radius = std::max(0.05, tool.diameter / 2.0);
+            for (const Pt& hole : tool.holes) {
+                const Geom circle = Geom::circle(hole, radius, std::max(12, stepsPerCircle_));
+                const Ring ring = circle.coords();
+                if (ring.size() >= 2) preview.push_back(Geom::line(ring));
+            }
+            for (const auto& [start, stop] : tool.slotSegments)
+                preview.push_back(Geom::line({start, stop}));
+        }
+        const int sourceId = drillSource_ ? drillSource_->currentData().toInt() : 0;
+        addGeneratedLayer(camName(tr("Taladrado"), drillSource_), preview, sourceId);
+        statusBar()->showMessage(
+            tr("Taladrado: %1 herramientas · trazado generado").arg(lastDrillJob_->tools.size()),
+            4000);
+    });
+    connect(drillPreview, &QPushButton::clicked, this, [this, buildDrill, camName] {
+        if (!buildDrill()) return;
+        const std::string code = drillingGCode(*lastDrillJob_, lastDrillHeader_);
+        addCncJobObject(camName(tr("Taladrado"), drillSource_), QString::fromStdString(code),
+                        cncProps(lastDrillHeader_, tr("Taladrado")));
+        statusBar()->showMessage(
+            tr("Taladrado: %1 herramientas · CNCJob generado").arg(lastDrillJob_->tools.size()),
+            4000);
+    });
     connect(drillExport, &QPushButton::clicked, this, &MainWindow::exportDrillGCode);
     toolTabs_[tr("Herramienta de perforación")] = wrapScroll(drillPage);
+
+    // --- Double-sided
+    auto* dblPage = new QWidget(this);
+    auto* dblForm = new QFormLayout(dblPage);
+    dblSource_ = new QComboBox(this);
+    dblSource_->setToolTip(tr("Objeto de la cara superior que se refleja para la cara inferior."));
+    pageTitle(dblForm, tr("Herramienta de 2 lados"),
+              tr("Crea la cara inferior espejada de una placa de doble faz."));
+    dblForm->addRow(tr("OBJETO:"), dblSource_);
+    section(dblForm, tr("Espejo de la cara inferior"));
+    auto* dblAxis = new QComboBox(this);
+    dblAxis->addItems({tr("Espejar horizontal (X)"), tr("Espejar vertical (Y)")});
+    dblAxis->setToolTip(tr("Eje alrededor del cual se refleja el objeto."));
+    auto* dblOffsetX = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm",
+        tr("<b>Desplazamiento X</b><br>Distancia entre la cara superior y la inferior."));
+    dblOffsetX_ = dblOffsetX;
+    auto* dblOffsetY = makeSpin(-10000.0, 10000.0, 0.0, 3, " mm",
+        tr("<b>Desplazamiento Y</b><br>Ajuste fino de alineación entre caras."));
+    addRow(dblForm, tr("Eje:"), dblAxis);
+    addRow(dblForm, tr("Desplazamiento X:"), dblOffsetX);
+    addRow(dblForm, tr("Desplazamiento Y:"), dblOffsetY);
+    auto* dblHint = new QLabel(tr("Se crea una copia espejada en el grupo Herramientas. "
+                                  "Usá el desplazamiento X para separar las dos caras."), this);
+    dblHint->setWordWrap(true);
+    dblForm->addRow(dblHint);
+    auto* dblGenerate = new QPushButton(originalIcon("doubleside"),
+                                        tr("Generar cara inferior"), this);
+    dblGenerate->setProperty("primary", true);
+    dblForm->addRow(dblGenerate);
+    connect(dblSource_, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            [this, dblOffsetX](int) {
+                const BBox b = canvas_->layerBounds(dblSource_->currentData().toInt());
+                if (b.valid) dblOffsetX->setValue(b.width());
+            });
+    connect(dblGenerate, &QPushButton::clicked, this, [this, dblAxis, dblOffsetX, dblOffsetY] {
+        const int id = dblSource_ ? dblSource_->currentData().toInt() : 0;
+        if (id <= 0) {
+            QMessageBox::information(this, tr("2 lados"), tr("Seleccioná un objeto primero."));
+            return;
+        }
+        if (mirrorLayerToNew(id, dblAxis->currentIndex() == 0, dblOffsetX->value(),
+                             dblOffsetY->value()) >= 0) {
+            statusBar()->showMessage(tr("Cara inferior espejada creada"), 4000);
+        }
+    });
+    toolTabs_[tr("Herramienta de 2 lados")] = wrapScroll(dblPage);
 
     // --- Milling (follow paths)
     auto* millPage = new QWidget(this);
@@ -10171,6 +10507,11 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 lastMillOptions_.zMove = millZMove->value();
                 lastMillOptions_.depthPerPass = millDepth->value();
                 lastMillOptions_.spindleSpeed = millSpindle->value();
+                addHeaderComments(lastMillOptions_, {
+                    tr("Operation: Milling"),
+                    tr("Tool diameter: %1 mm").arg(millDia->value()),
+                    tr("Depth per pass: %1 mm").arg(millDepth->value()),
+                });
                 std::vector<Geom> preview;
                 for (const auto& l : lines) preview.push_back(Geom::line(l));
                 const int sourceId = millSource_ ? millSource_->currentData().toInt() : 0;
@@ -10340,8 +10681,9 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     auto* dia = nozzleTable->item(row, 0);
                     auto* dwell = nozzleTable->item(row, 1);
                     if (!dia) continue;
-                    nozzleDias.push_back(dia->text().toDouble());
-                    nozzleDwells.push_back(dwell ? dwell->text().toDouble() : pasteDwell->value());
+                    nozzleDias.push_back(parseNumberText(dia->text()));
+                    nozzleDwells.push_back(dwell ? parseNumberText(dwell->text())
+                                                 : pasteDwell->value());
                 }
                 if (nozzleDias.empty()) {
                     nozzleDias.push_back(pasteNozzle->value());
@@ -10393,6 +10735,13 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 lastPasteOptions_.feedZ = pasteFeedZ->value();
                 lastPasteOptions_.toolDiameter = job.nozzleDiameter;
                 lastPasteOptions_.dwellTime = pasteDwell->value();
+                addHeaderComments(lastPasteOptions_, {
+                    tr("Operation: Solder Paste"),
+                    tr("Nozzle diameter: %1 mm").arg(pasteNozzle->value()),
+                    tr("Dispense Z: %1 mm").arg(pasteDispense->value()),
+                    tr("Retract Z: %1 mm").arg(pasteRetract->value()),
+                    tr("Dwell: %1 s").arg(pasteDwell->value()),
+                });
                 statusBar()->showMessage(tr("Pasta: %1 puntos").arg(job.points.size()), 4000);
             });
     connect(pasteExport, &QPushButton::clicked, this, [this] {
@@ -10488,7 +10837,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
 /// @brief Aplica NCC (hatch o paint) al objeto activo.
 bool MainWindow::applyNcc(double toolDiameter, double stepOverPercent, double clearance,
                           double angle, double margin, bool paintStrategy,
-                          const fc::GCodeOptions& gcode) {
+                          const fc::GCodeOptions& gcode, double border) {
     if (!lastGerber_) return false;
     NccOptions opt;
     opt.toolDiameter = toolDiameter;
@@ -10496,6 +10845,7 @@ bool MainWindow::applyNcc(double toolDiameter, double stepOverPercent, double cl
     opt.clearance = clearance;
     opt.angleDeg = angle;
     opt.margin = margin;
+    opt.border = border;
     opt.strategy = paintStrategy ? NccStrategy::Paint : NccStrategy::Hatch;
 
     const BBox b = lastGerber_->bounds.expanded(margin);
@@ -10504,6 +10854,7 @@ bool MainWindow::applyNcc(double toolDiameter, double stepOverPercent, double cl
     lastNccGCode_ = gcode;
     lastNccGCode_.toolDiameter = toolDiameter;
     lastNccHeader_ = gcode;
+    lastNccHeader_.toolDiameter = toolDiameter;
     lastNccMulti_.clear();
     {
         fc::PathToolJob job;
@@ -10536,6 +10887,7 @@ bool MainWindow::applyPaint(double toolDiameter, double stepOverPercent, double 
     lastPaintGCode_ = gcode;
     lastPaintGCode_.toolDiameter = toolDiameter;
     lastPaintHeader_ = gcode;
+    lastPaintHeader_.toolDiameter = toolDiameter;
     lastPaintMulti_.clear();
     {
         fc::PathToolJob job;
@@ -10686,6 +11038,21 @@ void MainWindow::refreshSourceCombos() {
     fill(millSource_, "gerber");
     fill(thiefSource_, "gerber");
     fill(pasteSource_, "gerber");
+    if (dblSource_) {
+        const int keep = dblSource_->currentData().toInt();
+        dblSource_->blockSignals(true);
+        dblSource_->clear();
+        for (QTreeWidgetItem* item : objectItems()) {
+            const int id = item->data(0, Qt::UserRole).toInt();
+            if (id <= 0) continue;
+            const QString kind = item->text(2).toLower();
+            if (kind != "gerber" && kind != "excellon" && kind != "herramienta") continue;
+            dblSource_->addItem(item->text(1), id);
+        }
+        const int index = dblSource_->findData(keep);
+        if (index >= 0) dblSource_->setCurrentIndex(index);
+        dblSource_->blockSignals(false);
+    }
 }
 
 /// @brief Llena la tabla de taladrado desde el Excellon.
@@ -10942,6 +11309,7 @@ bool MainWindow::applyIsolation(double toolDiameter, int passes, double overlapP
     lastIsolation_ = fc::isolateCopper(lastGerber_->solid, opt);
     lastCutout_.reset();
     lastIsoHeader_ = gcode;
+    lastIsoHeader_.toolDiameter = toolDiameter;
     lastIsoMulti_.clear();
     {
         fc::PathToolJob job;
@@ -11038,19 +11406,26 @@ void MainWindow::cutoutDialog() {
 
 /// Aplica corte de contorno con margen y lado externo/interno.
 bool MainWindow::applyCutout(double toolDiameter, double margin, bool external,
-                             const fc::GCodeOptions& gcode) {
+                             const fc::GCodeOptions& gcode, int tabCount, double tabWidth,
+                             fc::TabSides tabSides,
+                             const std::vector<double>& tabPositions) {
     if (!lastGerber_) return false;
 
     fc::CutoutOptions opt;
     opt.toolDiameter = toolDiameter;
     opt.margin = margin;
     opt.external = external;
+    opt.tabCount = tabCount;
+    opt.tabWidth = tabWidth;
+    opt.tabSides = tabSides;
+    opt.tabPositions = tabPositions;
 
     lastCutoutOptions_ = opt;
     lastCutoutGCode_ = gcode;
 
     lastCutout_ = fc::cutoutGeometry(lastGerber_->solid, opt);
     lastCutHeader_ = gcode;
+    lastCutHeader_.toolDiameter = toolDiameter;
     lastCutMulti_.clear();
     {
         fc::PathToolJob job;

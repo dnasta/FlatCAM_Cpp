@@ -11,6 +11,7 @@ var structfc_1_1_g_code_options =
     [ "feedXY", "structfc_1_1_g_code_options.html#a59efb43280627dc32dbb6817df5cdff9", null ],
     [ "feedZ", "structfc_1_1_g_code_options.html#a9758c511a269e831f6a746f0a11b3479", null ],
     [ "flavor", "structfc_1_1_g_code_options.html#a455441d8804debff7394b0d981cdda41", null ],
+    [ "headerComments", "structfc_1_1_g_code_options.html#a1fc82ef97a1b4566aa2ca3a13a8cfaad", null ],
     [ "includeToolChange", "structfc_1_1_g_code_options.html#a1c7f6ea7e8e207b6680d679484ad2199", null ],
     [ "laserPower", "structfc_1_1_g_code_options.html#a6675486e1c35af615d0d69206cd0cd20", null ],
     [ "spindleCw", "structfc_1_1_g_code_options.html#aaaa67f723c5706806b0e4714f3907a74", null ],

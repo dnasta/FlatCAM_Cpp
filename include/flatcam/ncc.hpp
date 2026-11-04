@@ -26,6 +26,7 @@ struct NccOptions {
     double clearance = 0.0;    ///< Distancia extra de seguridad al cobre.
     double angleDeg = 0.0;     ///< Dirección del hatch.
     double margin = 0.0;       ///< Expansión del área de trabajo.
+    double border = 0.0;       ///< Banda exterior sin despejar.
     int quadrantSegments = 16; ///< Segmentos por cuadrante.
 };
 

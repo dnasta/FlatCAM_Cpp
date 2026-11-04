@@ -108,6 +108,14 @@ NccResult clearCopper(const Geom& copper, const Geom& area, const NccOptions& op
         workArea = Geom::box(b.xmin - m, b.ymin - m, b.xmax + m, b.ymax + m);
     }
 
+    // Deja una banda perimetral sin mecanizar para no debilitar el borde de la
+    // placa ni cortar el material que la sostiene.
+    if (options.border > 0.0) {
+        Geom inset = workArea.bufferStyle(-options.border, std::max(2, options.quadrantSegments),
+                                          GEOSBUF_CAP_FLAT, GEOSBUF_JOIN_MITRE, 10.0);
+        if (inset.valid() && !inset.empty()) workArea = inset;
+    }
+
     Geom keepOut = copper.buffer(radius + clearance, std::max(2, options.quadrantSegments));
     Geom region = workArea.difference(keepOut);
     if (!region.valid() || region.empty()) return result;
