@@ -98,3 +98,13 @@ TEST(Ncc, PaintFillsNarrowGapWithManyPasses) {
     EXPECT_GT(r.paths.size(), std::size_t{10});
 }
 
+
+TEST(Ncc, PaintHalfMillimeterGapHasManyPasses) {
+    NccOptions opt;
+    opt.strategy = NccStrategy::Paint;
+    opt.toolDiameter = 0.1;
+    opt.stepOver = 0.2;
+    const NccResult r = clearCopper(Geom::box(0, 0, 10, 10),
+                                    Geom::box(-0.5, -0.5, 10.5, 10.5), opt);
+    EXPECT_GT(r.paths.size(), std::size_t{15});
+}

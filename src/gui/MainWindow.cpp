@@ -2177,7 +2177,7 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.4.2</b> · build 2026-11-04<br>"
+                           tr("<b>FlatCAM C++ 0.4.3</b> · build 2026-11-04<br>"
                               "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
                               "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
@@ -2294,7 +2294,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.4.2\nBuild: 2026-11-04\n"
+            tr("FlatCAM C++ 0.4.3\nBuild: 2026-11-04\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -3867,7 +3867,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.4.2");
+    return QStringLiteral("FlatCAM C++ 0.4.3");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
@@ -8904,6 +8904,7 @@ void MainWindow::generateGCodeFromObject(int layerId) {
 fc::BBox MainWindow::pcbBounds() const {
     BBox all;
     for (QTreeWidgetItem* item : objectItems()) {
+        if (item->parent() != filesGroup_) continue;
         const int id = item->data(0, Qt::UserRole).toInt();
         if (id <= 0) continue;
         const BBox b = canvas_->layerBounds(id);
@@ -8915,6 +8916,22 @@ fc::BBox MainWindow::pcbBounds() const {
             all.ymin = std::min(all.ymin, b.ymin);
             all.xmax = std::max(all.xmax, b.xmax);
             all.ymax = std::max(all.ymax, b.ymax);
+        }
+    }
+    if (!all.valid) {
+        for (QTreeWidgetItem* item : objectItems()) {
+            const int id = item->data(0, Qt::UserRole).toInt();
+            if (id <= 0) continue;
+            const BBox b = canvas_->layerBounds(id);
+            if (!b.valid) continue;
+            if (!all.valid) {
+                all = b;
+            } else {
+                all.xmin = std::min(all.xmin, b.xmin);
+                all.ymin = std::min(all.ymin, b.ymin);
+                all.xmax = std::max(all.xmax, b.xmax);
+                all.ymax = std::max(all.ymax, b.ymax);
+            }
         }
     }
     return all;
@@ -8945,6 +8962,8 @@ void MainWindow::moveToOrigin() {
                                            apply(afterSolids, afterFollows);
                                        },
                                        tr("Mover a origen")));
+    canvas_->setToolpaths({});
+    canvas_->fitTo(canvas_->layerBounds(id));
     statusBar()->showMessage(tr("Objeto llevado a su posición relativa al centro de la PCB"), 4000);
 }
 
@@ -8956,26 +8975,18 @@ void MainWindow::movePcbToOrigin() {
         std::vector<Geom> follows;
     };
     std::vector<Entry> before;
-    BBox all;
     for (QTreeWidgetItem* item : objectItems()) {
         const int id = item->data(0, Qt::UserRole).toInt();
         if (id <= 0) continue;
         const BBox b = canvas_->layerBounds(id);
         if (!b.valid) continue;
         before.push_back({id, canvas_->layerSolids(id), canvas_->layerFollows(id)});
-        if (!all.valid) {
-            all = b;
-        } else {
-            all.xmin = std::min(all.xmin, b.xmin);
-            all.ymin = std::min(all.ymin, b.ymin);
-            all.xmax = std::max(all.xmax, b.xmax);
-            all.ymax = std::max(all.ymax, b.ymax);
-        }
     }
-    if (!all.valid || before.empty()) return;
+    const BBox board = pcbBounds();
+    if (!board.valid || before.empty()) return;
 
-    const double dx = -(all.xmin + all.xmax) / 2.0;
-    const double dy = -(all.ymin + all.ymax) / 2.0;
+    const double dx = -(board.xmin + board.xmax) / 2.0;
+    const double dy = -(board.ymin + board.ymax) / 2.0;
     std::vector<Entry> after;
     after.reserve(before.size());
     for (const Entry& entry : before) {
@@ -8991,7 +9002,9 @@ void MainWindow::movePcbToOrigin() {
     };
     undoStack_->push(new LambdaCommand([apply, before] { apply(before); },
                                        [apply, after] { apply(after); },
-                                       tr("Llevar PCB a (0, 0)")));
+                                       tr("Centrar PCB en (0, 0)")));
+    canvas_->setToolpaths({});
+    canvas_->fitWithOrigin();
     statusBar()->showMessage(tr("Centro de la PCB llevado a (0, 0)"), 4000);
 }
 

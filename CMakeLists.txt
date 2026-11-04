@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(flatcam_cpp VERSION 0.4.2 LANGUAGES CXX)
+project(flatcam_cpp VERSION 0.4.3 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTORCC ON)
