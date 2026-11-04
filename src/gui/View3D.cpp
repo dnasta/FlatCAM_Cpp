@@ -12,6 +12,7 @@
 
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPalette>
 #include <QPainterPath>
 #include <QDoubleSpinBox>
 #include <QSettings>
@@ -52,8 +53,20 @@ View3D::View3D(std::vector<fc::Geom> solids, std::vector<fc::Geom> holes, QWidge
     resize(1000, 750);
     setMinimumSize(500, 400);
 
+    // El lienzo siempre es oscuro: los rótulos necesitan texto claro.
+    QPalette darkText = palette();
+    darkText.setColor(QPalette::WindowText, QColor(231, 233, 236));
+    darkText.setColor(QPalette::Text, QColor(231, 233, 236));
+    darkText.setColor(QPalette::ButtonText, QColor(231, 233, 236));
+    setPalette(darkText);
+    setStyleSheet("QLabel { color: #e7e9ec; } QCheckBox { color: #e7e9ec; }");
+
     auto* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(14, 12, 14, 12);
+    layout->setSpacing(8);
     auto* form = new QFormLayout();
+    form->setHorizontalSpacing(12);
+    form->setVerticalSpacing(6);
     UnitSpinBox::setDisplayInch(QSettings().value("preferences/displayInch", false).toBool());
     thicknessSpin_ = new UnitSpinBox(this);
     thicknessSpin_->setRange(0.1, 20.0);

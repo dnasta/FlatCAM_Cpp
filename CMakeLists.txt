@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(flatcam_cpp VERSION 0.2.1 LANGUAGES CXX)
+project(flatcam_cpp VERSION 0.3.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTORCC ON)
@@ -116,6 +116,8 @@ if(FC_BUILD_GUI)
     qt_add_executable(flatcam-gui
         src/gui/main.cpp
         src/gui/MainWindow.cpp
+        src/gui/Theme.cpp
+        src/gui/Theme.h
         src/gui/Canvas.cpp
         src/gui/View3D.cpp
         src/gui/GCodeEditor.cpp

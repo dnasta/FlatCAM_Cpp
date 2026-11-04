@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.2.1</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.3.0</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -122,14 +122,13 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('gui_2main_8cpp
 <div class="textblock"><code>#include &lt;QApplication&gt;</code><br />
 <code>#include &lt;QDebug&gt;</code><br />
 <code>#include &lt;QSettings&gt;</code><br />
-<code>#include &lt;QStyleFactory&gt;</code><br />
-<code>#include &lt;QPalette&gt;</code><br />
 <code>#include &lt;QFileInfo&gt;</code><br />
 <code>#include &lt;QHelpEvent&gt;</code><br />
 <code>#include &lt;QLabel&gt;</code><br />
 <code>#include &lt;QTimer&gt;</code><br />
 <code>#include &lt;QToolTip&gt;</code><br />
 <code>#include &quot;<a class="el" href="_main_window_8h_source.html">MainWindow.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_theme_8h_source.html">Theme.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gcode_8hpp_source.html">flatcam/gcode.hpp</a>&quot;</code><br />
 </div>
 <p><a href="gui_2main_8cpp_source.html">Ir al código fuente de este archivo.</a></p>
@@ -186,9 +185,9 @@ Funciones</h2></td></tr>
 <dl class="section note"><dt>Nota</dt><dd>Los valores numéricos inválidos se convierten a 0 y la acción correspondiente se omite; las opciones CAM de demostración usan valores fijos (1 pasada, margen 0.5, Z −1.8 y 0.6 mm por pasada). </dd></dl>
 <dl class="section warning"><dt>Atención</dt><dd>La captura se toma con un retardo fijo de 900 ms (main.cpp:188-195): con archivos grandes o el diálogo 3D recién abierto puede fotografiar antes de que el contenido esté listo. Las opciones desconocidas con valor dejan ese valor como "archivo". </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="gui_2main_8cpp_source.html#l00102">102</a> del archivo <a class="el" href="gui_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="gui_2main_8cpp_source.html#l00101">101</a> del archivo <a class="el" href="gui_2main_8cpp_source.html">main.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_main_window_8cpp_source.html#l07796">MainWindow::allowCloseWithoutPrompt()</a>, <a class="el" href="_main_window_8cpp_source.html#l10927">MainWindow::applyCutout()</a>, <a class="el" href="_main_window_8cpp_source.html#l10818">MainWindow::applyIsolation()</a>, <a class="el" href="gcode_8hpp_source.html#l00067">fc::GCodeOptions::depthPerPass</a>, <a class="el" href="_main_window_8cpp_source.html#l05837">MainWindow::excellonEditor()</a>, <a class="el" href="cli_2main_8cpp_source.html#l01362">main()</a>, <a class="el" href="_main_window_8cpp_source.html#l02112">MainWindow::openFiles()</a>, <a class="el" href="_main_window_8cpp_source.html#l05250">MainWindow::openToolTab()</a>, <a class="el" href="_main_window_8cpp_source.html#l03092">MainWindow::runScriptFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l03536">MainWindow::runTclCommand()</a>, <a class="el" href="_main_window_8cpp_source.html#l03238">MainWindow::show3D()</a>, <a class="el" href="_main_window_8cpp_source.html#l05268">MainWindow::showObjectTool()</a> y <a class="el" href="gcode_8hpp_source.html#l00064">fc::GCodeOptions::zCut</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_main_window_8cpp_source.html#l07868">MainWindow::allowCloseWithoutPrompt()</a>, <a class="el" href="_theme_8cpp_source.html#l00330">fc::theme::apply()</a>, <a class="el" href="_main_window_8cpp_source.html#l11011">MainWindow::applyCutout()</a>, <a class="el" href="_main_window_8cpp_source.html#l10902">MainWindow::applyIsolation()</a>, <a class="el" href="gcode_8hpp_source.html#l00067">fc::GCodeOptions::depthPerPass</a>, <a class="el" href="_main_window_8cpp_source.html#l05909">MainWindow::excellonEditor()</a>, <a class="el" href="cli_2main_8cpp_source.html#l01362">main()</a>, <a class="el" href="_main_window_8cpp_source.html#l02186">MainWindow::openFiles()</a>, <a class="el" href="_main_window_8cpp_source.html#l05322">MainWindow::openToolTab()</a>, <a class="el" href="_main_window_8cpp_source.html#l03166">MainWindow::runScriptFile()</a>, <a class="el" href="_main_window_8cpp_source.html#l03610">MainWindow::runTclCommand()</a>, <a class="el" href="_main_window_8cpp_source.html#l03312">MainWindow::show3D()</a>, <a class="el" href="_main_window_8cpp_source.html#l05340">MainWindow::showObjectTool()</a> y <a class="el" href="gcode_8hpp_source.html#l00064">fc::GCodeOptions::zCut</a>.</p>
 
 </div>
 </div>

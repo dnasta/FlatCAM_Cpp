@@ -79,9 +79,10 @@ var searchData=
   ['stepspercircle_5f_76',['stepsPerCircle_',['../class_main_window.html#ae0f46ac5476499f9c502050083e6f77b',1,'MainWindow']]],
   ['strategy_77',['strategy',['../structfc_1_1_ncc_options.html#a80a190a1ca68c97a10e877aeaa3c53c9',1,'fc::NccOptions']]],
   ['string_78',['string',['../structfc_1_1_all_objects_sax.html#ae72fe2c9c77de6611e2fc620293fedff',1,'fc::AllObjectsSax']]],
-  ['summaries_79',['summaries',['../structfc_1_1_all_objects_sax.html#a8a1798011937fdd202ceb5b50125e6e6',1,'fc::AllObjectsSax']]],
-  ['svg_2ecpp_80',['svg.cpp',['../svg_8cpp.html',1,'']]],
-  ['svg_2ehpp_81',['svg.hpp',['../svg_8hpp.html',1,'']]],
-  ['svgnumber_82',['svgNumber',['../_text_geometry_8cpp.html#ad5c18599037e7d2e77c7ef0dc4ccd49d',1,'TextGeometry.cpp']]],
-  ['svgtextgeometry_83',['svgTextGeometry',['../_text_geometry_8cpp.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp'],['../_text_geometry_8h.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp']]]
+  ['stylesheet_79',['styleSheet',['../namespacefc_1_1theme.html#a18e681340660452c1321cb59e0213fc7',1,'fc::theme']]],
+  ['summaries_80',['summaries',['../structfc_1_1_all_objects_sax.html#a8a1798011937fdd202ceb5b50125e6e6',1,'fc::AllObjectsSax']]],
+  ['svg_2ecpp_81',['svg.cpp',['../svg_8cpp.html',1,'']]],
+  ['svg_2ehpp_82',['svg.hpp',['../svg_8hpp.html',1,'']]],
+  ['svgnumber_83',['svgNumber',['../_text_geometry_8cpp.html#ad5c18599037e7d2e77c7ef0dc4ccd49d',1,'TextGeometry.cpp']]],
+  ['svgtextgeometry_84',['svgTextGeometry',['../_text_geometry_8cpp.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp'],['../_text_geometry_8h.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp']]]
 ];

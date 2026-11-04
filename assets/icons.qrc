@@ -8,6 +8,10 @@
     <file>icons/bug.png</file>
     <file>icons/calculator.png</file>
     <file>icons/calibrate.png</file>
+    <file>icons/check_dark.svg</file>
+    <file>icons/check_light.svg</file>
+    <file>icons/chevron_dark.svg</file>
+    <file>icons/chevron_light.svg</file>
     <file>icons/clean.png</file>
     <file>icons/clear_plot.png</file>
     <file>icons/close_edit_file.png</file>

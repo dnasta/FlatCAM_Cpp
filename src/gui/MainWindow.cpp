@@ -59,6 +59,7 @@
 #include <QFont>
 #include <QPixmap>
 #include <QIcon>
+#include <QIconEngine>
 #include <QSettings>
 #include <QPushButton>
 #include <QTableWidget>
@@ -91,14 +92,17 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <functional>
 #include <memory>
 #include <set>
 #include <sstream>
+#include <utility>
 
 #include "Canvas.h"
+#include "Theme.h"
 #include "View3D.h"
 #include "GCodeEditor.h"
 #include "PdfPages.h"
@@ -971,8 +975,78 @@ std::map<QString, QString> cncProps(const fc::GCodeOptions& opt, const QString& 
 }
 
 /// @brief Carga un icono original de FlatCAM desde el `.qrc`.
+/// @brief Aclara los trazos oscuros de un icono para el tema oscuro.
+QPixmap lightenIconForDark(const QPixmap& source) {
+    QImage image = source.toImage().convertToFormat(QImage::Format_ARGB32);
+    for (int y = 0; y < image.height(); ++y) {
+        auto* line = reinterpret_cast<QRgb*>(image.scanLine(y));
+        for (int x = 0; x < image.width(); ++x) {
+            const QRgb pixel = line[x];
+            const int alpha = qAlpha(pixel);
+            if (alpha == 0) continue;
+            const int r = qRed(pixel);
+            const int g = qGreen(pixel);
+            const int b = qBlue(pixel);
+            const int high = std::max({r, g, b});
+            const int low = std::min({r, g, b});
+            if (high - low <= 42 && high < 165) {
+                // Trazo neutro oscuro: se reemplaza por gris claro.
+                line[x] = qRgba(231, 233, 236, alpha);
+            } else if (high < 110) {
+                // Color muy oscuro: se aclara conservando el tono.
+                const QColor lifted = QColor::fromRgb(pixel).lighter(190);
+                line[x] = qRgba(lifted.red(), lifted.green(), lifted.blue(), alpha);
+            }
+        }
+    }
+    return QPixmap::fromImage(image);
+}
+
+/// @brief Icono que adapta sus trazos al tema activo en tiempo de dibujo.
+class ThemedIconEngine : public QIconEngine {
+public:
+    explicit ThemedIconEngine(QString name) : name_(std::move(name)) {}
+
+    QIconEngine* clone() const override { return new ThemedIconEngine(*this); }
+
+    QString key() const override {
+        return QStringLiteral("fc-icon:%1:%2").arg(name_, fc::theme::isDark() ? "d" : "l");
+    }
+
+    QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State) override {
+        QPixmap pixmap(":/icons/" + name_ + ".png");
+        if (pixmap.isNull()) return pixmap;
+        if (fc::theme::isDark()) pixmap = lightenIconForDark(pixmap);
+        if (mode == QIcon::Disabled) {
+            QImage image = pixmap.toImage().convertToFormat(QImage::Format_ARGB32);
+            for (int y = 0; y < image.height(); ++y) {
+                auto* line = reinterpret_cast<QRgb*>(image.scanLine(y));
+                for (int x = 0; x < image.width(); ++x) {
+                    const QRgb pixel = line[x];
+                    line[x] = qRgba(qRed(pixel), qGreen(pixel), qBlue(pixel),
+                                    qAlpha(pixel) * 45 / 100);
+                }
+            }
+            pixmap = QPixmap::fromImage(image);
+        }
+        if (size.isValid() && !size.isEmpty() &&
+            (pixmap.width() > size.width() || pixmap.height() > size.height())) {
+            pixmap = pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+        return pixmap;
+    }
+
+    void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode,
+               QIcon::State state) override {
+        painter->drawPixmap(rect, pixmap(rect.size(), mode, state));
+    }
+
+private:
+    QString name_;
+};
+
 QIcon originalIcon(const QString& name) {
-    return QIcon(":/icons/" + name + ".png");
+    return QIcon(new ThemedIconEngine(name));
 }
 
 /// @brief Dibuja un icono circular con una letra (fallback).
@@ -1155,7 +1229,7 @@ void MainWindow::buildLayout() {
 
     bottomTabs_ = new QTabWidget(this);
     bottomTabs_->tabBar()->setDrawBase(false);
-    bottomTabs_->setStyleSheet("QTabWidget::pane { border: 0; }");
+    bottomTabs_->setProperty("flat", true);
     buildTclConsole(bottomTabs_);
     buildConsole(bottomTabs_);
     gcodeView_ = new QPlainTextEdit(this);
@@ -1215,7 +1289,7 @@ void MainWindow::buildLayout() {
     leftTabs_ = new QTabWidget(this);
     leftTabs_->setMinimumWidth(370);
     leftTabs_->tabBar()->setDrawBase(false);
-    leftTabs_->setStyleSheet("QTabWidget::pane { border: 0; }");
+    leftTabs_->setProperty("flat", true);
     leftTabs_->setIconSize(QSize(16, 16));
     leftTabs_->setTabsClosable(true);
     leftTabs_->setDocumentMode(false);
@@ -1879,7 +1953,7 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.2.1</b> · build 2026-11-03<br>"
+                           tr("<b>FlatCAM C++ 0.3.0</b> · build 2026-11-04<br>"
                               "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
                               "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
@@ -1991,7 +2065,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.2.1\nBuild: 2026-11-03\n"
+            tr("FlatCAM C++ 0.3.0\nBuild: 2026-11-04\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -3548,7 +3622,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.2.1");
+    return QStringLiteral("FlatCAM C++ 0.3.0");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
@@ -4516,15 +4590,13 @@ void MainWindow::applyUiLevel() {
     }
 }
 
-/// @brief Aplica el tema claro u oscuro.
+/// @brief Aplica el tema claro u oscuro en caliente.
 void MainWindow::applyTheme(bool dark) {
-    const bool changed = darkTheme_ != dark;
     darkTheme_ = dark;
     QSettings().setValue("preferences/darkTheme", dark);
-    if (changed) {
-        QMessageBox::information(
-            this, tr("Tema"),
-            tr("El tema se aplicará la próxima vez que abras la aplicación."));
+    if (qApp) {
+        fc::theme::apply(*qApp, dark);
+        update();
     }
 }
 
@@ -5318,7 +5390,7 @@ void MainWindow::refreshObjectToolPage() {
     headerLayout->addWidget(title);
     headerLayout->addStretch();
     auto* level = new QLabel(tr("BASIC"), header);
-    level->setStyleSheet("color:#1b8a2f; font-weight:bold;");
+    level->setProperty("role", "badge");
     headerLayout->addWidget(level);
     objectToolLayout_->addWidget(header);
 
@@ -9138,17 +9210,18 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     };
     auto pageTitle = [this](QFormLayout* form, const QString& text, const QString& tip) {
         auto* label = new QLabel(text, this);
-        label->setStyleSheet("font-size:16px; font-weight:bold; margin-bottom:4px;");
+        label->setProperty("role", "pageTitle");
         label->setToolTip(tip);
         form->addRow(label);
         auto* line = new QFrame(this);
         line->setFrameShape(QFrame::HLine);
-        line->setFrameShadow(QFrame::Sunken);
+        line->setFrameShadow(QFrame::Plain);
+        line->setProperty("role", "rule");
         form->addRow(line);
     };
     auto section = [this](QFormLayout* form, const QString& text) {
         auto* label = new QLabel(text, this);
-        label->setStyleSheet("font-weight:bold; color:#2a6fb0; margin-top:8px;");
+        label->setProperty("role", "section");
         form->addRow(label);
     };
     auto markAdvanced = [this](QFormLayout* form, QWidget* widget) {
@@ -9160,6 +9233,11 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
         }
     };
     auto wrapScroll = [this](QWidget* page) {
+        if (auto* form = qobject_cast<QFormLayout*>(page->layout())) {
+            form->setContentsMargins(14, 12, 14, 14);
+            form->setVerticalSpacing(8);
+            form->setHorizontalSpacing(12);
+        }
         auto* area = new QScrollArea(this);
         area->setWidgetResizable(true);
         area->setFrameShape(QFrame::NoFrame);
@@ -9227,8 +9305,8 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
             set(6, lengthText(r.zcut, 3));
             set(7, lengthText(r.depth, 3));
         }
-        const int widths[8] = {22, 42, 46, 44, 46, 42, 50, 48};
-        const int inchWidths[8] = {22, 78, 46, 44, 46, 42, 84, 84};
+        const int widths[8] = {26, 50, 62, 52, 60, 48, 60, 56};
+        const int inchWidths[8] = {26, 82, 62, 52, 60, 48, 88, 88};
         const int* chosen = displayInch_ ? inchWidths : widths;
         for (int c = 0; c < 8; ++c) table->setColumnWidth(c, chosen[c]);
         connect(table, &QTableWidget::cellChanged, this,
@@ -9510,6 +9588,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     Common isoCommon = addCommon(isoForm, isoTable);
     auto* isoPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
     auto* isoCnc = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
+    isoCnc->setProperty("primary", true);
     auto* isoExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     isoForm->addRow(isoPreview);
     isoForm->addRow(isoCnc);
@@ -9646,6 +9725,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     Common nccCommon = addCommon(nccForm, nccTable);
     auto* nccPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
     auto* nccCnc = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
+    nccCnc->setProperty("primary", true);
     auto* nccExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     nccForm->addRow(nccPreview);
     nccForm->addRow(nccCnc);
@@ -9770,6 +9850,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     Common cutCommon = addCommon(cutForm, cutTable);
     auto* cutPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
     auto* cutCnc = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
+    cutCnc->setProperty("primary", true);
     auto* cutExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     cutForm->addRow(cutPreview);
     cutForm->addRow(cutCnc);
@@ -9861,6 +9942,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     Common paintCommon = addCommon(paintForm, paintTable);
     auto* paintPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
     auto* paintCnc = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
+    paintCnc->setProperty("primary", true);
     auto* paintExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     paintForm->addRow(paintPreview);
     paintForm->addRow(paintCnc);
@@ -9941,6 +10023,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     drillForm->addRow(QString(), drillOrder);
     markAdvanced(drillForm, drillOrder);
     auto* drillPreview = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
+    drillPreview->setProperty("primary", true);
     auto* drillExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     drillForm->addRow(drillPreview);
     drillForm->addRow(drillExport);
@@ -10022,6 +10105,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
     addRow(millForm, tr("Husillo:"), millSpindle);
     auto* millPreview = new QPushButton(originalIcon("geometry"), tr("Generar geometría"), this);
     auto* millCnc = new QPushButton(originalIcon("cnc"), tr("Generar CNCJob"), this);
+    millCnc->setProperty("primary", true);
     auto* millExport = new QPushButton(originalIcon("save_as"), tr("Exportar G-code"), this);
     millForm->addRow(millPreview);
     millForm->addRow(millCnc);

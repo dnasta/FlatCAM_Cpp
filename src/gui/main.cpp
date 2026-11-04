@@ -12,8 +12,6 @@
 #include <QApplication>
 #include <QDebug>
 #include <QSettings>
-#include <QStyleFactory>
-#include <QPalette>
 #include <QFileInfo>
 #include <QHelpEvent>
 #include <QLabel>
@@ -21,6 +19,7 @@
 #include <QToolTip>
 
 #include "MainWindow.h"
+#include "Theme.h"
 #include "flatcam/gcode.hpp"
 
 namespace {
@@ -106,40 +105,7 @@ int main(int argc, char** argv) {
     QApplication::setOrganizationName("FlatCAM C++");
     QApplication::setWindowIcon(QIcon(":/icons/appicon.png"));
     const bool darkTheme = QSettings().value("preferences/darkTheme", false).toBool();
-    if (!darkTheme) {
-        app.setStyleSheet(R"(
-            QWidget { background-color: #f1f1f1; color: #1e1e1e; }
-            QMenuBar, QToolBar { background-color: #f1f1f1; }
-            QTabBar::tab { background: #e4e4e4; border: 1px solid #b8b8b8;
-                           padding: 4px 10px; }
-            QTabBar::tab:selected { background: #fafafa; }
-            QTabWidget::pane { border: 1px solid #c0c0c0; }
-            QPushButton { background: #e9e9e9; border: 1px solid #adadad;
-                          border-radius: 3px; padding: 4px 8px; }
-            QPushButton:hover { background: #f3f3f3; }
-            QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QPlainTextEdit,
-            QTableWidget, QTreeWidget { background: #ffffff; border: 1px solid #b8b8b8; }
-            QHeaderView::section { background: #e6e6e6; border: 0px;
-                                   border-right: 1px solid #c0c0c0;
-                                   border-bottom: 1px solid #c0c0c0; padding: 3px; }
-        )");
-    }
-    if (darkTheme) {
-        QApplication::setStyle(QStyleFactory::create("Fusion"));
-        QPalette palette;
-        palette.setColor(QPalette::Window, QColor(45, 45, 48));
-        palette.setColor(QPalette::WindowText, QColor(230, 230, 230));
-        palette.setColor(QPalette::Base, QColor(30, 30, 32));
-        palette.setColor(QPalette::AlternateBase, QColor(45, 45, 48));
-        palette.setColor(QPalette::Text, QColor(230, 230, 230));
-        palette.setColor(QPalette::Button, QColor(53, 53, 56));
-        palette.setColor(QPalette::ButtonText, QColor(230, 230, 230));
-        palette.setColor(QPalette::Highlight, QColor(42, 130, 218));
-        palette.setColor(QPalette::HighlightedText, Qt::white);
-        palette.setColor(QPalette::ToolTipBase, QColor(60, 60, 64));
-        palette.setColor(QPalette::ToolTipText, QColor(230, 230, 230));
-        app.setPalette(palette);
-    }
+    fc::theme::apply(app, darkTheme);
 
     MainWindow window;
     window.resize(1400, 900);

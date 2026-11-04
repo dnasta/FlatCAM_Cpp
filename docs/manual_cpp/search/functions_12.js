@@ -50,6 +50,7 @@ var searchData=
   ['start_5farray_47',['start_array',['../structfc_1_1_all_objects_sax.html#a4ea7a0779b42c87573dd88dd25e23af0',1,'fc::AllObjectsSax']]],
   ['start_5fobject_48',['start_object',['../structfc_1_1_all_objects_sax.html#aab6c231affbb30fc1aba394404eca500',1,'fc::AllObjectsSax']]],
   ['string_49',['string',['../structfc_1_1_all_objects_sax.html#ae72fe2c9c77de6611e2fc620293fedff',1,'fc::AllObjectsSax']]],
-  ['svgnumber_50',['svgNumber',['../_text_geometry_8cpp.html#ad5c18599037e7d2e77c7ef0dc4ccd49d',1,'TextGeometry.cpp']]],
-  ['svgtextgeometry_51',['svgTextGeometry',['../_text_geometry_8cpp.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp'],['../_text_geometry_8h.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp']]]
+  ['stylesheet_50',['styleSheet',['../namespacefc_1_1theme.html#a18e681340660452c1321cb59e0213fc7',1,'fc::theme']]],
+  ['svgnumber_51',['svgNumber',['../_text_geometry_8cpp.html#ad5c18599037e7d2e77c7ef0dc4ccd49d',1,'TextGeometry.cpp']]],
+  ['svgtextgeometry_52',['svgTextGeometry',['../_text_geometry_8cpp.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp'],['../_text_geometry_8h.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp']]]
 ];

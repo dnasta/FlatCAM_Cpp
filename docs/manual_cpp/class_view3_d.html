@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.2.1</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.3.0</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -233,11 +233,11 @@ Atributos privados</h2></td></tr>
 <dl class="section note"><dt>Nota</dt><dd>La caja de la placa se deriva <b>sólo</b> de los sólidos: si no hay cobre válido la placa no existe y la vista queda vacía aunque haya taladros. </dd></dl>
 <dl class="section warning"><dt>Atención</dt><dd>El nombre sugerido del PNG usa un ternario con ramas idénticas (<a class="el" href="_view3_d_8cpp.html" title="Vista 3D sin GPU: extrusión de la placa y el cobre con QPainter.">View3D.cpp</a>:93-95): <span class="tt">QFileInfo::exists(".")</span> siempre es cierto, de modo que la intención original (proponer otra ruta si el directorio actual no existe) quedó sin efecto. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00049">49</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00050">50</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00063">board_</a>, <a class="el" href="_view3_d_8h_source.html#l00080">copperSpin_</a>, <a class="el" href="_view3_d_8h_source.html#l00070">copperThickness_</a>, <a class="el" href="geometry_8hpp_source.html#l00087">fc::BBox::expanded()</a>, <a class="el" href="_view3_d_8h_source.html#l00062">holes_</a>, <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00063">UnitSpinBox::setDecimals()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00076">UnitSpinBox::setDisplayInch()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00039">UnitSpinBox::setRange()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00069">UnitSpinBox::setSuffix()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00046">UnitSpinBox::setValue()</a>, <a class="el" href="_view3_d_8h_source.html#l00064">showBoard_</a>, <a class="el" href="_view3_d_8h_source.html#l00065">showCopper_</a>, <a class="el" href="_view3_d_8h_source.html#l00061">solids_</a>, <a class="el" href="_view3_d_8h_source.html#l00069">thickness_</a>, <a class="el" href="_view3_d_8h_source.html#l00079">thicknessSpin_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00027">UnitSpinBox::UnitSpinBox()</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00052">UnitSpinBox::value()</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00063">board_</a>, <a class="el" href="_view3_d_8h_source.html#l00080">copperSpin_</a>, <a class="el" href="_view3_d_8h_source.html#l00070">copperThickness_</a>, <a class="el" href="geometry_8hpp_source.html#l00087">fc::BBox::expanded()</a>, <a class="el" href="_view3_d_8h_source.html#l00062">holes_</a>, <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00063">UnitSpinBox::setDecimals()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00076">UnitSpinBox::setDisplayInch()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00039">UnitSpinBox::setRange()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00069">UnitSpinBox::setSuffix()</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00046">UnitSpinBox::setValue()</a>, <a class="el" href="_view3_d_8h_source.html#l00064">showBoard_</a>, <a class="el" href="_view3_d_8h_source.html#l00065">showCopper_</a>, <a class="el" href="_view3_d_8h_source.html#l00061">solids_</a>, <a class="el" href="_view3_d_8h_source.html#l00069">thickness_</a>, <a class="el" href="_view3_d_8h_source.html#l00079">thicknessSpin_</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00027">UnitSpinBox::UnitSpinBox()</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="_unit_spin_box_8h_source.html#l00052">UnitSpinBox::value()</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l03238">MainWindow::show3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l03312">MainWindow::show3D()</a>.</p>
 
 </div>
 </div>
@@ -271,11 +271,11 @@ Atributos privados</h2></td></tr>
 <dl class="section note"><dt>Nota</dt><dd>Si no hay caras (caja vacía) retorna sin tocar la vista. Como se llama desde rebuildFaces, la escala se recalcula en cada rotación: el zoom manual se conserva (vive en <span class="tt"><a class="el" href="#a757c469d58034fca2722ece5d63f6155">zoom_</a></span>) pero el centro siempre queda en el centro del diálogo. </dd></dl>
 <p>Extiende la caja 2D de encuadre con los puntos proyectados de la lista.</p>
 
-<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00313">313</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00326">326</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
 
 <p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00068">boardFaces_</a>, <a class="el" href="_view3_d_8h_source.html#l00067">bottomFaces_</a>, <a class="el" href="_view3_d_8h_source.html#l00078">offset_</a>, <a class="el" href="_view3_d_8h_source.html#l00077">scale_</a> y <a class="el" href="_view3_d_8h_source.html#l00066">topFaces_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a>.</p>
 
 </div>
 </div>
@@ -312,9 +312,9 @@ Atributos privados</h2></td></tr>
 </dl>
 <dl class="section note"><dt>Nota</dt><dd>El factor 0.01 rad/px equivale a unos 0.57° por píxel. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00460">460</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00473">473</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00076">dragging_</a>, <a class="el" href="_view3_d_8h_source.html#l00075">lastMouse_</a>, <a class="el" href="_view3_d_8h_source.html#l00072">pitch_</a>, <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a> y <a class="el" href="_view3_d_8h_source.html#l00071">yaw_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00076">dragging_</a>, <a class="el" href="_view3_d_8h_source.html#l00075">lastMouse_</a>, <a class="el" href="_view3_d_8h_source.html#l00072">pitch_</a>, <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a> y <a class="el" href="_view3_d_8h_source.html#l00071">yaw_</a>.</p>
 
 </div>
 </div>
@@ -349,7 +349,7 @@ Atributos privados</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00443">443</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00456">456</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
 
 <p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00076">dragging_</a> y <a class="el" href="_view3_d_8h_source.html#l00075">lastMouse_</a>.</p>
 
@@ -391,9 +391,9 @@ Atributos privados</h2></td></tr>
 <p>Aplica el factor de sombreado al color base con saturación a 0..255.</p>
 <p>Dibuja una lista de caras ya ordenada, con agujeros par-impar y perfil.</p>
 
-<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00351">351</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00364">364</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00063">board_</a>, <a class="el" href="_view3_d_8h_source.html#l00068">boardFaces_</a>, <a class="el" href="_view3_d_8h_source.html#l00067">bottomFaces_</a>, <a class="el" href="_view3_d_8h_source.html#l00070">copperThickness_</a>, <a class="el" href="_view3_d_8h_source.html#l00062">holes_</a>, <a class="el" href="_view3_d_8h_source.html#l00078">offset_</a>, <a class="el" href="_view3_d_8cpp_source.html#l00147">project()</a>, <a class="el" href="_view3_d_8h_source.html#l00077">scale_</a>, <a class="el" href="_view3_d_8h_source.html#l00064">showBoard_</a>, <a class="el" href="_view3_d_8h_source.html#l00065">showCopper_</a>, <a class="el" href="_view3_d_8h_source.html#l00066">topFaces_</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a>, <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a> y <a class="el" href="_view3_d_8h_source.html#l00073">zoom_</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00063">board_</a>, <a class="el" href="_view3_d_8h_source.html#l00068">boardFaces_</a>, <a class="el" href="_view3_d_8h_source.html#l00067">bottomFaces_</a>, <a class="el" href="_view3_d_8h_source.html#l00070">copperThickness_</a>, <a class="el" href="_view3_d_8h_source.html#l00062">holes_</a>, <a class="el" href="_view3_d_8h_source.html#l00078">offset_</a>, <a class="el" href="_view3_d_8cpp_source.html#l00160">project()</a>, <a class="el" href="_view3_d_8h_source.html#l00077">scale_</a>, <a class="el" href="_view3_d_8h_source.html#l00064">showBoard_</a>, <a class="el" href="_view3_d_8h_source.html#l00065">showCopper_</a>, <a class="el" href="_view3_d_8h_source.html#l00066">topFaces_</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a>, <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a> y <a class="el" href="_view3_d_8h_source.html#l00073">zoom_</a>.</p>
 
 </div>
 </div>
@@ -448,11 +448,11 @@ Atributos privados</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Devuelve</dt><dd>Punto en el espacio de la vista (aún sin escala ni desplazamiento; el llamador aplica <span class="tt"><a class="el" href="#a7f93f51afef5836f3aaa071f99b2c368">scale_</a> * <a class="el" href="#a757c469d58034fca2722ece5d63f6155">zoom_</a></span> y <span class="tt"><a class="el" href="#a1207ff6e3776399b74a53d9ccae00be6">offset_</a></span>). </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00147">147</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00160">160</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
 
 <p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00074">center_</a>, <a class="el" href="_view3_d_8h_source.html#l00072">pitch_</a> y <a class="el" href="_view3_d_8h_source.html#l00071">yaw_</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a>.</p>
 
 </div>
 </div>
@@ -488,11 +488,11 @@ Atributos privados</h2></td></tr>
 <p>Proyecta una tapa/fondo: contorno exterior con profundidad media y agujeros proyectados; descarta el contorno si tiene menos de 3 puntos.</p>
 <p>Genera un cuadrilátero vertical por cada lado del anillo, de z = 0 a la altura del material, con la normal exterior y la profundidad del centro.</p>
 
-<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00181">181</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00194">194</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00063">board_</a>, <a class="el" href="_view3_d_8h_source.html#l00068">boardFaces_</a>, <a class="el" href="_view3_d_8h_source.html#l00067">bottomFaces_</a>, <a class="el" href="_view3_d_8h_source.html#l00050">View3D::Face::copper</a>, <a class="el" href="_view3_d_8h_source.html#l00070">copperThickness_</a>, <a class="el" href="_view3_d_8h_source.html#l00047">View3D::Face::depth</a>, <a class="el" href="_view3_d_8cpp_source.html#l00313">fitView()</a>, <a class="el" href="geometry_8hpp_source.html#l00101">fc::PolygonContours::holes</a>, <a class="el" href="_view3_d_8h_source.html#l00046">View3D::Face::holes</a>, <a class="el" href="geometry_8hpp_source.html#l00100">fc::PolygonContours::outer</a>, <a class="el" href="_view3_d_8h_source.html#l00072">pitch_</a>, <a class="el" href="_view3_d_8h_source.html#l00045">View3D::Face::points</a>, <a class="el" href="_view3_d_8cpp_source.html#l00147">project()</a>, <a class="el" href="_view3_d_8h_source.html#l00048">View3D::Face::shade</a>, <a class="el" href="_view3_d_8h_source.html#l00061">solids_</a>, <a class="el" href="_view3_d_8h_source.html#l00069">thickness_</a>, <a class="el" href="_view3_d_8h_source.html#l00049">View3D::Face::top</a>, <a class="el" href="_view3_d_8h_source.html#l00066">topFaces_</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>, <a class="el" href="_view3_d_8h_source.html#l00071">yaw_</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00063">board_</a>, <a class="el" href="_view3_d_8h_source.html#l00068">boardFaces_</a>, <a class="el" href="_view3_d_8h_source.html#l00067">bottomFaces_</a>, <a class="el" href="_view3_d_8h_source.html#l00050">View3D::Face::copper</a>, <a class="el" href="_view3_d_8h_source.html#l00070">copperThickness_</a>, <a class="el" href="_view3_d_8h_source.html#l00047">View3D::Face::depth</a>, <a class="el" href="_view3_d_8cpp_source.html#l00326">fitView()</a>, <a class="el" href="geometry_8hpp_source.html#l00101">fc::PolygonContours::holes</a>, <a class="el" href="_view3_d_8h_source.html#l00046">View3D::Face::holes</a>, <a class="el" href="geometry_8hpp_source.html#l00100">fc::PolygonContours::outer</a>, <a class="el" href="_view3_d_8h_source.html#l00072">pitch_</a>, <a class="el" href="_view3_d_8h_source.html#l00045">View3D::Face::points</a>, <a class="el" href="_view3_d_8cpp_source.html#l00160">project()</a>, <a class="el" href="_view3_d_8h_source.html#l00048">View3D::Face::shade</a>, <a class="el" href="_view3_d_8h_source.html#l00061">solids_</a>, <a class="el" href="_view3_d_8h_source.html#l00069">thickness_</a>, <a class="el" href="_view3_d_8h_source.html#l00049">View3D::Face::top</a>, <a class="el" href="_view3_d_8h_source.html#l00066">topFaces_</a>, <a class="el" href="geometry_8hpp_source.html#l00053">fc::BBox::valid</a>, <a class="el" href="geometry_8hpp_source.html#l00035">fc::Pt::x</a>, <a class="el" href="geometry_8hpp_source.html#l00051">fc::BBox::xmax</a>, <a class="el" href="geometry_8hpp_source.html#l00049">fc::BBox::xmin</a>, <a class="el" href="geometry_8hpp_source.html#l00036">fc::Pt::y</a>, <a class="el" href="_view3_d_8h_source.html#l00071">yaw_</a>, <a class="el" href="geometry_8hpp_source.html#l00052">fc::BBox::ymax</a> y <a class="el" href="geometry_8hpp_source.html#l00050">fc::BBox::ymin</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00460">mouseMoveEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00473">mouseMoveEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D()</a>.</p>
 
 </div>
 </div>
@@ -529,7 +529,7 @@ Atributos privados</h2></td></tr>
 </dl>
 <dl class="section note"><dt>Nota</dt><dd>No se ancla al cursor (el zoom es siempre respecto del centro del diálogo) y se ignora la magnitud del delta. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00480">480</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_view3_d_8cpp_source.html#l00493">493</a> del archivo <a class="el" href="_view3_d_8cpp_source.html">View3D.cpp</a>.</p>
 
 <p class="reference">Hace referencia a <a class="el" href="_view3_d_8h_source.html#l00073">zoom_</a>.</p>
 
@@ -558,7 +558,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00063">63</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D()</a>.</p>
 
 </div>
 </div>
@@ -584,7 +584,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00068">68</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00313">fitView()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00326">fitView()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a>.</p>
 
 </div>
 </div>
@@ -610,7 +610,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00067">67</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00313">fitView()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00326">fitView()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a>.</p>
 
 </div>
 </div>
@@ -636,7 +636,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00074">74</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00147">project()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00160">project()</a>.</p>
 
 </div>
 </div>
@@ -662,7 +662,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00080">80</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D()</a>.</p>
 
 </div>
 </div>
@@ -688,7 +688,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00070">70</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D()</a>.</p>
 
 </div>
 </div>
@@ -714,7 +714,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00076">76</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00460">mouseMoveEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00443">mousePressEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00473">mouseMoveEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00456">mousePressEvent()</a>.</p>
 
 </div>
 </div>
@@ -740,7 +740,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00062">62</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D()</a>.</p>
 
 </div>
 </div>
@@ -766,7 +766,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00075">75</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00460">mouseMoveEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00443">mousePressEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00473">mouseMoveEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00456">mousePressEvent()</a>.</p>
 
 </div>
 </div>
@@ -792,7 +792,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00078">78</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00313">fitView()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00326">fitView()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a>.</p>
 
 </div>
 </div>
@@ -818,7 +818,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00072">72</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00460">mouseMoveEvent()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00147">project()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00473">mouseMoveEvent()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00160">project()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a>.</p>
 
 </div>
 </div>
@@ -844,7 +844,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00077">77</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00313">fitView()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00326">fitView()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a>.</p>
 
 </div>
 </div>
@@ -870,7 +870,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00064">64</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D()</a>.</p>
 
 </div>
 </div>
@@ -896,7 +896,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00065">65</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D()</a>.</p>
 
 </div>
 </div>
@@ -922,7 +922,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00061">61</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D()</a>.</p>
 
 </div>
 </div>
@@ -948,7 +948,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00069">69</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D()</a>.</p>
 
 </div>
 </div>
@@ -974,7 +974,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00079">79</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00049">View3D()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00050">View3D()</a>.</p>
 
 </div>
 </div>
@@ -1000,7 +1000,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00066">66</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00313">fitView()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00326">fitView()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a>.</p>
 
 </div>
 </div>
@@ -1026,7 +1026,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00071">71</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00460">mouseMoveEvent()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00147">project()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00181">rebuildFaces()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00473">mouseMoveEvent()</a>, <a class="el" href="_view3_d_8cpp_source.html#l00160">project()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00194">rebuildFaces()</a>.</p>
 
 </div>
 </div>
@@ -1052,7 +1052,7 @@ Atributos privados</h2></td></tr>
 
 <p class="definition">Definición en la línea <a class="el" href="_view3_d_8h_source.html#l00073">73</a> del archivo <a class="el" href="_view3_d_8h_source.html">View3D.h</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00351">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00480">wheelEvent()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_view3_d_8cpp_source.html#l00364">paintEvent()</a> y <a class="el" href="_view3_d_8cpp_source.html#l00493">wheelEvent()</a>.</p>
 
 </div>
 </div>

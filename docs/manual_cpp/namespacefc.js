@@ -1,5 +1,10 @@
 var namespacefc =
 [
+    [ "theme", "namespacefc_1_1theme.html", [
+      [ "apply", "namespacefc_1_1theme.html#abebd3fe1f78cd87efc90395a30394e62", null ],
+      [ "isDark", "namespacefc_1_1theme.html#ab97dc4c733a8eeb327d8253ba9f6b698", null ],
+      [ "styleSheet", "namespacefc_1_1theme.html#a18e681340660452c1321cb59e0213fc7", null ]
+    ] ],
     [ "AllObjectsSax", "structfc_1_1_all_objects_sax.html", "structfc_1_1_all_objects_sax" ],
     [ "BBox", "structfc_1_1_b_box.html", "structfc_1_1_b_box" ],
     [ "CutoutOptions", "structfc_1_1_cutout_options.html", "structfc_1_1_cutout_options" ],
