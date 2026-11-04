@@ -21,7 +21,7 @@ var searchData=
   ['intersection_18',['intersection',['../classfc_1_1_geom.html#a49e89dca4948b779ffde07afe74e3d32',1,'fc::Geom::intersection()'],['../class_geom.html#a49e89dca4948b779ffde07afe74e3d32',1,'Geom::intersection()']]],
   ['intersects_19',['intersects',['../classfc_1_1_geom.html#adee9c964dabff6c6b6ac0ea258e6a03f',1,'fc::Geom::intersects()'],['../class_geom.html#adee9c964dabff6c6b6ac0ea258e6a03f',1,'Geom::intersects()']]],
   ['invertgerber_20',['invertGerber',['../class_main_window.html#a16214e81c50576733e896d328eee4bbe',1,'MainWindow']]],
-  ['isdark_21',['isDark',['../namespacefc_1_1theme.html#ab97dc4c733a8eeb327d8253ba9f6b698',1,'fc::theme']]],
+  ['isdark_21',['isDark',['../namespacefc_1_1theme.html#ab97dc4c733a8eeb327d8253ba9f6b698',1,'fc::theme::isDark()'],['../namespacefc_1_1theme.html#a05614ef1f083a6c3970d5355d7cd46a6',1,'fc::theme::isDark(Theme theme)']]],
   ['isolate_22',['isolate',['../classfc_1_1_script_api.html#ac48deb8636daa280d05da435118e12d2',1,'fc::ScriptApi']]],
   ['isolatecopper_23',['isolateCopper',['../namespacefc.html#a1c21630b86a92f46fda7684dfab22cd5',1,'fc']]],
   ['isolatedialog_24',['isolateDialog',['../class_main_window.html#a07c035c9d4e47c3b2f173caf42d2b148',1,'MainWindow']]],

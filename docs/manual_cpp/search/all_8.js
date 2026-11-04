@@ -34,7 +34,7 @@ var searchData=
   ['intersects_31',['intersects',['../classfc_1_1_geom.html#adee9c964dabff6c6b6ac0ea258e6a03f',1,'fc::Geom::intersects()'],['../class_geom.html#adee9c964dabff6c6b6ac0ea258e6a03f',1,'Geom::intersects()']]],
   ['invert_32',['invert',['../structfc_1_1_cutout_options.html#adaecd5d419077d78d620e831e86e4b04',1,'fc::CutoutOptions::invert'],['../structfc_1_1_isolation_options.html#ab43eea3b2d404376212ff20ba28a73e8',1,'fc::IsolationOptions::invert'],['../structfc_1_1_paint_options.html#a5eec58c89690021dbe4770c1533d6bea',1,'fc::PaintOptions::invert']]],
   ['invertgerber_33',['invertGerber',['../class_main_window.html#a16214e81c50576733e896d328eee4bbe',1,'MainWindow']]],
-  ['isdark_34',['isDark',['../namespacefc_1_1theme.html#ab97dc4c733a8eeb327d8253ba9f6b698',1,'fc::theme']]],
+  ['isdark_34',['isDark',['../namespacefc_1_1theme.html#ab97dc4c733a8eeb327d8253ba9f6b698',1,'fc::theme::isDark()'],['../namespacefc_1_1theme.html#a05614ef1f083a6c3970d5355d7cd46a6',1,'fc::theme::isDark(Theme theme)']]],
   ['isel_35',['Isel',['../namespacefc.html#ab1000db7f3672945f3128b82831cdf62ac5891789a4d56fa8e7c4f7fef9b95d7e',1,'fc']]],
   ['iselicp_36',['IselIcp',['../namespacefc.html#ab1000db7f3672945f3128b82831cdf62a8bf80ce5fb3296b73d73e4cb9d29699e',1,'fc']]],
   ['isolate_37',['isolate',['../classfc_1_1_script_api.html#ac48deb8636daa280d05da435118e12d2',1,'fc::ScriptApi']]],

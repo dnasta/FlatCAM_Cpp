@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.3.0</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.3.1</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('importers_8cpp
 <div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span><span class="keyword">struct </span>SvgMatrix {</div>
 <div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    <span class="keywordtype">double</span> a = 1.0, b = 0.0, c = 0.0, d = 1.0, e = 0.0, f = 0.0;<span class="comment"></span></div>
 <div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span><span class="comment">    /// Transforma un punto: (a*x + c*y + e, b*x + d*y + f).</span></div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    Pt <a class="code hl_function" href="namespacefc_1_1theme.html#abebd3fe1f78cd87efc90395a30394e62">apply</a>(<span class="keyword">const</span> Pt&amp; p)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    Pt <a class="code hl_function" href="namespacefc_1_1theme.html#a8cb81096b3bc0108e5003e644e839df4">apply</a>(<span class="keyword">const</span> Pt&amp; p)<span class="keyword"> const </span>{</div>
 <div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>        <span class="keywordflow">return</span> {a * p.x + c * p.y + e, b * p.x + d * p.y + f};</div>
 <div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>    }<span class="comment"></span></div>
 <div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span><span class="comment">    /// Compone matrices; el resultado aplica @p o antes que esta matriz.</span></div>
@@ -1369,7 +1369,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('importers_8cpp
 <div class="ttc" id="aclassfc_1_1_geom_html_af776fc784d39a34a60aa9d7ecc67b6b8"><div class="ttname"><a href="classfc_1_1_geom.html#af776fc784d39a34a60aa9d7ecc67b6b8">fc::Geom::polygon</a></div><div class="ttdeci">static Geom polygon(const Ring &amp;shell, const std::vector&lt; Ring &gt; &amp;holes={})</div><div class="ttdoc">Crea un polígono con agujeros opcionales.</div><div class="ttdef"><b>Definición</b> <a href="geometry_8cpp_source.html#l00234">geometry.cpp:234</a></div></div>
 <div class="ttc" id="aexcellon_8hpp_html"><div class="ttname"><a href="excellon_8hpp.html">excellon.hpp</a></div><div class="ttdoc">Parser de archivos Excellon (taladros y ranuras de PCB).</div></div>
 <div class="ttc" id="aimporters_8hpp_html"><div class="ttname"><a href="importers_8hpp.html">importers.hpp</a></div><div class="ttdoc">Importadores/exportadores vectoriales y de imágenes.</div></div>
-<div class="ttc" id="anamespacefc_1_1theme_html_abebd3fe1f78cd87efc90395a30394e62"><div class="ttname"><a href="namespacefc_1_1theme.html#abebd3fe1f78cd87efc90395a30394e62">fc::theme::apply</a></div><div class="ttdeci">void apply(QApplication &amp;app, bool dark)</div><div class="ttdoc">Aplica estilo Fusion, paleta y hoja de estilo a la aplicación.</div><div class="ttdef"><b>Definición</b> <a href="_theme_8cpp_source.html#l00330">Theme.cpp:330</a></div></div>
+<div class="ttc" id="anamespacefc_1_1theme_html_a8cb81096b3bc0108e5003e644e839df4"><div class="ttname"><a href="namespacefc_1_1theme.html#a8cb81096b3bc0108e5003e644e839df4">fc::theme::apply</a></div><div class="ttdeci">void apply(QApplication &amp;app, Theme theme)</div><div class="ttdoc">Aplica el tema indicado: estilo, paleta y hoja de estilo.</div><div class="ttdef"><b>Definición</b> <a href="_theme_8cpp_source.html#l00462">Theme.cpp:462</a></div></div>
 <div class="ttc" id="anamespacefc_html"><div class="ttname"><a href="namespacefc.html">fc</a></div><div class="ttdef"><b>Definición</b> <a href="cutout_8hpp_source.html#l00016">cutout.hpp:16</a></div></div>
 <div class="ttc" id="anamespacefc_html_a187043d2c2f015d5227df4a9fbf86d1f"><div class="ttname"><a href="namespacefc.html#a187043d2c2f015d5227df4a9fbf86d1f">fc::importDxfTexts</a></div><div class="ttdeci">std::vector&lt; DxfText &gt; importDxfTexts(const std::string &amp;path)</div><div class="ttdoc">Importa sólo los textos de un DXF, ya transformados.</div><div class="ttdef"><b>Definición</b> <a href="#l00859">importers.cpp:859</a></div></div>
 <div class="ttc" id="anamespacefc_html_a72be113ffb643c93ac1427528268de8c"><div class="ttname"><a href="namespacefc.html#a72be113ffb643c93ac1427528268de8c">fc::importSvg</a></div><div class="ttdeci">std::vector&lt; Geom &gt; importSvg(const std::string &amp;path)</div><div class="ttdoc">Importa geometría de un SVG.</div><div class="ttdef"><b>Definición</b> <a href="#l00386">importers.cpp:386</a></div></div>

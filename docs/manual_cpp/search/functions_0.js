@@ -21,7 +21,7 @@ var searchData=
   ['allowclosewithoutprompt_18',['allowCloseWithoutPrompt',['../class_main_window.html#a6b86f18ebdd3400bf0f290bdbfeb3810',1,'MainWindow']]],
   ['appendgeometry_19',['appendGeometry',['../class_canvas.html#a37d934b6d4c630987f5d427d61d84dfd',1,'Canvas']]],
   ['appendlinepath_20',['appendLinePath',['../class_canvas.html#a9c976504f5214728a5e5db757ccc374b',1,'Canvas']]],
-  ['apply_21',['apply',['../namespacefc_1_1theme.html#abebd3fe1f78cd87efc90395a30394e62',1,'fc::theme']]],
+  ['apply_21',['apply',['../namespacefc_1_1theme.html#a8cb81096b3bc0108e5003e644e839df4',1,'fc::theme']]],
   ['applyaperturesizes_22',['applyApertureSizes',['../class_main_window.html#ae44caaf97b65a12a70521c1727ddb571',1,'MainWindow']]],
   ['applyconversion_23',['applyConversion',['../class_unit_spin_box.html#a0e601e38eedaab5fccbe16b088270ded',1,'UnitSpinBox']]],
   ['applycutout_24',['applyCutout',['../class_main_window.html#a5cf9155b86fe6305bda961c5b49f7ad5',1,'MainWindow']]],
@@ -30,7 +30,7 @@ var searchData=
   ['applymacrodefinition_27',['applyMacroDefinition',['../class_main_window.html#a382634d40ffe46bba688011e6133cd65',1,'MainWindow']]],
   ['applyncc_28',['applyNcc',['../class_main_window.html#a60ff57ac0c19f80d843cf0921e05a037',1,'MainWindow']]],
   ['applypaint_29',['applyPaint',['../class_main_window.html#a06e9757aed6f530b1066680a35b1ea1d',1,'MainWindow']]],
-  ['applytheme_30',['applyTheme',['../class_main_window.html#a64a403af96e1d21af389445a6bc643b0',1,'MainWindow']]],
+  ['applytheme_30',['applyTheme',['../class_main_window.html#ad4cac636010209427e5c39d27b4f4449',1,'MainWindow']]],
   ['applyuilevel_31',['applyUiLevel',['../class_main_window.html#a9f2e43e2dfed5a35d025bc6ea8edf29d',1,'MainWindow']]],
   ['area_32',['area',['../classfc_1_1_geom.html#a3f9e323af792e2c534783d0b886aa68f',1,'fc::Geom::area()'],['../class_geom.html#a3f9e323af792e2c534783d0b886aa68f',1,'Geom::area()']]]
 ];

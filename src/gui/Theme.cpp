@@ -11,9 +11,12 @@
 
 #include <QApplication>
 #include <QColor>
+#include <QGuiApplication>
 #include <QPalette>
+#include <QSettings>
 #include <QStyle>
 #include <QStyleFactory>
+#include <QStyleHints>
 
 #include <utility>
 
@@ -129,7 +132,7 @@ QString expand(QString sheet, const Colors& c) {
     return sheet;
 }
 
-/// @brief Plantilla QSS común a los dos temas.
+/// @brief Plantilla QSS común a las variantes clara y oscura del tema moderno.
 const char* kTemplate = R"QSS(
 /* ---- Ventanas y separadores ------------------------------------------- */
 QMainWindow, QDialog { background: @window; }
@@ -317,23 +320,72 @@ QProgressBar { background: @buttonDisabled; border: 1px solid @border;
 QProgressBar::chunk { background: @accent; border-radius: 6px; margin: 1px; }
 )QSS";
 
-}  // namespace
+/// @brief Hoja mínima para conservar la jerarquía del tema del sistema.
+///
+/// No define colores de fondo ni de controles: deja que el estilo nativo y la
+/// paleta del sistema dibujen todo. Sólo mantiene los títulos de panel, las
+/// secciones y el separador que usa la GUI.
+const char* kSystemTemplate = R"QSS(
+QLabel[role="pageTitle"] { font-size: 17px; font-weight: 700; }
+QLabel[role="section"] { font-size: 11px; font-weight: 700;
+                         letter-spacing: 1px; text-transform: uppercase;
+                         color: palette(highlight); }
+QFrame[role="rule"] { border: 0; background: palette(mid);
+                      max-height: 1px; min-height: 1px; }
+QLabel[role="badge"] { font-size: 10px; font-weight: 700;
+                       letter-spacing: 1px; color: palette(highlight); }
+QPushButton[primary="true"] { font-weight: 600; }
+)QSS";
 
-QString styleSheet(bool dark) {
-    return expand(QString::fromUtf8(kTemplate), colorsFor(dark));
+/// @brief Nombre del estilo nativo capturado antes de aplicar Fusion.
+QString platformStyleName() {
+    static const QString name = [] {
+        if (QStyle* style = QApplication::style()) return style->objectName();
+        return QString();
+    }();
+    return name;
 }
 
-bool isDark() {
-    return g_dark;
+/// @brief Construye una paleta oscura neutra para el tema del sistema.
+QPalette systemDarkPalette(const QPalette& base) {
+    QPalette palette = base;
+    const auto set = [&palette](QPalette::ColorRole role, const QColor& color) {
+        palette.setColor(role, color);
+    };
+    set(QPalette::Window, QColor("#1e1e1e"));
+    set(QPalette::WindowText, QColor("#f2f2f7"));
+    set(QPalette::Base, QColor("#1e1e1e"));
+    set(QPalette::AlternateBase, QColor("#2a2a2c"));
+    set(QPalette::Text, QColor("#f2f2f7"));
+    set(QPalette::Button, QColor("#2c2c2e"));
+    set(QPalette::ButtonText, QColor("#f2f2f7"));
+    set(QPalette::BrightText, QColor("#ffffff"));
+    set(QPalette::Highlight, QColor("#0a84ff"));
+    set(QPalette::HighlightedText, QColor("#ffffff"));
+    set(QPalette::ToolTipBase, QColor("#2c2c2e"));
+    set(QPalette::ToolTipText, QColor("#f2f2f7"));
+    set(QPalette::PlaceholderText, QColor("#8e8e93"));
+    set(QPalette::Link, QColor("#0a84ff"));
+    set(QPalette::LinkVisited, QColor("#5e5ce6"));
+    set(QPalette::Light, QColor("#48484a"));
+    set(QPalette::Midlight, QColor("#3a3a3c"));
+    set(QPalette::Mid, QColor("#48484a"));
+    set(QPalette::Dark, QColor("#1c1c1e"));
+    set(QPalette::Shadow, QColor("#000000"));
+
+    palette.setColor(QPalette::Disabled, QPalette::WindowText, QColor("#8e8e93"));
+    palette.setColor(QPalette::Disabled, QPalette::Text, QColor("#8e8e93"));
+    palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor("#8e8e93"));
+    palette.setColor(QPalette::Disabled, QPalette::Base, QColor("#2c2c2e"));
+    palette.setColor(QPalette::Disabled, QPalette::Button, QColor("#2c2c2e"));
+    palette.setColor(QPalette::Disabled, QPalette::Highlight, QColor("#48484a"));
+    palette.setColor(QPalette::Disabled, QPalette::HighlightedText, QColor("#8e8e93"));
+    return palette;
 }
 
-void apply(QApplication& app, bool dark) {
-    g_dark = dark;
-    const Colors c = colorsFor(dark);
+/// @brief Construye la paleta del tema moderno.
+QPalette modernPalette(const Colors& c) {
     const auto color = [](const QString& value) { return QColor(value); };
-
-    if (QStyle* style = QStyleFactory::create("Fusion")) app.setStyle(style);
-
     QPalette palette;
     palette.setColor(QPalette::Window, color(c.window));
     palette.setColor(QPalette::WindowText, color(c.text));
@@ -363,9 +415,73 @@ void apply(QApplication& app, bool dark) {
     palette.setColor(QPalette::Disabled, QPalette::Button, color(c.buttonDisabled));
     palette.setColor(QPalette::Disabled, QPalette::Highlight, color(c.borderStrong));
     palette.setColor(QPalette::Disabled, QPalette::HighlightedText, color(c.disabled));
+    return palette;
+}
 
-    app.setPalette(palette);
-    app.setStyleSheet(styleSheet(dark));
+}  // namespace
+
+QString styleSheet(bool dark) {
+    return expand(QString::fromUtf8(kTemplate), colorsFor(dark));
+}
+
+bool isDark() {
+    return g_dark;
+}
+
+bool isDark(Theme theme) {
+    return theme == Theme::ModernDark || theme == Theme::SystemDark;
+}
+
+QString themeKey(Theme theme) {
+    switch (theme) {
+        case Theme::ModernLight: return QStringLiteral("modern-light");
+        case Theme::ModernDark: return QStringLiteral("modern-dark");
+        case Theme::SystemLight: return QStringLiteral("system-light");
+        case Theme::SystemDark: return QStringLiteral("system-dark");
+    }
+    return QStringLiteral("modern-light");
+}
+
+Theme themeFromKey(const QString& key, Theme fallback) {
+    if (key == QLatin1String("modern-light")) return Theme::ModernLight;
+    if (key == QLatin1String("modern-dark")) return Theme::ModernDark;
+    if (key == QLatin1String("system-light")) return Theme::SystemLight;
+    if (key == QLatin1String("system-dark")) return Theme::SystemDark;
+    return fallback;
+}
+
+Theme themeFromSettings() {
+    QSettings settings;
+    const QString key = settings.value("preferences/theme").toString();
+    if (!key.isEmpty()) return themeFromKey(key);
+    // Compatibilidad con versiones anteriores que sólo guardaban el booleano.
+    return settings.value("preferences/darkTheme", false).toBool() ? Theme::ModernDark
+                                                                   : Theme::ModernLight;
+}
+
+void apply(QApplication& app, Theme theme) {
+    g_dark = isDark(theme);
+
+    // La apariencia nativa (diálogos de archivo incluidos) sigue la variante
+    // elegida, aunque el sistema operativo esté configurado al revés.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    QGuiApplication::styleHints()->setColorScheme(g_dark ? Qt::ColorScheme::Dark
+                                                        : Qt::ColorScheme::Light);
+#endif
+
+    if (theme == Theme::ModernLight || theme == Theme::ModernDark) {
+        if (QStyle* style = QStyleFactory::create("Fusion")) app.setStyle(style);
+        app.setPalette(modernPalette(colorsFor(g_dark)));
+        app.setStyleSheet(styleSheet(g_dark));
+        return;
+    }
+
+    QStyle* style = QStyleFactory::create(platformStyleName());
+    if (!style) style = QStyleFactory::create("Fusion");
+    if (style) app.setStyle(style);
+    const QPalette native = app.style()->standardPalette();
+    app.setPalette(g_dark ? systemDarkPalette(native) : native);
+    app.setStyleSheet(QString::fromUtf8(kSystemTemplate));
 }
 
 }  // namespace fc::theme

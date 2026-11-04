@@ -31,6 +31,7 @@
 #include "flatcam/paint.hpp"
 #include "flatcam/project.hpp"
 #include "ScriptApi.h"
+#include "Theme.h"
 
 class Canvas;
 class QLabel;
@@ -343,7 +344,7 @@ private:
     void setObjectVisible(QTreeWidgetItem* item, bool visible);
     void buildTclConsole(QTabWidget* tabs);
     void loadPreferences();
-    void applyTheme(bool dark);
+    void applyTheme(fc::theme::Theme theme);
     void applyUiLevel();
     void showToolDb();
     void addToolFromDb(class QTableWidget* table);
@@ -429,7 +430,7 @@ private:
     bool advancedLevel_ = true;
     std::vector<QWidget*> advancedWidgets_;
     QString customToolchange_;
-    bool darkTheme_ = false;
+    fc::theme::Theme theme_ = fc::theme::Theme::ModernLight;
     int decimals_ = 3;
     int stepsPerCircle_ = 64;
     bool gerberSimplify_ = false;

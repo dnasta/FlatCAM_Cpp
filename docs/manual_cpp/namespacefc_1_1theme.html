@@ -29,7 +29,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.3.0</span>
+   <div id="projectname">FlatCAM C++<span id="projectnumber">&#160;0.3.1</span>
    </div>
    <div id="projectbrief">Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS</div>
   </td>
@@ -117,16 +117,73 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('namespacefc_1_
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumeraciones</h2></td></tr>
+<tr class="memitem:a73488392d2adae4be645705f869ef226" id="r_a73488392d2adae4be645705f869ef226"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a> { <br />
+&#160;&#160;<a class="el" href="#a73488392d2adae4be645705f869ef226a61f0fd93d4636426befc59f68e46b573">ModernLight</a>
+, <br />
+&#160;&#160;<a class="el" href="#a73488392d2adae4be645705f869ef226a0a9661045457bd77b8752151c1c1ecd5">ModernDark</a>
+, <br />
+&#160;&#160;<a class="el" href="#a73488392d2adae4be645705f869ef226ac09bc2478c31c1fffce5acd28e7cf1ea">SystemLight</a>
+, <br />
+&#160;&#160;<a class="el" href="#a73488392d2adae4be645705f869ef226aaf6c8f249e55aea94da73d17a242b07a">SystemDark</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a73488392d2adae4be645705f869ef226"><td class="mdescLeft">&#160;</td><td class="mdescRight">Temas disponibles en <span class="tt">Opciones → Temas</span>.  <a href="#a73488392d2adae4be645705f869ef226">Más...</a><br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Funciones</h2></td></tr>
 <tr class="memitem:a18e681340660452c1321cb59e0213fc7" id="r_a18e681340660452c1321cb59e0213fc7"><td class="memItemLeft">QString&#160;</td><td class="memItemRight"><a class="el" href="#a18e681340660452c1321cb59e0213fc7">styleSheet</a> (bool dark)</td></tr>
 <tr class="memitem:ab97dc4c733a8eeb327d8253ba9f6b698" id="r_ab97dc4c733a8eeb327d8253ba9f6b698"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ab97dc4c733a8eeb327d8253ba9f6b698">isDark</a> ()</td></tr>
-<tr class="memitem:abebd3fe1f78cd87efc90395a30394e62" id="r_abebd3fe1f78cd87efc90395a30394e62"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#abebd3fe1f78cd87efc90395a30394e62">apply</a> (QApplication &amp;app, bool dark)</td></tr>
-<tr class="memdesc:abebd3fe1f78cd87efc90395a30394e62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aplica estilo Fusion, paleta y hoja de estilo a la aplicación.  <br /></td></tr>
+<tr class="memitem:a05614ef1f083a6c3970d5355d7cd46a6" id="r_a05614ef1f083a6c3970d5355d7cd46a6"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a05614ef1f083a6c3970d5355d7cd46a6">isDark</a> (<a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a> theme)</td></tr>
+<tr class="memitem:a49225836df781dbfef13065049ee539e" id="r_a49225836df781dbfef13065049ee539e"><td class="memItemLeft">QString&#160;</td><td class="memItemRight"><a class="el" href="#a49225836df781dbfef13065049ee539e">themeKey</a> (<a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a> theme)</td></tr>
+<tr class="memitem:af372729049cc074c6f14ca388e5082c0" id="r_af372729049cc074c6f14ca388e5082c0"><td class="memItemLeft"><a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a>&#160;</td><td class="memItemRight"><a class="el" href="#af372729049cc074c6f14ca388e5082c0">themeFromKey</a> (const QString &amp;key, <a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a> fallback=<a class="el" href="#a73488392d2adae4be645705f869ef226a61f0fd93d4636426befc59f68e46b573">Theme::ModernLight</a>)</td></tr>
+<tr class="memdesc:af372729049cc074c6f14ca388e5082c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convierte una clave de <span class="tt">QSettings</span> en un tema.  <br /></td></tr>
+<tr class="memitem:a4ae2c87f4e51edab89cfc3be2e21b30a" id="r_a4ae2c87f4e51edab89cfc3be2e21b30a"><td class="memItemLeft"><a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a>&#160;</td><td class="memItemRight"><a class="el" href="#a4ae2c87f4e51edab89cfc3be2e21b30a">themeFromSettings</a> ()</td></tr>
+<tr class="memdesc:a4ae2c87f4e51edab89cfc3be2e21b30a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lee el tema guardado, con compatibilidad para <span class="tt">preferences/darkTheme</span>.  <br /></td></tr>
+<tr class="memitem:a8cb81096b3bc0108e5003e644e839df4" id="r_a8cb81096b3bc0108e5003e644e839df4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8cb81096b3bc0108e5003e644e839df4">apply</a> (QApplication &amp;app, <a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a> theme)</td></tr>
+<tr class="memdesc:a8cb81096b3bc0108e5003e644e839df4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aplica el tema indicado: estilo, paleta y hoja de estilo.  <br /></td></tr>
 </table>
+<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Documentación de enumeraciones</h2>
+<a id="a73488392d2adae4be645705f869ef226" name="a73488392d2adae4be645705f869ef226"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73488392d2adae4be645705f869ef226">&#9670;&#160;</a></span>Theme</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a73488392d2adae4be645705f869ef226">fc::theme::Theme</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Temas disponibles en <span class="tt">Opciones → Temas</span>. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Valores de enumeraciones</th></tr><tr><td class="fieldname"><a id="a73488392d2adae4be645705f869ef226a61f0fd93d4636426befc59f68e46b573" name="a73488392d2adae4be645705f869ef226a61f0fd93d4636426befc59f68e46b573"></a>ModernLight&#160;</td><td class="fielddoc"><p>Tema moderno de FlatCAM C++ en versión clara. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a73488392d2adae4be645705f869ef226a0a9661045457bd77b8752151c1c1ecd5" name="a73488392d2adae4be645705f869ef226a0a9661045457bd77b8752151c1c1ecd5"></a>ModernDark&#160;</td><td class="fielddoc"><p>Tema moderno de FlatCAM C++ en versión oscura. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a73488392d2adae4be645705f869ef226ac09bc2478c31c1fffce5acd28e7cf1ea" name="a73488392d2adae4be645705f869ef226ac09bc2478c31c1fffce5acd28e7cf1ea"></a>SystemLight&#160;</td><td class="fielddoc"><p>Apariencia nativa del sistema en versión clara. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a73488392d2adae4be645705f869ef226aaf6c8f249e55aea94da73d17a242b07a" name="a73488392d2adae4be645705f869ef226aaf6c8f249e55aea94da73d17a242b07a"></a>SystemDark&#160;</td><td class="fielddoc"><p>Apariencia nativa del sistema en versión oscura. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definición en la línea <a class="el" href="_theme_8h_source.html#l00021">21</a> del archivo <a class="el" href="_theme_8h_source.html">Theme.h</a>.</p>
+
+</div>
+</div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Documentación de funciones</h2>
-<a id="abebd3fe1f78cd87efc90395a30394e62" name="abebd3fe1f78cd87efc90395a30394e62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abebd3fe1f78cd87efc90395a30394e62">&#9670;&#160;</a></span>apply()</h2>
+<a id="a8cb81096b3bc0108e5003e644e839df4" name="a8cb81096b3bc0108e5003e644e839df4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cb81096b3bc0108e5003e644e839df4">&#9670;&#160;</a></span>apply()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -139,23 +196,23 @@ Funciones</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>dark</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a></td>          <td class="paramname"><span class="paramname"><em>theme</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Aplica estilo Fusion, paleta y hoja de estilo a la aplicación. </p>
+<p>Aplica el tema indicado: estilo, paleta y hoja de estilo. </p>
 
-<p class="definition">Definición en la línea <a class="el" href="_theme_8cpp_source.html#l00330">330</a> del archivo <a class="el" href="_theme_8cpp_source.html">Theme.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_theme_8cpp_source.html#l00462">462</a> del archivo <a class="el" href="_theme_8cpp_source.html">Theme.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_theme_8cpp_source.html#l00330">apply()</a> y <a class="el" href="_theme_8cpp_source.html#l00322">styleSheet()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_theme_8cpp_source.html#l00462">apply()</a>, <a class="el" href="_theme_8cpp_source.html#l00427">isDark()</a>, <a class="el" href="_theme_8h_source.html#l00023">ModernDark</a>, <a class="el" href="_theme_8h_source.html#l00022">ModernLight</a> y <a class="el" href="_theme_8cpp_source.html#l00423">styleSheet()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_theme_8cpp_source.html#l00330">apply()</a>, <a class="el" href="_main_window_8cpp_source.html#l04594">MainWindow::applyTheme()</a> y <a class="el" href="gui_2main_8cpp_source.html#l00101">main()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_theme_8cpp_source.html#l00462">apply()</a>, <a class="el" href="_main_window_8cpp_source.html#l04621">MainWindow::applyTheme()</a> y <a class="el" href="gui_2main_8cpp_source.html#l00100">main()</a>.</p>
 
 </div>
 </div>
 <a id="ab97dc4c733a8eeb327d8253ba9f6b698" name="ab97dc4c733a8eeb327d8253ba9f6b698"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab97dc4c733a8eeb327d8253ba9f6b698">&#9670;&#160;</a></span>isDark()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab97dc4c733a8eeb327d8253ba9f6b698">&#9670;&#160;</a></span>isDark() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -170,11 +227,33 @@ Funciones</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Devuelve</dt><dd><span class="tt">true</span> si el último tema aplicado es oscuro. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_theme_8cpp_source.html#l00326">326</a> del archivo <a class="el" href="_theme_8cpp_source.html">Theme.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_theme_8cpp_source.html#l00427">427</a> del archivo <a class="el" href="_theme_8cpp_source.html">Theme.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_theme_8cpp_source.html#l00326">isDark()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_theme_8cpp_source.html#l00427">isDark()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_theme_8cpp_source.html#l00326">isDark()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_theme_8cpp_source.html#l00462">apply()</a>, <a class="el" href="_main_window_8cpp_source.html#l04621">MainWindow::applyTheme()</a>, <a class="el" href="_theme_8cpp_source.html#l00427">isDark()</a>, <a class="el" href="_theme_8cpp_source.html#l00431">isDark()</a> y <a class="el" href="_main_window_8cpp_source.html#l04363">MainWindow::savePreferences()</a>.</p>
+
+</div>
+</div>
+<a id="a05614ef1f083a6c3970d5355d7cd46a6" name="a05614ef1f083a6c3970d5355d7cd46a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05614ef1f083a6c3970d5355d7cd46a6">&#9670;&#160;</a></span>isDark() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fc::theme::isDark </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a></td>          <td class="paramname"><span class="paramname"><em>theme</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Devuelve</dt><dd><span class="tt">true</span> si la variante del tema es oscura. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="_theme_8cpp_source.html#l00431">431</a> del archivo <a class="el" href="_theme_8cpp_source.html">Theme.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_theme_8cpp_source.html#l00427">isDark()</a>, <a class="el" href="_theme_8h_source.html#l00023">ModernDark</a> y <a class="el" href="_theme_8h_source.html#l00025">SystemDark</a>.</p>
 
 </div>
 </div>
@@ -192,13 +271,91 @@ Funciones</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Devuelve</dt><dd>Hoja de estilo QSS correspondiente al tema indicado. </dd></dl>
+<dl class="section return"><dt>Devuelve</dt><dd>Hoja de estilo QSS del tema moderno indicado. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="_theme_8cpp_source.html#l00322">322</a> del archivo <a class="el" href="_theme_8cpp_source.html">Theme.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="_theme_8cpp_source.html#l00423">423</a> del archivo <a class="el" href="_theme_8cpp_source.html">Theme.cpp</a>.</p>
 
-<p class="reference">Hace referencia a <a class="el" href="_theme_8cpp_source.html#l00322">styleSheet()</a>.</p>
+<p class="reference">Hace referencia a <a class="el" href="_theme_8cpp_source.html#l00423">styleSheet()</a>.</p>
 
-<p class="reference">Referenciado por <a class="el" href="_theme_8cpp_source.html#l00330">apply()</a> y <a class="el" href="_theme_8cpp_source.html#l00322">styleSheet()</a>.</p>
+<p class="reference">Referenciado por <a class="el" href="_theme_8cpp_source.html#l00462">apply()</a> y <a class="el" href="_theme_8cpp_source.html#l00423">styleSheet()</a>.</p>
+
+</div>
+</div>
+<a id="af372729049cc074c6f14ca388e5082c0" name="af372729049cc074c6f14ca388e5082c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af372729049cc074c6f14ca388e5082c0">&#9670;&#160;</a></span>themeFromKey()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a> fc::theme::themeFromKey </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>key</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a></td>          <td class="paramname"><span class="paramname"><em>fallback</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convierte una clave de <span class="tt">QSettings</span> en un tema. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_theme_8cpp_source.html#l00445">445</a> del archivo <a class="el" href="_theme_8cpp_source.html">Theme.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_theme_8h_source.html#l00023">ModernDark</a>, <a class="el" href="_theme_8h_source.html#l00022">ModernLight</a>, <a class="el" href="_theme_8h_source.html#l00025">SystemDark</a>, <a class="el" href="_theme_8h_source.html#l00024">SystemLight</a> y <a class="el" href="_theme_8cpp_source.html#l00445">themeFromKey()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_theme_8cpp_source.html#l00445">themeFromKey()</a> y <a class="el" href="_theme_8cpp_source.html#l00453">themeFromSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a4ae2c87f4e51edab89cfc3be2e21b30a" name="a4ae2c87f4e51edab89cfc3be2e21b30a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ae2c87f4e51edab89cfc3be2e21b30a">&#9670;&#160;</a></span>themeFromSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a> fc::theme::themeFromSettings </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Lee el tema guardado, con compatibilidad para <span class="tt">preferences/darkTheme</span>. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_theme_8cpp_source.html#l00453">453</a> del archivo <a class="el" href="_theme_8cpp_source.html">Theme.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_theme_8h_source.html#l00023">ModernDark</a>, <a class="el" href="_theme_8h_source.html#l00022">ModernLight</a>, <a class="el" href="_theme_8cpp_source.html#l00445">themeFromKey()</a> y <a class="el" href="_theme_8cpp_source.html#l00453">themeFromSettings()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l04324">MainWindow::loadPreferences()</a>, <a class="el" href="gui_2main_8cpp_source.html#l00100">main()</a> y <a class="el" href="_theme_8cpp_source.html#l00453">themeFromSettings()</a>.</p>
+
+</div>
+</div>
+<a id="a49225836df781dbfef13065049ee539e" name="a49225836df781dbfef13065049ee539e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49225836df781dbfef13065049ee539e">&#9670;&#160;</a></span>themeKey()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString fc::theme::themeKey </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a73488392d2adae4be645705f869ef226">Theme</a></td>          <td class="paramname"><span class="paramname"><em>theme</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Devuelve</dt><dd>Clave estable usada en <span class="tt">QSettings</span>. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="_theme_8cpp_source.html#l00435">435</a> del archivo <a class="el" href="_theme_8cpp_source.html">Theme.cpp</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_theme_8h_source.html#l00023">ModernDark</a>, <a class="el" href="_theme_8h_source.html#l00022">ModernLight</a>, <a class="el" href="_theme_8h_source.html#l00025">SystemDark</a>, <a class="el" href="_theme_8h_source.html#l00024">SystemLight</a> y <a class="el" href="_theme_8cpp_source.html#l00435">themeKey()</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_main_window_8cpp_source.html#l04621">MainWindow::applyTheme()</a>, <a class="el" href="_main_window_8cpp_source.html#l04363">MainWindow::savePreferences()</a> y <a class="el" href="_theme_8cpp_source.html#l00435">themeKey()</a>.</p>
 
 </div>
 </div>

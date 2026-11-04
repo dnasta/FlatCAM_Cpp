@@ -2,16 +2,15 @@
  * @file main.cpp
  * @brief Punto de entrada de la GUI: tema, filtro de tooltips y opciones CLI.
  *
- * Configura la aplicación Qt (nombre, icono, tema claro u oscuro persistido en
- * `QSettings`), instala un filtro global que hace que las etiquetas de
- * formulario muestren el tooltip de su campo asociado, crea y muestra
- * `MainWindow`, procesa los argumentos de línea de comandos usados para
- * automatizar capturas y pruebas y entra en el bucle de eventos. Si se pide una
- * captura, la guarda tras un retardo fijo y cierra la aplicación.
+ * Configura la aplicación Qt (nombre, icono, tema persistido en `QSettings`),
+ * instala un filtro global que hace que las etiquetas de formulario muestren el
+ * tooltip de su campo asociado, crea y muestra `MainWindow`, procesa los
+ * argumentos de línea de comandos usados para automatizar capturas y pruebas y
+ * entra en el bucle de eventos. Si se pide una captura, la guarda tras un
+ * retardo fijo y cierra la aplicación.
  */
 #include <QApplication>
 #include <QDebug>
-#include <QSettings>
 #include <QFileInfo>
 #include <QHelpEvent>
 #include <QLabel>
@@ -75,9 +74,9 @@ protected:
  * @brief Arranca la aplicación de escritorio.
  *
  * Secuencia: crea `QApplication`, fija nombre/organización/icono, instala el
- * filtro de tooltips, aplica el tema (hoja de estilo clara o paleta Fusion
- * oscura según `preferences/darkTheme`), construye y muestra `MainWindow` con
- * tamaño 1400x900 y luego interpreta los argumentos:
+ * filtro de tooltips, aplica el tema guardado (moderno o del sistema, claro u
+ * oscuro), construye y muestra `MainWindow` con tamaño 1400x900 y luego
+ * interpreta los argumentos:
  *
  * - `--screenshot <png>`: captura la ventana (o el diálogo activo) y sale.
  * - `--isolate <Ø>` / `--cutout <Ø>`: aplican aislamiento o corte de demostración.
@@ -104,8 +103,8 @@ int main(int argc, char** argv) {
     app.installEventFilter(new LabelTooltipFilter(&app));
     QApplication::setOrganizationName("FlatCAM C++");
     QApplication::setWindowIcon(QIcon(":/icons/appicon.png"));
-    const bool darkTheme = QSettings().value("preferences/darkTheme", false).toBool();
-    fc::theme::apply(app, darkTheme);
+    const fc::theme::Theme theme = fc::theme::themeFromSettings();
+    fc::theme::apply(app, theme);
 
     MainWindow window;
     window.resize(1400, 900);

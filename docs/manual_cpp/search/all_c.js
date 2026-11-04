@@ -22,12 +22,14 @@ var searchData=
   ['millsource_5f_19',['millSource_',['../class_main_window.html#a46eaf38ae3aae48994beaa728b9a4540',1,'MainWindow']]],
   ['mm_20',['Mm',['../namespacefc.html#acb79184d1e00b1635d60b5596d70db00a07f07b623b4a00b57dc150ff2e59cb92',1,'fc']]],
   ['mode_21',['mode',['../structfc_1_1_all_objects_sax.html#af540c4d6ac2da3f593a3614fff3cbb71',1,'fc::AllObjectsSax']]],
-  ['modifiers_22',['modifiers',['../structfc_1_1_gerber_aperture.html#a9d7d15a718c2d42c2420dee11f688595',1,'fc::GerberAperture']]],
-  ['mousedoubleclickevent_23',['mouseDoubleClickEvent',['../class_canvas.html#ae897cc3da40d38bcd2bba5bb463ad4ad',1,'Canvas']]],
-  ['mousemoveevent_24',['mouseMoveEvent',['../class_canvas.html#ae9f5a1c5981b802814aa5b189faba710',1,'Canvas::mouseMoveEvent()'],['../class_view3_d.html#a9438fa7b4e79d0cf61e92d0edc9cc449',1,'View3D::mouseMoveEvent()']]],
-  ['mousepressevent_25',['mousePressEvent',['../class_canvas.html#ac766a4e369f781943df021b80e5922c4',1,'Canvas::mousePressEvent()'],['../class_view3_d.html#a4c9c4abfa45b1389af23e288d301cf28',1,'View3D::mousePressEvent()']]],
-  ['mousereleaseevent_26',['mouseReleaseEvent',['../class_canvas.html#a0fa87c1ae8fcab07ae22d6c0e63b7148',1,'Canvas']]],
-  ['moveobject_27',['moveObject',['../class_main_window.html#a546aeb1aa602e71302f19e51706f4879',1,'MainWindow']]],
-  ['movetoorigin_28',['moveToOrigin',['../class_main_window.html#a55dc188b043b4e3c0259636bb2ce4e43',1,'MainWindow']]],
-  ['multicolor_29',['multicolor',['../struct_canvas_1_1_layer.html#a49d18d2029fc3f3cc6e75a520aed07d9',1,'Canvas::Layer']]]
+  ['moderndark_22',['ModernDark',['../namespacefc_1_1theme.html#a73488392d2adae4be645705f869ef226a0a9661045457bd77b8752151c1c1ecd5',1,'fc::theme']]],
+  ['modernlight_23',['ModernLight',['../namespacefc_1_1theme.html#a73488392d2adae4be645705f869ef226a61f0fd93d4636426befc59f68e46b573',1,'fc::theme']]],
+  ['modifiers_24',['modifiers',['../structfc_1_1_gerber_aperture.html#a9d7d15a718c2d42c2420dee11f688595',1,'fc::GerberAperture']]],
+  ['mousedoubleclickevent_25',['mouseDoubleClickEvent',['../class_canvas.html#ae897cc3da40d38bcd2bba5bb463ad4ad',1,'Canvas']]],
+  ['mousemoveevent_26',['mouseMoveEvent',['../class_canvas.html#ae9f5a1c5981b802814aa5b189faba710',1,'Canvas::mouseMoveEvent()'],['../class_view3_d.html#a9438fa7b4e79d0cf61e92d0edc9cc449',1,'View3D::mouseMoveEvent()']]],
+  ['mousepressevent_27',['mousePressEvent',['../class_canvas.html#ac766a4e369f781943df021b80e5922c4',1,'Canvas::mousePressEvent()'],['../class_view3_d.html#a4c9c4abfa45b1389af23e288d301cf28',1,'View3D::mousePressEvent()']]],
+  ['mousereleaseevent_28',['mouseReleaseEvent',['../class_canvas.html#a0fa87c1ae8fcab07ae22d6c0e63b7148',1,'Canvas']]],
+  ['moveobject_29',['moveObject',['../class_main_window.html#a546aeb1aa602e71302f19e51706f4879',1,'MainWindow']]],
+  ['movetoorigin_30',['moveToOrigin',['../class_main_window.html#a55dc188b043b4e3c0259636bb2ce4e43',1,'MainWindow']]],
+  ['multicolor_31',['multicolor',['../struct_canvas_1_1_layer.html#a49d18d2029fc3f3cc6e75a520aed07d9',1,'Canvas::Layer']]]
 ];

@@ -16,6 +16,7 @@
 #include "MainWindow.h"
 
 #include <QAction>
+#include <QActionGroup>
 #include <QApplication>
 #include <QClipboard>
 #include <QSysInfo>
@@ -1248,8 +1249,12 @@ void MainWindow::buildLayout() {
     auto* closeConsole = new QToolButton(bottomTabs_);
     closeConsole->setText("×");
     closeConsole->setAutoRaise(true);
+    closeConsole->setToolButtonStyle(Qt::ToolButtonTextOnly);
     closeConsole->setToolTip(tr("Ocultar la consola (Ver → Consola para mostrarla)."));
     closeConsole->setFixedSize(24, 24);
+    QFont closeFont = closeConsole->font();
+    closeFont.setPointSize(14);
+    closeConsole->setFont(closeFont);
     bottomTabs_->setCornerWidget(closeConsole, Qt::TopRightCorner);
     connect(closeConsole, &QToolButton::clicked, this, [this] {
         if (shellDock_) shellDock_->hide();
@@ -1938,13 +1943,34 @@ void MainWindow::buildMenus() {
         refreshProperties();
         statusBar()->showMessage(on ? tr("Unidades: pulgadas") : tr("Unidades: mm"), 3000);
     });
-    QAction* darkAction = options->addAction(tr("Tema &oscuro"));
-    darkAction->setCheckable(true);
-    darkAction->setChecked(darkTheme_);
-    connect(darkAction, &QAction::toggled, this, [this](bool on) {
-        applyTheme(on);
-        savePreferences();
-    });
+    QMenu* themesMenu = options->addMenu(tr("&Temas"));
+    auto* themeGroup = new QActionGroup(this);
+    themeGroup->setExclusive(true);
+    struct ThemeChoice {
+        fc::theme::Theme theme;
+        QString label;
+        QString tip;
+    };
+    const ThemeChoice themeChoices[] = {
+        {fc::theme::Theme::ModernLight, tr("Moderno claro"),
+         tr("Tema moderno de FlatCAM C++ con fondo claro y acento ámbar.")},
+        {fc::theme::Theme::ModernDark, tr("Moderno oscuro"),
+         tr("Tema moderno de FlatCAM C++ con fondo oscuro y acento ámbar.")},
+        {fc::theme::Theme::SystemLight, tr("Sistema claro"),
+         tr("Apariencia nativa del sistema en versión clara.")},
+        {fc::theme::Theme::SystemDark, tr("Sistema oscuro"),
+         tr("Apariencia nativa del sistema en versión oscura.")},
+    };
+    for (const ThemeChoice& choice : themeChoices) {
+        QAction* action = themesMenu->addAction(choice.label);
+        action->setCheckable(true);
+        action->setChecked(theme_ == choice.theme);
+        action->setToolTip(choice.tip);
+        action->setStatusTip(choice.tip);
+        themeGroup->addAction(action);
+        connect(action, &QAction::triggered, this,
+                [this, selected = choice.theme] { applyTheme(selected); });
+    }
 
     QMenu* help = menuBar()->addMenu(tr("A&yuda"));
     QAction* about = help->addAction(tr("Acerca de"));
@@ -1953,7 +1979,7 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.3.0</b> · build 2026-11-04<br>"
+                           tr("<b>FlatCAM C++ 0.3.1</b> · build 2026-11-04<br>"
                               "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
                               "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
@@ -2065,7 +2091,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.3.0\nBuild: 2026-11-04\n"
+            tr("FlatCAM C++ 0.3.1\nBuild: 2026-11-04\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -3622,7 +3648,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.3.0");
+    return QStringLiteral("FlatCAM C++ 0.3.1");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
@@ -4306,7 +4332,7 @@ void MainWindow::loadPreferences() {
     copperColor_ = settings.value("preferences/copper", copperColor_).value<QColor>();
     followColor_ = settings.value("preferences/follow", followColor_).value<QColor>();
     toolpathColor_ = settings.value("preferences/toolpath", toolpathColor_).value<QColor>();
-    darkTheme_ = settings.value("preferences/darkTheme", false).toBool();
+    theme_ = fc::theme::themeFromSettings();
     customToolchange_ = settings.value("preferences/customToolchange").toString();
     {
         const bool wasInch = displayInch_;
@@ -4343,7 +4369,8 @@ void MainWindow::savePreferences() {
     settings.setValue("preferences/copper", copperColor_);
     settings.setValue("preferences/follow", followColor_);
     settings.setValue("preferences/toolpath", toolpathColor_);
-    settings.setValue("preferences/darkTheme", darkTheme_);
+    settings.setValue("preferences/theme", fc::theme::themeKey(theme_));
+    settings.setValue("preferences/darkTheme", fc::theme::isDark(theme_));
     settings.setValue("preferences/displayInch", displayInch_);
     settings.setValue("preferences/snapGrid", snapGrid_);
     settings.setValue("preferences/advancedLevel", advancedLevel_);
@@ -4590,12 +4617,14 @@ void MainWindow::applyUiLevel() {
     }
 }
 
-/// @brief Aplica el tema claro u oscuro en caliente.
-void MainWindow::applyTheme(bool dark) {
-    darkTheme_ = dark;
-    QSettings().setValue("preferences/darkTheme", dark);
+/// @brief Aplica el tema elegido en caliente y lo persiste.
+void MainWindow::applyTheme(fc::theme::Theme theme) {
+    theme_ = theme;
+    QSettings settings;
+    settings.setValue("preferences/theme", fc::theme::themeKey(theme));
+    settings.setValue("preferences/darkTheme", fc::theme::isDark(theme));
     if (qApp) {
-        fc::theme::apply(*qApp, dark);
+        fc::theme::apply(*qApp, theme);
         update();
     }
 }

@@ -84,5 +84,7 @@ var searchData=
   ['svg_2ecpp_81',['svg.cpp',['../svg_8cpp.html',1,'']]],
   ['svg_2ehpp_82',['svg.hpp',['../svg_8hpp.html',1,'']]],
   ['svgnumber_83',['svgNumber',['../_text_geometry_8cpp.html#ad5c18599037e7d2e77c7ef0dc4ccd49d',1,'TextGeometry.cpp']]],
-  ['svgtextgeometry_84',['svgTextGeometry',['../_text_geometry_8cpp.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp'],['../_text_geometry_8h.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp']]]
+  ['svgtextgeometry_84',['svgTextGeometry',['../_text_geometry_8cpp.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp'],['../_text_geometry_8h.html#ae2995974b5caee748c92d30842d4f7cd',1,'svgTextGeometry(const QString &amp;path):&#160;TextGeometry.cpp']]],
+  ['systemdark_85',['SystemDark',['../namespacefc_1_1theme.html#a73488392d2adae4be645705f869ef226aaf6c8f249e55aea94da73d17a242b07a',1,'fc::theme']]],
+  ['systemlight_86',['SystemLight',['../namespacefc_1_1theme.html#a73488392d2adae4be645705f869ef226ac09bc2478c31c1fffce5acd28e7cf1ea',1,'fc::theme']]]
 ];

@@ -1,9 +1,19 @@
 var namespacefc =
 [
     [ "theme", "namespacefc_1_1theme.html", [
-      [ "apply", "namespacefc_1_1theme.html#abebd3fe1f78cd87efc90395a30394e62", null ],
+      [ "Theme", "namespacefc_1_1theme.html#a73488392d2adae4be645705f869ef226", [
+        [ "ModernLight", "namespacefc_1_1theme.html#a73488392d2adae4be645705f869ef226a61f0fd93d4636426befc59f68e46b573", null ],
+        [ "ModernDark", "namespacefc_1_1theme.html#a73488392d2adae4be645705f869ef226a0a9661045457bd77b8752151c1c1ecd5", null ],
+        [ "SystemLight", "namespacefc_1_1theme.html#a73488392d2adae4be645705f869ef226ac09bc2478c31c1fffce5acd28e7cf1ea", null ],
+        [ "SystemDark", "namespacefc_1_1theme.html#a73488392d2adae4be645705f869ef226aaf6c8f249e55aea94da73d17a242b07a", null ]
+      ] ],
+      [ "apply", "namespacefc_1_1theme.html#a8cb81096b3bc0108e5003e644e839df4", null ],
       [ "isDark", "namespacefc_1_1theme.html#ab97dc4c733a8eeb327d8253ba9f6b698", null ],
-      [ "styleSheet", "namespacefc_1_1theme.html#a18e681340660452c1321cb59e0213fc7", null ]
+      [ "isDark", "namespacefc_1_1theme.html#a05614ef1f083a6c3970d5355d7cd46a6", null ],
+      [ "styleSheet", "namespacefc_1_1theme.html#a18e681340660452c1321cb59e0213fc7", null ],
+      [ "themeFromKey", "namespacefc_1_1theme.html#af372729049cc074c6f14ca388e5082c0", null ],
+      [ "themeFromSettings", "namespacefc_1_1theme.html#a4ae2c87f4e51edab89cfc3be2e21b30a", null ],
+      [ "themeKey", "namespacefc_1_1theme.html#a49225836df781dbfef13065049ee539e", null ]
     ] ],
     [ "AllObjectsSax", "structfc_1_1_all_objects_sax.html", "structfc_1_1_all_objects_sax" ],
     [ "BBox", "structfc_1_1_b_box.html", "structfc_1_1_b_box" ],

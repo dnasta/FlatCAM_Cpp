@@ -65,9 +65,9 @@ var NAVTREEINDEX =
 "class_main_window.html#a369553b9fe18313299782be239b6a40a",
 "class_unit_spin_box.html#a434d101b1d8d2853dbe7bb429827ef18",
 "cli_2main_8cpp_source.html",
-"pdf_8hpp.html",
-"structfc_1_1_excellon_tool.html#a657926686ccdbccc9c44b10cafaefe7e",
-"structfc_1_1_paste_job.html#ace1dee9237b26c494143e7d3c1b9b7f4"
+"ncc_8hpp.html",
+"structfc_1_1_excellon_result.html#af67480a9d7308d09293be30264ef34d7",
+"structfc_1_1_paste_job.html#a38e443cb8ae9b49e4fa4c2d5b6b33ffa"
 ];
 
 const SYNCONMSG = 'pulsar para deshabilitar sincronización';
