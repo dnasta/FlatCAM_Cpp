@@ -148,6 +148,109 @@ void addHeaderComments(fc::GCodeOptions& opt, std::initializer_list<QString> lin
     for (const QString& line : lines) opt.headerComments.push_back(line.toStdString());
 }
 
+/// @brief Extrae los recorridos de corte de un G-code para el visor.
+struct GCodePreview {
+    std::vector<Geom> paths;
+    double toolDiameter = 0.0;
+};
+
+GCodePreview parseGCodePreview(const QString& code) {
+    GCodePreview result;
+    const QRegularExpression diameterRe(
+        QStringLiteral("\\(Tool diameter:\\s*([0-9]+(?:\\.[0-9]+)?)"));
+    const QRegularExpressionMatch diameter = diameterRe.match(code.left(4000));
+    if (diameter.hasMatch()) result.toolDiameter = diameter.captured(1).toDouble();
+
+    const bool drilling = code.contains(QStringLiteral("(Operation: Drilling)"),
+                                        Qt::CaseInsensitive);
+    std::map<int, double> toolDiameters;
+    const QRegularExpression toolRe(
+        QStringLiteral("\\(Tool:\\s*([0-9]+)\\s*->\\s*Dia:\\s*([0-9]+(?:\\.[0-9]+)?)"));
+    auto toolIt = toolRe.globalMatch(code.left(5000));
+    while (toolIt.hasNext()) {
+        const QRegularExpressionMatch match = toolIt.next();
+        toolDiameters[match.captured(1).toInt()] = match.captured(2).toDouble();
+    }
+    int currentTool = 1;
+    double currentZ = 0.0;
+    double scale = 1.0;
+    bool absolute = true;
+    int motion = -1;
+    Pt current{0.0, 0.0};
+    std::vector<Pt> path;
+    auto flush = [&] {
+        if (path.size() >= 2) result.paths.push_back(Geom::line(path));
+        path.clear();
+    };
+    const QStringList lines = code.split('\n');
+    for (QString line : lines) {
+        line.remove(QRegularExpression("\\([^)]*\\)"));
+        line = line.section(';', 0, 0).trimmed();
+        if (line.isEmpty()) continue;
+        const QStringList words = line.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+        bool hasX = false;
+        bool hasY = false;
+        double x = current.x;
+        double y = current.y;
+        int lineMotion = motion;
+        for (QString word : words) {
+            word = word.toUpper();
+            if (word == "G20") { scale = 25.4; continue; }
+            if (word == "G21") { scale = 1.0; continue; }
+            if (word == "G90") { absolute = true; continue; }
+            if (word == "G91") { absolute = false; continue; }
+            if (word == "G0" || word == "G00") { lineMotion = 0; continue; }
+            if (word == "G1" || word == "G01") { lineMotion = 1; continue; }
+            if (word == "G2" || word == "G02" || word == "G3" || word == "G03")
+                { lineMotion = 1; continue; }
+            if (word.startsWith('T') && word.size() > 1) {
+                bool ok = false;
+                const int number = word.mid(1).toInt(&ok);
+                if (ok) currentTool = number;
+                continue;
+            }
+            if (word.startsWith('Z')) {
+                bool ok = false;
+                const double v = word.mid(1).toDouble(&ok);
+                if (ok) currentZ = absolute ? v * scale : currentZ + v * scale;
+                continue;
+            }
+            if (word.startsWith('X')) {
+                bool ok = false;
+                const double v = word.mid(1).toDouble(&ok);
+                if (ok) { x = absolute ? v * scale : current.x + v * scale; hasX = true; }
+            } else if (word.startsWith('Y')) {
+                bool ok = false;
+                const double v = word.mid(1).toDouble(&ok);
+                if (ok) { y = absolute ? v * scale : current.y + v * scale; hasY = true; }
+            }
+        }
+        motion = lineMotion;
+        if (lineMotion == 0) {
+            flush();
+            current = {x, y};
+        } else if (lineMotion == 1 && (hasX || hasY)) {
+            const Pt next{x, y};
+            if (path.empty()) path.push_back(current);
+            if (std::hypot(next.x - current.x, next.y - current.y) > 1e-9) {
+                path.push_back(next);
+                current = next;
+            }
+        } else if (drilling && lineMotion == 1 && !hasX && !hasY && currentZ < -1e-6) {
+            const auto it = toolDiameters.find(currentTool);
+            const double radius = it != toolDiameters.end() ? it->second / 2.0 : 0.0;
+            if (radius > 0.0) {
+                const Geom circle = Geom::circle(current, radius, 24);
+                Ring ring = circle.coords();
+                if (ring.size() >= 2) result.paths.push_back(Geom::line(ring));
+            }
+        }
+    }
+    flush();
+    if (drilling) result.toolDiameter = 0.0;  // círculos nítidos, sin banda
+    return result;
+}
+
 /// @brief Devuelve la fracción de perímetro más cercana a un punto.
 double nearestFractionOnOutline(const Geom& outline, const Pt& point) {
     Ring ring;
@@ -2161,7 +2264,7 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.4.6</b> · build 2026-11-05<br>"
+                           tr("<b>FlatCAM C++ 0.4.7</b> · build 2026-11-05<br>"
                               "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
                               "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
@@ -2278,7 +2381,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.4.6\nBuild: 2026-11-05\n"
+            tr("FlatCAM C++ 0.4.7\nBuild: 2026-11-05\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -2511,25 +2614,19 @@ bool MainWindow::openProject(const QString& path) {
                             objectProps_[layerId][it.key()] = it.value().toString();
                         bool ok = false;
                         const double width = props.value("__toolWidth").toString().toDouble(&ok);
-                        if (ok && width > 0.0) canvas_->setLayerWidth(layerId, width);
+                        if (ok && width > 0.0 && obj.kind == "cncjob")
+                            canvas_->setLayerWidth(layerId, width);
                     }
                 }
                 if (obj.kind == "cncjob" && !obj.text.empty()) {
-                    const QString code = QString::fromStdString(obj.text).left(1500);
-                    const int marker = code.indexOf("(Tool diameter:");
-                    if (marker >= 0) {
-                        const int end = code.indexOf(')', marker);
-                        bool ok = false;
-                        const double width = code.mid(marker + 15, end - marker - 15)
-                                                 .trimmed().split(' ').first().toDouble(&ok);
-                        const QString targetName =
-                            QString::fromStdString(obj.name).remove(QStringLiteral("CNCJob: "));
-                        QTreeWidgetItem* target = findObjectByName(targetName);
-                        if (ok && width > 0.0 && target && !targetName.startsWith(tr("Taladrado"))) {
-                            const int targetId = target->data(0, Qt::UserRole).toInt();
-                            canvas_->setLayerWidth(targetId, width);
-                            objectProps_[targetId][QStringLiteral("__toolWidth")] =
-                                QString::number(width, 'f', 4);
+                    const GCodePreview preview =
+                        parseGCodePreview(QString::fromStdString(obj.text));
+                    if (!preview.paths.empty()) {
+                        canvas_->setLayerGeometry(layerId, {}, preview.paths);
+                        if (preview.toolDiameter > 0.0) {
+                            canvas_->setLayerWidth(layerId, preview.toolDiameter);
+                            objectProps_[layerId][QStringLiteral("__toolWidth")] =
+                                QString::number(preview.toolDiameter, 'f', 4);
                         }
                     }
                 }
@@ -3874,7 +3971,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.4.6");
+    return QStringLiteral("FlatCAM C++ 0.4.7");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
@@ -5166,10 +5263,7 @@ int MainWindow::addGeneratedLayer(const QString& name, const std::vector<Geom>& 
     const int id = canvas_->appendGeometry({}, paths, true);
     canvas_->endGeometry();
     canvas_->setView(oldScale, oldOffset);
-    if (toolWidth > 0.0) {
-        canvas_->setLayerWidth(id, toolWidth);
-        objectProps_[id][QStringLiteral("__toolWidth")] = QString::number(toolWidth, 'f', 4);
-    }
+    Q_UNUSED(toolWidth);
     addObjectRow(name, "herramienta", "-", id, true, toolsGroup_);
     if (sourceId > 0) generatedFrom_[sourceId].push_back(id);
     if (toolsGroup_) toolsGroup_->setExpanded(true);
@@ -8511,6 +8605,11 @@ bool MainWindow::saveProjectToPath(const QString& path) {
         if (source != sourcePaths_.end()) object.sourceFile = source->second.toStdString();
         object.solids = canvas_->layerSolids(id);
         object.follows = canvas_->layerFollows(id);
+        if (item->text(2).toLower() == "cncjob") {
+            // El CNCJob se reconstruye desde su texto al abrir el proyecto.
+            object.solids.clear();
+            object.follows.clear();
+        }
         const auto text = objectText_.find(id);
         if (text != objectText_.end()) object.text = text->second.toStdString();
         if (item->text(2).toLower() == "gerber") {
@@ -8759,12 +8858,18 @@ void MainWindow::openTextObject(int layerId) {
 /// @brief Agrega un CNCJob con su G-code y propiedades.
 void MainWindow::addCncJobObject(const QString& name, const QString& code,
                                  const std::map<QString, QString>& props) {
+    const GCodePreview preview = parseGCodePreview(code);
     const double oldScale = canvas_->viewScale();
     const QPointF oldOffset = canvas_->viewOffset();
-    const int id = canvas_->appendGeometry({}, {}, true);
+    const int id = canvas_->appendGeometry({}, preview.paths, true);
     canvas_->endGeometry();
     canvas_->setView(oldScale, oldOffset);
     addObjectRow(tr("CNCJob: %1").arg(name), "cncjob", "-", id, true, gcodeGroup_);
+    if (preview.toolDiameter > 0.0) {
+        canvas_->setLayerWidth(id, preview.toolDiameter);
+        objectProps_[id][QStringLiteral("__toolWidth")] = QString::number(
+            preview.toolDiameter, 'f', 4);
+    }
     objectText_[id] = code;
     objectProps_[id][tr("Tipo")] = tr("CNCJob");
     objectProps_[id][tr("Líneas")] = QString::number(code.count('\n') + 1);

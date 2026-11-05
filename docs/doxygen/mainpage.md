@@ -10,7 +10,7 @@ del código fuente.
 
 - [Manual de usuario](../manual_html/index.html)
 - [Repositorio](https://github.com/dnasta/FlatCAM_Cpp)
-- [Descargar v0.4.6](https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.6)
+- [Descargar v0.4.7](https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.7)
 - [Avisos de terceros](https://github.com/dnasta/FlatCAM_Cpp/blob/main/THIRD_PARTY_NOTICES.md)
 
 ## Arquitectura en capas
