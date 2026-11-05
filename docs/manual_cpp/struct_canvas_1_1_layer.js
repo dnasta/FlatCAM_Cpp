@@ -7,5 +7,6 @@ var struct_canvas_1_1_layer =
     [ "multicolor", "struct_canvas_1_1_layer.html#a49d18d2029fc3f3cc6e75a520aed07d9", null ],
     [ "solid", "struct_canvas_1_1_layer.html#aa7f0659454a4b7aff522aa6057b77c45", null ],
     [ "solids", "struct_canvas_1_1_layer.html#ae87f838fe7eb2cde7788fb42cc9551be", null ],
-    [ "visible", "struct_canvas_1_1_layer.html#a3fa3c8625b1c84f4f59e6b455fb1d394", null ]
+    [ "visible", "struct_canvas_1_1_layer.html#a3fa3c8625b1c84f4f59e6b455fb1d394", null ],
+    [ "width", "struct_canvas_1_1_layer.html#a7d6a11ec20792ea9a766ad7c22c15fe3", null ]
 ];

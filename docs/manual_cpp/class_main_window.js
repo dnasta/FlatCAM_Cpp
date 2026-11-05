@@ -9,7 +9,7 @@ var class_main_window =
     [ "addFiducials", "class_main_window.html#ad038cf5d78c7f1a9af402415a22ac012", null ],
     [ "addGCodeLayer", "class_main_window.html#a8c83b5106267e224022bee8fb66f89d7", null ],
     [ "addGCodeRow", "class_main_window.html#a2283a0e34fcd8fffa97e33849266c93c", null ],
-    [ "addGeneratedLayer", "class_main_window.html#ac10b06c80ee0d43735fec6c9a9dea6ea", null ],
+    [ "addGeneratedLayer", "class_main_window.html#ac19b345a775447d8cac88fe62c5a9b68", null ],
     [ "addGeneratedSolid", "class_main_window.html#a167b9d4d2010dced277a09b9e72ca862", null ],
     [ "addGerber", "class_main_window.html#aa79c924fbe7d939c41b74f7d0da9a0d3", null ],
     [ "addImageGeometry", "class_main_window.html#adbb811f4ecc7304af226695827ef5e59", null ],

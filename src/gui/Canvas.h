@@ -99,6 +99,10 @@ public:
 
     /// @brief Activa el coloreado por aperturas.
     void setLayerMulticolor(int id, bool multicolor);
+    /// @brief Define el ancho de línea de una capa en mm (0 = 1 px).
+    void setLayerWidth(int id, double width);
+    /// @return Ancho de línea de una capa en mm.
+    double layerWidth(int id) const;
     /// @return `true` si la capa usa modo multicolor.
     bool layerMulticolor(int id) const;
 
@@ -213,6 +217,7 @@ private:
         bool visible = true;              ///< Visibilidad.
         bool filled = true;
         bool multicolor = false;
+        double width = 0.0;               ///< Ancho de línea en mm; 0 = 1 px.
     };
 
     static QPainterPath buildPath(const std::vector<fc::Geom>& geoms);

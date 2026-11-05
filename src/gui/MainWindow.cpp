@@ -2161,7 +2161,7 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.4.5</b> · build 2026-11-05<br>"
+                           tr("<b>FlatCAM C++ 0.4.6</b> · build 2026-11-05<br>"
                               "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
                               "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
@@ -2278,7 +2278,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.4.5\nBuild: 2026-11-05\n"
+            tr("FlatCAM C++ 0.4.6\nBuild: 2026-11-05\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -2506,8 +2506,31 @@ bool MainWindow::openProject(const QString& path) {
                     const QJsonDocument doc = QJsonDocument::fromJson(
                         QByteArray::fromStdString(obj.properties));
                     if (doc.isObject()) {
-                        for (auto it = doc.object().begin(); it != doc.object().end(); ++it)
+                        const QJsonObject props = doc.object();
+                        for (auto it = props.begin(); it != props.end(); ++it)
                             objectProps_[layerId][it.key()] = it.value().toString();
+                        bool ok = false;
+                        const double width = props.value("__toolWidth").toString().toDouble(&ok);
+                        if (ok && width > 0.0) canvas_->setLayerWidth(layerId, width);
+                    }
+                }
+                if (obj.kind == "cncjob" && !obj.text.empty()) {
+                    const QString code = QString::fromStdString(obj.text).left(1500);
+                    const int marker = code.indexOf("(Tool diameter:");
+                    if (marker >= 0) {
+                        const int end = code.indexOf(')', marker);
+                        bool ok = false;
+                        const double width = code.mid(marker + 15, end - marker - 15)
+                                                 .trimmed().split(' ').first().toDouble(&ok);
+                        const QString targetName =
+                            QString::fromStdString(obj.name).remove(QStringLiteral("CNCJob: "));
+                        QTreeWidgetItem* target = findObjectByName(targetName);
+                        if (ok && width > 0.0 && target && !targetName.startsWith(tr("Taladrado"))) {
+                            const int targetId = target->data(0, Qt::UserRole).toInt();
+                            canvas_->setLayerWidth(targetId, width);
+                            objectProps_[targetId][QStringLiteral("__toolWidth")] =
+                                QString::number(width, 'f', 4);
+                        }
                     }
                 }
                 if (!obj.sourceFile.empty())
@@ -3851,7 +3874,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.4.5");
+    return QStringLiteral("FlatCAM C++ 0.4.6");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
@@ -5135,13 +5158,18 @@ QTreeWidgetItem* MainWindow::addObjectRow(const QString& name, const QString& ki
 }
 
 /// @brief Agrega una capa generada al grupo Herramientas.
-int MainWindow::addGeneratedLayer(const QString& name, const std::vector<Geom>& paths, int sourceId) {
+int MainWindow::addGeneratedLayer(const QString& name, const std::vector<Geom>& paths, int sourceId,
+                                  double toolWidth) {
     if (paths.empty()) return -1;
     const double oldScale = canvas_->viewScale();
     const QPointF oldOffset = canvas_->viewOffset();
     const int id = canvas_->appendGeometry({}, paths, true);
     canvas_->endGeometry();
     canvas_->setView(oldScale, oldOffset);
+    if (toolWidth > 0.0) {
+        canvas_->setLayerWidth(id, toolWidth);
+        objectProps_[id][QStringLiteral("__toolWidth")] = QString::number(toolWidth, 'f', 4);
+    }
     addObjectRow(name, "herramienta", "-", id, true, toolsGroup_);
     if (sourceId > 0) generatedFrom_[sourceId].push_back(id);
     if (toolsGroup_) toolsGroup_->setExpanded(true);
@@ -10449,10 +10477,11 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastIsoMulti_.push_back(std::move(job));
                 }
                 lastIsoHeader_ = optionsFor(rows.front(), isoCommon);
+                lastIsoHeader_.connectPaths = isoCombine->isChecked();
                 if (!lastIsoMulti_.empty())
                     lastIsoHeader_.headerComments = lastIsoMulti_.front().options.headerComments;
                 const int sourceId = isoSource_ ? isoSource_->currentData().toInt() : 0;
-                addGeneratedLayer(camName(tr("Aislamiento"), isoSource_), preview, sourceId);
+                addGeneratedLayer(camName(tr("Aislamiento"), isoSource_), preview, sourceId, rows.front().dia);
                 statusBar()->showMessage(tr("Aislamiento: %1 herramientas").arg(lastIsoMulti_.size()), 4000);
             });
     connect(isoCnc, &QPushButton::clicked, this, [this, camName] {
@@ -10621,10 +10650,11 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastNccMulti_.push_back(std::move(job));
                 }
                 lastNccHeader_ = optionsFor(rows.front(), nccCommon);
+                lastNccHeader_.connectPaths = nccConnect->isChecked();
                 if (!lastNccMulti_.empty())
                     lastNccHeader_.headerComments = lastNccMulti_.front().options.headerComments;
                 const int sourceId = nccSource_ ? nccSource_->currentData().toInt() : 0;
-                addGeneratedLayer(camName(tr("NCC"), nccSource_), preview, sourceId);
+                addGeneratedLayer(camName(tr("NCC"), nccSource_), preview, sourceId, rows.front().dia);
                 statusBar()->showMessage(tr("NCC: %1 herramientas").arg(lastNccMulti_.size()), 4000);
             });
     connect(nccCnc, &QPushButton::clicked, this, [this, camName] {
@@ -10785,7 +10815,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 if (!lastCutMulti_.empty())
                     lastCutHeader_.headerComments = lastCutMulti_.front().options.headerComments;
                 const int sourceId = cutSource_ ? cutSource_->currentData().toInt() : 0;
-                addGeneratedLayer(camName(tr("Corte"), cutSource_), preview, sourceId);
+                addGeneratedLayer(camName(tr("Corte"), cutSource_), preview, sourceId, rows.front().dia);
                 statusBar()->showMessage(tr("Corte: %1 herramientas").arg(lastCutMulti_.size()), 4000);
             });
     auto manualTabPoints = std::make_shared<std::vector<Pt>>();
@@ -10898,7 +10928,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 if (!lastPaintMulti_.empty())
                     lastPaintHeader_.headerComments = lastPaintMulti_.front().options.headerComments;
                 const int sourceId = paintSource_ ? paintSource_->currentData().toInt() : 0;
-                addGeneratedLayer(camName(tr("Pintura"), paintSource_), preview, sourceId);
+                addGeneratedLayer(camName(tr("Pintura"), paintSource_), preview, sourceId, rows.front().dia);
                 statusBar()->showMessage(tr("Pintura: %1 herramientas").arg(lastPaintMulti_.size()), 4000);
             });
     connect(paintCnc, &QPushButton::clicked, this, [this, camName] {
@@ -11282,7 +11312,7 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 std::vector<Geom> preview;
                 for (const auto& l : lines) preview.push_back(Geom::line(l));
                 const int sourceId = millSource_ ? millSource_->currentData().toInt() : 0;
-                addGeneratedLayer(tr("Fresado"), preview, sourceId);
+                addGeneratedLayer(tr("Fresado"), preview, sourceId, millDia->value());
                 statusBar()->showMessage(tr("Fresado: %1 recorridos").arg(lines.size()), 4000);
             });
     connect(millCnc, &QPushButton::clicked, this, [this, camName] {
@@ -11640,7 +11670,7 @@ bool MainWindow::applyNcc(double toolDiameter, double stepOverPercent, double cl
     }
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(toolLayerName(tr("NCC")), lastNcc_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("NCC")), lastNcc_->paths, sourceId, opt.toolDiameter);
     statusBar()->showMessage(tr("NCC: %1 recorridos").arg(lastNcc_->paths.size()), 4000);
     return true;
 }
@@ -11673,7 +11703,7 @@ bool MainWindow::applyPaint(double toolDiameter, double stepOverPercent, double 
     }
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(toolLayerName(tr("Pintura")), lastPaint_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("Pintura")), lastPaint_->paths, sourceId, opt.toolDiameter);
     statusBar()->showMessage(tr("Pintado: %1 recorridos").arg(lastPaint_->paths.size()), 4000);
     return true;
 }
@@ -12098,7 +12128,7 @@ bool MainWindow::applyIsolation(double toolDiameter, int passes, double overlapP
     }
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(toolLayerName(tr("Aislamiento")), lastIsolation_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("Aislamiento")), lastIsolation_->paths, sourceId, toolDiameter);
 
     std::ostringstream os;
     os << "\n--- AISLAMIENTO ---\n";
@@ -12214,7 +12244,7 @@ bool MainWindow::applyCutout(double toolDiameter, double margin, bool external,
     }
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(toolLayerName(tr("Corte")), lastCutout_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("Corte")), lastCutout_->paths, sourceId, toolDiameter);
 
     std::ostringstream os;
     os << "\n--- CORTE DE CONTORNO ---\n";
@@ -12357,7 +12387,7 @@ void MainWindow::nccDialog() {
     lastNccGCode_.toolDiameter = opt.toolDiameter;
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(toolLayerName(tr("NCC")), lastNcc_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("NCC")), lastNcc_->paths, sourceId, opt.toolDiameter);
 
     std::ostringstream os;
     os << "\n--- NCC ---\n";
@@ -12448,7 +12478,7 @@ void MainWindow::paintDialog() {
     lastPaintGCode_.toolDiameter = opt.toolDiameter;
     int sourceId = 0;
     if (auto* cur = objects_->currentItem()) sourceId = cur->data(0, Qt::UserRole).toInt();
-    addGeneratedLayer(toolLayerName(tr("Pintura")), lastPaint_->paths, sourceId);
+    addGeneratedLayer(toolLayerName(tr("Pintura")), lastPaint_->paths, sourceId, opt.toolDiameter);
 
     std::ostringstream os;
     os << "\n--- PAINT ---\n";

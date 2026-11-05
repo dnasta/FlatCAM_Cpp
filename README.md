@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.5"><img alt="Release" src="https://img.shields.io/badge/release-v0.4.5-b4771b"></a>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.6"><img alt="Release" src="https://img.shields.io/badge/release-v0.4.6-b4771b"></a>
   <a href="LICENSE"><img alt="Licencia" src="https://img.shields.io/badge/licencia-GPLv3-2f6f4f"></a>
   <img alt="macOS" src="https://img.shields.io/badge/macOS-14.4%2B%20arm64-16202b">
   <img alt="C++" src="https://img.shields.io/badge/C%2B%2B-20-00599C">
@@ -22,7 +22,7 @@
   <a href="README_US.md">🇬🇧 English</a> ·
   <a href="https://dnasta.github.io/FlatCAM_Cpp/manual_html/index.html"><strong>📖 Manual de usuario</strong></a> ·
   <a href="https://dnasta.github.io/FlatCAM_Cpp/manual_cpp/index.html"><strong>🛠 Manual del código</strong></a> ·
-  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.5"><strong>⬇ Descargar v0.4.5</strong></a>
+  <a href="https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.6"><strong>⬇ Descargar v0.4.6</strong></a>
 </p>
 
 ---
@@ -136,7 +136,7 @@ Es un port del FlatCAM original (Python + PyQt5) a **C++20**, con **Qt 6** para 
 
 - Árbol de proyecto con grupos **Archivos**, **Herramientas** y **G-code** resaltados; borrado con Supr/Retroceso y confirmación.
 - Columna **Vis** con iconos, propiedades por objeto y tablas de herramientas por operación.
-- Canvas con zoom/pan, selección, medición, rejilla, snap, unidades **mm/in**, ejes **X=0/Y=0** resaltados, reglas, medidas de la PCB, recorrido desde el origen y trayectoria de la herramienta con viajes.
+- Canvas con zoom/pan, selección, medición, rejilla, snap, unidades **mm/in**, ejes **X=0/Y=0** resaltados, reglas, medidas de la PCB, recorrido desde el origen y trayectorias dibujadas con el **ancho real de la herramienta**.
 - **Vista 3D** con cobre extruido, placa, taladros, iluminación por cara y exportación PNG.
 - Nivel **BASIC/ADVANCED**.
 - **Cuatro temas** en `Opciones → Temas`: Moderno claro/oscuro (Fusion + QSS, acento ámbar) y Sistema claro/oscuro (controles nativos). Se aplican en caliente.
@@ -203,7 +203,7 @@ Es un port del FlatCAM original (Python + PyQt5) a **C++20**, con **Qt 6** para 
 
 ### Desde el DMG
 
-1. Descargá [`FlatCAM-CPP-0.4.5-arm64.dmg`](https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.5).
+1. Descargá [`FlatCAM-CPP-0.4.6-arm64.dmg`](https://github.com/dnasta/FlatCAM_Cpp/releases/tag/v0.4.6).
 2. Abrí el DMG.
 3. Arrastrá **FlatCAM C++** a *Aplicaciones*.
 4. La primera vez: clic derecho → **Abrir** (firma ad-hoc).
@@ -333,8 +333,8 @@ cmake --build build -j8
 ### Empaquetar el DMG
 
 ```bash
-./tools/create_dmg.sh 0.4.5
-# dist/FlatCAM-CPP-0.4.5-arm64.dmg
+./tools/create_dmg.sh 0.4.6
+# dist/FlatCAM-CPP-0.4.6-arm64.dmg
 ```
 
 El script compila, ejecuta `macdeployqt`, copia GEOS, incrusta licencias, firma ad-hoc y crea el DMG con la app renombrada a `FlatCAM C++.app`.
@@ -465,4 +465,4 @@ cadena original.
 - **QR Code generator:** Project Nayuki.
 - **Comunidad FlatCAM** por la documentación y los ejemplos.
 
-<p align="center"><sub>Hecho con C++20, Qt 6 y GEOS · macOS Apple Silicon · v0.4.5</sub></p>
+<p align="center"><sub>Hecho con C++20, Qt 6 y GEOS · macOS Apple Silicon · v0.4.6</sub></p>

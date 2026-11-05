@@ -651,6 +651,20 @@ void Canvas::setLayerMulticolor(int id, bool multicolor) {
     update();
 }
 
+/// @brief Define el ancho de línea de una capa en milímetros.
+void Canvas::setLayerWidth(int id, double width) {
+    Layer* layer = findLayer(id);
+    if (!layer) return;
+    layer->width = std::max(0.0, width);
+    update();
+}
+
+/// @return Ancho de línea de una capa en milímetros.
+double Canvas::layerWidth(int id) const {
+    const Layer* layer = findLayer(id);
+    return layer ? layer->width : 0.0;
+}
+
 /**
  * @brief Aplica una transformación afín a la geometría de una capa.
  *
@@ -1025,7 +1039,10 @@ void Canvas::paintEvent(QPaintEvent*) {
         }
 
         p.setBrush(Qt::NoBrush);
-        p.setPen(QPen(followColor_, 0.0));
+        QPen followPen(followColor_, layer.width);
+        followPen.setCapStyle(Qt::RoundCap);
+        followPen.setJoinStyle(Qt::RoundJoin);
+        p.setPen(followPen);
         p.drawPath(layer.follow);
     }
 

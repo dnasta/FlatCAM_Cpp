@@ -2,7 +2,7 @@
 # Genera docs/manual_cpp/index.html
 
 PROJECT_NAME           = "FlatCAM C++"
-PROJECT_NUMBER         = "0.4.5"
+PROJECT_NUMBER         = "0.4.6"
 PROJECT_BRIEF          = "Port nativo de FlatCAM 2024.4 a C++20, Qt 6 y GEOS"
 PROJECT_LOGO           = assets/logo.png
 OUTPUT_DIRECTORY       = docs

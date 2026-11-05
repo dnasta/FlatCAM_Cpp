@@ -357,7 +357,8 @@ private:
     QTreeWidgetItem* addObjectRow(const QString& name, const QString& kind, const QString& area,
                                   int layerId, bool visible = true,
                                   QTreeWidgetItem* parent = nullptr);
-    int addGeneratedLayer(const QString& name, const std::vector<fc::Geom>& paths, int sourceId);
+    int addGeneratedLayer(const QString& name, const std::vector<fc::Geom>& paths, int sourceId,
+                          double toolWidth = 0.0);
     int addGeneratedSolid(const QString& name, const std::vector<fc::Geom>& solids,
                           int sourceId, const QString& kind = "herramienta");
     std::vector<fc::Geom> layerGeometries(int layerId) const;
