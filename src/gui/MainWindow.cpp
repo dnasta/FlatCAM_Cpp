@@ -148,22 +148,6 @@ void addHeaderComments(fc::GCodeOptions& opt, std::initializer_list<QString> lin
     for (const QString& line : lines) opt.headerComments.push_back(line.toStdString());
 }
 
-/// @brief Dibuja el recorrido de la herramienta, incluyendo viajes entre tramos.
-void setPathToolpaths(Canvas* canvas, const std::vector<std::vector<fc::Pt>>& paths) {
-    if (!canvas) return;
-    std::vector<Geom> moves;
-    fc::Pt last{0.0, 0.0};
-    bool hasLast = false;
-    for (const auto& path : paths) {
-        if (path.size() < 2) continue;
-        if (hasLast) moves.push_back(Geom::line({last, path.front()}));
-        moves.push_back(Geom::line(path));
-        last = path.back();
-        hasLast = true;
-    }
-    canvas->setToolpaths(moves);
-}
-
 /// @brief Devuelve la fracción de perímetro más cercana a un punto.
 double nearestFractionOnOutline(const Geom& outline, const Pt& point) {
     Ring ring;
@@ -2177,7 +2161,7 @@ void MainWindow::buildMenus() {
     about->setStatusTip(tr("Información de la aplicación y licencia."));
     connect(about, &QAction::triggered, this, [this] {
         QMessageBox::about(this, tr("FlatCAM C++"),
-                           tr("<b>FlatCAM C++ 0.4.4</b> · build 2026-11-04<br>"
+                           tr("<b>FlatCAM C++ 0.4.5</b> · build 2026-11-05<br>"
                               "Port nativo de FlatCAM 2024.4 a C++20 + Qt6 + GEOS.<br>"
                               "Gerber, Excellon, G-code, importadores y herramientas CAM.<br><br>"
                               "Licencia GPLv3, igual que el proyecto original."));
@@ -2294,7 +2278,7 @@ void MainWindow::buildMenus() {
         auto* details = new QPlainTextEdit(&dialog);
         details->setReadOnly(true);
         details->setPlainText(
-            tr("FlatCAM C++ 0.4.4\nBuild: 2026-11-04\n"
+            tr("FlatCAM C++ 0.4.5\nBuild: 2026-11-05\n"
                "Qt: %1\nSistema: %2\nConfig: %3")
                 .arg(QString::fromLatin1(qVersion()))
                 .arg(QSysInfo::prettyProductName())
@@ -3867,7 +3851,7 @@ QString MainWindow::runTclCommand(const QString& command) {
 
 /// @brief Adaptador Tcl del comando `version`.
 QString MainWindow::tclVersion() const {
-    return QStringLiteral("FlatCAM C++ 0.4.4");
+    return QStringLiteral("FlatCAM C++ 0.4.5");
 }
 
 /// @brief Adaptador Tcl del comando `help`.
@@ -10469,12 +10453,6 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastIsoHeader_.headerComments = lastIsoMulti_.front().options.headerComments;
                 const int sourceId = isoSource_ ? isoSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("Aislamiento"), isoSource_), preview, sourceId);
-                {
-                    std::vector<std::vector<Pt>> moves;
-                    for (const auto& job : lastIsoMulti_)
-                        for (const auto& path : job.paths) moves.push_back(path);
-                    setPathToolpaths(canvas_, moves);
-                }
                 statusBar()->showMessage(tr("Aislamiento: %1 herramientas").arg(lastIsoMulti_.size()), 4000);
             });
     connect(isoCnc, &QPushButton::clicked, this, [this, camName] {
@@ -10647,12 +10625,6 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastNccHeader_.headerComments = lastNccMulti_.front().options.headerComments;
                 const int sourceId = nccSource_ ? nccSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("NCC"), nccSource_), preview, sourceId);
-                {
-                    std::vector<std::vector<Pt>> moves;
-                    for (const auto& job : lastNccMulti_)
-                        for (const auto& path : job.paths) moves.push_back(path);
-                    setPathToolpaths(canvas_, moves);
-                }
                 statusBar()->showMessage(tr("NCC: %1 herramientas").arg(lastNccMulti_.size()), 4000);
             });
     connect(nccCnc, &QPushButton::clicked, this, [this, camName] {
@@ -10814,12 +10786,6 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastCutHeader_.headerComments = lastCutMulti_.front().options.headerComments;
                 const int sourceId = cutSource_ ? cutSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("Corte"), cutSource_), preview, sourceId);
-                {
-                    std::vector<std::vector<Pt>> moves;
-                    for (const auto& job : lastCutMulti_)
-                        for (const auto& path : job.paths) moves.push_back(path);
-                    setPathToolpaths(canvas_, moves);
-                }
                 statusBar()->showMessage(tr("Corte: %1 herramientas").arg(lastCutMulti_.size()), 4000);
             });
     auto manualTabPoints = std::make_shared<std::vector<Pt>>();
@@ -10933,12 +10899,6 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                     lastPaintHeader_.headerComments = lastPaintMulti_.front().options.headerComments;
                 const int sourceId = paintSource_ ? paintSource_->currentData().toInt() : 0;
                 addGeneratedLayer(camName(tr("Pintura"), paintSource_), preview, sourceId);
-                {
-                    std::vector<std::vector<Pt>> moves;
-                    for (const auto& job : lastPaintMulti_)
-                        for (const auto& path : job.paths) moves.push_back(path);
-                    setPathToolpaths(canvas_, moves);
-                }
                 statusBar()->showMessage(tr("Pintura: %1 herramientas").arg(lastPaintMulti_.size()), 4000);
             });
     connect(paintCnc, &QPushButton::clicked, this, [this, camName] {
@@ -11323,7 +11283,6 @@ void MainWindow::buildToolPanel(QTabWidget* tabs) {
                 for (const auto& l : lines) preview.push_back(Geom::line(l));
                 const int sourceId = millSource_ ? millSource_->currentData().toInt() : 0;
                 addGeneratedLayer(tr("Fresado"), preview, sourceId);
-                setPathToolpaths(canvas_, lines);
                 statusBar()->showMessage(tr("Fresado: %1 recorridos").arg(lines.size()), 4000);
             });
     connect(millCnc, &QPushButton::clicked, this, [this, camName] {

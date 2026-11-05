@@ -3,7 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-VERSION="${1:-0.4.4}"
+VERSION="${1:-0.4.5}"
 ARCH="$(uname -m)"
 DEST="dist"
 APP="FlatCAM C++"
